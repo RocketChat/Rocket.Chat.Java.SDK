@@ -7,11 +7,13 @@ import java.io.IOException;
 /**
  * Created by sachin on 7/6/17.
  */
+
 public class Main {
+
     public static void main(String [] args){
 
 //        System.out.println("Hello there");
-        RocketChatAPI liveChat=new RocketChatAPI("ws://localhost:3000/websocket");
+        LiveChatAPI liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
 
         //Connect event to server
         try {

@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 public class RocketChatAPI extends Socket {
+
     AtomicInteger integer;
     String sessionId;
     WebSocketListener listener;
@@ -148,7 +149,6 @@ public class RocketChatAPI extends Socket {
 //                System.out.println("On sending handshake");
             }
         };
-
 
     }
 }

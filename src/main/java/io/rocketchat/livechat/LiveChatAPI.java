@@ -91,7 +91,8 @@ public class LiveChatAPI extends Socket{
                         websocket.sendText("{\"msg\":\"pong\"}");
                     } else if (object.optString("msg").equals("connected")) {
                         sessionId = object.optString("session");
-                        System.out.println("session id is "+sessionId);
+                    }else{
+
                     }
 //
                     System.out.println("Message is " + text);
