@@ -1,4 +1,6 @@
 import io.rocketchat.Socket;
+import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.livechat.LiveChatAPI;
 
 import java.io.IOException;
 
@@ -9,11 +11,11 @@ public class Main {
     public static void main(String [] args){
 
 //        System.out.println("Hello there");
-        Socket socket=new Socket("wss://demo.rocket.chat/websocket");
+        RocketChatAPI liveChat=new RocketChatAPI("ws://localhost:3000/websocket");
 
         //Connect event to server
         try {
-            socket.connect();
+            liveChat.connect();
         } catch (IOException e) {
             e.printStackTrace();
         }

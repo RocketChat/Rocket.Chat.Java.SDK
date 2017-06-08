@@ -1,11 +1,11 @@
-package io.rocketchat.rpc;
+package io.rocketchat.livechat.rpc;
 
 import io.rocketchat.Utils;
 
 /**
  * Created by sachin on 8/6/17.
  */
-public class BasicRPC {
+public class LiveChatBasicRPC {
 
     public static String ConnectObject(){
         return "{\"msg\":\"connect\",\"version\":\"1\",\"support\":[\"1\",\"pre2\",\"pre1\"]}";
