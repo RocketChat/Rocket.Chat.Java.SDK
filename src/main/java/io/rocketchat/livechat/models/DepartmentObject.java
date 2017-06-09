@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by sachin on 9/6/17.
  */
 
-public class Department {
+public class DepartmentObject {
 
     String id;
     Boolean enabled;
@@ -20,7 +20,7 @@ public class Department {
     Boolean showOnRegistration;
     Date updatedAt;
 
-    Department(JSONObject object){
+    DepartmentObject(JSONObject object){
         try {
             id=object.getString("_id");
             enabled=object.getBoolean("enabled");
@@ -92,7 +92,7 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department{" +
+        return "DepartmentObject{" +
                 "id='" + id + '\'' +
                 ", enabled=" + enabled +
                 ", deptName='" + deptName + '\'' +

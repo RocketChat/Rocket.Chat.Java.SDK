@@ -18,7 +18,7 @@ public class LiveChatConfigObject {
     Boolean displayRegistrationForm;
     String room;
     JSONArray triggers;
-    ArrayList<Department> departments;
+    ArrayList<DepartmentObject> departments;
     Boolean allowSwitchingDepartments;
     Boolean online;
     String offlineColour;
@@ -44,10 +44,10 @@ public class LiveChatConfigObject {
         triggers=object.getJSONArray("triggers");
 
         //Loading departments data
-        this.departments=new ArrayList<Department>();
+        this.departments=new ArrayList<DepartmentObject>();
         JSONArray departments=object.getJSONArray("departments");
         for (int i=0;i<departments.length();i++){
-            this.departments.add(new Department(departments.getJSONObject(i)));
+            this.departments.add(new DepartmentObject(departments.getJSONObject(i)));
         }
 
 
@@ -116,11 +116,11 @@ public class LiveChatConfigObject {
         this.triggers = triggers;
     }
 
-    public ArrayList<Department> getDepartments() {
+    public ArrayList<DepartmentObject> getDepartments() {
         return departments;
     }
 
-    public void setDepartments(ArrayList<Department> departments) {
+    public void setDepartments(ArrayList<DepartmentObject> departments) {
         this.departments = departments;
     }
 
