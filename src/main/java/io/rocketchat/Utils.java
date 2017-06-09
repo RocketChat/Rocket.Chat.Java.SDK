@@ -1,12 +1,15 @@
 package io.rocketchat;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.UUID;
 
 /**
  * Created by sachin on 8/6/17.
  */
+
 public class Utils {
 
 
@@ -49,5 +52,11 @@ public class Utils {
         byte[] token = new byte[byteLength];
         secureRandom.nextBytes(token);
         return new BigInteger(token).toString(16); //hex encoding
+    }
+
+    public static String shortUUID() {
+        UUID uuid = UUID.randomUUID();
+        long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
+        return Long.toString(l, Character.MAX_RADIX);
     }
 }
