@@ -16,6 +16,8 @@ import java.util.TimerTask;
 
 public class Main {
 
+    public static String token="49MOBz4cO8LUKggSnu2gBz-lYPbhFWxDgN9q3Z8ZPQE";
+
     public static void main(String [] args){
 
 //        System.out.println("Hello there");
@@ -25,28 +27,11 @@ public class Main {
         try {
             liveChat.connect();
 
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    liveChat.getInitialData(new InitialDataCallback() {
-                        public void call(LiveChatConfigObject object) {
-                            System.out.println("First result is "+object);
-                      liveChat.registerGuest("sac", "sac@gmail.com", object.getDepartments().get(0).getId(), new GuestCallback() {
-                          public void call(GuestObject object) {
-                              System.out.println("Second result is "+object);
-                              liveChat.login(object.getToken(), new GuestCallback() {
-                                  public void call(GuestObject object) {
-                                      System.out.println("Third result is "+object);
-                                  }
-                              });
-                          }
-                      });
-                        }
-                    });
+            liveChat.login(token, new GuestCallback() {
+                public void call(GuestObject object) {
+                    System.out.println("Result is "+object);
                 }
-            },3000);
-
-
+            });
 
         } catch (IOException e) {
             e.printStackTrace();

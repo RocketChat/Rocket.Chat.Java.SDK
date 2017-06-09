@@ -78,6 +78,7 @@ public class LiveChatAPI extends Socket{
 
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 integer.set(1);
+                websocket.sendText(LiveChatBasicRPC.ConnectObject());
                 System.out.println("Connected to server");
             }
 
@@ -118,21 +119,15 @@ public class LiveChatAPI extends Socket{
             }
 
             public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                System.out.println("Message is " + text);
+
                 JSONObject object = new JSONObject(text);
-
-                if (object.has("server_id")) {
-                    websocket.sendText(LiveChatBasicRPC.ConnectObject());
-                } else {
-
-                    if (object.optString("msg").equals("ping")) {
-                        websocket.sendText("{\"msg\":\"pong\"}");
-                    } else if (object.optString("msg").equals("connected")) {
-                        sessionId = object.optString("session");
-                    }else if (Utils.isInteger(object.optString("id"))){
-                        middleware.processCallback(Long.valueOf(object.optString("id")),object);
-                    }
-//
-                    System.out.println("Message is " + text);
+                if (object.optString("msg").equals("ping")) {
+                    websocket.sendText("{\"msg\":\"pong\"}");
+                } else if (object.optString("msg").equals("connected")) {
+                    sessionId = object.optString("session");
+                } else if (Utils.isInteger(object.optString("id"))) {
+                    middleware.processCallback(Long.valueOf(object.optString("id")), object);
                 }
             }
 

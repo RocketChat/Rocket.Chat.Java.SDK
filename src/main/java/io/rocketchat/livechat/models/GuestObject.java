@@ -10,6 +10,7 @@ import java.util.Date;
  * Created by sachin on 9/6/17.
  */
 public class GuestObject {
+
     String userID;
     String token;
     Date tokenExpiry;
@@ -20,6 +21,9 @@ public class GuestObject {
             token=object.getString("token");
             if (object.optJSONObject("tokenExpires")!=null) {
                 tokenExpiry = new Date(new Timestamp(object.getJSONObject("tokenExpires").getLong("$date")).getTime());
+            }
+            if (object.optString("id")!=null) {
+                userID = object.optString("id");
             }
         } catch (JSONException e) {
             e.printStackTrace();

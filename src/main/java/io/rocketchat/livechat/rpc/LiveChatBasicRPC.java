@@ -42,4 +42,11 @@ public class LiveChatBasicRPC {
                 "}";
     }
 
+    public static String getAgentData(int integer, String roomId){
+        return "{\"msg\":\"method\"," +
+                "\"method\":\"livechat:getAgentData\"," +
+                "\"params\":[\""+roomId+"\"]," +
+                "\"id\":\""+integer+"\"}";
+    }
+
 }
