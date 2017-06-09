@@ -1,35 +1,41 @@
-import io.rocketchat.Socket;
-import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.InitialDataCallback;
 import io.rocketchat.livechat.models.GuestObject;
-import io.rocketchat.livechat.models.LiveChatConfigObject;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
+
 public class Main {
 
-    public static String token="49MOBz4cO8LUKggSnu2gBz-lYPbhFWxDgN9q3Z8ZPQE";
+    public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh";
+    public static String visitorToken="gxCgQjdSisYWJGuSf";
+    public static String userID="CPse2MSPxc5YbAgzJ";
+    public static String roomID="qdyaxcrgqgxl";
 
     public static void main(String [] args){
 
+
 //        System.out.println("Hello there");
-        final LiveChatAPI liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket");
+        final String msgID= Utils.shortUUID();
+
+        final String roomID= Utils.shortUUID();
+        System.out.println("roomID is "+roomID);
+
+        final LiveChatAPI liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
 
         //Connect event to server
         try {
             liveChat.connect();
 
-            liveChat.login(token, new GuestCallback() {
+            liveChat.login(authToken, new GuestCallback() {
                 public void call(GuestObject object) {
                     System.out.println("Result is "+object);
+                    liveChat.sendMessage(msgID,roomID,"Hi there",visitorToken);
                 }
             });
 

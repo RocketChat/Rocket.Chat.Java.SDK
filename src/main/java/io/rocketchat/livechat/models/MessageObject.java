@@ -10,12 +10,18 @@ import java.util.Date;
  * Created by sachin on 9/6/17.
  */
 public class MessageObject {
+
     String messageId;
     String roomId;
     String message;
+    String visitorToken;
+    String senderAlias;
     Date msgTimestamp;
     JSONObject sender;
     Date updatedAt;  //Message saved on the server
+    Boolean newRoom;
+    Boolean showConnecting; //This message triggers showconnecting popup
+    String sandstormSessionId;
     Date editedAt;
     JSONObject editedBy;
 
@@ -24,11 +30,16 @@ public class MessageObject {
             messageId=object.optString("_id");
             roomId=object.optString("rid");
             message=object.optString("msg");
+            visitorToken=object.getString("token");
+            senderAlias=object.getString("alias");
             if (object.optJSONObject("ts")!=null) {
                 msgTimestamp = new Date(new Timestamp(object.getJSONObject("ts").getLong("$date")).getTime());
             }
             sender=object.optJSONObject("u");
-
+            updatedAt = new Date(new Timestamp(object.getJSONObject("_updatedAt").getLong("$date")).getTime());
+            newRoom=object.getBoolean("newRoom");
+            showConnecting=object.getBoolean("showConnecting");
+            sandstormSessionId=object.getString("sandstormSessionId");
             if (object.optJSONObject("editedAt")!=null) {
                 editedAt = new Date(new Timestamp(object.getJSONObject("editedAt").getLong("$date")).getTime());
                 editedBy = object.getJSONObject("editedBy");

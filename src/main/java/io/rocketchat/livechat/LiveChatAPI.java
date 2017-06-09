@@ -8,6 +8,7 @@ import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.InitialDataCallback;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
+import io.rocketchat.livechat.rpc.LiveChatSendMsgRPC;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -62,6 +63,17 @@ public class LiveChatAPI extends Socket{
             }
         });
     }
+
+    public void sendMessage(final String msgId, final String roomID, final String message, final String token){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                ws.sendText(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
+            }
+        });
+    }
+
+
 
     @Override
     public void connect() throws IOException {
