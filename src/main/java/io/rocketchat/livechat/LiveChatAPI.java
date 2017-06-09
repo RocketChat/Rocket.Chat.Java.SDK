@@ -11,6 +11,7 @@ import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
 import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
 import io.rocketchat.livechat.rpc.LiveChatSendMsgRPC;
+import io.rocketchat.livechat.rpc.LiveChatTypingRPC;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -85,6 +86,11 @@ public class LiveChatAPI extends Socket{
             }
         });
 
+    }
+
+    public void sendIsTyping(String roomId, String username, Boolean istyping){
+        int uniqueID = integer.getAndIncrement();
+        ws.sendText(LiveChatTypingRPC.streamNotifyRoom(uniqueID,roomId,username,istyping));
     }
 
 

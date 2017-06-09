@@ -20,6 +20,7 @@ public class Main {
     public static String visitorToken="gxCgQjdSisYWJGuSf";
     public static String userID="CPse2MSPxc5YbAgzJ";
     public static String roomID="qdyaxcrgqgxl";
+    public static String username="guest-5";
 
     public static void main(String [] args){
 
@@ -44,6 +45,8 @@ public class Main {
 //                              }
 //                          }
 //                      });
+                    liveChat.sendIsTyping(roomID,username,true );
+
                 }
             });
 
