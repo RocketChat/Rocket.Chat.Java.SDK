@@ -1,7 +1,9 @@
 import io.rocketchat.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
+import io.rocketchat.livechat.callbacks.AgentCallback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.MessagesCallback;
+import io.rocketchat.livechat.models.AgentObject;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.MessageObject;
 
@@ -45,8 +47,12 @@ public class Main {
 //                              }
 //                          }
 //                      });
-                    liveChat.sendIsTyping(roomID,username,true );
-
+//                    liveChat.sendIsTyping(roomID,username,true );
+//                    liveChat.getAgentData(roomID, new AgentCallback() {
+//                        public void call(AgentObject object) {
+//                            System.out.println(object);
+//                        }
+//                    });
                 }
             });
 

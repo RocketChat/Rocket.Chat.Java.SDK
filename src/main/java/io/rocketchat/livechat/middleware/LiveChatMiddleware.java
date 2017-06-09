@@ -1,9 +1,7 @@
 package io.rocketchat.livechat.middleware;
 
-import io.rocketchat.livechat.callbacks.Callback;
-import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.InitialDataCallback;
-import io.rocketchat.livechat.callbacks.MessagesCallback;
+import io.rocketchat.livechat.callbacks.*;
+import io.rocketchat.livechat.models.AgentObject;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.LiveChatConfigObject;
 import io.rocketchat.livechat.models.MessageObject;
@@ -58,6 +56,10 @@ public class LiveChatMiddleware {
                 }
                 int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
                 messagesCallback.call(list,unreadNotLoaded);
+            }else if (callback instanceof AgentCallback){
+                AgentCallback agentCallback= (AgentCallback) callback;
+                AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
+                agentCallback.call(agentObject);
             }
 
         }

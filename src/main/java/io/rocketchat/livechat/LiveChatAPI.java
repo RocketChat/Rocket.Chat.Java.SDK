@@ -4,6 +4,7 @@ import com.neovisionaries.ws.client.*;
 import io.rocketchat.EventThread;
 import io.rocketchat.Socket;
 import io.rocketchat.Utils;
+import io.rocketchat.livechat.callbacks.AgentCallback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.InitialDataCallback;
 import io.rocketchat.livechat.callbacks.MessagesCallback;
@@ -94,6 +95,16 @@ public class LiveChatAPI extends Socket{
     }
 
 
+    public void getAgentData(final String roomId, final AgentCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                middleware.createCallback(uniqueID,callback);
+                ws.sendText(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
+            }
+        });
+
+    }
 
     @Override
     public void connect() throws IOException {
