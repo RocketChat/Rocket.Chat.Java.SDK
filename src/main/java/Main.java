@@ -1,8 +1,7 @@
 import io.rocketchat.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callbacks.AgentCallback;
-import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.MessagesCallback;
+import io.rocketchat.livechat.callbacks.*;
+import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.models.AgentObject;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.MessageObject;
@@ -53,6 +52,21 @@ public class Main {
 //                            System.out.println(object);
 //                        }
 //                    });
+
+                    liveChat.subscribeRoom(roomID,false);
+                    liveChat.subscribeLiveChatRoom(roomID,false);
+                    liveChat.subscribeTyping(roomID,false);
+                    LiveChatStreamMiddleware.getInstance().subscribeRoom(new MessageCallback() {
+                        public void call(String roomId,MessageObject object) {
+                            System.out.println("Got message "+object+ " from roomId "+roomId);
+                        }
+                    });
+
+                    LiveChatStreamMiddleware.getInstance().subscribeTyping(new TypingCallback() {
+                        public void call(String roomId, String user, Boolean istyping) {
+                            System.out.println(user+" : typing "+istyping);
+                        }
+                    });
                 }
             });
 

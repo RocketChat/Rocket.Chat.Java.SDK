@@ -6,27 +6,44 @@ package io.rocketchat.livechat.rpc;
 
 public class LiveChatSubRPC {
 
-    public static String streamRoomMessages(int uniqueid, String room_id,Boolean enable){
+    /**
+     *
+     * @param uniqueid
+     * @param room_id
+     * @param persistenceEnable Used for adding to collections, more like using sessions for maintaining subscriptions
+     * @return
+     */
+
+    public static String streamRoomMessages(String uniqueid, String room_id,Boolean persistenceEnable){
         return "{\n" +
                 "    \"msg\": \"sub\",\n" +
                 "    \"id\": \""+uniqueid+"\",\n" +
                 "    \"name\": \"stream-room-messages\",\n" +
                 "    \"params\":[\n" +
                 "        \""+room_id+"\",\n" +
-                "        "+enable+"\n" +
+                "        "+persistenceEnable+"\n" +
                 "    ]\n" +
                 "}";
     }
 
-    public static String streamLivechatRoom(int uniqueid, String room_id,Boolean enable){
+    public static String streamLivechatRoom(String uniqueid, String room_id, Boolean persistenceEnable){
         return "{\n" +
                 "    \"msg\": \"sub\",\n" +
                 "    \"id\": \""+uniqueid+"\",\n" +
                 "    \"name\": \"stream-livechat-room\",\n" +
                 "    \"params\":[\n" +
                 "        \""+room_id+"\",\n" +
-                "        "+enable+"\n" +
+                "        "+persistenceEnable+"\n" +
                 "    ]\n" +
+                "}";
+    }
+
+    public static String subscribeTyping(String uniqueid, String room_id, Boolean persistenceEnable){
+        return "{\"msg\":\"sub\"," +
+                "\"id\":\""+uniqueid+"\"," +
+                "\"name\":\"stream-notify-room\"," +
+                "\"params\":[\""+room_id+"/typing\"," +
+                ""+persistenceEnable+"]" +
                 "}";
     }
 
