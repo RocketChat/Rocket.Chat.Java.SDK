@@ -1,9 +1,13 @@
 import io.rocketchat.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callbacks.GuestCallback;
+import io.rocketchat.livechat.callbacks.MessagesCallback;
 import io.rocketchat.livechat.models.GuestObject;
+import io.rocketchat.livechat.models.MessageObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
@@ -23,9 +27,6 @@ public class Main {
 //        System.out.println("Hello there");
         final String msgID= Utils.shortUUID();
 
-        final String roomID= Utils.shortUUID();
-        System.out.println("roomID is "+roomID);
-
         final LiveChatAPI liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
 
         //Connect event to server
@@ -35,7 +36,14 @@ public class Main {
             liveChat.login(authToken, new GuestCallback() {
                 public void call(GuestObject object) {
                     System.out.println("Result is "+object);
-                    liveChat.sendMessage(msgID,roomID,"Hi there",visitorToken);
+//                    liveChat.sendMessage(msgID,roomID,"Hi there",visitorToken);
+//                      liveChat.getChatHistory(roomID, 50, new Date(), new MessagesCallback() {
+//                          public void call(ArrayList<MessageObject> list, int unreadNotLoaded) {
+//                              for (MessageObject object1: list){
+//                                  System.out.println("Message is "+object1.getMessage());
+//                              }
+//                          }
+//                      });
                 }
             });
 

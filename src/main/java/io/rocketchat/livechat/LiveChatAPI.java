@@ -6,12 +6,15 @@ import io.rocketchat.Socket;
 import io.rocketchat.Utils;
 import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.InitialDataCallback;
+import io.rocketchat.livechat.callbacks.MessagesCallback;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
+import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
 import io.rocketchat.livechat.rpc.LiveChatSendMsgRPC;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -71,6 +74,17 @@ public class LiveChatAPI extends Socket{
                 ws.sendText(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
             }
         });
+    }
+
+    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final MessagesCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                middleware.createCallback(uniqueID,callback);
+                ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,limit,lasttimestamp));
+            }
+        });
+
     }
 
 

@@ -3,10 +3,14 @@ package io.rocketchat.livechat.middleware;
 import io.rocketchat.livechat.callbacks.Callback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.InitialDataCallback;
+import io.rocketchat.livechat.callbacks.MessagesCallback;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.LiveChatConfigObject;
+import io.rocketchat.livechat.models.MessageObject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -45,6 +49,15 @@ public class LiveChatMiddleware {
                 GuestCallback guestCallback= (GuestCallback) callback;
                 GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
                 guestCallback.call(guestObject);
+            }else if (callback instanceof MessagesCallback){
+                ArrayList <MessageObject> list=new ArrayList<MessageObject>();
+                MessagesCallback messagesCallback= (MessagesCallback) callback;
+                JSONArray array=object.optJSONObject("result").optJSONArray("messages");
+                for (int j=0;j<array.length();j++){
+                    list.add(new MessageObject(array.optJSONObject(j)));
+                }
+                int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
+                messagesCallback.call(list,unreadNotLoaded);
             }
 
         }
