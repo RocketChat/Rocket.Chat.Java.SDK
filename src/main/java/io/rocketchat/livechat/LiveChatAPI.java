@@ -1,7 +1,12 @@
 package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
+import io.rocketchat.EventThread;
 import io.rocketchat.Socket;
+import io.rocketchat.Utils;
+import io.rocketchat.livechat.callbacks.GuestCallback;
+import io.rocketchat.livechat.callbacks.InitialDataCallback;
+import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
 import org.json.JSONObject;
 
@@ -19,11 +24,43 @@ public class LiveChatAPI extends Socket{
     AtomicInteger integer;
     String sessionId;
     WebSocketListener listener;
+    LiveChatMiddleware middleware;
 
     public LiveChatAPI(String url) {
         super(url);
         listener=getListener();
         integer=new AtomicInteger(1);
+        middleware=LiveChatMiddleware.getInstance();
+    }
+
+    public void getInitialData(final InitialDataCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID=integer.getAndIncrement();
+                middleware.createCallback(uniqueID,callback);
+                ws.sendText(LiveChatBasicRPC.getInitialData(uniqueID));
+            }
+        });
+    }
+
+    public void registerGuest(final String name, final String email, final String dept, final GuestCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID=integer.getAndIncrement();
+                middleware.createCallback(uniqueID,callback);
+                ws.sendText(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
+            }
+        });
+    }
+
+    public void login(final String token, final GuestCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID=integer.getAndIncrement();
+                middleware.createCallback(uniqueID,callback);
+                ws.sendText(LiveChatBasicRPC.login(uniqueID,token));
+            }
+        });
     }
 
     @Override
@@ -91,8 +128,8 @@ public class LiveChatAPI extends Socket{
                         websocket.sendText("{\"msg\":\"pong\"}");
                     } else if (object.optString("msg").equals("connected")) {
                         sessionId = object.optString("session");
-                    }else{
-
+                    }else if (Utils.isInteger(object.optString("id"))){
+                        middleware.processCallback(Long.valueOf(object.optString("id")),object);
                     }
 //
                     System.out.println("Message is " + text);
