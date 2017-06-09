@@ -1,4 +1,4 @@
-package io.rocketchat;
+package io.rocketchat.network;
 
 import com.neovisionaries.ws.client.*;
 

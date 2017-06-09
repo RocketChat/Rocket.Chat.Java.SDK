@@ -1,6 +1,6 @@
 package io.rocketchat.livechat.rpc;
 
-import io.rocketchat.Utils;
+import io.rocketchat.utils.Utils;
 
 /**
  * Created by sachin on 8/6/17.

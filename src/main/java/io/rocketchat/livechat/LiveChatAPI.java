@@ -1,9 +1,9 @@
 package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
-import io.rocketchat.EventThread;
-import io.rocketchat.Socket;
-import io.rocketchat.Utils;
+import io.rocketchat.network.EventThread;
+import io.rocketchat.network.Socket;
+import io.rocketchat.utils.Utils;
 import io.rocketchat.livechat.callbacks.AgentCallback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
 import io.rocketchat.livechat.callbacks.InitialDataCallback;
@@ -128,6 +128,7 @@ public class LiveChatAPI extends Socket{
             }
         });
     }
+
     @Override
     public void connect() throws IOException {
         createWebsocketfactory();

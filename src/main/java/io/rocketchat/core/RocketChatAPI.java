@@ -1,7 +1,7 @@
 package io.rocketchat.core;
 
 import com.neovisionaries.ws.client.*;
-import io.rocketchat.Socket;
+import io.rocketchat.network.Socket;
 import io.rocketchat.core.rpc.BasicRPC;
 import org.json.JSONObject;
 

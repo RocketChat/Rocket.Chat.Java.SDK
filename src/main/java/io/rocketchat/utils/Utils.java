@@ -1,4 +1,4 @@
-package io.rocketchat;
+package io.rocketchat.utils;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;

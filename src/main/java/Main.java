@@ -1,14 +1,13 @@
-import io.rocketchat.Utils;
+import io.rocketchat.utils.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callbacks.*;
+import io.rocketchat.livechat.callbacks.GuestCallback;
+import io.rocketchat.livechat.callbacks.MessageCallback;
+import io.rocketchat.livechat.callbacks.TypingCallback;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
-import io.rocketchat.livechat.models.AgentObject;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.MessageObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.

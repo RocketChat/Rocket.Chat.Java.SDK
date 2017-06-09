@@ -1,4 +1,4 @@
-package io.rocketchat;
+package io.rocketchat.network;
 
 /**
  * Created by sachin on 9/6/17.
