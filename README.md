@@ -27,13 +27,6 @@ Gradle
 For java 
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/sacoo7/Maven" 
-    }
-}
-...........
-...........
 
 dependencies {
     compile 'io.rocketchat:rocketchatjavasdk:0.0.2'
@@ -42,14 +35,6 @@ dependencies {
 For android 
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/sacoo7/Maven" 
-    }
-}
-.........
-........
-
 compile ('io.rocketchat:rocketchatjavasdk:0.0.2'){
         exclude group :'org.json', module: 'json'
 }
