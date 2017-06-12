@@ -1,10 +1,10 @@
 package io.rocketchat.livechat.middleware;
 
-import io.rocketchat.livechat.callbacks.*;
-import io.rocketchat.livechat.models.AgentObject;
-import io.rocketchat.livechat.models.GuestObject;
-import io.rocketchat.livechat.models.LiveChatConfigObject;
-import io.rocketchat.livechat.models.MessageObject;
+import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.LiveChatConfigObject;
+import io.rocketchat.livechat.model.MessageObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LiveChatMiddleware {
 
 
-    //It will contain ConcurrentArrayList of all callbacks
+    //It will contain ConcurrentArrayList of all callback
     //Each new response will trigger each of the callback
 
     public enum CallbackType{

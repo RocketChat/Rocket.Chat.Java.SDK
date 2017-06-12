@@ -1,10 +1,10 @@
 package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
-import io.rocketchat.livechat.callbacks.*;
-import io.rocketchat.network.EventThread;
-import io.rocketchat.network.Socket;
-import io.rocketchat.utils.Utils;
+import io.rocketchat.livechat.callback.*;
+import io.rocketchat.common.network.EventThread;
+import io.rocketchat.common.network.Socket;
+import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.rpc.*;

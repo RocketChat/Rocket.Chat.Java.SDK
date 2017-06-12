@@ -1,10 +1,10 @@
 package io.rocketchat.livechat.middleware;
 
-import io.rocketchat.livechat.callbacks.AgentCallback;
-import io.rocketchat.livechat.callbacks.MessageCallback;
-import io.rocketchat.livechat.callbacks.TypingCallback;
-import io.rocketchat.livechat.models.AgentObject;
-import io.rocketchat.livechat.models.MessageObject;
+import io.rocketchat.livechat.callback.AgentCallback;
+import io.rocketchat.livechat.callback.MessageCallback;
+import io.rocketchat.livechat.callback.TypingCallback;
+import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.model.MessageObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * Created by sachin on 9/6/17.
  */
 
-//This middleware consists of room subscription callbacks
+//This middleware consists of room subscription callback
 
 public class LiveChatStreamMiddleware {
 

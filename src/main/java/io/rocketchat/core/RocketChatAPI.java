@@ -1,11 +1,10 @@
 package io.rocketchat.core;
 
 import com.neovisionaries.ws.client.*;
-import io.rocketchat.network.Socket;
+import io.rocketchat.common.network.Socket;
 import io.rocketchat.core.rpc.BasicRPC;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;

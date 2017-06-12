@@ -1,10 +1,10 @@
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callbacks.ConnectCallback;
-import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.HistoryCallback;
-import io.rocketchat.livechat.models.GuestObject;
-import io.rocketchat.livechat.models.MessageObject;
-import io.rocketchat.utils.Utils;
+import io.rocketchat.livechat.callback.ConnectCallback;
+import io.rocketchat.livechat.callback.GuestCallback;
+import io.rocketchat.livechat.callback.HistoryCallback;
+import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,7 +82,7 @@ public class Main implements ConnectCallback,
     @Override
     public void call(ArrayList<MessageObject> list, int unreadNotLoaded) {
         for (MessageObject object: list){
-            System.out.println("Message is "+object.getMessage());
+            System.out.println("Message is "+object);
         }
     }
 
