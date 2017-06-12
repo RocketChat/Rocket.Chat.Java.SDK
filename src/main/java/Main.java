@@ -1,22 +1,23 @@
+import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.ConnectCallback;
 import io.rocketchat.livechat.callback.GuestCallback;
 import io.rocketchat.livechat.callback.HistoryCallback;
+import io.rocketchat.livechat.callback.SubscribeCallback;
+import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.MessageObject;
-import io.rocketchat.common.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-
 public class Main implements ConnectCallback,
         GuestCallback,
-        HistoryCallback {
+        HistoryCallback,
+        SubscribeCallback{
 
     public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh";
     public static String visitorToken="gxCgQjdSisYWJGuSf";
@@ -41,9 +42,7 @@ public class Main implements ConnectCallback,
 //                        }
 //                    });
 
-//                    liveChat.subscribeRoom(roomID,false);
-//                    liveChat.subscribeLiveChatRoom(roomID,false);
-//                    liveChat.subscribeTyping(roomID,false);
+
 //                    LiveChatStreamMiddleware.getInstance().subscribeRoom(new MessageCallback() {
 //                        public void call(String roomId,MessageObject object) {
 //                            System.out.println("Got message "+object+ " from roomId "+roomId);
@@ -76,7 +75,11 @@ public class Main implements ConnectCallback,
     @Override
     public void call(GuestObject object) {
         System.out.println("Login is successful");
-        liveChat.getChatHistory(roomID, 50, new Date(),this);
+        liveChat.subscribeRoom(roomID,false,this);
+        liveChat.subscribeLiveChatRoom(roomID,false,this);
+        liveChat.subscribeTyping(roomID,false,this);
+
+//        liveChat.getChatHistory(roomID, 50, new Date(),this);
     }
 
     @Override
@@ -86,4 +89,8 @@ public class Main implements ConnectCallback,
         }
     }
 
+    @Override
+    public void onSubscribe(LiveChatStreamMiddleware.subscriptiontype type, String subId) {
+        System.out.println("subscribed successfully to "+type+ " using id "+subId);
+    }
 }

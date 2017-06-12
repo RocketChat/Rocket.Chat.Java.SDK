@@ -7,7 +7,7 @@ import io.rocketchat.livechat.model.MessageObject;
  */
 
 /**
- *  Used to get message, which is returned after subscription to particular room
+ *  Used to get message, which is returned after subscriptiontype to particular room
  */
 
 public interface MessageCallback extends Callback {

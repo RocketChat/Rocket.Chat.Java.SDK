@@ -113,7 +113,8 @@ public class LiveChatAPI extends Socket{
     public void subscribeRoom(final String roomID, final Boolean enable){
         EventThread.exec(new Runnable() {
             public void run() {
-                ws.sendText(LiveChatSubRPC.streamRoomMessages(Utils.shortUUID(),roomID,enable));
+                String uniqueID=Utils.shortUUID();
+                ws.sendText(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
             }
         });
     }
@@ -121,7 +122,8 @@ public class LiveChatAPI extends Socket{
     public void subscribeLiveChatRoom(final String roomID, final Boolean enable){
         EventThread.exec(new Runnable() {
             public void run() {
-                ws.sendText(LiveChatSubRPC.streamLivechatRoom(Utils.shortUUID(),roomID,enable));
+                String uniqueID=Utils.shortUUID();
+                ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
             }
         });
     }
@@ -129,7 +131,38 @@ public class LiveChatAPI extends Socket{
     public void subscribeTyping(final String roomID, final Boolean enable){
         EventThread.exec(new Runnable() {
             public void run() {
-                ws.sendText(LiveChatSubRPC.subscribeTyping(Utils.shortUUID(),roomID,enable));
+                String uniqueID=Utils.shortUUID();
+                ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
+            }
+        });
+    }
+
+    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                String uniqueID=Utils.shortUUID();
+                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
+                ws.sendText(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
+            }
+        });
+    }
+
+    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                String uniqueID=Utils.shortUUID();
+                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
+                ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
+            }
+        });
+    }
+
+    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                String uniqueID=Utils.shortUUID();
+                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
+                ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
             }
         });
     }
@@ -212,6 +245,8 @@ public class LiveChatAPI extends Socket{
                     }
                 }else if (Utils.isInteger(object.optString("id"))) {
                     liveChatMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
+                }else if (object.optString("msg").equals("ready")){
+                    liveChatStreamMiddleware.processSubSuccess(object);
                 }else if (object.optString("msg").equals("changed")){
                     liveChatStreamMiddleware.processCallback(object);
                 }
