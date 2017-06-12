@@ -8,17 +8,38 @@ This SDK is divided into two parts
 
 Current development approach is focused on LiveChat SDK and it allows following functionality
 
-- getinitialdata (info. about departments and triggers) and register guest  
-- guest login
-- load history
-- send message
-- subscribe to room
-- receive message event
-- get agent info.
-- send and receive typing event
+- Getinitialdata (info. about departments and triggers) and register guest  
+- Guest login
+- Load history
+- Send message
+- Subscribe to room
+- Receive message event
+- Get agent info.
+- Send and receive typing event
 
 License
 -------
 Apache License, Version 2.0
+
+
+Gradle
+------
+For java 
+
+```Gradle
+
+dependencies {
+    compile 'io.rocketchat:rocketchatjavasdk:0.0.2'
+}
+```
+For android 
+
+```Gradle
+compile ('io.rocketchat:rocketchatjavasdk:0.0.2'){
+        exclude group :'org.json', module: 'json'
+}
+```
+
+[ ![Download](https://api.bintray.com/packages/sacoo7/Maven/RocketChat-SDK/images/download.svg) ](https://bintray.com/sacoo7/Maven/RocketChat-SDK/_latestVersion)
 
 
