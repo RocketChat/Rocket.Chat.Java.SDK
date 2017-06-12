@@ -22,7 +22,6 @@ public class Socket {
 
     /**
      * Function for connecting to server
-     * @throws IOException
      */
 
     protected void createWebsocketfactory(){

@@ -16,7 +16,7 @@ allprojects {
 }
 
 group 'io.rocketchat'
-version '0.0.2'
+version '0.1.0'
 
 
 apply plugin: 'java'
@@ -52,7 +52,7 @@ publishing {
             from components.java
             groupId 'io.rocketchat'
             artifactId 'rocketchatjavasdk'
-            version '0.0.2'
+            version '0.1.0'
 
             artifact sourceJar {
                 classifier "sources"
@@ -78,10 +78,10 @@ bintray{
         publicDownloadNumbers = true
 
         version {
-            name = '0.0.2'
+            name = '0.1.0'
             released  = new Date()
-            desc = 'Basic development version of RocketChat SDK'
-            vcsTag = '0.0.2'
+            desc = 'Now Async functionality in connect'
+            vcsTag = '0.1.0'
         }
 
     }
