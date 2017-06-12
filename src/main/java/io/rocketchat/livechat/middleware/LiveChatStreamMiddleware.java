@@ -63,11 +63,17 @@ public class LiveChatStreamMiddleware {
         String s = object.optString("collection");
         JSONArray array=object.optJSONObject("fields").optJSONArray("args");
         if (s.equals("stream-room-messages")) {
-            messageCallback.call(object.optJSONObject("fields").optString("eventName"),new MessageObject(array.optJSONObject(0)));
+            if (messageCallback!=null) {
+                messageCallback.call(object.optJSONObject("fields").optString("eventName"), new MessageObject(array.optJSONObject(0)));
+            }
         }else if (s.equals("stream-livechat-room")){
-            agentCallback.call(LiveChatMiddleware.AgentCallbackType.STREAMLIVECHATROOM,new AgentObject(array.optJSONObject(0)));
+            if (agentCallback!=null) {
+                agentCallback.call(LiveChatMiddleware.AgentCallbackType.STREAMLIVECHATROOM, new AgentObject(array.optJSONObject(0)));
+            }
         }else{
-            typingCallback.call(object.optJSONObject("fields").optString("eventName"),array.optString(0),array.optBoolean(1));
+            if (typingCallback!=null) {
+                typingCallback.call(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
+            }
         }
     }
 

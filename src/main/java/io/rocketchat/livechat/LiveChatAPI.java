@@ -110,58 +110,46 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void subscribeRoom(final String roomID, final Boolean enable){
+    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final MessageCallback callback){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
+                if (subscribeCallback!=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
+                }
+                if (callback!=null){
+                    liveChatStreamMiddleware.subscribeRoom(callback);
+                }
                 ws.sendText(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
             }
         });
     }
 
-    public void subscribeLiveChatRoom(final String roomID, final Boolean enable){
+    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final AgentCallback callback){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
+                if (subscribeCallback!=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
+                }
+                if (callback!=null){
+                    liveChatStreamMiddleware.subscribeLiveChatRoom(callback);
+                }
                 ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
             }
         });
     }
 
-    public void subscribeTyping(final String roomID, final Boolean enable){
+    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final TypingCallback callback){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
-                ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
-            }
-        });
-    }
-
-    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeCallback callback){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
-                ws.sendText(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
-            }
-        });
-    }
-
-    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeCallback callback){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
-                ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
-            }
-        });
-    }
-
-    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeCallback callback){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                liveChatStreamMiddleware.createSubCallbacks(uniqueID,callback, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
+                if (subscribeCallback!=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
+                }
+                if (callback!=null){
+                    liveChatStreamMiddleware.subscribeTyping(callback);
+                }
                 ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
             }
         });
@@ -172,6 +160,7 @@ public class LiveChatAPI extends Socket{
         ws.addListener(listener);
         super.connect();
     }
+
 
     public void connectAsync(ConnectCallback connectCallback) {
         createWebsocketfactory();
