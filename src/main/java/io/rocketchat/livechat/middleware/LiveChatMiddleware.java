@@ -21,9 +21,15 @@ public class LiveChatMiddleware {
     //It will contain ConcurrentArrayList of all callback
     //Each new response will trigger each of the callback
 
+    public enum AgentCallbackType{
+        GETAGENTDATA,
+        STREAMLIVECHATROOM
+    }
+
     public enum CallbackType{
         GETINITIALDATA,
-        REGISTERORLOGIN,
+        REGISTER,
+        LOGIN,
         GETCHATHISTORY,
         GETAGENTDATA
     }
@@ -55,10 +61,16 @@ public class LiveChatMiddleware {
                     LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(object.optJSONObject("result"));
                     dataCallback.call(liveChatConfigObject);
                     break;
-                case REGISTERORLOGIN:
+                case REGISTER: {
+                    GuestCallback guestCallback = (GuestCallback) callback;
+                    GuestObject guestObject = new GuestObject(object.optJSONObject("result"));
+                    guestCallback.call(CallbackType.REGISTER, guestObject);
+                }
+                    break;
+                case LOGIN:
                     GuestCallback guestCallback= (GuestCallback) callback;
                     GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
-                    guestCallback.call(guestObject);
+                    guestCallback.call(CallbackType.LOGIN,guestObject);
                     break;
                 case GETCHATHISTORY:
                     ArrayList <MessageObject> list=new ArrayList<MessageObject>();
@@ -73,7 +85,7 @@ public class LiveChatMiddleware {
                 case GETAGENTDATA:
                     AgentCallback agentCallback= (AgentCallback) callback;
                     AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
-                    agentCallback.call(agentObject);
+                    agentCallback.call(AgentCallbackType.GETAGENTDATA,agentObject);
                     break;
             }
 

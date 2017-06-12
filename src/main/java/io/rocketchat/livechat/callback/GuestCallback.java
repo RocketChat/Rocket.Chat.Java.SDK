@@ -1,4 +1,5 @@
 package io.rocketchat.livechat.callback;
+import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.model.GuestObject;
 
 /**
@@ -10,5 +11,5 @@ import io.rocketchat.livechat.model.GuestObject;
  */
 
 public interface GuestCallback extends Callback{
-    void call(GuestObject object);
+    void call(LiveChatMiddleware.CallbackType guestCallbackType,GuestObject object);
 }

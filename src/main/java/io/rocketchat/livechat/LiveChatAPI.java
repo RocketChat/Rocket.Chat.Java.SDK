@@ -55,7 +55,7 @@ public class LiveChatAPI extends Socket{
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTERORLOGIN);
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTER);
                 ws.sendText(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
             }
         });
@@ -65,7 +65,7 @@ public class LiveChatAPI extends Socket{
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTERORLOGIN);
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.LOGIN);
                 ws.sendText(LiveChatBasicRPC.login(uniqueID,token));
             }
         });

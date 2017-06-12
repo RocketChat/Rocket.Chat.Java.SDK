@@ -1,11 +1,10 @@
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.ConnectCallback;
-import io.rocketchat.livechat.callback.GuestCallback;
-import io.rocketchat.livechat.callback.HistoryCallback;
-import io.rocketchat.livechat.callback.SubscribeCallback;
+import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.MessageObject;
 
 import java.util.ArrayList;
@@ -36,11 +35,7 @@ public class Main implements ConnectCallback,
 
 //                    liveChat.sendMessage(msgID,roomID,"Hi there",visitorToken);
 //                    liveChat.sendIsTyping(roomID,username,true );
-//                    liveChat.getAgentData(roomID, new AgentCallback() {
-//                        public void call(AgentObject object) {
-//                            System.out.println(object);
-//                        }
-//                    });
+
 
 
 //                    LiveChatStreamMiddleware.getInstance().subscribeRoom(new MessageCallback() {
@@ -73,13 +68,11 @@ public class Main implements ConnectCallback,
     }
 
     @Override
-    public void call(GuestObject object) {
-        System.out.println("Login is successful");
+    public void call(LiveChatMiddleware.CallbackType guestCallbackType, GuestObject object) {
+        System.out.println("logged in successfully");
         liveChat.subscribeRoom(roomID,false,this);
         liveChat.subscribeLiveChatRoom(roomID,false,this);
         liveChat.subscribeTyping(roomID,false,this);
-
-//        liveChat.getChatHistory(roomID, 50, new Date(),this);
     }
 
     @Override
@@ -93,4 +86,5 @@ public class Main implements ConnectCallback,
     public void onSubscribe(LiveChatStreamMiddleware.subscriptiontype type, String subId) {
         System.out.println("subscribed successfully to "+type+ " using id "+subId);
     }
+
 }

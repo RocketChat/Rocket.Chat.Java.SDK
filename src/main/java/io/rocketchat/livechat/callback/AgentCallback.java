@@ -1,5 +1,6 @@
 package io.rocketchat.livechat.callback;
 
+import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.model.AgentObject;
 
 /**
@@ -10,5 +11,5 @@ import io.rocketchat.livechat.model.AgentObject;
  * Getting agent info. from the server
  */
 public interface AgentCallback extends Callback {
-    void call(AgentObject object);
+    void call(LiveChatMiddleware.AgentCallbackType agentCallbackType, AgentObject object);
 }

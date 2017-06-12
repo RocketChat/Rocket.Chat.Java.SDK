@@ -65,7 +65,7 @@ public class LiveChatStreamMiddleware {
         if (s.equals("stream-room-messages")) {
             messageCallback.call(object.optJSONObject("fields").optString("eventName"),new MessageObject(array.optJSONObject(0)));
         }else if (s.equals("stream-livechat-room")){
-            agentCallback.call(new AgentObject(array.optJSONObject(0)));
+            agentCallback.call(LiveChatMiddleware.AgentCallbackType.STREAMLIVECHATROOM,new AgentObject(array.optJSONObject(0)));
         }else{
             typingCallback.call(object.optJSONObject("fields").optString("eventName"),array.optString(0),array.optBoolean(1));
         }
