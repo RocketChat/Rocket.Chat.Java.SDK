@@ -10,7 +10,6 @@ import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.rpc.*;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +72,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final MessagesCallback callback){
+    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final HistoryCallback callback){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();

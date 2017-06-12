@@ -1,7 +1,7 @@
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callbacks.ConnectCallback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.MessagesCallback;
+import io.rocketchat.livechat.callbacks.HistoryCallback;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.MessageObject;
 import io.rocketchat.utils.Utils;
@@ -16,7 +16,7 @@ import java.util.Date;
 
 public class Main implements ConnectCallback,
         GuestCallback,
-        MessagesCallback{
+        HistoryCallback {
 
     public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh";
     public static String visitorToken="gxCgQjdSisYWJGuSf";

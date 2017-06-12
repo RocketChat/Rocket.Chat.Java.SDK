@@ -62,13 +62,13 @@ public class LiveChatMiddleware {
                     break;
                 case GETCHATHISTORY:
                     ArrayList <MessageObject> list=new ArrayList<MessageObject>();
-                    MessagesCallback messagesCallback= (MessagesCallback) callback;
+                    HistoryCallback historymessages = (HistoryCallback) callback;
                     JSONArray array=object.optJSONObject("result").optJSONArray("messages");
                     for (int j=0;j<array.length();j++){
                         list.add(new MessageObject(array.optJSONObject(j)));
                     }
                     int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
-                    messagesCallback.call(list,unreadNotLoaded);
+                    historymessages.call(list,unreadNotLoaded);
                     break;
                 case GETAGENTDATA:
                     AgentCallback agentCallback= (AgentCallback) callback;
