@@ -1,0 +1,10 @@
+
+io.rocketchat.core
+io.rocketchat.core.rpc
+io.rocketchat.livechat
+io.rocketchat.livechat.callbacks
+io.rocketchat.livechat.middleware
+io.rocketchat.livechat.models
+io.rocketchat.livechat.rpc
+io.rocketchat.network
+io.rocketchat.utils

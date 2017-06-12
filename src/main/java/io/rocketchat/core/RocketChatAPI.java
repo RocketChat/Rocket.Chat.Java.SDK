@@ -25,8 +25,7 @@ public class RocketChatAPI extends Socket {
         integer=new AtomicInteger(1);
     }
 
-    @Override
-    public void connect() throws IOException {
+    public void connect(){
         createWebsocketfactory();
         ws.addListener(listener);
         super.connect();

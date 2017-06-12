@@ -19,8 +19,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="LiveChatAPI_main" target="1.5" />
-      <module name="LiveChatAPI_test" target="1.5" />
+      <module name="LiveChatAPI_main" target="1.7" />
+      <module name="LiveChatAPI_test" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

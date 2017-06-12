@@ -17,49 +17,64 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatMiddleware {
 
+
     //It will contain ConcurrentArrayList of all callbacks
     //Each new response will trigger each of the callback
 
-    ConcurrentHashMap<Long,Callback> callbacks;
+    public enum CallbackType{
+        GETINITIALDATA,
+        REGISTERORLOGIN,
+        GETCHATHISTORY,
+        GETAGENTDATA
+    }
+
+    ConcurrentHashMap<Long,Object[]> callbacks;
 
     private static LiveChatMiddleware middleware= new LiveChatMiddleware();
 
     private LiveChatMiddleware(){
-        callbacks=new ConcurrentHashMap<Long, Callback>();
+        callbacks= new ConcurrentHashMap<>();
     }
 
     public static LiveChatMiddleware getInstance(){
         return middleware;
     }
 
-    public void createCallback(long i,Callback callback){
-        callbacks.put(i,callback);
+    public void createCallback(long i,Callback callback, CallbackType type){
+        callbacks.put(i,new Object[]{callback,type});
     }
 
     public void processCallback(long i, JSONObject object){
         if (callbacks.containsKey(i)){
-            Callback callback=callbacks.remove(i);
-            if (callback instanceof InitialDataCallback){
-                InitialDataCallback dataCallback= (InitialDataCallback) callback;
-                LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(object.optJSONObject("result"));
-                dataCallback.call(liveChatConfigObject);
-            }else if (callback instanceof GuestCallback){
-                GuestCallback guestCallback= (GuestCallback) callback;
-                GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
-                guestCallback.call(guestObject);
-            }else if (callback instanceof MessagesCallback){
-                ArrayList <MessageObject> list=new ArrayList<MessageObject>();
-                MessagesCallback messagesCallback= (MessagesCallback) callback;
-                JSONArray array=object.optJSONObject("result").optJSONArray("messages");
-                for (int j=0;j<array.length();j++){
-                    list.add(new MessageObject(array.optJSONObject(j)));
-                }
-                int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
-                messagesCallback.call(list,unreadNotLoaded);
-            }else if (callback instanceof AgentCallback){
-                AgentCallback agentCallback= (AgentCallback) callback;
-                AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
-                agentCallback.call(agentObject);
+            Object[] objects=callbacks.remove(i);
+            Callback callback= (Callback) objects[0];
+            CallbackType type= (CallbackType) objects[1];
+            switch (type) {
+                case GETINITIALDATA:
+                    InitialDataCallback dataCallback= (InitialDataCallback) callback;
+                    LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(object.optJSONObject("result"));
+                    dataCallback.call(liveChatConfigObject);
+                    break;
+                case REGISTERORLOGIN:
+                    GuestCallback guestCallback= (GuestCallback) callback;
+                    GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
+                    guestCallback.call(guestObject);
+                    break;
+                case GETCHATHISTORY:
+                    ArrayList <MessageObject> list=new ArrayList<MessageObject>();
+                    MessagesCallback messagesCallback= (MessagesCallback) callback;
+                    JSONArray array=object.optJSONObject("result").optJSONArray("messages");
+                    for (int j=0;j<array.length();j++){
+                        list.add(new MessageObject(array.optJSONObject(j)));
+                    }
+                    int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
+                    messagesCallback.call(list,unreadNotLoaded);
+                    break;
+                case GETAGENTDATA:
+                    AgentCallback agentCallback= (AgentCallback) callback;
+                    AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
+                    agentCallback.call(agentObject);
+                    break;
             }
 
         }

@@ -1,13 +1,10 @@
 package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
+import io.rocketchat.livechat.callbacks.*;
 import io.rocketchat.network.EventThread;
 import io.rocketchat.network.Socket;
 import io.rocketchat.utils.Utils;
-import io.rocketchat.livechat.callbacks.AgentCallback;
-import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.InitialDataCallback;
-import io.rocketchat.livechat.callbacks.MessagesCallback;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.rpc.*;
@@ -26,10 +23,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
+
     String sessionId;
+    JSONObject userInfo;
+
     WebSocketListener listener;
     LiveChatMiddleware liveChatMiddleware;
     LiveChatStreamMiddleware liveChatStreamMiddleware;
+
+    ConnectCallback connectCallback;
+
 
     public LiveChatAPI(String url) {
         super(url);
@@ -43,7 +46,7 @@ public class LiveChatAPI extends Socket{
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback);
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETINITIALDATA);
                 ws.sendText(LiveChatBasicRPC.getInitialData(uniqueID));
             }
         });
@@ -53,7 +56,7 @@ public class LiveChatAPI extends Socket{
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback);
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTERORLOGIN);
                 ws.sendText(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
             }
         });
@@ -63,11 +66,35 @@ public class LiveChatAPI extends Socket{
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback);
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTERORLOGIN);
                 ws.sendText(LiveChatBasicRPC.login(uniqueID,token));
             }
         });
     }
+
+
+    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final MessagesCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETCHATHISTORY);
+                ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,limit,lasttimestamp));
+            }
+        });
+
+    }
+
+
+    public void getAgentData(final String roomId, final AgentCallback callback){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETAGENTDATA);
+                ws.sendText(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
+            }
+        });
+    }
+
 
     public void sendMessage(final String msgId, final String roomID, final String message, final String token){
         EventThread.exec(new Runnable() {
@@ -78,32 +105,11 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final MessagesCallback callback){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback);
-                ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,limit,lasttimestamp));
-            }
-        });
-
-    }
-
     public void sendIsTyping(String roomId, String username, Boolean istyping){
                 int uniqueID = integer.getAndIncrement();
                 ws.sendText(LiveChatTypingRPC.streamNotifyRoom(uniqueID,roomId,username,istyping));
     }
 
-
-    public void getAgentData(final String roomId, final AgentCallback callback){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback);
-                ws.sendText(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
-            }
-        });
-    }
 
     public void subscribeRoom(final String roomID, final Boolean enable){
         EventThread.exec(new Runnable() {
@@ -129,11 +135,17 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    @Override
-    public void connect() throws IOException {
+    public void connect(){
         createWebsocketfactory();
         ws.addListener(listener);
         super.connect();
+    }
+
+    public void connectAsync(ConnectCallback connectCallback) {
+        createWebsocketfactory();
+        ws.addListener(listener);
+        this.connectCallback=connectCallback;
+        super.connectAsync();
     }
 
     WebSocketListener getListener() {
@@ -192,7 +204,14 @@ public class LiveChatAPI extends Socket{
                     websocket.sendText("{\"msg\":\"pong\"}");
                 } else if (object.optString("msg").equals("connected")) {
                     sessionId = object.optString("session");
-                } else if (Utils.isInteger(object.optString("id"))) {
+                    if (connectCallback != null) {
+                        connectCallback.onConnect(sessionId);
+                    }
+                } else if (object.optString("msg").equals("added")){
+                    if (object.optString("collection")!=null && object.optString("collection").equals("users")) {
+                        userInfo = object.optJSONObject("fields");
+                    }
+                }else if (Utils.isInteger(object.optString("id"))) {
                     liveChatMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
                 }else if (object.optString("msg").equals("changed")){
                     liveChatStreamMiddleware.processCallback(object);

@@ -1,20 +1,22 @@
-import io.rocketchat.utils.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
+import io.rocketchat.livechat.callbacks.ConnectCallback;
 import io.rocketchat.livechat.callbacks.GuestCallback;
-import io.rocketchat.livechat.callbacks.MessageCallback;
-import io.rocketchat.livechat.callbacks.TypingCallback;
-import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
+import io.rocketchat.livechat.callbacks.MessagesCallback;
 import io.rocketchat.livechat.models.GuestObject;
 import io.rocketchat.livechat.models.MessageObject;
+import io.rocketchat.utils.Utils;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
 
-public class Main {
+public class Main implements ConnectCallback,
+        GuestCallback,
+        MessagesCallback{
 
     public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh";
     public static String visitorToken="gxCgQjdSisYWJGuSf";
@@ -22,29 +24,16 @@ public class Main {
     public static String roomID="qdyaxcrgqgxl";
     public static String username="guest-5";
 
-    public static void main(String [] args){
+    LiveChatAPI liveChat;
+    private String msgID;
 
+    public void call(){
+        msgID= Utils.shortUUID();
 
-//        System.out.println("Hello there");
-        final String msgID= Utils.shortUUID();
+        liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
+        liveChat.connectAsync(this);
 
-        final LiveChatAPI liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
-
-        //Connect event to server
-        try {
-            liveChat.connect();
-
-            liveChat.login(authToken, new GuestCallback() {
-                public void call(GuestObject object) {
-                    System.out.println("Result is "+object);
 //                    liveChat.sendMessage(msgID,roomID,"Hi there",visitorToken);
-//                      liveChat.getChatHistory(roomID, 50, new Date(), new MessagesCallback() {
-//                          public void call(ArrayList<MessageObject> list, int unreadNotLoaded) {
-//                              for (MessageObject object1: list){
-//                                  System.out.println("Message is "+object1.getMessage());
-//                              }
-//                          }
-//                      });
 //                    liveChat.sendIsTyping(roomID,username,true );
 //                    liveChat.getAgentData(roomID, new AgentCallback() {
 //                        public void call(AgentObject object) {
@@ -52,25 +41,49 @@ public class Main {
 //                        }
 //                    });
 
-                    liveChat.subscribeRoom(roomID,false);
-                    liveChat.subscribeLiveChatRoom(roomID,false);
-                    liveChat.subscribeTyping(roomID,false);
-                    LiveChatStreamMiddleware.getInstance().subscribeRoom(new MessageCallback() {
-                        public void call(String roomId,MessageObject object) {
-                            System.out.println("Got message "+object+ " from roomId "+roomId);
-                        }
-                    });
+//                    liveChat.subscribeRoom(roomID,false);
+//                    liveChat.subscribeLiveChatRoom(roomID,false);
+//                    liveChat.subscribeTyping(roomID,false);
+//                    LiveChatStreamMiddleware.getInstance().subscribeRoom(new MessageCallback() {
+//                        public void call(String roomId,MessageObject object) {
+//                            System.out.println("Got message "+object+ " from roomId "+roomId);
+//                        }
+//                    });
+//
+//                    LiveChatStreamMiddleware.getInstance().subscribeTyping(new TypingCallback() {
+//                        public void call(String roomId, String user, Boolean istyping) {
+//                            System.out.println(user+" : typing "+istyping);
+//                        }
+//                    });
 
-                    LiveChatStreamMiddleware.getInstance().subscribeTyping(new TypingCallback() {
-                        public void call(String roomId, String user, Boolean istyping) {
-                            System.out.println(user+" : typing "+istyping);
-                        }
-                    });
-                }
-            });
+    }
+    public static void main(String [] args){
 
-        } catch (IOException e) {
-            e.printStackTrace();
+
+//        System.out.println("Hello there");
+        new Main().call();
+
+
+    }
+
+
+    @Override
+    public void onConnect(String sessionID) {
+        System.out.println("on connect got called");
+        liveChat.login(authToken,Main.this);
+    }
+
+    @Override
+    public void call(GuestObject object) {
+        System.out.println("Login is successful");
+        liveChat.getChatHistory(roomID, 50, new Date(),this);
+    }
+
+    @Override
+    public void call(ArrayList<MessageObject> list, int unreadNotLoaded) {
+        for (MessageObject object: list){
+            System.out.println("Message is "+object.getMessage());
         }
     }
+
 }

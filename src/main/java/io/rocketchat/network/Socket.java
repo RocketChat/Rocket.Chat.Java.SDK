@@ -25,13 +25,17 @@ public class Socket {
      * @throws IOException
      */
 
-    protected void createWebsocketfactory() throws IOException {
+    protected void createWebsocketfactory(){
         factory = new WebSocketFactory();
         // Create a WebSocket with a socket connection timeout value.
-        ws = factory.createSocket(url);
+        try {
+            ws = factory.createSocket(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void connect() throws IOException {
+    protected void connect() {
         try
         {
             // Connect to the server and perform an opening handshake.
@@ -78,6 +82,10 @@ public class Socket {
             System.out.println("Got websocket exception "+e.getMessage());
             // Failed to establish a WebSocket connection.
         }
+    }
+
+    protected void connectAsync(){
+        ws.connectAsynchronously();
     }
 
 }
