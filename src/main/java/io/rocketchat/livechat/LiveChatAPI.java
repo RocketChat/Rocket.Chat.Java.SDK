@@ -125,15 +125,15 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.ConnectedAgentListener connectedAgentListener){
+    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.AgentConnectListener agentConnectListener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
                 if (subscribeListener !=null) {
                     liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
                 }
-                if (connectedAgentListener!=null){
-                    liveChatStreamMiddleware.subscribeLiveChatRoom(connectedAgentListener);
+                if (agentConnectListener !=null){
+                    liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
                 }
                 ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
             }

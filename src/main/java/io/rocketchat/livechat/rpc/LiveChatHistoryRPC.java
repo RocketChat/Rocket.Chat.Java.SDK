@@ -13,8 +13,9 @@ public class LiveChatHistoryRPC extends RPC{
 
 
     public static String HISTORY="loadHistory";
+
     /**
-     *
+     * TESTED
      * @param integer
      * @param roomId
      * @param oldestMessageTimestamp Used to do pagination (null means latest timestamp)
@@ -24,13 +25,6 @@ public class LiveChatHistoryRPC extends RPC{
      */
 
     public static String loadHistory(int integer, String roomId, Date oldestMessageTimestamp,Integer count, Date lastTimestamp){
-//        return "{\n" +
-//                "    \"msg\": \"method\",\n" +
-//                "    \"method\": \"loadHistory\",\n" +
-//                "    \"id\": \""+integer+"\",\n" +
-//                "    \"params\": [ \""+roomId+"\", { \"$date\": "+((int)lastTimestamp.getTime()/1000)+"} ,"+count+",null]\n" +
-//                "}";
-
         JSONObject lastTs = null;
         JSONObject oldestTs=null;
         try {
@@ -45,13 +39,5 @@ public class LiveChatHistoryRPC extends RPC{
         }
 
         return getRemoteMethodObject(integer,HISTORY,roomId,oldestTs,count,lastTs).toString();
-//        if (oldestMessageTimestamp!=null) {
-//            return "{\n" +
-//                    "    \"msg\": \"method\",\n" +
-//                    "    \"method\": \"loadHistory\",\n" +
-//                    "    \"id\": \"" + integer + "\",\n" +
-//                    "    \"params\": [ \"" + roomId + "\", { \"$date\": " + ((int) oldestMessageTimestamp.getTime() / 1000) + " }, " + count + ", { \"$date\": " + ((int) lastTimestamp.getTime() / 1000) + " } ]\n" +
-//                    "}";
-//
     }
 }

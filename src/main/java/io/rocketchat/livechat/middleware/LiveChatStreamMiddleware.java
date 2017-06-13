@@ -29,7 +29,7 @@ public class LiveChatStreamMiddleware {
 
 
     MessageListener messageListener;
-    AgentListener.ConnectedAgentListener connectedAgentListener;
+    AgentListener.AgentConnectListener agentConnectListener;
     TypingListener typingListener;
 
     ConcurrentHashMap <String,Object[]> subcallbacks;
@@ -47,8 +47,8 @@ public class LiveChatStreamMiddleware {
         this.messageListener = messageListener;
     }
 
-    public void subscribeLiveChatRoom(AgentListener.ConnectedAgentListener connectedAgentListener) {
-        this.connectedAgentListener = connectedAgentListener;
+    public void subscribeLiveChatRoom(AgentListener.AgentConnectListener agentConnectListener) {
+        this.agentConnectListener = agentConnectListener;
     }
 
     public void subscribeTyping(TypingListener callback){
@@ -67,8 +67,8 @@ public class LiveChatStreamMiddleware {
                 messageListener.onMessage(object.optJSONObject("fields").optString("eventName"), new MessageObject(array.optJSONObject(0)));
             }
         }else if (s.equals("stream-livechat-room")){
-            if (connectedAgentListener !=null) {
-                connectedAgentListener.onConnectedAgent(new AgentObject(array.optJSONObject(0)));
+            if (agentConnectListener !=null) {
+                agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0)));
             }
         }else{
             if (typingListener !=null) {

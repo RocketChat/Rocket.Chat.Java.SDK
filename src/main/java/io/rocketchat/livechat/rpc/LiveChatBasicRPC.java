@@ -19,20 +19,33 @@ public class LiveChatBasicRPC extends RPC{
     private static String GETAGENTDATA="livechat:getAgentData";
     private static String CLOSECONVERSATION="livechat:closeByVisitor";
 
+    /**
+     * Tested
+     * @return
+     */
+
     public static String ConnectObject(){
         return "{\"msg\":\"connect\",\"version\":\"1\",\"support\":[\"1\",\"pre2\",\"pre1\"]}";
     }
 
+    /**
+     * Tested
+     * @param integer
+     * @return
+     */
+
     public static String getInitialData(int integer){
-
-//        return "{\"msg\":\"method\"," +
-//                "\"method\":\"livechat:getInitialData\"," +
-//                "\"params\":[\""+ visitorToken +"\"]," +
-//                "\"id\":\""+integer+"\"}";
-
         return getRemoteMethodObject(integer,GETINITIALDATA,visitorToken).toString();
-//        return "{\"msg\":\"method\",\"method\":\"livechat:getInitialData\",\"params\":[\"7T4jzes7rX3Fr6cQ2\"],\"id\":\"1\"}";
     }
+
+    /**
+     * Not tested
+     * @param integer
+     * @param name
+     * @param email
+     * @param dept
+     * @return
+     */
 
     public static String registerGuest(int integer,String name, String email, String dept){
 //        return "{\"msg\":\"method\"," +
@@ -51,15 +64,13 @@ public class LiveChatBasicRPC extends RPC{
         return getRemoteMethodObject(integer,REGISTERGUEST,object).toString();
     }
 
+    /**
+     * Tested
+     * @param integer
+     * @param token
+     * @return
+     */
     public static String login(int integer,String token){
-//        return "{\n" +
-//                "    \"msg\": \"method\",\n" +
-//                "    \"method\": \"login\",\n" +
-//                "    \"id\": \""+integer+"\",\n" +
-//                "    \"params\":[\n" +
-//                "        { \"resume\": \""+token+"\" }\n" +
-//                "    ]\n" +
-//                "}";
             JSONObject object=new JSONObject();
             try {
                 object.put("resume",token);
@@ -70,13 +81,22 @@ public class LiveChatBasicRPC extends RPC{
 
     }
 
+    /**
+     * Tested
+     * @param integer
+     * @param roomId
+     * @return
+     */
     public static String getAgentData(int integer, String roomId){
-//        return "{\"msg\":\"method\"," +
-//                "\"method\":\"livechat:getAgentData\"," +
-//                "\"params\":[\""+roomId+"\"]," +
-//                "\"id\":\""+integer+"\"}";
         return getRemoteMethodObject(integer,GETAGENTDATA,roomId).toString();
     }
+
+    /**
+     * Not tested
+     * @param integer
+     * @param roomId
+     * @return
+     */
 
     public static String closeConversation(int integer,String roomId){
 //        return "{\"msg\":\"method\"," +
