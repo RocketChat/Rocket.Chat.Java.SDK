@@ -1,5 +1,6 @@
 
 io.rocketchat.common.data.model
+io.rocketchat.common.data.rpc
 io.rocketchat.common.network
 io.rocketchat.common.utils
 io.rocketchat.core
