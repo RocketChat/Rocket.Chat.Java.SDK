@@ -381,9 +381,26 @@ public class LiveChatAPI extends Socket{
                     ", authToken='" + authToken + '\'' +
                     '}';
         }
+
+        public String getUserName() {
+            return userName;
+        }
+
+        public String getRoomId() {
+            return roomId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+
+        public String getVisitorToken() {
+            return visitorToken;
+        }
+
+        public String getAuthToken() {
+            return authToken;
+        }
     }
-
-
-
 
 }
