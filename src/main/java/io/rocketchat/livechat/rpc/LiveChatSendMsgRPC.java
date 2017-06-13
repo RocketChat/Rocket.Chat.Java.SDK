@@ -6,7 +6,7 @@ package io.rocketchat.livechat.rpc;
 public class LiveChatSendMsgRPC {
 
 
-    //Token is register guest token (visitorToken), not token for authentication
+    //Token is register guest visitorToken (visitorToken), not visitorToken for authentication
     public static String sendMessage(int integer, String msgId, String roomId, String message,String token){
         return "{\n" +
                 "    \"msg\": \"method\",\n" +
@@ -17,7 +17,7 @@ public class LiveChatSendMsgRPC {
                 "            \"_id\": \""+msgId+"\",\n" +
                 "            \"rid\": \""+roomId+"\",\n" +
                 "            \"msg\": \""+message+"\",\n" +
-                "            \"token\": \""+token+"\"\n" +
+                "            \"visitorToken\": \""+token+"\"\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";

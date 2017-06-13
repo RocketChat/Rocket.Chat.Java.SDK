@@ -14,10 +14,7 @@ import java.util.ArrayList;
 
 public class Main implements ConnectCallback,
         GuestCallback,
-        HistoryCallback,
-        SubscribeCallback,
-        MessageCallback,
-        TypingCallback{
+        HistoryCallback{
 
     public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh";
     public static String visitorToken="gxCgQjdSisYWJGuSf";
@@ -70,10 +67,14 @@ public class Main implements ConnectCallback,
 
     @Override
     public void call(LiveChatMiddleware.CallbackType guestCallbackType, GuestObject object) {
-        System.out.println("logged in successfully");
-        liveChat.subscribeRoom(roomID,false,this,this);
-        liveChat.subscribeLiveChatRoom(roomID,false,this,null);
-        liveChat.subscribeTyping(roomID,false,this,this);
+        switch (guestCallbackType) {
+            case REGISTER:
+                System.out.println("This is registration");
+                break;
+            case LOGIN:
+                System.out.println("This is login");
+                break;
+        }
     }
 
     @Override
@@ -83,18 +84,4 @@ public class Main implements ConnectCallback,
         }
     }
 
-    @Override
-    public void onSubscribe(LiveChatStreamMiddleware.subscriptiontype type, String subId) {
-        System.out.println("subscribed successfully to "+type+ " using id "+subId);
-    }
-
-    @Override
-    public void call(String roomId, MessageObject object) {
-        System.out.println("Got message "+object.getMessage()+ " from user "+object.getSender().getUserName());
-    }
-
-    @Override
-    public void call(String roomId, String user, Boolean istyping) {
-        System.out.println(" User "+user+ " is typing "+istyping+ " in the room  "+roomId);
-    }
 }

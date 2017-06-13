@@ -32,7 +32,7 @@ public class MessageObject {
             messageId=object.optString("_id");
             roomId=object.optString("rid");
             message=object.optString("msg");
-            visitorToken=object.optString("token");
+            visitorToken=object.optString("visitorToken");
             senderAlias=object.optString("alias");
             if (object.optJSONObject("ts")!=null) {
                 msgTimestamp = new Date(new Timestamp(object.getJSONObject("ts").getLong("$date")).getTime());

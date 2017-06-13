@@ -18,7 +18,7 @@ public class GuestObject {
     public GuestObject(JSONObject object){
         try {
             userID= object.optString("userId");
-            token=object.getString("token");
+            token=object.getString("visitorToken");
             if (object.optJSONObject("tokenExpires")!=null) {
                 tokenExpiry = new Date(new Timestamp(object.getJSONObject("tokenExpires").getLong("$date")).getTime());
             }
@@ -58,7 +58,7 @@ public class GuestObject {
     public String toString() {
         return "GuestObject{" +
                 "userID='" + userID + '\'' +
-                ", token='" + token + '\'' +
+                ", visitorToken='" + token + '\'' +
                 ", tokenExpiry=" + tokenExpiry +
                 '}';
     }

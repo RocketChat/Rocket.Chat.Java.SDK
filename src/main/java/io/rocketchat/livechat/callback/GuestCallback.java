@@ -7,7 +7,7 @@ import io.rocketchat.livechat.model.GuestObject;
  */
 
 /**
- * Gets called during user registration or login. Returns agent info. having token and userId
+ * Gets called during user registration or login. Returns agent info. having visitorToken and userId
  */
 
 public interface GuestCallback extends Callback{
