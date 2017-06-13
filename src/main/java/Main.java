@@ -64,6 +64,11 @@ public class Main implements ConnectListener,
     }
 
     @Override
+    public void onAgentDisconnect(String roomId, MessageObject object) {
+
+    }
+
+    @Override
     public void onTyping(String roomId, String user, Boolean istyping) {
         System.out.println("user "+user+" typing :"+istyping);
     }
