@@ -187,6 +187,9 @@ public class LiveChatAPI extends Socket{
 
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                 System.out.println("Disconnected to server");
+                if (connectListener!=null) {
+                    connectListener.onDisconnect(closedByServer);
+                }
             }
 
             public void onFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {

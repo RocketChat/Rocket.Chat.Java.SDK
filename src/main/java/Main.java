@@ -1,19 +1,20 @@
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.MessageObject;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
 public class Main implements ConnectListener,
-        AuthListener.LoginListener,
-        MessageListener,
-        TypingListener, AgentListener.AgentConnectListener {
-
+        AuthListener.LoginListener, LoadHistoryListener {
     /**
      * Those parameters are supposed to be available all the time, need to create a wrapper that abstracts API
      */
@@ -49,33 +50,19 @@ public class Main implements ConnectListener,
         liveChat.login(authToken,Main.this);
     }
 
-
     @Override
     public void onLogin(final GuestObject object) {
-        liveChat.subscribeLiveChatRoom(roomID,false,null,this);
-        liveChat.subscribeRoom(roomID,false,null,this);
-        liveChat.subscribeTyping(roomID,false,null,this);
-        liveChat.sendMessage(Utils.shortUUID(),roomID,"Hi gandu",visitorToken);
+        System.out.println("Login successful");
+        liveChat.getChatHistory(roomID,40,null,new Date(),this);
     }
 
     @Override
-    public void onMessage(String roomId, MessageObject object) {
-        System.out.println("got message from "+roomId+" message "+object);
-    }
-
-    @Override
-    public void onAgentDisconnect(String roomId, MessageObject object) {
+    public void onDisconnect(boolean closedByServer) {
 
     }
 
     @Override
-    public void onTyping(String roomId, String user, Boolean istyping) {
-        System.out.println("user "+user+" typing :"+istyping);
+    public void onLoadHistory(ArrayList<MessageObject> list, int unreadNotLoaded) {
+        System.out.println("Messages received");
     }
-
-    @Override
-    public void onAgentConnect(AgentObject agentObject) {
-        System.out.println("Agent connected");
-    }
-
 }
