@@ -12,6 +12,9 @@ import java.util.Date;
  */
 public class MessageObject {
 
+    public static String MESSAGE_TYPE_COMMAND="command";
+    public static String MESSAGE_TYPE_CLOSE="livechat-close";
+
     String messageId;
     String roomId;
     String message;

@@ -12,4 +12,5 @@ import io.rocketchat.livechat.model.MessageObject;
 
 public interface MessageListener extends Listener {
     void onMessage(String roomId, MessageObject object);
+    void onAgentDisconnect(String roomId, MessageObject object);
 }

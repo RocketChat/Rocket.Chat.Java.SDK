@@ -20,9 +20,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class LiveChatStreamMiddleware {
 
     public enum subscriptiontype {
-        STREAMROOMMESSAGES,
-        STREAMLIVECHATROOM,
-        NOTIFYROOM
+        STREAMROOMMESSAGES("stream-room-messages"),
+        STREAMLIVECHATROOM("stream-livechat-room"),
+        NOTIFYROOM("stream-notify-room");
+
+        private final String text;
+
+        subscriptiontype(String text) {
+            this.text = text;
+        }
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
     public static LiveChatStreamMiddleware middleware=new LiveChatStreamMiddleware();
@@ -62,15 +72,23 @@ public class LiveChatStreamMiddleware {
     public void processCallback(JSONObject object){
         String s = object.optString("collection");
         JSONArray array=object.optJSONObject("fields").optJSONArray("args");
-        if (s.equals("stream-room-messages")) {
+        if (s.equals(subscriptiontype.STREAMROOMMESSAGES.toString())) {
             if (messageListener !=null) {
-                messageListener.onMessage(object.optJSONObject("fields").optString("eventName"), new MessageObject(array.optJSONObject(0)));
+                MessageObject messageObject=new MessageObject(array.optJSONObject(0));
+                String roomId=object.optJSONObject("fields").optString("eventName");
+                if (messageObject.getMessagetype()!=null){
+                    if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)){
+                        messageListener.onAgentDisconnect(roomId,messageObject);
+                    }
+                }else {
+                    messageListener.onMessage(roomId, messageObject);
+                }
             }
-        }else if (s.equals("stream-livechat-room")){
+        }else if (s.equals(subscriptiontype.STREAMLIVECHATROOM.toString())){
             if (agentConnectListener !=null) {
                 agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0)));
             }
-        }else{
+        }else if (s.equals(subscriptiontype.NOTIFYROOM)){
             if (typingListener !=null) {
                 typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
             }
