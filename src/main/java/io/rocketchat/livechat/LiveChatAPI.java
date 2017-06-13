@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
-
     String sessionId;
     JSONObject userInfo;
 
@@ -59,9 +58,10 @@ public class LiveChatAPI extends Socket{
                 ws.sendText(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
             }
         });
+
     }
 
-    public void login(final String token, final AuthListener.LoginListener listener){
+    private void login(final String token, final AuthListener.LoginListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
@@ -72,7 +72,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp, final LoadHistoryListener listener){
+    private void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp, final LoadHistoryListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();
@@ -80,11 +80,10 @@ public class LiveChatAPI extends Socket{
                 ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
             }
         });
-
     }
 
 
-    public void getAgentData(final String roomId, final AgentListener.AgentDataListener listener){
+    private void getAgentData(final String roomId, final AgentListener.AgentDataListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();
@@ -95,7 +94,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void sendMessage(final String msgId, final String roomID, final String message, final String token){
+    private void sendMessage(final String msgId, final String roomID, final String message, final String token){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();
@@ -104,13 +103,18 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void sendIsTyping(String roomId, String username, Boolean istyping){
+    private void sendIsTyping(final String roomId, final String username, final Boolean istyping){
+        EventThread.exec(new Runnable() {
+            @Override
+            public void run() {
                 int uniqueID = integer.getAndIncrement();
                 ws.sendText(LiveChatTypingRPC.streamNotifyRoom(uniqueID,roomId,username,istyping));
+            }
+        });
     }
 
 
-    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener listener){
+    private void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
@@ -125,7 +129,7 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.AgentConnectListener agentConnectListener){
+    private void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.AgentConnectListener agentConnectListener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
@@ -140,7 +144,7 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final TypingListener listener){
+    private void subscribeTyping(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final TypingListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
@@ -151,6 +155,16 @@ public class LiveChatAPI extends Socket{
                     liveChatStreamMiddleware.subscribeTyping(listener);
                 }
                 ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
+            }
+        });
+    }
+
+    private void closeConversation(final String roomId){
+        EventThread.exec(new Runnable() {
+            @Override
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                ws.sendText(LiveChatBasicRPC.closeConversation(uniqueID,roomId));
             }
         });
     }
@@ -296,7 +310,59 @@ public class LiveChatAPI extends Socket{
 //                System.out.println("On sending handshake");
             }
         };
-
-
     }
+
+    public class ChatRoom{
+
+        String userName;
+        String roomId;
+        String userId;
+        String visitorToken;
+        String authToken;
+
+        public ChatRoom(String userName, String roomId, String userId, String visitorToken, String authToken) {
+            this.userName = userName;
+            this.roomId = roomId;
+            this.userId = userId;
+            this.visitorToken = visitorToken;
+            this.authToken = authToken;
+        }
+
+        public void login(AuthListener.LoginListener listener){
+            LiveChatAPI.this.login(authToken,listener);
+        }
+
+        public void getChatHistory(int limit, Date oldestMessageTimestamp,Date lasttimestamp,LoadHistoryListener listener){
+            LiveChatAPI.this.getChatHistory(roomId,limit,oldestMessageTimestamp,lasttimestamp,listener);
+        }
+
+        public void getAgentData(AgentListener.AgentDataListener listener){
+            LiveChatAPI.this.getAgentData(roomId,listener);
+        }
+
+        public void sendMessage(String message){
+            LiveChatAPI.this.sendMessage(Utils.shortUUID(),roomId,message,visitorToken);
+        }
+
+        public void sendIsTyping(Boolean istyping){
+            LiveChatAPI.this.sendIsTyping(roomId,userName,istyping);
+        }
+
+        public void subscribeRoom(SubscribeListener subscribeListener,MessageListener listener){
+            LiveChatAPI.this.subscribeRoom(roomId,false,subscribeListener,listener);
+        }
+
+        public void subscribeLiveChatRoom(SubscribeListener subscribeListener,AgentListener.AgentConnectListener agentConnectListener){
+            LiveChatAPI.this.subscribeLiveChatRoom(roomId,false,subscribeListener,agentConnectListener);
+        }
+
+        public void subscribeTyping(SubscribeListener subscribeListener,TypingListener listener){
+            LiveChatAPI.this.subscribeTyping(roomId,false,subscribeListener,listener);
+        }
+
+        public void closeConversation(final String roomId){
+            closeConversation(roomId);
+        }
+    }
+
 }

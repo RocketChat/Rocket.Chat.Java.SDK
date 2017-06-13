@@ -22,6 +22,8 @@ public class Main implements ConnectListener,
      * Availabel after login
      */
 
+
+
     public static String authToken="ubS92xhRYz6pRklXXNxU86z7bzxMo9a4wjq7KtVV8kh"; //Get after login or register
     public static String visitorToken="gxCgQjdSisYWJGuSf";                        //Created before login
     public static String userID="CPse2MSPxc5YbAgzJ";                              //after login
@@ -34,7 +36,6 @@ public class Main implements ConnectListener,
 
     public void call(){
         msgID= Utils.shortUUID();
-
         liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
         liveChat.connectAsync(this);
     }
@@ -42,7 +43,6 @@ public class Main implements ConnectListener,
     public static void main(String [] args){
         new Main().call();
     }
-
 
     @Override
     public void onConnect(String sessionID) {
