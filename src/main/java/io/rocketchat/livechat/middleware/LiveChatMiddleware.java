@@ -21,12 +21,7 @@ public class LiveChatMiddleware {
     //It will contain ConcurrentArrayList of all callback
     //Each new response will trigger each of the callback
 
-    public enum AgentCallbackType{
-        GETAGENTDATA,
-        STREAMLIVECHATROOM
-    }
-
-    public enum CallbackType{
+    public enum ListenerType {
         GETINITIALDATA,
         REGISTER,
         LOGIN,
@@ -46,46 +41,46 @@ public class LiveChatMiddleware {
         return middleware;
     }
 
-    public void createCallback(long i,Callback callback, CallbackType type){
-        callbacks.put(i,new Object[]{callback,type});
+    public void createCallback(long i, Listener listener, ListenerType type){
+        callbacks.put(i,new Object[]{listener,type});
     }
 
     public void processCallback(long i, JSONObject object){
         if (callbacks.containsKey(i)){
             Object[] objects=callbacks.remove(i);
-            Callback callback= (Callback) objects[0];
-            CallbackType type= (CallbackType) objects[1];
+            Listener listener = (Listener) objects[0];
+            ListenerType type= (ListenerType) objects[1];
             switch (type) {
                 case GETINITIALDATA:
-                    InitialDataCallback dataCallback= (InitialDataCallback) callback;
+                    InitialDataListener dataListener= (InitialDataListener) listener;
                     LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(object.optJSONObject("result"));
-                    dataCallback.call(liveChatConfigObject);
+                    dataListener.onInitialData(liveChatConfigObject);
                     break;
                 case REGISTER: {
-                    GuestCallback guestCallback = (GuestCallback) callback;
+                    AuthListener.RegisterListener registerListener = (AuthListener.RegisterListener) listener;
                     GuestObject guestObject = new GuestObject(object.optJSONObject("result"));
-                    guestCallback.call(CallbackType.REGISTER, guestObject);
+                    registerListener.onRegister(guestObject);
                 }
                     break;
                 case LOGIN:
-                    GuestCallback guestCallback= (GuestCallback) callback;
+                    AuthListener.LoginListener loginListener= (AuthListener.LoginListener) listener;
                     GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
-                    guestCallback.call(CallbackType.LOGIN,guestObject);
+                    loginListener.onLogin(guestObject);
                     break;
                 case GETCHATHISTORY:
                     ArrayList <MessageObject> list=new ArrayList<MessageObject>();
-                    HistoryCallback historymessages = (HistoryCallback) callback;
+                    LoadHistoryListener historyListener = (LoadHistoryListener) listener;
                     JSONArray array=object.optJSONObject("result").optJSONArray("messages");
                     for (int j=0;j<array.length();j++){
                         list.add(new MessageObject(array.optJSONObject(j)));
                     }
                     int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
-                    historymessages.call(list,unreadNotLoaded);
+                    historyListener.onLoadHistory(list,unreadNotLoaded);
                     break;
                 case GETAGENTDATA:
-                    AgentCallback agentCallback= (AgentCallback) callback;
+                    AgentListener.AgentDataListener agentDataListener = (AgentListener.AgentDataListener) listener;
                     AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
-                    agentCallback.call(AgentCallbackType.GETAGENTDATA,agentObject);
+                    agentDataListener.onAgentData(agentObject);
                     break;
             }
 

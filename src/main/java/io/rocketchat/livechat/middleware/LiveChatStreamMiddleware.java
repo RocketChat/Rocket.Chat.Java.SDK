@@ -1,9 +1,9 @@
 package io.rocketchat.livechat.middleware;
 
-import io.rocketchat.livechat.callback.AgentCallback;
-import io.rocketchat.livechat.callback.MessageCallback;
-import io.rocketchat.livechat.callback.SubscribeCallback;
-import io.rocketchat.livechat.callback.TypingCallback;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.MessageListener;
+import io.rocketchat.livechat.callback.SubscribeListener;
+import io.rocketchat.livechat.callback.TypingListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.MessageObject;
 import org.json.JSONArray;
@@ -28,9 +28,9 @@ public class LiveChatStreamMiddleware {
     public static LiveChatStreamMiddleware middleware=new LiveChatStreamMiddleware();
 
 
-    MessageCallback messageCallback;
-    AgentCallback agentCallback;
-    TypingCallback typingCallback;
+    MessageListener messageListener;
+    AgentListener.ConnectedAgentListener connectedAgentListener;
+    TypingListener typingListener;
 
     ConcurrentHashMap <String,Object[]> subcallbacks;
 
@@ -43,19 +43,19 @@ public class LiveChatStreamMiddleware {
         return middleware;
     }
 
-    public void subscribeRoom(MessageCallback messageCallback) {
-        this.messageCallback = messageCallback;
+    public void subscribeRoom(MessageListener messageListener) {
+        this.messageListener = messageListener;
     }
 
-    public void subscribeLiveChatRoom(AgentCallback agentCallback) {
-        this.agentCallback = agentCallback;
+    public void subscribeLiveChatRoom(AgentListener.ConnectedAgentListener connectedAgentListener) {
+        this.connectedAgentListener = connectedAgentListener;
     }
 
-    public void subscribeTyping(TypingCallback callback){
-        typingCallback=callback;
+    public void subscribeTyping(TypingListener callback){
+        typingListener =callback;
     }
 
-    public void createSubCallbacks(String id, SubscribeCallback callback, subscriptiontype subscription){
+    public void createSubCallbacks(String id, SubscribeListener callback, subscriptiontype subscription){
         subcallbacks.put(id,new Object[]{callback,subscription});
     }
 
@@ -63,16 +63,16 @@ public class LiveChatStreamMiddleware {
         String s = object.optString("collection");
         JSONArray array=object.optJSONObject("fields").optJSONArray("args");
         if (s.equals("stream-room-messages")) {
-            if (messageCallback!=null) {
-                messageCallback.call(object.optJSONObject("fields").optString("eventName"), new MessageObject(array.optJSONObject(0)));
+            if (messageListener !=null) {
+                messageListener.onMessage(object.optJSONObject("fields").optString("eventName"), new MessageObject(array.optJSONObject(0)));
             }
         }else if (s.equals("stream-livechat-room")){
-            if (agentCallback!=null) {
-                agentCallback.call(LiveChatMiddleware.AgentCallbackType.STREAMLIVECHATROOM, new AgentObject(array.optJSONObject(0)));
+            if (connectedAgentListener !=null) {
+                connectedAgentListener.onConnectedAgent(new AgentObject(array.optJSONObject(0)));
             }
         }else{
-            if (typingCallback!=null) {
-                typingCallback.call(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
+            if (typingListener !=null) {
+                typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
             }
         }
     }
@@ -82,9 +82,9 @@ public class LiveChatStreamMiddleware {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
                 Object object[] = subcallbacks.remove(id);
-                SubscribeCallback subscribeCallback = (SubscribeCallback) object[0];
+                SubscribeListener subscribeListener = (SubscribeListener) object[0];
                 subscriptiontype subscription = (subscriptiontype) object[1];
-                subscribeCallback.onSubscribe(subscription, id);
+                subscribeListener.onSubscribe(subscription, id);
             }
         }
     }

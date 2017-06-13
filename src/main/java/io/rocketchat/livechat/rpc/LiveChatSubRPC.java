@@ -1,11 +1,17 @@
 package io.rocketchat.livechat.rpc;
 
+import io.rocketchat.common.data.rpc.SubRPC;
+
 /**
  * Created by sachin on 9/6/17.
  */
 
-public class LiveChatSubRPC {
+public class LiveChatSubRPC extends SubRPC{
 
+
+    private static String STREAMROOM="stream-room-messages";
+    private static String STREAMLIVECHATROOM="stream-livechat-room";
+    private static String NOTIFYROOM="stream-notify-room";
     /**
      *
      * @param uniqueid
@@ -15,36 +21,39 @@ public class LiveChatSubRPC {
      */
 
     public static String streamRoomMessages(String uniqueid, String room_id,Boolean persistenceEnable){
-        return "{\n" +
-                "    \"msg\": \"sub\",\n" +
-                "    \"id\": \""+uniqueid+"\",\n" +
-                "    \"name\": \"stream-room-messages\",\n" +
-                "    \"params\":[\n" +
-                "        \""+room_id+"\",\n" +
-                "        "+persistenceEnable+"\n" +
-                "    ]\n" +
-                "}";
+//        return "{\n" +
+//                "    \"msg\": \"sub\",\n" +
+//                "    \"id\": \""+uniqueid+"\",\n" +
+//                "    \"name\": \"stream-room-messages\",\n" +
+//                "    \"params\":[\n" +
+//                "        \""+room_id+"\",\n" +
+//                "        "+persistenceEnable+"\n" +
+//                "    ]\n" +
+//                "}";
+        return getRemoteSubscriptionObject(uniqueid,STREAMROOM,room_id,persistenceEnable).toString();
     }
 
     public static String streamLivechatRoom(String uniqueid, String room_id, Boolean persistenceEnable){
-        return "{\n" +
-                "    \"msg\": \"sub\",\n" +
-                "    \"id\": \""+uniqueid+"\",\n" +
-                "    \"name\": \"stream-livechat-room\",\n" +
-                "    \"params\":[\n" +
-                "        \""+room_id+"\",\n" +
-                "        "+persistenceEnable+"\n" +
-                "    ]\n" +
-                "}";
+//        return "{\n" +
+//                "    \"msg\": \"sub\",\n" +
+//                "    \"id\": \""+uniqueid+"\",\n" +
+//                "    \"name\": \"stream-livechat-room\",\n" +
+//                "    \"params\":[\n" +
+//                "        \""+room_id+"\",\n" +
+//                "        "+persistenceEnable+"\n" +
+//                "    ]\n" +
+//                "}";
+        return getRemoteSubscriptionObject(uniqueid,STREAMLIVECHATROOM,room_id,persistenceEnable).toString();
     }
 
     public static String subscribeTyping(String uniqueid, String room_id, Boolean persistenceEnable){
-        return "{\"msg\":\"sub\"," +
-                "\"id\":\""+uniqueid+"\"," +
-                "\"name\":\"stream-notify-room\"," +
-                "\"params\":[\""+room_id+"/typing\"," +
-                ""+persistenceEnable+"]" +
-                "}";
+//        return "{\"msg\":\"sub\"," +
+//                "\"id\":\""+uniqueid+"\"," +
+//                "\"name\":\"stream-notify-room\"," +
+//                "\"params\":[\""+room_id+"/typing\"," +
+//                ""+persistenceEnable+"]" +
+//                "}";
+        return getRemoteSubscriptionObject(uniqueid,NOTIFYROOM,room_id,persistenceEnable).toString();
     }
 
 }

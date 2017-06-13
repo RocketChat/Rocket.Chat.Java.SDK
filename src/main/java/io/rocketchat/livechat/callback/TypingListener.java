@@ -8,6 +8,6 @@ package io.rocketchat.livechat.callback;
  * Getting event about room-user whether he is typing or not
  */
 
-public interface TypingCallback {
-    void call(String roomId,String user, Boolean istyping);
+public interface TypingListener {
+    void onTyping(String roomId, String user, Boolean istyping);
 }

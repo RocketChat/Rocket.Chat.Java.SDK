@@ -12,6 +12,6 @@ import java.util.ArrayList;
  * Used to get messages available in the history
  */
 
-public interface HistoryCallback extends Callback{
-    void call(ArrayList <MessageObject> list,int unreadNotLoaded);
+public interface LoadHistoryListener extends Listener {
+    void onLoadHistory(ArrayList <MessageObject> list, int unreadNotLoaded);
 }

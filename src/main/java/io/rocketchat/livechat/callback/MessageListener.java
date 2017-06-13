@@ -10,6 +10,6 @@ import io.rocketchat.livechat.model.MessageObject;
  *  Used to get message, which is returned after subscriptiontype to particular room
  */
 
-public interface MessageCallback extends Callback {
-    void call(String roomId,MessageObject object);
+public interface MessageListener extends Listener {
+    void onMessage(String roomId, MessageObject object);
 }

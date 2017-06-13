@@ -8,6 +8,6 @@ import io.rocketchat.livechat.model.LiveChatConfigObject;
 /**
  * gets called after getInitialData event, return contains configuration object
  */
-public interface InitialDataCallback extends Callback{
-    void call(LiveChatConfigObject object);
+public interface InitialDataListener extends Listener {
+    void onInitialData(LiveChatConfigObject object);
 }

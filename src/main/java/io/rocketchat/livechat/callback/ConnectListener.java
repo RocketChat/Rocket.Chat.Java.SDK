@@ -8,6 +8,6 @@ package io.rocketchat.livechat.callback;
  * Gets called after successful connection with server
  */
 
-public interface ConnectCallback extends Callback{
+public interface ConnectListener extends Listener {
     void onConnect(String sessionID);
 }

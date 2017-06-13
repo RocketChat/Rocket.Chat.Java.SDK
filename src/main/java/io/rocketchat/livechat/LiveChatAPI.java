@@ -30,7 +30,7 @@ public class LiveChatAPI extends Socket{
     LiveChatMiddleware liveChatMiddleware;
     LiveChatStreamMiddleware liveChatStreamMiddleware;
 
-    ConnectCallback connectCallback;
+    ConnectListener connectListener;
 
 
     public LiveChatAPI(String url) {
@@ -41,54 +41,54 @@ public class LiveChatAPI extends Socket{
         liveChatStreamMiddleware=LiveChatStreamMiddleware.getInstance();
     }
 
-    public void getInitialData(final InitialDataCallback callback){
+    public void getInitialData(final InitialDataListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETINITIALDATA);
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETINITIALDATA);
                 ws.sendText(LiveChatBasicRPC.getInitialData(uniqueID));
             }
         });
     }
 
-    public void registerGuest(final String name, final String email, final String dept, final GuestCallback callback){
+    public void registerGuest(final String name, final String email, final String dept, final AuthListener.RegisterListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.REGISTER);
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.REGISTER);
                 ws.sendText(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
             }
         });
     }
 
-    public void login(final String token, final GuestCallback callback){
+    public void login(final String token, final AuthListener.LoginListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.LOGIN);
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.LOGIN);
                 ws.sendText(LiveChatBasicRPC.login(uniqueID,token));
             }
         });
     }
 
 
-    public void getChatHistory(final String roomID, final int limit, final Date lasttimestamp, final HistoryCallback callback){
+    public void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp, final LoadHistoryListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETCHATHISTORY);
-                ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,limit,lasttimestamp));
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETCHATHISTORY);
+                ws.sendText(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
             }
         });
 
     }
 
 
-    public void getAgentData(final String roomId, final AgentCallback callback){
+    public void getAgentData(final String roomId, final AgentListener.AgentDataListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,callback, LiveChatMiddleware.CallbackType.GETAGENTDATA);
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETAGENTDATA);
                 ws.sendText(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
             }
         });
@@ -110,45 +110,45 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final MessageCallback callback){
+    public void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
-                if (subscribeCallback!=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
+                if (subscribeListener !=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
                 }
-                if (callback!=null){
-                    liveChatStreamMiddleware.subscribeRoom(callback);
+                if (listener!=null){
+                    liveChatStreamMiddleware.subscribeRoom(listener);
                 }
                 ws.sendText(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
             }
         });
     }
 
-    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final AgentCallback callback){
+    public void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.ConnectedAgentListener connectedAgentListener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
-                if (subscribeCallback!=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
+                if (subscribeListener !=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
                 }
-                if (callback!=null){
-                    liveChatStreamMiddleware.subscribeLiveChatRoom(callback);
+                if (connectedAgentListener!=null){
+                    liveChatStreamMiddleware.subscribeLiveChatRoom(connectedAgentListener);
                 }
                 ws.sendText(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
             }
         });
     }
 
-    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeCallback subscribeCallback, final TypingCallback callback){
+    public void subscribeTyping(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final TypingListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
-                if (subscribeCallback!=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
+                if (subscribeListener !=null) {
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
                 }
-                if (callback!=null){
-                    liveChatStreamMiddleware.subscribeTyping(callback);
+                if (listener!=null){
+                    liveChatStreamMiddleware.subscribeTyping(listener);
                 }
                 ws.sendText(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
             }
@@ -162,10 +162,10 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    public void connectAsync(ConnectCallback connectCallback) {
+    public void connectAsync(ConnectListener connectListener) {
         createWebsocketfactory();
         ws.addListener(listener);
-        this.connectCallback=connectCallback;
+        this.connectListener = connectListener;
         super.connectAsync();
     }
 
@@ -225,8 +225,8 @@ public class LiveChatAPI extends Socket{
                     websocket.sendText("{\"msg\":\"pong\"}");
                 } else if (object.optString("msg").equals("connected")) {
                     sessionId = object.optString("session");
-                    if (connectCallback != null) {
-                        connectCallback.onConnect(sessionId);
+                    if (connectListener != null) {
+                        connectListener.onConnect(sessionId);
                     }
                 } else if (object.optString("msg").equals("added")){
                     if (object.optString("collection")!=null && object.optString("collection").equals("users")) {

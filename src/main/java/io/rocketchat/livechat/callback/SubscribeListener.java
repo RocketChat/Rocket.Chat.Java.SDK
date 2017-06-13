@@ -5,7 +5,7 @@ import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 /**
  * Created by sachin on 12/6/17.
  */
-public interface SubscribeCallback {
+public interface SubscribeListener {
     /**
      *
      * @param type Subscription type : stream-room-messages, stream-livechat-room, typing stream
