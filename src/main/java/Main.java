@@ -1,16 +1,14 @@
-import io.rocketchat.common.utils.Utils;
-import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.MessageObject;
-import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
 
+import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
@@ -35,7 +33,7 @@ public class Main implements ConnectListener,
     @Override
     public void onConnect(String sessionID) {
         liveChat.getInitialData(this);
-        liveChat.registerGuest("titanic","titanic@gmail.com",null,this);
+        liveChat.registerGuest("ironman","ironman@gmail.com",null,this);
     }
 
     @Override
@@ -76,6 +74,12 @@ public class Main implements ConnectListener,
     @Override
     public void onMessage(String roomId, MessageObject object) {
         System.out.println("got message "+object.getMessage());
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+              chatRoom.closeConversation();
+            }
+        },2000);
     }
 
     @Override

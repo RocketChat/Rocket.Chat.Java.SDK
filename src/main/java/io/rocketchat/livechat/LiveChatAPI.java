@@ -367,8 +367,8 @@ public class LiveChatAPI extends Socket{
             LiveChatAPI.this.subscribeTyping(roomId,false,subscribeListener,listener);
         }
 
-        public void closeConversation(final String roomId){
-            closeConversation(roomId);
+        public void closeConversation(){
+            LiveChatAPI.this.closeConversation(roomId);
         }
 
         @Override
