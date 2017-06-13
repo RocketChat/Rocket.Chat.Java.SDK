@@ -115,7 +115,7 @@ public class LiveChatAPI extends Socket{
             public void run() {
                 String uniqueID=Utils.shortUUID();
                 if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.STREAMROOMMESSAGES);
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMROOMMESSAGES);
                 }
                 if (listener!=null){
                     liveChatStreamMiddleware.subscribeRoom(listener);
@@ -130,7 +130,7 @@ public class LiveChatAPI extends Socket{
             public void run() {
                 String uniqueID=Utils.shortUUID();
                 if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.STREAMLIVECHATROOM);
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMLIVECHATROOM);
                 }
                 if (agentConnectListener !=null){
                     liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
@@ -145,7 +145,7 @@ public class LiveChatAPI extends Socket{
             public void run() {
                 String uniqueID=Utils.shortUUID();
                 if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.subscriptiontype.NOTIFYROOM);
+                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.NOTIFYROOM);
                 }
                 if (listener!=null){
                     liveChatStreamMiddleware.subscribeTyping(listener);

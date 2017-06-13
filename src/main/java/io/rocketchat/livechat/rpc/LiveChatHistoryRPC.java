@@ -25,14 +25,16 @@ public class LiveChatHistoryRPC extends RPC{
      */
 
     public static String loadHistory(int integer, String roomId, Date oldestMessageTimestamp,Integer count, Date lastTimestamp){
-        JSONObject lastTs = null;
         JSONObject oldestTs=null;
+        JSONObject lastTs = null;
         try {
-            lastTs=new JSONObject();
-            lastTs.put("$date",((int) lastTimestamp.getTime() / 1000));
             if (oldestMessageTimestamp!=null){
                 oldestTs=new JSONObject();
                 oldestTs.put("$date",((int) oldestMessageTimestamp.getTime() / 1000));
+            }
+            if (lastTimestamp!=null){
+                lastTs = new JSONObject();
+                lastTs.put("$date", ((int) lastTimestamp.getTime() / 1000));
             }
         } catch (JSONException e) {
             e.printStackTrace();

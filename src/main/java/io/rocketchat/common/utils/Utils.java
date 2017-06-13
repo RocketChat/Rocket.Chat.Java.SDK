@@ -1,5 +1,7 @@
 package io.rocketchat.common.utils;
 
+import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
@@ -59,4 +61,5 @@ public class Utils {
         long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
         return Long.toString(l, Character.MAX_RADIX);
     }
+
 }

@@ -9,7 +9,7 @@ public interface SubscribeListener {
     /**
      *
      * @param type Subscription type : stream-room-messages, stream-livechat-room, typing stream
-     * @param subId It represents uniqueID used for subscriptiontype
+     * @param subId It represents uniqueID used for SubType
      */
-    void onSubscribe(LiveChatStreamMiddleware.subscriptiontype type, String subId);
+    void onSubscribe(LiveChatStreamMiddleware.SubType type, String subId);
 }

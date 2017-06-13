@@ -7,7 +7,7 @@ import io.rocketchat.livechat.model.MessageObject;
  */
 
 /**
- *  Used to get message, which is returned after subscriptiontype to particular room
+ *  Used to get message, which is returned after SubType to particular room
  */
 
 public interface MessageListener extends Listener {
