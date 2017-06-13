@@ -68,10 +68,8 @@ public class LiveChatStreamMiddleware {
                 if (messageListener !=null) {
                     MessageObject messageObject = new MessageObject(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
-                    if (messageObject.getMessagetype() != null) {
-                        if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)) {
-                            messageListener.onAgentDisconnect(roomId, messageObject);
-                        }
+                    if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)) {
+                        messageListener.onAgentDisconnect(roomId, messageObject);
                     } else {
                         messageListener.onMessage(roomId, messageObject);
                     }
@@ -79,7 +77,7 @@ public class LiveChatStreamMiddleware {
                 break;
             case STREAMLIVECHATROOM:
                 if (agentConnectListener !=null) {
-                    agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0)));
+                    agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0).optJSONObject("data")));
                 }
                 break;
             case NOTIFYROOM:

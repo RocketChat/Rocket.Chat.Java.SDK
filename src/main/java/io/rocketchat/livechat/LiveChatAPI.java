@@ -23,7 +23,7 @@ public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
     String sessionId;
-    JSONObject userInfo;
+    public JSONObject userInfo;
 
     WebSocketListener listener;
     LiveChatMiddleware liveChatMiddleware;
@@ -61,7 +61,7 @@ public class LiveChatAPI extends Socket{
 
     }
 
-    private void login(final String token, final AuthListener.LoginListener listener){
+    public void login(final String token, final AuthListener.LoginListener listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 int uniqueID=integer.getAndIncrement();
@@ -312,6 +312,13 @@ public class LiveChatAPI extends Socket{
         };
     }
 
+    public ChatRoom createRoom(String userID,String authToken){
+        String userName=userInfo.optString("username");
+        String visitorToken= LiveChatBasicRPC.visitorToken;
+        String roomID=Utils.shortUUID();
+        return new ChatRoom(userName,roomID,userID,visitorToken,authToken);
+    }
+
     public class ChatRoom{
 
         String userName;
@@ -363,6 +370,20 @@ public class LiveChatAPI extends Socket{
         public void closeConversation(final String roomId){
             closeConversation(roomId);
         }
+
+        @Override
+        public String toString() {
+            return "ChatRoom{" +
+                    "userName='" + userName + '\'' +
+                    ", roomId='" + roomId + '\'' +
+                    ", userId='" + userId + '\'' +
+                    ", visitorToken='" + visitorToken + '\'' +
+                    ", authToken='" + authToken + '\'' +
+                    '}';
+        }
     }
+
+
+
 
 }
