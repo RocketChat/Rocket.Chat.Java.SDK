@@ -25,7 +25,7 @@ public class LiveChatAPI extends Socket{
     String sessionId;
     public JSONObject userInfo;
 
-    WebSocketListener listener;
+    WebSocketAdapter adapter;
     LiveChatMiddleware liveChatMiddleware;
     LiveChatStreamMiddleware liveChatStreamMiddleware;
 
@@ -34,7 +34,7 @@ public class LiveChatAPI extends Socket{
 
     public LiveChatAPI(String url) {
         super(url);
-        listener=getListener();
+        adapter= getAdapter();
         integer=new AtomicInteger(1);
         liveChatMiddleware =LiveChatMiddleware.getInstance();
         liveChatStreamMiddleware=LiveChatStreamMiddleware.getInstance();
@@ -48,6 +48,8 @@ public class LiveChatAPI extends Socket{
                 ws.sendText(LiveChatBasicRPC.getInitialData(uniqueID));
             }
         });
+
+
     }
 
     public void registerGuest(final String name, final String email, final String dept, final AuthListener.RegisterListener listener){
@@ -169,74 +171,51 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void connect(){
-        createWebsocketfactory();
-        ws.addListener(listener);
-        super.connect();
-    }
 
-
-    public void connectAsync(ConnectListener connectListener) {
-        createWebsocketfactory();
-        ws.addListener(listener);
+    public void connect(ConnectListener connectListener) {
+        createSocket();
+        ws.addListener(adapter);
         this.connectListener = connectListener;
         super.connectAsync();
     }
 
-    WebSocketListener getListener() {
-        return new WebSocketListener() {
-            public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
-                System.out.println("on state changed");
+    WebSocketAdapter getAdapter() {
 
+        return new WebSocketAdapter(){
+
+            @Override
+            public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+                System.out.println("On Error");
+                super.onError(websocket, cause);
             }
 
+            @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                System.out.println("Connected");
                 integer.set(1);
                 websocket.sendText(LiveChatBasicRPC.ConnectObject());
+                super.onConnected(websocket, headers);
             }
 
-            public void onConnectError(WebSocket websocket, WebSocketException cause) throws Exception {
-                System.out.println("got connect error");
-            }
-
+            @Override
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                System.out.println("Disconnected to server");
+                System.out.println("Disconnected");
                 if (connectListener!=null) {
                     connectListener.onDisconnect(closedByServer);
                 }
+                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
             }
 
-            public void onFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("Got frame");
+            @Override
+            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                System.out.println("Onconnect Error");
+                super.onConnectError(websocket, exception);
             }
 
-            public void onContinuationFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on continuation frame");
-            }
 
-            public void onTextFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                   System.out.println("On text frame");
-            }
-
-            public void onBinaryFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on binary frame");
-            }
-
-            public void onCloseFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("On close frame");
-            }
-
-            public void onPingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("On ping frame" + frame.getPayloadText());
-            }
-
-            public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on pong frame");
-            }
-
+            @Override
             public void onTextMessage(WebSocket websocket, String text) throws Exception {
                 System.out.println("Message is " + text);
-
                 JSONObject object = new JSONObject(text);
                 if (object.optString("msg").equals("ping")) {
                     websocket.sendText("{\"msg\":\"pong\"}");
@@ -256,58 +235,19 @@ public class LiveChatAPI extends Socket{
                 }else if (object.optString("msg").equals("changed")){
                     liveChatStreamMiddleware.processCallback(object);
                 }
+                super.onTextMessage(websocket, text);
             }
 
-            public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                System.out.println("on binary message");
+            @Override
+            public void onCloseFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                System.out.println("On close frame");
+                super.onCloseFrame(websocket, frame);
             }
 
-            public void onSendingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on sending frame");
-            }
-
-            public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on frame set "+frame.getPayloadText());
-            }
-
-            public void onFrameUnsent(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("on frame unsent");
-            }
-
-            public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                System.out.println("On error");
-            }
-
-            public void onFrameError(WebSocket websocket, WebSocketException cause, WebSocketFrame frame) throws Exception {
-                System.out.println("On frame error");
-            }
-
-            public void onMessageError(WebSocket websocket, WebSocketException cause, List<WebSocketFrame> frames) throws Exception {
-                System.out.println("On message error");
-            }
-
-            public void onMessageDecompressionError(WebSocket websocket, WebSocketException cause, byte[] compressed) throws Exception {
-                System.out.println("on message decompression error");
-            }
-
-            public void onTextMessageError(WebSocket websocket, WebSocketException cause, byte[] data) throws Exception {
-                System.out.println("on text message error");
-            }
-
+            @Override
             public void onSendError(WebSocket websocket, WebSocketException cause, WebSocketFrame frame) throws Exception {
-                System.out.println("on send error");
-            }
-
-            public void onUnexpectedError(WebSocket websocket, WebSocketException cause) throws Exception {
-                System.out.println("on unexpected error");
-            }
-
-            public void handleCallbackError(WebSocket websocket, Throwable cause) throws Exception {
-                System.out.println("handle callback error");
-            }
-
-            public void onSendingHandshake(WebSocket websocket, String requestLine, List<String[]> headers) throws Exception {
-                System.out.println("On sending handshake");
+                System.out.println("On send error");
+                super.onSendError(websocket, cause, frame);
             }
         };
     }

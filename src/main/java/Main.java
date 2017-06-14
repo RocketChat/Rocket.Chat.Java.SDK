@@ -11,8 +11,8 @@ public class Main implements ConnectListener{
     private LiveChatAPI.ChatRoom chatRoom;
 
     public void call(){
-        liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket");
-        liveChat.connectAsync(this);
+        liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket/");
+        liveChat.connect(this);
     }
 
     public static void main(String [] args){

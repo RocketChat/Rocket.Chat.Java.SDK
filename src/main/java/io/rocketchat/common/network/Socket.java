@@ -18,20 +18,26 @@ public class Socket {
 
     protected Socket(String url){
         this.url=url;
+        factory=new WebSocketFactory().setConnectionTimeout(5000);
     }
 
     /**
      * Function for connecting to server
      */
 
-    protected void createWebsocketfactory(){
-        factory = new WebSocketFactory();
+    protected void createSocket(){
         // Create a WebSocket with a socket connection timeout value.
         try {
-            ws = factory.createSocket(url,5000);
+            ws = factory.createSocket(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ws.addExtension("permessage-deflate; client_max_window_bits");
+        ws.addHeader("Accept-Encoding","gzip, deflate, sdch");
+        ws.addHeader("Accept-Language","en-US,en;q=0.8");
+        ws.addHeader("Pragma","no-cache");
+        ws.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
+
     }
 
     protected void connect() {
@@ -85,6 +91,14 @@ public class Socket {
 
     protected void connectAsync(){
         ws.connectAsynchronously();
+    }
+
+    protected void reconnect(){
+        try {
+            ws = ws.recreate().connectAsynchronously();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
