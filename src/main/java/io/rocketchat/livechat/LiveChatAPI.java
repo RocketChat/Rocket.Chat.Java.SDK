@@ -186,13 +186,13 @@ public class LiveChatAPI extends Socket{
     WebSocketListener getListener() {
         return new WebSocketListener() {
             public void onStateChanged(WebSocket websocket, WebSocketState newState) throws Exception {
-//                System.out.println("on state changed");
+                System.out.println("on state changed");
+
             }
 
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 integer.set(1);
                 websocket.sendText(LiveChatBasicRPC.ConnectObject());
-                System.out.println("Connected to server");
             }
 
             public void onConnectError(WebSocket websocket, WebSocketException cause) throws Exception {
@@ -207,7 +207,7 @@ public class LiveChatAPI extends Socket{
             }
 
             public void onFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-//                System.out.println("Got frame");
+                System.out.println("Got frame");
             }
 
             public void onContinuationFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
@@ -215,7 +215,7 @@ public class LiveChatAPI extends Socket{
             }
 
             public void onTextFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                //   System.out.println("On text frame");
+                   System.out.println("On text frame");
             }
 
             public void onBinaryFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
@@ -263,11 +263,11 @@ public class LiveChatAPI extends Socket{
             }
 
             public void onSendingFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-//                System.out.println("on sending frame");
+                System.out.println("on sending frame");
             }
 
             public void onFrameSent(WebSocket websocket, WebSocketFrame frame) throws Exception {
-//                System.out.println("on frame set "+frame.getPayloadText());
+                System.out.println("on frame set "+frame.getPayloadText());
             }
 
             public void onFrameUnsent(WebSocket websocket, WebSocketFrame frame) throws Exception {
@@ -307,7 +307,7 @@ public class LiveChatAPI extends Socket{
             }
 
             public void onSendingHandshake(WebSocket websocket, String requestLine, List<String[]> headers) throws Exception {
-//                System.out.println("On sending handshake");
+                System.out.println("On sending handshake");
             }
         };
     }

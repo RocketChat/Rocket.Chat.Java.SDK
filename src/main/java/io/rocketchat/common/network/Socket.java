@@ -28,7 +28,7 @@ public class Socket {
         factory = new WebSocketFactory();
         // Create a WebSocket with a socket connection timeout value.
         try {
-            ws = factory.createSocket(url);
+            ws = factory.createSocket(url,5000);
         } catch (IOException e) {
             e.printStackTrace();
         }

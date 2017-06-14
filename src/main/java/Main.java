@@ -1,27 +1,17 @@
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.model.AgentObject;
-import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.LiveChatConfigObject;
-import io.rocketchat.livechat.model.MessageObject;
-
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import io.rocketchat.livechat.callback.ConnectListener;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener,
-        AuthListener.LoginListener, LoadHistoryListener, InitialDataListener, AuthListener.RegisterListener ,
-        AgentListener.AgentConnectListener, MessageListener {
+public class Main implements ConnectListener{
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom chatRoom;
 
     public void call(){
-        liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
+        liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket");
         liveChat.connectAsync(this);
     }
 
@@ -31,58 +21,11 @@ public class Main implements ConnectListener,
 
     @Override
     public void onConnect(String sessionID) {
-        liveChat.getInitialData(this);
-        liveChat.registerGuest("ironman","ironman@gmail.com",null,this);
+        System.out.println("Connected to server");
     }
 
     @Override
     public void onDisconnect(boolean closedByServer) {
-
-    }
-
-    @Override
-    public void onLoadHistory(ArrayList<MessageObject> list, int unreadNotLoaded) {
-        System.out.println("Messages received");
-    }
-
-    @Override
-    public void onLogin(GuestObject object) {
-        chatRoom=liveChat.createRoom(object.getUserID(),object.getToken());
-        chatRoom.subscribeLiveChatRoom(null,this);
-        System.out.println("Chatroom is "+chatRoom);
-        chatRoom.sendMessage("Hi, anyone there please?");
-    }
-
-    @Override
-    public void onInitialData(LiveChatConfigObject object) {
-        System.out.println("Initial data is "+object);
-    }
-
-    @Override
-    public void onRegister(GuestObject object) {
-        System.out.println("Registration success "+object);
-        liveChat.login(object.getToken(),this);
-    }
-
-    @Override
-    public void onAgentConnect(AgentObject agentObject) {
-        System.out.println("New agent got connected"+agentObject.getUsername());
-        chatRoom.subscribeRoom(null,this);
-    }
-
-    @Override
-    public void onMessage(String roomId, MessageObject object) {
-        System.out.println("got message "+object.getMessage());
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-              chatRoom.closeConversation();
-            }
-        },2000);
-    }
-
-    @Override
-    public void onAgentDisconnect(String roomId, MessageObject object) {
-        System.out.println("Agent got disconnected");
+        System.out.println("Disconnected from server");
     }
 }
