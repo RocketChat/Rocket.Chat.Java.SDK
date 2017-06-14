@@ -95,7 +95,7 @@ public class Socket {
 
     protected void reconnect(){
         try {
-            ws = ws.recreate().connectAsynchronously();
+            ws = ws.recreate(5000).connectAsynchronously();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
 import io.rocketchat.common.data.rpc.RPC;
+import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.common.network.EventThread;
 import io.rocketchat.common.network.Socket;
@@ -11,9 +12,7 @@ import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.rpc.*;
 import org.json.JSONObject;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -31,7 +30,9 @@ public class LiveChatAPI extends Socket{
     LiveChatStreamMiddleware liveChatStreamMiddleware;
 
     ConnectListener connectListener;
-
+    ReconnectionStrategy strategy;
+    private Timer timer;
+    private boolean selfDisconnect;
 
     public LiveChatAPI(String url) {
         super(url);
@@ -39,6 +40,11 @@ public class LiveChatAPI extends Socket{
         integer=new AtomicInteger(1);
         liveChatMiddleware =LiveChatMiddleware.getInstance();
         liveChatStreamMiddleware=LiveChatStreamMiddleware.getInstance();
+        selfDisconnect=false;
+    }
+
+    public void setReconnectionStrategy(ReconnectionStrategy strategy) {
+        this.strategy = strategy;
     }
 
     public void getInitialData(final InitialDataListener listener){
@@ -180,6 +186,11 @@ public class LiveChatAPI extends Socket{
         super.connectAsync();
     }
 
+    public void disconnect(){
+        ws.disconnect();
+        selfDisconnect=true;
+    }
+
     WebSocketAdapter getAdapter() {
 
         return new WebSocketAdapter(){
@@ -198,7 +209,25 @@ public class LiveChatAPI extends Socket{
                 if (connectListener!=null) {
                     connectListener.onDisconnect(closedByServer);
                 }
-                integer.set(1);
+                if (strategy!=null && !selfDisconnect){
+                    if (strategy.getNumberOfAttempts()<strategy.getMaxAttempts()){
+                        timer=new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                reconnect();
+                                strategy.processAttempts();
+                                timer.cancel();
+                                timer.purge();
+                            }
+                        },strategy.getReconnectInterval());
+
+                    }else{
+                        System.out.println("Number of attempts are complete");
+                    }
+                }else{
+                    selfDisconnect=false;
+                }
                 super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
             }
 
