@@ -185,12 +185,6 @@ public class LiveChatAPI extends Socket{
         return new WebSocketAdapter(){
 
             @Override
-            public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                System.out.println("On Error");
-                super.onError(websocket, cause);
-            }
-
-            @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 System.out.println("Connected");
                 integer.set(1);
@@ -204,6 +198,7 @@ public class LiveChatAPI extends Socket{
                 if (connectListener!=null) {
                     connectListener.onDisconnect(closedByServer);
                 }
+                integer.set(1);
                 super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
             }
 
@@ -252,17 +247,6 @@ public class LiveChatAPI extends Socket{
                 super.onTextMessage(websocket, text);
             }
 
-            @Override
-            public void onCloseFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                System.out.println("On close frame");
-                super.onCloseFrame(websocket, frame);
-            }
-
-            @Override
-            public void onSendError(WebSocket websocket, WebSocketException cause, WebSocketFrame frame) throws Exception {
-                System.out.println("On send error");
-                super.onSendError(websocket, cause, frame);
-            }
         };
     }
 
@@ -358,5 +342,4 @@ public class LiveChatAPI extends Socket{
                     '}';
         }
     }
-
 }

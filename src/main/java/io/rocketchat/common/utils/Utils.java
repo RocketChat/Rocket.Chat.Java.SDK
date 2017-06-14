@@ -1,7 +1,5 @@
 package io.rocketchat.common.utils;
 
-import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
-
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
