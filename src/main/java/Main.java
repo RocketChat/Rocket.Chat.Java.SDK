@@ -29,4 +29,9 @@ public class Main implements ConnectListener {
         System.out.println("Disconnected from server");
     }
 
+    @Override
+    public void onConnectError(Exception websocketException) {
+        System.out.println("Got connect error with the server");
+    }
+
 }

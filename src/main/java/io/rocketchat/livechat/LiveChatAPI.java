@@ -210,6 +210,9 @@ public class LiveChatAPI extends Socket{
             @Override
             public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
                 System.out.println("Onconnect Error");
+                if (connectListener!=null) {
+                    connectListener.onConnectError(exception);
+                }
                 super.onConnectError(websocket, exception);
             }
 

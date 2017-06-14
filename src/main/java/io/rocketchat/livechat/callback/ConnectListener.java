@@ -12,4 +12,5 @@ package io.rocketchat.livechat.callback;
 public interface ConnectListener extends Listener {
     void onConnect(String sessionID);
     void onDisconnect(boolean closedByServer);
+    void onConnectError(Exception websocketException);
 }
