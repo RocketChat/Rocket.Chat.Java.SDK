@@ -2,9 +2,6 @@ import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.ConnectListener;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 /**
  * Created by sachin on 7/6/17.
  */
