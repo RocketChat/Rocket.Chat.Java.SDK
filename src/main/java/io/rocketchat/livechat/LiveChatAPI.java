@@ -1,6 +1,7 @@
 package io.rocketchat.livechat;
 
 import com.neovisionaries.ws.client.*;
+import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.common.network.EventThread;
 import io.rocketchat.common.network.Socket;
@@ -217,23 +218,33 @@ public class LiveChatAPI extends Socket{
             public void onTextMessage(WebSocket websocket, String text) throws Exception {
                 System.out.println("Message is " + text);
                 JSONObject object = new JSONObject(text);
-                if (object.optString("msg").equals("ping")) {
-                    websocket.sendText("{\"msg\":\"pong\"}");
-                } else if (object.optString("msg").equals("connected")) {
-                    sessionId = object.optString("session");
-                    if (connectListener != null) {
-                        connectListener.onConnect(sessionId);
-                    }
-                } else if (object.optString("msg").equals("added")){
-                    if (object.optString("collection")!=null && object.optString("collection").equals("users")) {
-                        userInfo = object.optJSONObject("fields");
-                    }
-                }else if (Utils.isInteger(object.optString("id"))) {
-                    liveChatMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
-                }else if (object.optString("msg").equals("ready")){
-                    liveChatStreamMiddleware.processSubSuccess(object);
-                }else if (object.optString("msg").equals("changed")){
-                    liveChatStreamMiddleware.processCallback(object);
+                switch (RPC.parse(object.optString("msg"))) {
+                    case PING:
+                        websocket.sendText("{\"msg\":\"pong\"}");
+                        break;
+                    case CONNECTED:
+                        sessionId = object.optString("session");
+                        if (connectListener != null) {
+                            connectListener.onConnect(sessionId);
+                        }
+                        break;
+                    case ADDED:
+                        if (object.optString("collection").equals("users")) {
+                            userInfo = object.optJSONObject("fields");
+                        }
+                        break;
+                    case RESULT:
+                        liveChatMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
+                        break;
+                    case READY:
+                        liveChatStreamMiddleware.processSubSuccess(object);
+                        break;
+                    case CHANGED:
+                        liveChatStreamMiddleware.processCallback(object);
+                        break;
+                    case OTHER:
+                        //DO SOMETHING
+                        break;
                 }
                 super.onTextMessage(websocket, text);
             }
@@ -311,16 +322,7 @@ public class LiveChatAPI extends Socket{
             LiveChatAPI.this.closeConversation(roomId);
         }
 
-        @Override
-        public String toString() {
-            return "ChatRoom{" +
-                    "userName='" + userName + '\'' +
-                    ", roomId='" + roomId + '\'' +
-                    ", userId='" + userId + '\'' +
-                    ", visitorToken='" + visitorToken + '\'' +
-                    ", authToken='" + authToken + '\'' +
-                    '}';
-        }
+
 
         public String getUserName() {
             return userName;
@@ -340,6 +342,17 @@ public class LiveChatAPI extends Socket{
 
         public String getAuthToken() {
             return authToken;
+        }
+
+        @Override
+        public String toString() {
+            return "ChatRoom{" +
+                    "userName='" + userName + '\'' +
+                    ", roomId='" + roomId + '\'' +
+                    ", userId='" + userId + '\'' +
+                    ", visitorToken='" + visitorToken + '\'' +
+                    ", authToken='" + authToken + '\'' +
+                    '}';
         }
     }
 

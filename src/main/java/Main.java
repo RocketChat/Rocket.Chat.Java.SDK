@@ -5,13 +5,13 @@ import io.rocketchat.livechat.callback.ConnectListener;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener{
+public class Main implements ConnectListener {
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom chatRoom;
 
     public void call(){
-        liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket/");
+        liveChat=new LiveChatAPI("wss://demo.rocket.chat/websocket");
         liveChat.connect(this);
     }
 
@@ -28,4 +28,5 @@ public class Main implements ConnectListener{
     public void onDisconnect(boolean closedByServer) {
         System.out.println("Disconnected from server");
     }
+
 }
