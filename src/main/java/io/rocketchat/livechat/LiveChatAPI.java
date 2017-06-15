@@ -10,6 +10,7 @@ import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.rpc.*;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -303,6 +304,19 @@ public class LiveChatAPI extends Socket{
             this.authToken = authToken;
         }
 
+        public ChatRoom(String s){
+            try {
+                JSONObject object=new JSONObject(s);
+                this.userName=object.getString("userName");
+                this.roomId=object.getString("roomId");
+                this.userId=object.getString("userId");
+                this.visitorToken=object.getString("visitorToken");
+                this.authToken=object.getString("authToken");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         public void login(AuthListener.LoginListener listener){
             LiveChatAPI.this.login(authToken,listener);
         }
@@ -363,12 +377,12 @@ public class LiveChatAPI extends Socket{
 
         @Override
         public String toString() {
-            return "ChatRoom{" +
-                    "userName='" + userName + '\'' +
-                    ", roomId='" + roomId + '\'' +
-                    ", userId='" + userId + '\'' +
-                    ", visitorToken='" + visitorToken + '\'' +
-                    ", authToken='" + authToken + '\'' +
+            return "{" +
+                    "\"userName\":\"" + userName + '\"' +
+                    ",\"roomId\":\"" + roomId + '\"' +
+                    ",\"userId\":\"" + userId + '\"' +
+                    ",\"visitorToken\":\"" + visitorToken + '\"' +
+                    ",\"authToken\":\"" + authToken + '\"' +
                     '}';
         }
     }
