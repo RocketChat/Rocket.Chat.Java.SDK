@@ -31,11 +31,11 @@ public class LiveChatHistoryRPC extends RPC{
         try {
             if (oldestMessageTimestamp!=null){
                 oldestTs=new JSONObject();
-                oldestTs.put("$date",((int) oldestMessageTimestamp.getTime() / 1000));
+                oldestTs.put("$date",oldestMessageTimestamp.getTime());
             }
             if (lastTimestamp!=null){
                 lastTs = new JSONObject();
-                lastTs.put("$date", ((int) lastTimestamp.getTime() / 1000));
+                lastTs.put("$date", lastTimestamp.getTime());
             }
         } catch (JSONException e) {
             e.printStackTrace();
