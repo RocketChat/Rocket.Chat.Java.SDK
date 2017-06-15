@@ -39,7 +39,7 @@ public class LiveChatBasicRPC extends RPC{
     }
 
     /**
-     * Not tested
+     * Tested
      * @param integer
      * @param name
      * @param email
@@ -48,10 +48,7 @@ public class LiveChatBasicRPC extends RPC{
      */
 
     public static String registerGuest(int integer,String name, String email, String dept){
-//        return "{\"msg\":\"method\"," +
-//                "\"method\":\"livechat:registerGuest\"," +
-//                "\"params\":[{\"token\":\""+ visitorToken +"\",\"name\":\""+name+"\",\"email\":\""+email+"\",\"department\":\""+dept+"\"}]," +
-//                "\"id\":\""+integer+"\"}";
+
             JSONObject object=new JSONObject();
             try {
                 object.put("token",visitorToken);
@@ -92,17 +89,13 @@ public class LiveChatBasicRPC extends RPC{
     }
 
     /**
-     * Not tested
+     * Tested
      * @param integer
      * @param roomId
      * @return
      */
 
     public static String closeConversation(int integer,String roomId){
-//        return "{\"msg\":\"method\"," +
-//                "\"method\":\"livechat:closeByVisitor\"," +
-//                "\"params\":[\""+roomId+"\"]," +
-//                "\"id\":\""+integer+"\"}";
         return getRemoteMethodObject(integer,CLOSECONVERSATION,roomId).toString();
     }
 

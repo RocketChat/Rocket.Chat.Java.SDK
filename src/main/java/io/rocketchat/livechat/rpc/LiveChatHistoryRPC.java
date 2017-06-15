@@ -15,7 +15,8 @@ public class LiveChatHistoryRPC extends RPC{
     public static String HISTORY="loadHistory";
 
     /**
-     * TESTED
+     * @// TODO: 15/6/17 Need to check history along with pagination support
+     * HALF TESTED
      * @param integer
      * @param roomId
      * @param oldestMessageTimestamp Used to do pagination (null means latest timestamp)

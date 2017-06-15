@@ -8,8 +8,6 @@ import io.rocketchat.livechat.callback.ConnectListener;
 
 public class Main implements ConnectListener {
 
-
-
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom chatRoom;
 
@@ -26,7 +24,6 @@ public class Main implements ConnectListener {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.disconnect();
     }
 
     @Override

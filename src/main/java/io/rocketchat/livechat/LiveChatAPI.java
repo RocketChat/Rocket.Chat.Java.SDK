@@ -203,6 +203,7 @@ public class LiveChatAPI extends Socket{
                 super.onConnected(websocket, headers);
             }
 
+            // TODO: 15/6/17 Need to find out disconnect event when internet connection is lost accidentally, or wifi is closed in the middle of active connection
             @Override
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                 System.out.println("Disconnected");

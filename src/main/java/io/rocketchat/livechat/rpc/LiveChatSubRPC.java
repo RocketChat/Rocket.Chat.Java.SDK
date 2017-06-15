@@ -25,15 +25,6 @@ public class LiveChatSubRPC extends SubRPC{
     }
 
     public static String streamLivechatRoom(String uniqueid, String room_id, Boolean persistenceEnable){
-//        return "{\n" +
-//                "    \"msg\": \"sub\",\n" +
-//                "    \"id\": \""+uniqueid+"\",\n" +
-//                "    \"name\": \"stream-livechat-room\",\n" +
-//                "    \"params\":[\n" +
-//                "        \""+room_id+"\",\n" +
-//                "        "+persistenceEnable+"\n" +
-//                "    ]\n" +
-//                "}";
         return getRemoteSubscriptionObject(uniqueid,STREAMLIVECHATROOM,room_id,persistenceEnable).toString();
     }
 
