@@ -1,12 +1,12 @@
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.MessageObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 /**
  * Created by sachin on 7/6/17.
@@ -55,7 +55,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, LoadHi
     public void onLogin(GuestObject object) {
         System.out.println("login is successful");
         room=liveChat.new ChatRoom(userName,roomId,userID,visitorToken,authToken);
-        room.getChatHistory(3,null,new Date(),this);
+        room.getChatHistory(3,new Date(),new Date(new Date().getTime()/1000),this);
     }
 
     @Override
@@ -64,8 +64,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, LoadHi
             System.out.println("Message is "+messageObject.getMessage());
         }
         System.out.println("Unread not loaded "+unreadNotLoaded);
-        System.out.println("loading next set of messages");
-        room.getChatHistory(3,null,list.get(list.size()-1).getMsgTimestamp(),this);
+
     }
 }
 

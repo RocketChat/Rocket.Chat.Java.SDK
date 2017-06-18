@@ -1,8 +1,8 @@
 -classpath '/home/sachin/IdeaProjects/LiveChatAPI/build/classes/main:/home/sachin/IdeaProjects/LiveChatAPI/build/resources/main:/home/sachin/.gradle/caches/modules-2/files-2.1/com.neovisionaries/nv-websocket-client/2.2/225e2a6eb3efa44b3bede68b19f5a26ae9cc17c1/nv-websocket-client-2.2.jar:/home/sachin/.gradle/caches/modules-2/files-2.1/org.json/json/20090211/c183aa3a2a6250293808bba12262c8920ce5a51c/json-20090211.jar'
 -d '/home/sachin/IdeaProjects/LiveChatAPI/build/docs/javadoc'
--doctitle 'LiveChatAPI 0.2.1 API'
+-doctitle 'LiveChatAPI 0.3.0 API'
 -quiet 
--windowtitle 'LiveChatAPI 0.2.1 API'
+-windowtitle 'LiveChatAPI 0.3.0 API'
 '/home/sachin/IdeaProjects/LiveChatAPI/src/main/java/Main.java'
 '/home/sachin/IdeaProjects/LiveChatAPI/src/main/java/io/rocketchat/common/network/ReconnectionStrategy.java'
 '/home/sachin/IdeaProjects/LiveChatAPI/src/main/java/io/rocketchat/common/network/EventThread.java'
