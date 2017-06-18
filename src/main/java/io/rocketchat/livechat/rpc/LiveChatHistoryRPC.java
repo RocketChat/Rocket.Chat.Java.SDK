@@ -15,7 +15,7 @@ public class LiveChatHistoryRPC extends RPC{
     public static String HISTORY="loadHistory";
 
     /**
-     * @// TODO: 15/6/17 Need to check history along with pagination support
+     * @// TODO: 18/6/17 look for unread messages or new messages
      * HALF TESTED
      * @param integer
      * @param roomId
