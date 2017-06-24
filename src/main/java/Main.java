@@ -1,30 +1,21 @@
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.MessageObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, AuthListener.LoginListener, LoadHistoryListener {
+public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener {
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom room;
-    public static String userName="guest-18";
-    public static String roomId="u7xcgonkr7sh";
-    public static String userID="rQ2EHbhjryZnqbZxC";
-    public static String visitorToken="707d47ae407b3790465f61d28ee4c63d";
-    public static String authToken="VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133";
-
+    private static String serverurl="wss://livechattest.rocket.chat/websocket";
+    private static String localurl="wss://localhost:3000/websocket";
 
     public void call(){
-        liveChat=new LiveChatAPI("ws://localhost:3000/websocket");
+        liveChat=new LiveChatAPI(serverurl);
         liveChat.setReconnectionStrategy(null);
         liveChat.connect(this);
     }
@@ -37,7 +28,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, LoadHi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.login(authToken,this);
+        liveChat.registerGuest("shreyash","shreyash@gmail.com",null,this);
     }
 
     @Override
@@ -54,17 +45,13 @@ public class Main implements ConnectListener, AuthListener.LoginListener, LoadHi
     @Override
     public void onLogin(GuestObject object) {
         System.out.println("login is successful");
-        room=liveChat.new ChatRoom(userName,roomId,userID,visitorToken,authToken);
-        room.getChatHistory(3,new Date(),new Date(new Date().getTime()/1000),this);
+        room=liveChat.createRoom(object.getUserID(),object.getToken());
+        room.sendMessage("Hi there");
     }
 
     @Override
-    public void onLoadHistory(ArrayList<MessageObject> list, int unreadNotLoaded) {
-        for (MessageObject messageObject: list){
-            System.out.println("Message is "+messageObject.getMessage());
-        }
-        System.out.println("Unread not loaded "+unreadNotLoaded);
-
+    public void onRegister(GuestObject object) {
+        liveChat.login(object.getToken(),this);
     }
 }
 
@@ -76,3 +63,4 @@ public class Main implements ConnectListener, AuthListener.LoginListener, LoadHi
 /**
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
+

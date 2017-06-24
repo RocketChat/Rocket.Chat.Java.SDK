@@ -29,13 +29,13 @@ For java
 ```Gradle
 
 dependencies {
-    compile 'io.rocketchat:rocketchatjavasdk:0.3.0'
+    compile 'io.rocketchat:rocketchatjavasdk:0.3.1'
 }
 ```
 For android 
 
 ```Gradle
-compile ('io.rocketchat:rocketchatjavasdk:0.3.0'){
+compile ('io.rocketchat:rocketchatjavasdk:0.3.1'){
         exclude group :'org.json', module: 'json'
 }
 ```

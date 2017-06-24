@@ -2,81 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63aa3452-a326-4d90-9051-8d9e68837f7c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/Main.class" afterPath="$PROJECT_DIR$/build/classes/main/Main.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/LiveChatAPI.iml" afterPath="$PROJECT_DIR$/.idea/modules/LiveChatAPI.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_main.iml" afterPath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_main.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_test.iml" afterPath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_test.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/Main.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/Main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" afterPath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" afterPath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main.java" afterPath="$PROJECT_DIR$/src/main/java/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java" />
     </list>
     <ignored path="LiveChatAPI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -116,127 +49,35 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="67" column="5" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
+            <state relative-caret-position="319">
+              <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1102#1103#0" expanded="true" />
-                <element signature="e#1135#1136#0" expanded="true" />
-                <element signature="e#1364#1365#0" expanded="true" />
-                <element signature="e#1426#1427#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
-              <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LiveChatAPI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LiveChatAPI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="206" column="15" selection-start-line="206" selection-start-column="15" selection-end-line="206" selection-end-column="15" />
+            <state relative-caret-position="108">
+              <caret line="211" column="42" selection-start-line="211" selection-start-column="42" selection-end-line="211" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#8704#9063#0" expanded="true" />
+                <element signature="e#9062#9063#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LiveChatHistoryRPC.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+            <state relative-caret-position="359">
+              <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageObject.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/model/MessageObject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="648">
-              <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2057#2058#0" expanded="false" />
-                <element signature="e#2089#2090#0" expanded="false" />
-                <element signature="e#2139#2140#0" expanded="false" />
-                <element signature="e#2181#2182#0" expanded="false" />
-                <element signature="e#2214#2215#0" expanded="false" />
-                <element signature="e#2243#2244#0" expanded="false" />
-                <element signature="e#2287#2288#0" expanded="false" />
-                <element signature="e#2323#2324#0" expanded="false" />
-                <element signature="e#2357#2358#0" expanded="false" />
-                <element signature="e#2387#2388#0" expanded="false" />
-                <element signature="e#2433#2434#0" expanded="false" />
-                <element signature="e#2471#2472#0" expanded="false" />
-                <element signature="e#2510#2511#0" expanded="false" />
-                <element signature="e#2545#2546#0" expanded="false" />
-                <element signature="e#2601#2602#0" expanded="false" />
-                <element signature="e#2649#2650#0" expanded="false" />
-                <element signature="e#2687#2688#0" expanded="false" />
-                <element signature="e#2721#2722#0" expanded="false" />
-                <element signature="e#2775#2776#0" expanded="false" />
-                <element signature="e#2821#2822#0" expanded="false" />
-                <element signature="e#2858#2859#0" expanded="false" />
-                <element signature="e#2893#2894#0" expanded="false" />
-                <element signature="e#2947#2948#0" expanded="false" />
-                <element signature="e#2995#2996#0" expanded="false" />
-                <element signature="e#3029#3030#0" expanded="false" />
-                <element signature="e#3061#3062#0" expanded="false" />
-                <element signature="e#3109#3110#0" expanded="false" />
-                <element signature="e#3151#3152#0" expanded="false" />
-                <element signature="e#3186#3187#0" expanded="false" />
-                <element signature="e#3216#3217#0" expanded="false" />
-                <element signature="e#3263#3264#0" expanded="false" />
-                <element signature="e#3301#3302#0" expanded="false" />
-                <element signature="e#3343#3344#0" expanded="false" />
-                <element signature="e#3380#3381#0" expanded="false" />
-                <element signature="e#3441#3442#0" expanded="false" />
-                <element signature="e#3493#3494#0" expanded="false" />
-                <element signature="e#3538#3539#0" expanded="false" />
-                <element signature="e#3579#3580#0" expanded="false" />
-                <element signature="e#3647#3648#0" expanded="false" />
-                <element signature="e#3707#3708#0" expanded="false" />
-                <element signature="e#3740#3741#0" expanded="false" />
-                <element signature="e#3771#3772#0" expanded="false" />
-                <element signature="e#3817#3818#0" expanded="false" />
-                <element signature="e#3857#3858#0" expanded="false" />
-                <element signature="e#3894#3895#0" expanded="false" />
-                <element signature="e#3923#3924#0" expanded="false" />
-                <element signature="e#3971#3972#0" expanded="false" />
-                <element signature="e#4007#4008#0" expanded="false" />
-                <element signature="e#4046#4047#0" expanded="false" />
-                <element signature="e#4077#4078#0" expanded="false" />
-                <element signature="e#4129#4130#0" expanded="false" />
-                <element signature="e#4169#4170#0" expanded="false" />
-                <element signature="e#4207#4208#0" expanded="false" />
-                <element signature="e#4241#4242#0" expanded="false" />
-                <element signature="e#4295#4296#0" expanded="false" />
-                <element signature="e#4341#4342#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LiveChatSendMsgRPC.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="594">
-              <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -244,27 +85,29 @@
       <file leaf-file-name="Socket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#2926#2927#0" expanded="false" />
-                <element signature="e#2968#2969#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="166">
+              <caret line="95" column="23" selection-start-line="95" selection-start-column="23" selection-end-line="95" selection-end-column="23" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/utils/Utils.java">
+      <file leaf-file-name="AgentListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AgentListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="900">
-              <caret line="56" column="33" selection-start-line="56" selection-start-column="33" selection-end-line="56" selection-end-column="33" />
-              <folding>
-                <element signature="imports" expanded="false" />
-                <element signature="e#932#933#0" expanded="false" />
-                <element signature="e#970#971#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="306">
+              <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPC.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="918">
+              <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -484,7 +327,7 @@
     <option name="modificationStamps">
       <map>
         <entry key="$PROJECT_DIR$/../JFoenix" value="5896919173480" />
-        <entry key="$PROJECT_DIR$" value="2994667526190" />
+        <entry key="$PROJECT_DIR$" value="2995154711140" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -704,15 +547,15 @@
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/ReconnectionStrategy.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatBasicRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSubRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java" />
         <option value="$PROJECT_DIR$/src/main/java/Main.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java" />
       </list>
     </option>
   </component>
@@ -861,6 +704,70 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="network" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1350,12 +1257,17 @@
       <workItem from="1497423352111" duration="17961000" />
       <workItem from="1497502222337" duration="5335000" />
       <workItem from="1497532706559" duration="2538000" />
-      <workItem from="1497792657618" duration="5748000" />
+      <workItem from="1497792657618" duration="8245000" />
+      <workItem from="1497842341069" duration="82000" />
+      <workItem from="1497863370170" duration="51000" />
+      <workItem from="1497879536921" duration="3133000" />
+      <workItem from="1498108059254" duration="43000" />
+      <workItem from="1498295938874" duration="426000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="145518000" />
+    <option name="totallyTimeSpent" value="151750000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1368,34 +1280,34 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="24" width="1299" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32561728" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40432099" sideWeight="0.5091633" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988048" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3441358" sideWeight="0.49402392" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3441358" sideWeight="0.49402392" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24102154" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1433,10 +1345,6 @@
           <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
-            <element signature="e#1135#1136#0" expanded="true" />
-            <element signature="e#1364#1365#0" expanded="true" />
-            <element signature="e#1426#1427#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1454,10 +1362,6 @@
           <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
-            <element signature="e#1135#1136#0" expanded="true" />
-            <element signature="e#1364#1365#0" expanded="true" />
-            <element signature="e#1426#1427#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1538,7 +1442,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1574,7 +1477,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1585,13 +1487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AgentListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
@@ -1599,21 +1494,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AuthListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/middleware/LiveChatMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="52" column="27" selection-start-line="52" selection-start-column="27" selection-end-line="52" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1628,9 +1512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1673,38 +1554,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
           <caret line="2773" column="44" selection-start-line="2773" selection-start-column="44" selection-end-line="2773" selection-end-column="44" />
-          <folding>
-            <element signature="e#94281#94282#0" expanded="false" />
-            <element signature="e#94354#94355#0" expanded="false" />
-          </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/SubRPC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="11" column="51" selection-start-line="11" selection-start-column="51" selection-end-line="11" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="0">
-            <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/ReconnectionStrategy.java">
@@ -1718,7 +1568,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="11" column="58" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1726,7 +1575,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
           <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1734,117 +1582,19 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="358">
           <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/model/MessageObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="648">
-          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2057#2058#0" expanded="false" />
-            <element signature="e#2089#2090#0" expanded="false" />
-            <element signature="e#2139#2140#0" expanded="false" />
-            <element signature="e#2181#2182#0" expanded="false" />
-            <element signature="e#2214#2215#0" expanded="false" />
-            <element signature="e#2243#2244#0" expanded="false" />
-            <element signature="e#2287#2288#0" expanded="false" />
-            <element signature="e#2323#2324#0" expanded="false" />
-            <element signature="e#2357#2358#0" expanded="false" />
-            <element signature="e#2387#2388#0" expanded="false" />
-            <element signature="e#2433#2434#0" expanded="false" />
-            <element signature="e#2471#2472#0" expanded="false" />
-            <element signature="e#2510#2511#0" expanded="false" />
-            <element signature="e#2545#2546#0" expanded="false" />
-            <element signature="e#2601#2602#0" expanded="false" />
-            <element signature="e#2649#2650#0" expanded="false" />
-            <element signature="e#2687#2688#0" expanded="false" />
-            <element signature="e#2721#2722#0" expanded="false" />
-            <element signature="e#2775#2776#0" expanded="false" />
-            <element signature="e#2821#2822#0" expanded="false" />
-            <element signature="e#2858#2859#0" expanded="false" />
-            <element signature="e#2893#2894#0" expanded="false" />
-            <element signature="e#2947#2948#0" expanded="false" />
-            <element signature="e#2995#2996#0" expanded="false" />
-            <element signature="e#3029#3030#0" expanded="false" />
-            <element signature="e#3061#3062#0" expanded="false" />
-            <element signature="e#3109#3110#0" expanded="false" />
-            <element signature="e#3151#3152#0" expanded="false" />
-            <element signature="e#3186#3187#0" expanded="false" />
-            <element signature="e#3216#3217#0" expanded="false" />
-            <element signature="e#3263#3264#0" expanded="false" />
-            <element signature="e#3301#3302#0" expanded="false" />
-            <element signature="e#3343#3344#0" expanded="false" />
-            <element signature="e#3380#3381#0" expanded="false" />
-            <element signature="e#3441#3442#0" expanded="false" />
-            <element signature="e#3493#3494#0" expanded="false" />
-            <element signature="e#3538#3539#0" expanded="false" />
-            <element signature="e#3579#3580#0" expanded="false" />
-            <element signature="e#3647#3648#0" expanded="false" />
-            <element signature="e#3707#3708#0" expanded="false" />
-            <element signature="e#3740#3741#0" expanded="false" />
-            <element signature="e#3771#3772#0" expanded="false" />
-            <element signature="e#3817#3818#0" expanded="false" />
-            <element signature="e#3857#3858#0" expanded="false" />
-            <element signature="e#3894#3895#0" expanded="false" />
-            <element signature="e#3923#3924#0" expanded="false" />
-            <element signature="e#3971#3972#0" expanded="false" />
-            <element signature="e#4007#4008#0" expanded="false" />
-            <element signature="e#4046#4047#0" expanded="false" />
-            <element signature="e#4077#4078#0" expanded="false" />
-            <element signature="e#4129#4130#0" expanded="false" />
-            <element signature="e#4169#4170#0" expanded="false" />
-            <element signature="e#4207#4208#0" expanded="false" />
-            <element signature="e#4241#4242#0" expanded="false" />
-            <element signature="e#4295#4296#0" expanded="false" />
-            <element signature="e#4341#4342#0" expanded="false" />
-          </folding>
-        </state>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="MultiMarkdownFxPreviewEditor">
+        <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="12" column="21" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#2926#2927#0" expanded="false" />
-            <element signature="e#2968#2969#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="56" column="33" selection-start-line="56" selection-start-column="33" selection-end-line="56" selection-end-column="33" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#932#933#0" expanded="false" />
-            <element signature="e#970#971#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-          <folding />
+      <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="18">
+            <caret line="14" column="19" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
@@ -1852,39 +1602,102 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="279">
           <caret line="25" column="7" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/model/MessageObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="41" column="13" selection-start-line="41" selection-start-column="13" selection-end-line="41" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="31" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AuthListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/SubRPC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AgentListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="918">
+          <caret line="53" column="5" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="67" column="5" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
+        <state relative-caret-position="319">
+          <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
-            <element signature="e#1135#1136#0" expanded="true" />
-            <element signature="e#1364#1365#0" expanded="true" />
-            <element signature="e#1426#1427#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="88" column="0" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
+        <state relative-caret-position="166">
+          <caret line="95" column="23" selection-start-line="95" selection-start-column="23" selection-end-line="95" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="206" column="15" selection-start-line="206" selection-start-column="15" selection-end-line="206" selection-end-column="15" />
+        <state relative-caret-position="108">
+          <caret line="211" column="42" selection-start-line="211" selection-start-column="42" selection-end-line="211" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#8704#9063#0" expanded="true" />
+            <element signature="e#9062#9063#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="95" column="0" selection-start-line="95" selection-start-column="0" selection-end-line="95" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
