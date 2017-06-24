@@ -1,4 +1,5 @@
 package io.rocketchat.livechat.callback;
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.model.GuestObject;
 
 /**
@@ -11,9 +12,9 @@ import io.rocketchat.livechat.model.GuestObject;
 
 public class AuthListener{
     public interface RegisterListener extends Listener {
-        void onRegister(GuestObject object);
+        void onRegister(GuestObject object, ErrorObject error);
     }
     public interface LoginListener extends Listener {
-        void onLogin(GuestObject object);
+        void onLogin(GuestObject object, ErrorObject error);
     }
 }

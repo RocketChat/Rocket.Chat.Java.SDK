@@ -28,7 +28,7 @@ public class LiveChatStreamMiddleware {
     public static LiveChatStreamMiddleware middleware=new LiveChatStreamMiddleware();
 
 
-    MessageListener messageListener;
+    MessageListener.MessageSubscription messageSubscription;
     AgentListener.AgentConnectListener agentConnectListener;
     TypingListener typingListener;
 
@@ -43,8 +43,8 @@ public class LiveChatStreamMiddleware {
         return middleware;
     }
 
-    public void subscribeRoom(MessageListener messageListener) {
-        this.messageListener = messageListener;
+    public void subscribeRoom(MessageListener.MessageSubscription subscription) {
+        this.messageSubscription = subscription;
     }
 
     public void subscribeLiveChatRoom(AgentListener.AgentConnectListener agentConnectListener) {
@@ -65,13 +65,13 @@ public class LiveChatStreamMiddleware {
 
         switch (parse(s)) {
             case STREAMROOMMESSAGES:
-                if (messageListener !=null) {
+                if (messageSubscription !=null) {
                     MessageObject messageObject = new MessageObject(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
                     if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)) {
-                        messageListener.onAgentDisconnect(roomId, messageObject);
+                        messageSubscription.onAgentDisconnect(roomId, messageObject);
                     } else {
-                        messageListener.onMessage(roomId, messageObject);
+                        messageSubscription.onMessage(roomId, messageObject);
                     }
                 }
                 break;

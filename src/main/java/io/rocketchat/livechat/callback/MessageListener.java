@@ -1,5 +1,6 @@
 package io.rocketchat.livechat.callback;
 
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.model.MessageObject;
 
 /**
@@ -10,7 +11,12 @@ import io.rocketchat.livechat.model.MessageObject;
  *  Used to get message, which is returned after SubType to particular room
  */
 
-public interface MessageListener extends Listener {
-    void onMessage(String roomId, MessageObject object);
-    void onAgentDisconnect(String roomId, MessageObject object);
+public class MessageListener  {
+    public interface MessageSubscription extends Listener{
+        void onMessage(String roomId, MessageObject object);
+        void onAgentDisconnect(String roomId, MessageObject object);
+    }
+    public interface MessageAck extends Listener{
+        void onMessageAck(String roomId, MessageObject object, ErrorObject error);
+    }
 }

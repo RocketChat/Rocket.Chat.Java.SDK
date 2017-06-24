@@ -27,7 +27,8 @@ public class LiveChatMiddleware {
         REGISTER,
         LOGIN,
         GETCHATHISTORY,
-        GETAGENTDATA
+        GETAGENTDATA,
+        SENDMESSAGE
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -52,38 +53,65 @@ public class LiveChatMiddleware {
             Listener listener = (Listener) objects[0];
             ListenerType type= (ListenerType) objects[1];
             JSONObject result=object.optJSONObject("result");
-//            ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
             switch (type) {
                 case GETINITIALDATA:
                     InitialDataListener dataListener= (InitialDataListener) listener;
-                    LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(result);
-                    dataListener.onInitialData(liveChatConfigObject);
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        dataListener.onInitialData(null,errorObject);
+                    }else{
+                        LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(result);
+                        dataListener.onInitialData(liveChatConfigObject,null);
+                    }
                     break;
                 case REGISTER: {
                     AuthListener.RegisterListener registerListener = (AuthListener.RegisterListener) listener;
-                    GuestObject guestObject = new GuestObject(result);
-                    registerListener.onRegister(guestObject);
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        registerListener.onRegister(null,errorObject);
+                    }else {
+                        GuestObject guestObject = new GuestObject(result);
+                        registerListener.onRegister(guestObject,null);
+                    }
                 }
                     break;
                 case LOGIN:
                     AuthListener.LoginListener loginListener= (AuthListener.LoginListener) listener;
-                    GuestObject guestObject=new GuestObject(result);
-                    loginListener.onLogin(guestObject);
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        loginListener.onLogin(null,errorObject);
+                    }else {
+                        GuestObject guestObject = new GuestObject(result);
+                        loginListener.onLogin(guestObject,null);
+                    }
                     break;
                 case GETCHATHISTORY:
-                    ArrayList <MessageObject> list=new ArrayList<MessageObject>();
                     LoadHistoryListener historyListener = (LoadHistoryListener) listener;
-                    JSONArray array=result.optJSONArray("messages");
-                    for (int j=0;j<array.length();j++){
-                        list.add(new MessageObject(array.optJSONObject(j)));
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        historyListener.onLoadHistory(null, 0,errorObject);
+                    }else {
+                        ArrayList <MessageObject> list=new ArrayList<MessageObject>();
+                        JSONArray array = result.optJSONArray("messages");
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new MessageObject(array.optJSONObject(j)));
+                        }
+                        int unreadNotLoaded = object.optJSONObject("result").optInt("unreadNotLoaded");
+                        historyListener.onLoadHistory(list, unreadNotLoaded,null);
                     }
-                    int unreadNotLoaded=object.optJSONObject("result").optInt("unreadNotLoaded");
-                    historyListener.onLoadHistory(list,unreadNotLoaded);
                     break;
                 case GETAGENTDATA:
                     AgentListener.AgentDataListener agentDataListener = (AgentListener.AgentDataListener) listener;
-                    AgentObject agentObject=new AgentObject(result);
-                    agentDataListener.onAgentData(agentObject);
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        agentDataListener.onAgentData(null,errorObject);
+                    }else {
+                        AgentObject agentObject = new AgentObject(result);
+                        agentDataListener.onAgentData(agentObject,null);
+                    }
+                    break;
+                case SENDMESSAGE:
+
                     break;
             }
 

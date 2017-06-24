@@ -128,7 +128,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    private void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener listener){
+    private void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener.MessageSubscription listener){
         EventThread.exec(new Runnable() {
             public void run() {
                 String uniqueID=Utils.shortUUID();
@@ -341,7 +341,7 @@ public class LiveChatAPI extends Socket{
             LiveChatAPI.this.sendIsTyping(roomId,userName,istyping);
         }
 
-        public void subscribeRoom(SubscribeListener subscribeListener,MessageListener listener){
+        public void subscribeRoom(SubscribeListener subscribeListener,MessageListener.MessageSubscription listener){
             LiveChatAPI.this.subscribeRoom(roomId,false,subscribeListener,listener);
         }
 

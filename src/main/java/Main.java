@@ -1,3 +1,4 @@
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
@@ -28,7 +29,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("shreyash","shreyash@gmail.com",null,this);
+        liveChat.registerGuest("ajit","ajit@gmail.com",null,this);
     }
 
     @Override
@@ -41,18 +42,28 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
         System.out.println("Got connect error with the server");
     }
 
-
     @Override
-    public void onLogin(GuestObject object) {
-        System.out.println("login is successful");
-        room=liveChat.createRoom(object.getUserID(),object.getToken());
-        room.sendMessage("Hi there");
+    public void onRegister(GuestObject object, ErrorObject error) {
+        if (error==null) {
+            System.out.println("registration success");
+            liveChat.login(object.getToken(), this);
+        }else{
+            System.out.println("error occurred "+error);
+        }
     }
 
     @Override
-    public void onRegister(GuestObject object) {
-        liveChat.login(object.getToken(),this);
+    public void onLogin(GuestObject object, ErrorObject error) {
+        if (error==null) {
+            System.out.println("login is successful");
+            room = liveChat.createRoom(object.getUserID(), object.getToken());
+            room.sendMessage("Hi there");
+        }else{
+            System.out.println("error occurred "+error);
+        }
     }
+
+
 }
 
 

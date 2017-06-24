@@ -1,5 +1,6 @@
 package io.rocketchat.livechat.callback;
 
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.model.MessageObject;
 
 import java.util.ArrayList;
@@ -13,5 +14,5 @@ import java.util.ArrayList;
  */
 
 public interface LoadHistoryListener extends Listener {
-    void onLoadHistory(ArrayList <MessageObject> list, int unreadNotLoaded);
+    void onLoadHistory(ArrayList <MessageObject> list, int unreadNotLoaded, ErrorObject error);
 }
