@@ -10,7 +10,7 @@ import io.rocketchat.livechat.model.AgentObject;
 /**
  * Getting agent info. from the server
  */
-public class AgentListener{
+public class AgentListener {
     public interface AgentDataListener extends Listener{
         void onAgentData(AgentObject agentObject, ErrorObject error);
     }

@@ -12,11 +12,11 @@ import io.rocketchat.livechat.model.MessageObject;
  */
 
 public class MessageListener  {
-    public interface MessageSubscription extends Listener{
+    public interface SubscriptionListener extends Listener{
         void onMessage(String roomId, MessageObject object);
         void onAgentDisconnect(String roomId, MessageObject object);
     }
-    public interface MessageAck extends Listener{
+    public interface MessageAckListener extends Listener{
         void onMessageAck(String roomId, MessageObject object, ErrorObject error);
     }
 }
