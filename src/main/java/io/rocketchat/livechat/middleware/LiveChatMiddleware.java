@@ -1,5 +1,6 @@
 package io.rocketchat.livechat.middleware;
 
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
@@ -50,27 +51,29 @@ public class LiveChatMiddleware {
             Object[] objects=callbacks.remove(i);
             Listener listener = (Listener) objects[0];
             ListenerType type= (ListenerType) objects[1];
+            JSONObject result=object.optJSONObject("result");
+//            ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
             switch (type) {
                 case GETINITIALDATA:
                     InitialDataListener dataListener= (InitialDataListener) listener;
-                    LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(object.optJSONObject("result"));
+                    LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(result);
                     dataListener.onInitialData(liveChatConfigObject);
                     break;
                 case REGISTER: {
                     AuthListener.RegisterListener registerListener = (AuthListener.RegisterListener) listener;
-                    GuestObject guestObject = new GuestObject(object.optJSONObject("result"));
+                    GuestObject guestObject = new GuestObject(result);
                     registerListener.onRegister(guestObject);
                 }
                     break;
                 case LOGIN:
                     AuthListener.LoginListener loginListener= (AuthListener.LoginListener) listener;
-                    GuestObject guestObject=new GuestObject(object.optJSONObject("result"));
+                    GuestObject guestObject=new GuestObject(result);
                     loginListener.onLogin(guestObject);
                     break;
                 case GETCHATHISTORY:
                     ArrayList <MessageObject> list=new ArrayList<MessageObject>();
                     LoadHistoryListener historyListener = (LoadHistoryListener) listener;
-                    JSONArray array=object.optJSONObject("result").optJSONArray("messages");
+                    JSONArray array=result.optJSONArray("messages");
                     for (int j=0;j<array.length();j++){
                         list.add(new MessageObject(array.optJSONObject(j)));
                     }
@@ -79,7 +82,7 @@ public class LiveChatMiddleware {
                     break;
                 case GETAGENTDATA:
                     AgentListener.AgentDataListener agentDataListener = (AgentListener.AgentDataListener) listener;
-                    AgentObject agentObject=new AgentObject(object.optJSONObject("result"));
+                    AgentObject agentObject=new AgentObject(result);
                     agentDataListener.onAgentData(agentObject);
                     break;
             }

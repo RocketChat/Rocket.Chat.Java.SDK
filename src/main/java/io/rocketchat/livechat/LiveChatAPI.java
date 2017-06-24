@@ -24,7 +24,7 @@ public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
     String sessionId;
-    public JSONObject userInfo;
+    JSONObject userInfo;
 
     WebSocketAdapter adapter;
     LiveChatMiddleware liveChatMiddleware;
@@ -46,6 +46,10 @@ public class LiveChatAPI extends Socket{
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
         this.strategy = strategy;
+    }
+
+    public void setConnectListener(ConnectListener connectListener) {
+        this.connectListener = connectListener;
     }
 
     public void getInitialData(final InitialDataListener listener){
