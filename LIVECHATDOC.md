@@ -10,16 +10,7 @@ Following methods are provided by LiveChatAPI.ChatRoom API
 - subscribeTyping (Listening to typing events)
 - closeConversation (Closing conversation with the server)
 
-#### Priority of calling methods    
-- Some methods are required to be called after receiving callbacks from other methods.
-Example : login or register can only be called after connect callback.
-- Priority decides which must methods should be called before other methods.
-- For room object, it can be given as follow. </br>
-I. Login </br>
-II. For the first login use subscribeLiveChatRoom (agent assignment will be returned in callback, it will remain constant afterwards) else getAgentData (after receiving callback from login) </br>
-III. Any other Method </br>
-
-1. login
+**1. login**
 
 ```java
     room.login(new AuthListener.LoginListener() {
@@ -49,9 +40,8 @@ III. Any other Method </br>
            }
         }
         
-- It will save you from **callback hell**.    
-    
-2. getChatHistory
+   
+**2. getChatHistory**
 
 ```java
     /****
@@ -69,7 +59,7 @@ III. Any other Method </br>
     Hint: pass count=20, oldestMessageTimestamp=new Date(),lastTimestamp=null for getting latest 20 messages
 ```
 
-3. getAgentData
+**3. getAgentData**
 
 ```java
     room.getAgentData(new AgentListener.AgentDataListener() {
@@ -80,13 +70,13 @@ III. Any other Method </br>
     });
 ```
 
-4. sendMessage
+**4. sendMessage**
 
 ```java
     room.sendMessage("This is some random message");
 ```
 
-5. sendIsTyping
+**5. sendIsTyping**
 
 ```java
     room.sendIsTyping(true); //for sending typing event to true
@@ -94,7 +84,7 @@ III. Any other Method </br>
 ```
 
 
-6. subscribeLiveChatRoom
+**6. subscribeLiveChatRoom**
 
 ```java
     room.subscribeLiveChatRoom(new SubscribeListener() {
@@ -110,7 +100,7 @@ III. Any other Method </br>
     });
 ```
 
-7. subscribeRoom
+**7. subscribeRoom**
 
 ```java
     room.subscribeRoom(new SubscribeListener() {
@@ -132,7 +122,7 @@ III. Any other Method </br>
 
 ```
 
-8. subscribeTyping
+**8. subscribeTyping**
 
 ```java
     room.subscribeTyping(new SubscribeListener() {
@@ -148,8 +138,17 @@ III. Any other Method </br>
                 });
 ```
 
-9. closeConversation
+**9. closeConversation**
 
 ```java
     room.closeConversation();
 ```
+
+#### Priority of calling methods    
+- Some methods are required to be called after receiving callbacks from other methods.
+Example : login or register can only be called after connect callback.
+- Priority decides which must methods should be called before other methods.
+- For room object, it can be given as follow. </br>
+**I.** Login </br>
+**II.** For the first login use subscribeLiveChatRoom (agent assignment will be returned in callback, it will remain constant afterwards) else getAgentData (after receiving callback from login) </br>
+**III.** Any other Method </br>
