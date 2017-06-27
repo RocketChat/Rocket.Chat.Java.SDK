@@ -224,7 +224,21 @@ _II. LiveChatAPI.ChatRoom (room)_
 - As room object is global accessible throughout Main class, it's methods can be called from anywhere after initialization.
 - Each method for communication with server is given in the [LiveChat Room API DOC]() .
 
-#### 5. Handling disconnection with server
+#### 5. Handling re-connection with server
+- `reconnect` method in `liveChat` can be used for reconnecting to the server.
+
+1. Manual reconnection
+
+```java
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+            liveChat.reconnect();
+            System.out.println("Disconnected from server");
+    }
+
+```
+
+2. Automatic reconnection
 
 
 #### 6. Maintaining state of the room
