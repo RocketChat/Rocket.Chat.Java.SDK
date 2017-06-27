@@ -36,5 +36,5 @@ Following RPC are provided by LiveChatAPI.ChatRoom API
                     }
     });
     
-    Hint: pass count=20, oldestMessageTimestamp=new Date(),lastTimestamp=null for getting latest messages
+    Hint: pass count=20, oldestMessageTimestamp=new Date(),lastTimestamp=null for getting latest 20 messages
 ```

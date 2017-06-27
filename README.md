@@ -41,9 +41,9 @@ Documentation
 
 ### Overview
 
-- LiveChat SDK will consist of RPC for server methods available on hosted or remote rocket.chat server.</br>
+- LiveChat SDK consist of set of RPC for server methods available on hosted or remote rocket.chat server.</br>
 - Primary requirement is to have **url** of hosted server.
-- The process of connecting to server and registration must be done by following 3 steps
+- The process of connecting to server and registration must be done by following below steps
 
 #### 1. Connecting to server
 
@@ -143,7 +143,7 @@ Documentation
 #### 3. Logging in
 
 - It is done immediately after registration of a user.
-- Login will return **Authentication credentials** in the callback,required for next login.
+- Login will return **Authentication credentials** in the callback, required for next login.
 - After user disconnects from the server,user can again connect to server using room API, by calling it's login method. 
 
 ```java
@@ -210,20 +210,21 @@ Documentation
 
 1. LiveChatAPI
 - Provides functionality that can hold instance required to maintain connection with server.
-- API allows basic functionality like connect, login, register, reconnection and disconnection.
+- API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
 
 2. LiveChatAPI.ChatRoom
 - It is created using LiveChatAPI and is extended version of basic API. 
 - Provides abstraction as a **room**.
 - All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
+- It is possible to save state of a room in a file or database in the form of string.
+- So,it is possible to use room API for further login and communication with server (login method from `LiveChatAPI` can be avoided after first time login).
 
 #### 4. Further communication with server
 
-- As room object is global accessible throughout Main class, it's method can be called from anywhere after initialization.
+- As room object is global accessible throughout Main class, it's methods can be called from anywhere after initialization.
 - Each method for communication with server is given in the [LiveChat Room API DOC]() .
 
 #### 5. Handling disconnection with server
-
 
 
 #### 6. Maintaining state of the room
