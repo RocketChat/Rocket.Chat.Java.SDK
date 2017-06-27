@@ -1,4 +1,5 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
@@ -22,7 +23,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
 
     public void call(){
         liveChat=new LiveChatAPI(serverurl);
-        liveChat.setReconnectionStrategy(null);
+        liveChat.setReconnectionStrategy(new ReconnectionStrategy(10,5000));
         liveChat.connect(this);
     }
 

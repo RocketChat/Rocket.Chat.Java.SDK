@@ -225,9 +225,16 @@ _II. LiveChatAPI.ChatRoom (room)_
 - Each method for communication with server is given in the [LiveChat Room API DOC]() .
 
 #### 5. Handling re-connection with server
-- `reconnect` method in `liveChat` can be used for reconnecting to the server.
+- `reconnect` method in `LiveChatAPI` class can be used for reconnecting to the server.
 
 1. Manual reconnection
+- Set reconnection to null before connecting to server.  
+
+```java
+    liveChat.setReconnectionStrategy(null);
+    liveChat.connect(this);
+```
+- After disconnect event, reconnect to the server
 
 ```java
     @Override
@@ -239,7 +246,13 @@ _II. LiveChatAPI.ChatRoom (room)_
 ```
 
 2. Automatic reconnection
+- Pass reconnection object while setting reconnection strategy
 
+```java
+        int maxAttempts=10;    //Number of attemps are 10
+        int timeInterval=5000; // in milliseconds, reconnection will be called after 5 seconds
+        liveChat.setReconnectionStrategy(new ReconnectionStrategy(maxAttempts,timeInterval));  
+```
 
 #### 6. Maintaining state of the room
 - Maintaining state means even if `room` object is destroyed, it can be reconstructed.
