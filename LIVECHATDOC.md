@@ -151,4 +151,4 @@ Example : login or register can only be called after connect callback.
 - For room object, it can be given as follow. </br>
 **I.** Login </br>
 **II.** For the first login use subscribeLiveChatRoom (agent assignment will be returned in callback, it will remain constant afterwards) else getAgentData (after receiving callback from login) </br>
-**III.** Any other Method (after callback from step 2)</br>
+**III.** Any other Method (after receiving callback from step II)</br>
