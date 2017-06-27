@@ -1,4 +1,5 @@
 LiveChat SDK can be effectively used using two classes
+- Till now we have used `LiveChatAPI` class, in order to use `LiveChatAPI.ChatRoom` class .
 
 1. LiveChatAPI
 - Provides functionality that can hold instance required to maintain connection with server.
