@@ -2,7 +2,12 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.MessageObject;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
@@ -57,7 +62,12 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
         if (error==null) {
             System.out.println("login is successful");
             room = liveChat.createRoom(object.getUserID(), object.getToken()); //Auth data is passed to room for further communication using room API.
+            room.getChatHistory(20, new Date(), null, new LoadHistoryListener() {
+                @Override
+                public void onLoadHistory(ArrayList<MessageObject> list, int unreadNotLoaded, ErrorObject error) {
 
+                }
+            });
         }else{
             System.out.println("error occurred "+error);
         }
