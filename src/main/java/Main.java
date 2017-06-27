@@ -63,6 +63,9 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
             System.out.println("login is successful");
             room = liveChat.createRoom(object.getUserID(), object.getToken()); //Auth data is passed to room for further communication using room API.
 
+
+
+
         }else{
             System.out.println("error occurred "+error);
         }

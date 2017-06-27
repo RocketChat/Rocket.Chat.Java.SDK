@@ -205,8 +205,7 @@ Documentation
 ```
 
 - Till now we have used `LiveChatAPI` class. In order to use `LiveChatAPI.ChatRoom` class, you must login and pass
- appropriate credentials to `createRoom` method.
-- `Room` is used for further communication with server.
+ appropriate credentials to `createRoom` method. `room` is used for further communication with server.
 - In short, LiveChat SDK can be effectively used using two classes
 
 _I. LiveChatAPI_
@@ -229,3 +228,32 @@ _II. LiveChatAPI.ChatRoom (room)_
 
 
 #### 6. Maintaining state of the room
+- Maintaining state means even if `room` object is destroyed, it can be reconstructed.
+- Whenever `room` object is created for the first time after login, call toString() method to get it's state.
+- Save this state in file or database (permanent storage), next time read the file and pass this string to `room` the constructor.
+
+Writing state to the file </br>
+Example : </br>
+- Suppose saveToFile is a function that saves string to the given fileName.
+
+```java
+    String state=room.toString();
+    saveToFile("filename.txt",state);
+
+```
+
+Reading state from the file </br>
+Example : </br>
+- Suppose getFromFile is a function that returns String from the given file.
+        
+Example:
+```java
+    String state=getFromFile("filename.txt");
+    /**
+    **  liveChat is a initialized object connected to server  
+    **/
+    room=liveChat.new ChatRoom(state); // Constructor is used to construct room Object
+    /**
+    **  Login and other methods can be called by room
+    **/
+```
