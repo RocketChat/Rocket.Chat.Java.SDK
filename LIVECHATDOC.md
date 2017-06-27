@@ -1,4 +1,4 @@
-Following RPC are provided by LiveChatAPI.ChatRoom API
+Following methods are provided by LiveChatAPI.ChatRoom API
 
 - Login (from second time onwards)
 - getChatHistory (getting history from the server)
@@ -14,11 +14,10 @@ Following RPC are provided by LiveChatAPI.ChatRoom API
 - Some methods are required to be called after receiving callbacks from other methods.
 Example : login or register can only be called after connect callback.
 - Priority decides which must methods should be called before other methods.
-- For room object,it can be given as follow.
-1. login
-2. subscribeLiveChatRoom if agent is not connected before else getAgentData (after receiving callback from login)
-3. subscribeRoom,subscribeTyping (after receiving callback from step 2)
-4. Any other method
+- For room object, it can be given as follow. </br>
+I. Login </br>
+II. For the first login use subscribeLiveChatRoom (agent assignment will be returned in callback, it will remain constant afterwards) else getAgentData (after receiving callback from login) </br>
+III. Any other Method </br>
 
 1. login
 
@@ -32,8 +31,7 @@ Example : login or register can only be called after connect callback.
     
 ```
 
-**Note (Get yourself saved from callback hell):** Best way to write down callbacks is to let Main Class implement the interface and passing it's instance
-    to the room method as a callback parameter. Same should be followed for other methods. 
+**Note (Get rid of callback hell):** Best way to write down callbacks is to let Main Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. 
     
 - Example 
 
@@ -97,8 +95,6 @@ Example : login or register can only be called after connect callback.
 
 
 6. subscribeLiveChatRoom
-- It is necessary after login.
-- Other subscriptions should be made after agent is connected or agent data is received.
 
 ```java
     room.subscribeLiveChatRoom(new SubscribeListener() {
