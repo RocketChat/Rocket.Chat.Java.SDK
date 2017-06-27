@@ -56,8 +56,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="198">
-                <caret line="201" column="55" selection-start-line="201" selection-start-column="55" selection-end-line="201" selection-end-column="55" />
+              <first_editor relative-caret-position="90">
+                <caret line="227" column="42" selection-start-line="227" selection-start-column="42" selection-end-line="227" selection-end-column="42" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -1197,12 +1197,20 @@
       <workItem from="1498543548238" duration="10215000" />
       <workItem from="1498557370173" duration="820000" />
       <workItem from="1498569066929" duration="3000" />
-      <workItem from="1498569090010" duration="6798000" />
+      <workItem from="1498569090010" duration="6931000" />
     </task>
+    <task id="LOCAL-00001" summary="changed styling">
+      <created>1498578775927</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1498578775927</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178566000" />
+    <option name="totallyTimeSpent" value="178699000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1255,6 +1263,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="changed styling" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed styling" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1403,8 +1415,8 @@
       </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="198">
-            <caret line="201" column="55" selection-start-line="201" selection-start-column="55" selection-end-line="201" selection-end-column="55" />
+          <first_editor relative-caret-position="90">
+            <caret line="227" column="42" selection-start-line="227" selection-start-column="42" selection-end-line="227" selection-end-column="42" />
             <folding />
           </first_editor>
           <second_editor />

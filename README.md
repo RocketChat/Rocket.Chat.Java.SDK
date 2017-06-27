@@ -228,7 +228,7 @@ _II. LiveChatAPI.ChatRoom (room) Class_
 #### 5. Handling re-connection with server
 - `reconnect` method in `LiveChatAPI` class can be used for reconnecting to the server.
 
-**1.** Manual reconnection
+I. Manual reconnection
 - Set reconnection to null before connecting to server.  
 
 ```java
@@ -246,7 +246,7 @@ _II. LiveChatAPI.ChatRoom (room) Class_
 
 ```
 
-**II.** Automatic reconnection
+II. Automatic reconnection
 - Pass reconnection object while setting reconnection strategy
 
 ```java
@@ -260,7 +260,7 @@ _II. LiveChatAPI.ChatRoom (room) Class_
 - Whenever `room` object is created for the first time after login, call toString() method to get it's state.
 - Save this state in file or database (permanent storage), next time read the file and pass this string to `room` the constructor.
 
-**I.** Writing state to the file </br>
+I. Writing state to the file </br>
 Example : </br>
 - Suppose saveToFile is a function that saves string to the given fileName.
 
@@ -270,7 +270,7 @@ Example : </br>
 
 ```
 
-**II.** Reading state from the file </br>
+II. Reading state from the file </br>
 Example : </br>
 - Suppose getFromFile is a function that returns String from the given file.
         
