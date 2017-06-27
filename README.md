@@ -209,11 +209,11 @@ Documentation
  appropriate credentials to `createRoom` method. `room` is used for further communication with server.
 - In short, LiveChat SDK can be effectively used using two classes
 
-_I. LiveChatAPI_
+_I. LiveChatAPI Class_
 - Provides functionality that can hold instance required to maintain connection with server.
 - API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
 
-_II. LiveChatAPI.ChatRoom (room)_
+_II. LiveChatAPI.ChatRoom (room) Class_
 - It is created using LiveChatAPI and is extended version of basic API. 
 - Provides abstraction as a **room**.
 - All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
@@ -228,7 +228,7 @@ _II. LiveChatAPI.ChatRoom (room)_
 #### 5. Handling re-connection with server
 - `reconnect` method in `LiveChatAPI` class can be used for reconnecting to the server.
 
-1. Manual reconnection
+**1.** Manual reconnection
 - Set reconnection to null before connecting to server.  
 
 ```java
@@ -246,7 +246,7 @@ _II. LiveChatAPI.ChatRoom (room)_
 
 ```
 
-2. Automatic reconnection
+**II.** Automatic reconnection
 - Pass reconnection object while setting reconnection strategy
 
 ```java
@@ -260,7 +260,7 @@ _II. LiveChatAPI.ChatRoom (room)_
 - Whenever `room` object is created for the first time after login, call toString() method to get it's state.
 - Save this state in file or database (permanent storage), next time read the file and pass this string to `room` the constructor.
 
-Writing state to the file </br>
+**I.** Writing state to the file </br>
 Example : </br>
 - Suppose saveToFile is a function that saves string to the given fileName.
 
@@ -270,7 +270,7 @@ Example : </br>
 
 ```
 
-Reading state from the file </br>
+**II.** Reading state from the file </br>
 Example : </br>
 - Suppose getFromFile is a function that returns String from the given file.
         
