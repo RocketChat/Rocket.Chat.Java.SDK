@@ -6,21 +6,11 @@ This SDK is divided into two parts
 1. Core SDK
 2. LiveChat SDK
 
-Current development approach is focused on LiveChat SDK and it allows following functionality
-
-- Getinitialdata (info. about departments and triggers) and register guest  
-- Guest login
-- Load history
-- Send message
-- Subscribe to room
-- Receive message event
-- Get agent info.
-- Send and receive typing event
+Current development approach is focused on **LiveChat SDK**.
 
 License
 -------
-Apache License, Version 2.0
-
+MIT
 
 Gradle
 ------
