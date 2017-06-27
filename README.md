@@ -36,7 +36,8 @@ compile ('io.rocketchat:rocketchatjavasdk:0.3.2'){
 Documentation
 -------------
 ### Important Note :
-- Before reading the documentation, go through all terms associated with [LiveChat (Agent, Departments etc)](https://rocket.chat/docs/administrator-guides/livechat/).
+- Before reading the documentation, go through all terms associated with LiveChat (Agent, Departments etc).
+- Docs can be found here [LIVECHAT USER DOC](https://rocket.chat/docs/administrator-guides/livechat/).
 - Make sure **LiveChat is properly configured** on the server.
 
 ### Overview
@@ -222,7 +223,7 @@ _II. LiveChatAPI.ChatRoom (room)_
 #### 4. Further communication with server
 
 - As room object is global accessible throughout Main class, it's methods can be called from anywhere after initialization.
-- Each method for communication with server is given in the [LiveChat Room API DOC]() .
+- Each method for communication with server is given in the [LiveChat Room API DOC](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/master/LIVECHATDOC.md) .
 
 #### 5. Handling re-connection with server
 - `reconnect` method in `LiveChatAPI` class can be used for reconnecting to the server.
