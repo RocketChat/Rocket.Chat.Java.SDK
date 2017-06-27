@@ -209,11 +209,11 @@ Documentation
 - `Room` is used for further communication with server.
 - In short, LiveChat SDK can be effectively used using two classes
 
-**1. LiveChatAPI**
+_I. LiveChatAPI_
 - Provides functionality that can hold instance required to maintain connection with server.
 - API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
 
-**2. LiveChatAPI.ChatRoom (room)**
+_II. LiveChatAPI.ChatRoom (room)_
 - It is created using LiveChatAPI and is extended version of basic API. 
 - Provides abstraction as a **room**.
 - All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
