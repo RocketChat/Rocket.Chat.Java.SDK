@@ -204,15 +204,16 @@ Documentation
     }
 ```
 
-- Till now we have used `LiveChatAPI` class, in order to use `LiveChatAPI.ChatRoom` class, you must login and pass
+- Till now we have used `LiveChatAPI` class. In order to use `LiveChatAPI.ChatRoom` class, you must login and pass
  appropriate credentials to `createRoom` method.
+- `Room` is used for further communication with server.
 - In short, LiveChat SDK can be effectively used using two classes
 
-1. LiveChatAPI
+**1. LiveChatAPI**
 - Provides functionality that can hold instance required to maintain connection with server.
 - API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
 
-2. LiveChatAPI.ChatRoom
+**2. LiveChatAPI.ChatRoom (room)**
 - It is created using LiveChatAPI and is extended version of basic API. 
 - Provides abstraction as a **room**.
 - All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
