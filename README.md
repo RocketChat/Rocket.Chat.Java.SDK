@@ -87,7 +87,7 @@ Documentation
 #### 2. Registration of a user
 
 - Registration is a one time process.
-- It is in order to communicate with agent and is done using **email** and **password**.
+- It is done in order to communicate with agent using **email** and **password**.
 
 ```java 
 
@@ -143,8 +143,8 @@ Documentation
 #### 3. Logging in
 
 - It is done immediately after registration of a user.
-- Login will return **Authentication credentials** in the callback, required for next login.
-- After user disconnects from the server,user can again connect to server using room API, by calling it's login method. 
+- Login will return **Guest Object (Authentication credentials)** in the callback, required for next login.
+- User can re-login to server by using room API. 
 
 ```java
     public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener {
