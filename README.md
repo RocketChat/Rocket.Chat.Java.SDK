@@ -33,3 +33,17 @@ compile ('io.rocketchat:rocketchatjavasdk:0.3.2'){
 [ ![Download](https://api.bintray.com/packages/sacoo7/Maven/RocketChat-SDK/images/download.svg) ](https://bintray.com/sacoo7/Maven/RocketChat-SDK/_latestVersion)
 
 
+Documentation
+-------------
+- LiveChat SDK will consist of RPC for server methods available on hosted or remote rocket.chat server.</br>
+- Primary requirement is to have url of hosted server.
+Example </br>
+     
+
+```
+
+
+
+```
+
+

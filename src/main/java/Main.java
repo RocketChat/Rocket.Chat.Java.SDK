@@ -29,7 +29,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("ajit","ajit@gmail.com",null,this);
+        liveChat.registerGuest("kunal","kunal@gmail.com",null,this);
     }
 
     @Override
