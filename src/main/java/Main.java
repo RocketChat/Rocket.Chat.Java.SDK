@@ -8,16 +8,14 @@ import io.rocketchat.livechat.model.GuestObject;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener {
+public class Main implements ConnectListener {
 
     private LiveChatAPI liveChat;
-    private LiveChatAPI.ChatRoom room;
     private static String serverurl="wss://livechattest.rocket.chat/websocket";
-    private static String localurl="wss://localhost:3000/websocket";
 
     public void call(){
         liveChat=new LiveChatAPI(serverurl);
-        liveChat.setReconnectionStrategy(null);
+        liveChat.setReconnectionStrategy(null); //null means no reconnection after disconnect.
         liveChat.connect(this);
     }
 
@@ -25,11 +23,9 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
         new Main().call();
     }
 
-
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("kunal","kunal@gmail.com",null,this);
     }
 
     @Override
@@ -39,29 +35,46 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
 
     @Override
     public void onConnectError(Exception websocketException) {
-        System.out.println("Got connect error with the server");
+        System.out.println("Connection error with server");
     }
 
-    @Override
-    public void onRegister(GuestObject object, ErrorObject error) {
-        if (error==null) {
-            System.out.println("registration success");
-            liveChat.login(object.getToken(), this);
-        }else{
-            System.out.println("error occurred "+error);
-        }
-    }
 
-    @Override
-    public void onLogin(GuestObject object, ErrorObject error) {
-        if (error==null) {
-            System.out.println("login is successful");
-            room = liveChat.createRoom(object.getUserID(), object.getToken());
-            room.sendMessage("Hi there");
-        }else{
-            System.out.println("error occurred "+error);
-        }
-    }
+//    @Override
+//    public void onConnect(String sessionID) {
+//        System.out.println("Connected to server");
+//        liveChat.registerGuest("kunal","kunal@gmail.com",null,this);
+//    }
+//
+//    @Override
+//    public void onDisconnect(boolean closedByServer) {
+//        System.out.println("Disconnected from server");
+//    }
+//
+//    @Override
+//    public void onConnectError(Exception websocketException) {
+//        System.out.println("Got connect error with the server");
+//    }
+//
+//    @Override
+//    public void onRegister(GuestObject object, ErrorObject error) {
+//        if (error==null) {
+//            System.out.println("registration success");
+//            liveChat.login(object.getToken(), this);
+//        }else{
+//            System.out.println("error occurred "+error);
+//        }
+//    }
+//
+//    @Override
+//    public void onLogin(GuestObject object, ErrorObject error) {
+//        if (error==null) {
+//            System.out.println("login is successful");
+//            room = liveChat.createRoom(object.getUserID(), object.getToken());
+//            room.sendMessage("Hi there");
+//        }else{
+//            System.out.println("error occurred "+error);
+//        }
+//    }
 
 
 }
