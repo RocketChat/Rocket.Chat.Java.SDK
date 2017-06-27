@@ -14,6 +14,11 @@ Following RPC are provided by LiveChatAPI.ChatRoom API
 - Some methods are required to be called after receiving callbacks from other methods.
 Example : login or register can only be called after connect callback.
 - Priority decides which must methods should be called before other methods.
+- For room object,it can be given as follow.
+1. login
+2. subscribeLiveChatRoom if agent is not connected before else getAgentData (after receiving callback from login)
+3. subscribeRoom,subscribeTyping (after receiving callback from step 2)
+4. Any other method
 
 1. login
 
@@ -27,7 +32,7 @@ Example : login or register can only be called after connect callback.
     
 ```
 
-**Note :** Best way to write down callbacks is to let Main Class implement the interface and passing it's instance
+**Note (Get yourself saved from callback hell):** Best way to write down callbacks is to let Main Class implement the interface and passing it's instance
     to the room method as a callback parameter. Same should be followed for other methods. 
     
 - Example 
