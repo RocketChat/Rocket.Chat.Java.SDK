@@ -42,8 +42,7 @@ Documentation
 
 ### Overview
 
-- LiveChat SDK consist of set of RPC for server methods available on hosted or remote rocket.chat server.</br>
-- Primary requirement is to have **url** of hosted server.
+- Primary requirement is to have **URL** of hosted server.
 - The process of connecting to server and registration must be done by following below steps
 
 #### 1. Connecting to server
@@ -88,7 +87,7 @@ Documentation
 #### 2. Registration of a user
 
 - Registration is a one time process.
-- It is done in order to communicate with agent using **email** and **password**.
+- It is done in order to communicate with agent using **email** and **password**. (assume no **departments** are available,so passing null as third parameter)
 
 ```java 
 
@@ -207,18 +206,17 @@ Documentation
 
 - Till now we have used `LiveChatAPI` class. In order to use `LiveChatAPI.ChatRoom` class, you must login and pass
  appropriate credentials to `createRoom` method. `room` is used for further communication with server.
-- In short, LiveChat SDK can be effectively used using two classes
 
-_I. LiveChatAPI Class_
-- Provides functionality that can hold instance required to maintain connection with server.
-- API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
-
-_II. LiveChatAPI.ChatRoom (room) Class_
-- It is created using LiveChatAPI and is extended version of basic API. 
-- Provides abstraction as a **room**.
-- All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
-- It is possible to save state of a room in a file or database in the form of string.
-- So,it is possible to use room API for further login and communication with server (login method from `LiveChatAPI` can be avoided after first time login).
+        * LiveChatAPI Class
+        - Provides functionality that can hold instance required to maintain connection with server.
+        - API allows basic functionality like connect, getting initial data, login, register, reconnection and disconnection.
+        
+        * LiveChatAPI.ChatRoom (room) Class
+        - It is created using LiveChatAPI and is extended version of basic API. 
+        - Provides abstraction as a real-world "chat-room".
+        - All advanced API's like sending messages, loading history, getting agent data etc. can be used via ChatRoom.
+        - It is possible to save state of a room in a file or database in the form of string.
+        - So, it is possible to use room API for further login and communication with server (login method from `LiveChatAPI` can be avoided after first time login).
 
 #### 4. Further communication with server
 
@@ -285,3 +283,8 @@ Example:
     **  Login and other methods can be called by room
     **/
 ```
+
+Use-case Samples
+----------------
+- Library is currently being used for development of [Rocket.Chat Android SDK](https://github.com/RocketChat/Rocket.Chat.Android.SDK) 
+- For more information, checkout library use [here ](https://github.com/RocketChat/Rocket.Chat.Android.SDK/tree/develop/rocketchatsdk/src/main/java/com/github/rocketchat/livechat) 
