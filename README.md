@@ -6,7 +6,8 @@ This SDK is divided into two parts
 1. Core SDK
 2. LiveChat SDK
 
-Current development approach is focused on **LiveChat SDK**.
+Current development approach is focused on **LiveChat SDK**. </br>
+**Core SDK** coming soon.....
 
 License
 -------
