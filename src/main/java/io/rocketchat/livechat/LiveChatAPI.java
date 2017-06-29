@@ -117,6 +117,16 @@ public class LiveChatAPI extends Socket{
         });
     }
 
+    private void sendMessage(final String msgId, final String roomID, final String message, final String token, final MessageListener.MessageAckListener messageAckListener){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID = integer.getAndIncrement();
+                liveChatMiddleware.createCallback(uniqueID,messageAckListener, LiveChatMiddleware.ListenerType.SENDMESSAGE);
+                ws.sendText(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
+            }
+        });
+    }
+
     private void sendIsTyping(final String roomId, final String username, final Boolean istyping){
         EventThread.exec(new Runnable() {
             @Override
@@ -333,8 +343,28 @@ public class LiveChatAPI extends Socket{
             LiveChatAPI.this.getAgentData(roomId,listener);
         }
 
-        public void sendMessage(String message){
-            LiveChatAPI.this.sendMessage(Utils.shortUUID(),roomId,message,visitorToken);
+        /**
+         * Used for sending messages to server
+         * @param message to be sent
+         * @return MessageID
+         */
+        public String sendMessage(String message){
+            String uuid=Utils.shortUUID();
+            LiveChatAPI.this.sendMessage(uuid,roomId,message,visitorToken);
+            return uuid;
+        }
+
+        /**
+         * Used for sending messages to server with messageAcknowledgement
+         * @param message
+         * @param messageAckListener Returns ack to particular message
+         * @return MessageID
+         */
+
+        public String sendMessage(String message,MessageListener.MessageAckListener messageAckListener){
+            String uuid=Utils.shortUUID();
+            LiveChatAPI.this.sendMessage(uuid,roomId,message,visitorToken,messageAckListener);
+            return uuid;
         }
 
         public void sendIsTyping(Boolean istyping){

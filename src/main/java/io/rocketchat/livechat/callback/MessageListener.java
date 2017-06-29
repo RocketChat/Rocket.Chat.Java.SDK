@@ -17,6 +17,6 @@ public class MessageListener  {
         void onAgentDisconnect(String roomId, MessageObject object);
     }
     public interface MessageAckListener extends Listener{
-        void onMessageAck(String roomId, MessageObject object, ErrorObject error);
+        void onMessageAck(MessageObject object, ErrorObject error);
     }
 }

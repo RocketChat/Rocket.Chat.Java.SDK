@@ -1,20 +1,17 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
-import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.MessageObject;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener {
+public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener, MessageListener.MessageAckListener {
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
@@ -35,7 +32,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("saurabha","saurabha@gmail.com",null,this);
+        liveChat.registerGuest("aza","aza@gmail.com",null,this);
     }
 
     @Override
@@ -63,9 +60,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
         if (error==null) {
             System.out.println("login is successful");
             room = liveChat.createRoom(object.getUserID(), object.getToken()); //Auth data is passed to room for further communication using room API.
-
-
-
+            room.sendMessage("Hey aza, You are very smart",this);
 
         }else{
             System.out.println("error occurred "+error);
@@ -73,6 +68,14 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     }
 
 
+    @Override
+    public void onMessageAck(MessageObject object, ErrorObject error) {
+        if (error==null) {
+            System.out.println("got message in the callback " + object);
+        }else{
+            System.out.println("Error is "+error);
+        }
+    }
 }
 
 

@@ -111,7 +111,14 @@ public class LiveChatMiddleware {
                     }
                     break;
                 case SENDMESSAGE:
-
+                    MessageListener.MessageAckListener messageAckListener= (MessageListener.MessageAckListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        messageAckListener.onMessageAck(null,errorObject);
+                    }else {
+                        MessageObject messageObject=new MessageObject(result);
+                        messageAckListener.onMessageAck(messageObject,null);
+                    }
                     break;
             }
 
