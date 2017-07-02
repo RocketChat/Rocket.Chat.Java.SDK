@@ -3,15 +3,17 @@ import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.MessageObject;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener, MessageListener.MessageAckListener {
+public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener, MessageListener.MessageAckListener, InitialDataListener, MessageListener.OfflineMessageListener {
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
@@ -32,7 +34,10 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("aza","aza@gmail.com",null,this);
+        liveChat.sendOfflineMessage("garud","garud@gmail.com","Hi this is garud and its really important",this);
+
+//        liveChat.getInitialData(this);
+//        liveChat.registerGuest("aza","aza@gmail.com",null,this);
     }
 
     @Override
@@ -74,6 +79,18 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
             System.out.println("got message in the callback " + object);
         }else{
             System.out.println("Error is "+error);
+        }
+    }
+
+    @Override
+    public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
+        System.out.println("Got initial data "+object);
+    }
+
+    @Override
+    public void onOfflineMesssageSuccess(Boolean success, ErrorObject error) {
+        if (error==null) {
+            System.out.println("There is offline message " + success);
         }
     }
 }
