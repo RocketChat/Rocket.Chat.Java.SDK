@@ -85,29 +85,6 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-    public void connect(ConnectListener connectListener) {
-        createSocket();
-        ws.addListener(adapter);
-        this.connectListener = connectListener;
-        super.connectAsync();
-    }
-
-    public ChatRoom createRoom(String userID,String authToken){
-        String userName=userInfo.optString("username");
-        String visitorToken= LiveChatBasicRPC.visitorToken;
-        String roomID=Utils.shortUUID();
-        return new ChatRoom(userName,roomID,userID,visitorToken,authToken);
-    }
-
-    public ChatRoom createRoom(String s){
-        return new ChatRoom(s);
-    }
-
-
-    public void disconnect(){
-        ws.disconnect();
-        selfDisconnect=true;
-    }
 
     public void sendOfflineMessage(final String name, final String email, final String message){
         EventThread.exec(new Runnable() {
@@ -236,7 +213,17 @@ public class LiveChatAPI extends Socket{
         });
     }
 
+    public void connect(ConnectListener connectListener) {
+        createSocket();
+        ws.addListener(adapter);
+        this.connectListener = connectListener;
+        super.connectAsync();
+    }
 
+    public void disconnect(){
+        ws.disconnect();
+        selfDisconnect=true;
+    }
 
 
     WebSocketAdapter getAdapter() {
@@ -251,7 +238,7 @@ public class LiveChatAPI extends Socket{
                 super.onConnected(websocket, headers);
             }
 
-            // TODO: 15/6/17 Need to find out disconnect event when internet connection is lost accidentally, or wifi is closed in the middle of active connection
+
             @Override
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                 System.out.println("Disconnected");
@@ -326,6 +313,18 @@ public class LiveChatAPI extends Socket{
             }
 
         };
+    }
+
+
+    public ChatRoom createRoom(String userID,String authToken){
+        String userName=userInfo.optString("username");
+        String visitorToken= LiveChatBasicRPC.visitorToken;
+        String roomID=Utils.shortUUID();
+        return new ChatRoom(userName,roomID,userID,visitorToken,authToken);
+    }
+
+    public ChatRoom createRoom(String s){
+        return new ChatRoom(s);
     }
 
 
