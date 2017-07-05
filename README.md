@@ -147,7 +147,7 @@ Documentation
 
 ```java 
 
-    public class Main implements ConnectListener ,AuthListener.RegisterListener {
+    public class Main implements ConnectListener ,AuthListener.RegisterListener ,InitialDataListener{
     
         private LiveChatAPI liveChat;
         private static String serverurl="wss://livechattest.rocket.chat/websocket";

@@ -1,11 +1,9 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
 import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
-import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 
 import java.util.ArrayList;

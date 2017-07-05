@@ -2,142 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63aa3452-a326-4d90-9051-8d9e68837f7c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/AgentCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/Callback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/ConnectCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/GuestCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/HistoryCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/InitialDataCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/MessageCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/SubscribeCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/TypingCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/AgentCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/Callback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/ConnectCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/GuestCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/HistoryCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/InitialDataCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/MessageCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/MessagesCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/TypingCallback.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callbacks/package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.AgentCallbackType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.CallbackType.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.subscriptiontype.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/AgentObject.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/DepartmentObject.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/GuestObject.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/LiveChatConfigObject.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/MessageObject.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/models/package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/network/EventThread.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/network/Socket.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/network/package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/network/package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/network/package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/utils/Utils.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/utils/package-frame.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/utils/package-summary.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/utils/package-tree.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.0.2-javadoc.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.0.2-sources.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.0.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.0-javadoc.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.0-sources.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.1-javadoc.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.1-sources.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/build/libs/LiveChatAPI-0.1.1.jar" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$10.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$10.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$4.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$5.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$6.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$7.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$8.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$8.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$9.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI$9.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/livechat/LiveChatAPI.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/Main.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/Main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" afterPath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" afterPath="$PROJECT_DIR$/build/tmp/jar/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" afterPath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/javadocJar/MANIFEST.MF" afterPath="$PROJECT_DIR$/build/tmp/javadocJar/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/sourceJar/MANIFEST.MF" afterPath="$PROJECT_DIR$/build/tmp/sourceJar/MANIFEST.MF" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/Main.java" afterPath="$PROJECT_DIR$/src/main/java/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java" />
     </list>
     <ignored path="LiveChatAPI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -177,12 +44,12 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+            <state relative-caret-position="162">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1336#1337#0" expanded="true" />
-                <element signature="e#1398#1399#0" expanded="true" />
+                <element signature="e#1234#1235#0" expanded="true" />
+                <element signature="e#1296#1297#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -191,22 +58,12 @@
       <file leaf-file-name="LiveChatAPI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+            <state relative-caret-position="162">
+              <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
               <folding>
-                <element signature="e#1695#2013#0" expanded="true" />
-                <element signature="e#2012#2013#0" expanded="true" />
+                <element signature="e#1777#2095#0" expanded="true" />
+                <element signature="e#2094#2095#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/build.gradle">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -215,8 +72,8 @@
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="225">
-                <caret line="223" column="0" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+              <first_editor relative-caret-position="162">
+                <caret line="231" column="4" selection-start-line="231" selection-start-column="4" selection-end-line="231" selection-end-column="4" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -672,9 +529,9 @@
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatBasicRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/middleware/LiveChatMiddleware.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
         <option value="$PROJECT_DIR$/src/main/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java" />
         <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
@@ -1370,7 +1227,7 @@
       <workItem from="1499088697862" duration="1702000" />
       <workItem from="1499136659649" duration="2692000" />
       <workItem from="1499153295337" duration="2497000" />
-      <workItem from="1499272222751" duration="1592000" />
+      <workItem from="1499272222751" duration="2371000" />
     </task>
     <task id="LOCAL-00001" summary="changed styling">
       <created>1498578775927</created>
@@ -1390,7 +1247,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="212061000" />
+    <option name="totallyTimeSpent" value="212840000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1412,6 +1269,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40432099" sideWeight="0.5091633" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988048" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35185185" sideWeight="0.49402392" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1422,14 +1280,13 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1480,8 +1337,8 @@
           <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1398#1399#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1296#1297#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1520,8 +1377,8 @@
           <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1398#1399#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1296#1297#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1560,8 +1417,8 @@
           <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1398#1399#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1296#1297#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1600,8 +1457,8 @@
           <caret line="18" column="55" selection-start-line="18" selection-start-column="55" selection-end-line="18" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1398#1399#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1296#1297#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1828,33 +1685,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
-          <folding>
-            <element signature="e#1695#2013#0" expanded="true" />
-            <element signature="e#2012#2013#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="120">
+          <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+        <state relative-caret-position="162">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1336#1337#0" expanded="true" />
-            <element signature="e#1398#1399#0" expanded="true" />
+            <element signature="e#1234#1235#0" expanded="true" />
+            <element signature="e#1296#1297#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
+          <folding>
+            <element signature="e#1777#2095#0" expanded="true" />
+            <element signature="e#2094#2095#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1862,8 +1719,8 @@
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;MultiMarkdownPreviewEditor]">
         <state split_layout="FIRST">
-          <first_editor relative-caret-position="225">
-            <caret line="223" column="0" selection-start-line="223" selection-start-column="0" selection-end-line="223" selection-end-column="0" />
+          <first_editor relative-caret-position="162">
+            <caret line="231" column="4" selection-start-line="231" selection-start-column="4" selection-end-line="231" selection-end-column="4" />
             <folding />
           </first_editor>
           <second_editor />
