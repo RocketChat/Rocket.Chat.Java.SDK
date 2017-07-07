@@ -1,0 +1,58 @@
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[{\"_id\":\"niqqkRerW5aBsLfKm\",\"enabled\":true,\"name\":\"Technical\",\"description\":\"This is a technical department\",\"numAgents\":2,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498890214677}},{\"_id\":\"qaA9XFXEGpeaXz6m6\",\"enabled\":true,\"name\":\"Support\",\"description\":\"This is a support department\",\"numAgents\":3,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498888262281}}],\"allowSwitchingDepartments\":true,\"online\":true,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"\",\"offlineUnavailableMessage\":\"\",\"displayOfflineForm\":true,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":false,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"livechat:registerGuest\",\"params\":[{\"token\":\"7vXh8xJHfM2WSEqNQ\",\"name\":\"arjun\",\"email\":\"arjun@gmail.com\",\"department\":\"niqqkRerW5aBsLfKm\"}],\"id\":\"5\"}"]
+
+
+//Switching departments
+["{\"msg\":\"method\",\"method\":\"livechat:closeByVisitor\",\"params\":[],\"id\":\"17\"}"]
+
+
+["{\"msg\":\"method\",\"method\":\"livechat:setDepartmentForVisitor\",\"params\":[{\"token\":\"7vXh8xJHfM2WSEqNQ\",\"department\":\"qaA9XFXEGpeaXz6m6\"}],\"id\":\"18\"}"]
+
+["{\"msg\":\"method\",\"method\":\"stream-notify-room\",\"params\":[\"5DZ4APrneG6CCNbBa/typing\",\"guest-69\",true],\"id\":\"19\"}"]
+
+
+//Again switch
+["{\"msg\":\"method\",\"method\":\"livechat:closeByVisitor\",\"params\":[],\"id\":\"22\"}"]
+
+["{\"msg\":\"method\",\"method\":\"livechat:setDepartmentForVisitor\",\"params\":[{\"token\":\"7vXh8xJHfM2WSEqNQ\",\"department\":\"niqqkRerW5aBsLfKm\"}],\"id\":\"23\"}"]
+
+
+//one department register
+
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[{\"_id\":\"qaA9XFXEGpeaXz6m6\",\"enabled\":true,\"name\":\"Support\",\"description\":\"This is a support department\",\"numAgents\":3,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498888262281}}],\"allowSwitchingDepartments\":true,\"online\":true,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"\",\"offlineUnavailableMessage\":\"\",\"displayOfflineForm\":true,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":false,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"livechat:registerGuest\",\"params\":[{\"token\":\"sqyh9LhngnewpQs7b\",\"name\":\"toytoy\",\"email\":\"toytoy@gmail.com\",\"department\":\"qaA9XFXEGpeaXz6m6\"}],\"id\":\"5\"}"]
+
+
+//Sending message to department having no active agents
+
+["{\"msg\":\"method\",\"method\":\"sendMessageLivechat\",\"params\":[{\"_id\":\"mozY2S4Bw4i3FGEGm\",\"rid\":\"5ZXWnPF7a6CoAq7wT\",\"msg\":\"OYYY\",\"token\":\"eaL5WLTTQiwr7WAww\"}],\"id\":\"9\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"9\",\"error\":{\"error\":\"no-agent-online\",\"reason\":\"Sorry, no online agents\",\"message\":\"Sorry, no online agents [no-agent-online]\",\"errorType\":\"Meteor.Error\"}}"]
+
+
+//No need to maintain history of previous dept. on department change. It will be same for same room.
+//Bug : while switching departments, agent does not change
+
+//Not enabled registration form
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[{\"_id\":\"hucrbC5qwaZgDSByC\",\"enabled\":true,\"name\":\"Technical\",\"description\":\"This is a technical department\",\"numAgents\":3,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498935554483}},{\"_id\":\"qaA9XFXEGpeaXz6m6\",\"enabled\":true,\"name\":\"Support\",\"description\":\"This is a support department\",\"numAgents\":3,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498888262281}}],\"allowSwitchingDepartments\":true,\"online\":true,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"This is a success message\",\"offlineUnavailableMessage\":\"Ghe re tu\",\"displayOfflineForm\":false,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":false,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+//Enabled registration form
+
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[],\"allowSwitchingDepartments\":true,\"online\":false,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"\",\"offlineUnavailableMessage\":\"\",\"displayOfflineForm\":true,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":true,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+
+//registration form with user email
+
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[],\"allowSwitchingDepartments\":true,\"online\":false,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"This is a success\",\"offlineUnavailableMessage\":\"I takdfnwf wknwkefn wekfjnwef wkefnwf wekfjnwef wfkjwf wefwkjfnwef wjfnwkef kfjnwef wefwjefnwe fkjwfnwe f wkefnwkef  wefkjnwef wefknwef wfkjnwef wefnwekfnwe fwkfnwe fwkejfnwef wkjefnwef wekjfnwef wjekfnwe fkjwf wef\",\"displayOfflineForm\":true,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":true,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"livechat:sendOfflineMessage\",\"params\":[{\"name\":\"pandey\",\"email\":\"pandey@gmail.com\",\"message\":\"This is something you gotta do\"}],\"id\":\"5\"}"]
+
+//form with no agent online
+
+a["{\"msg\":\"result\",\"id\":\"2\",\"result\":{\"enabled\":true,\"title\":\"Rocket.Chat\",\"color\":\"#C1272D\",\"registrationForm\":true,\"room\":null,\"triggers\":[],\"departments\":[{\"_id\":\"hucrbC5qwaZgDSByC\",\"enabled\":true,\"name\":\"Technical\",\"description\":\"This is a technical department\",\"numAgents\":1,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498974774406}},{\"_id\":\"qaA9XFXEGpeaXz6m6\",\"enabled\":true,\"name\":\"Support\",\"description\":\"This is a support department\",\"numAgents\":1,\"showOnRegistration\":true,\"_updatedAt\":{\"$date\":1498974768170}}],\"allowSwitchingDepartments\":true,\"online\":false,\"offlineColor\":\"#666666\",\"offlineMessage\":\"We are not online right now. Please leave us a message:\",\"offlineSuccessMessage\":\"This is a success message\",\"offlineUnavailableMessage\":\"Ghe re tu\",\"displayOfflineForm\":true,\"videoCall\":false,\"offlineTitle\":\"Leave a message\",\"language\":\"\",\"transcript\":false,\"transcriptMessage\":\"Would you like a copy of this chat emailed?\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"livechat:sendOfflineMessage\",\"params\":[{\"name\":\"pratik\",\"email\":\"pratik@gmail.com\",\"message\":\"Hi, I am pratik\"}],\"id\":\"5\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"5\",\"result\":true}"]

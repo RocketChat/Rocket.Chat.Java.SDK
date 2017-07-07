@@ -19,4 +19,7 @@ public class MessageListener  {
     public interface MessageAckListener extends Listener{
         void onMessageAck(MessageObject object, ErrorObject error);
     }
+    public interface OfflineMessageListener extends Listener{
+        void onOfflineMesssageSuccess(Boolean success,ErrorObject error);
+    }
 }

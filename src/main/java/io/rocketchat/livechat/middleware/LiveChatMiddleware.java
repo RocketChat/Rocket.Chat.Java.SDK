@@ -28,7 +28,8 @@ public class LiveChatMiddleware {
         LOGIN,
         GETCHATHISTORY,
         GETAGENTDATA,
-        SENDMESSAGE
+        SENDMESSAGE,
+        SENDOFFLINEMESSAGE
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -52,7 +53,7 @@ public class LiveChatMiddleware {
             Object[] objects=callbacks.remove(i);
             Listener listener = (Listener) objects[0];
             ListenerType type= (ListenerType) objects[1];
-            JSONObject result=object.optJSONObject("result");
+            Object result=object.opt("result");
             switch (type) {
                 case GETINITIALDATA:
                     InitialDataListener dataListener= (InitialDataListener) listener;
@@ -60,7 +61,7 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         dataListener.onInitialData(null,errorObject);
                     }else{
-                        LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject(result);
+                        LiveChatConfigObject liveChatConfigObject=new LiveChatConfigObject((JSONObject) result);
                         dataListener.onInitialData(liveChatConfigObject,null);
                     }
                     break;
@@ -70,7 +71,7 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         registerListener.onRegister(null,errorObject);
                     }else {
-                        GuestObject guestObject = new GuestObject(result);
+                        GuestObject guestObject = new GuestObject((JSONObject) result);
                         registerListener.onRegister(guestObject,null);
                     }
                 }
@@ -81,7 +82,7 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         loginListener.onLogin(null,errorObject);
                     }else {
-                        GuestObject guestObject = new GuestObject(result);
+                        GuestObject guestObject = new GuestObject((JSONObject) result);
                         loginListener.onLogin(guestObject,null);
                     }
                     break;
@@ -92,7 +93,7 @@ public class LiveChatMiddleware {
                         historyListener.onLoadHistory(null, 0,errorObject);
                     }else {
                         ArrayList <MessageObject> list=new ArrayList<MessageObject>();
-                        JSONArray array = result.optJSONArray("messages");
+                        JSONArray array = ((JSONObject)result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new MessageObject(array.optJSONObject(j)));
                         }
@@ -106,7 +107,7 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         agentDataListener.onAgentData(null,errorObject);
                     }else {
-                        AgentObject agentObject = new AgentObject(result);
+                        AgentObject agentObject = new AgentObject((JSONObject) result);
                         agentDataListener.onAgentData(agentObject,null);
                     }
                     break;
@@ -116,8 +117,17 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         messageAckListener.onMessageAck(null,errorObject);
                     }else {
-                        MessageObject messageObject=new MessageObject(result);
+                        MessageObject messageObject=new MessageObject((JSONObject) result);
                         messageAckListener.onMessageAck(messageObject,null);
+                    }
+                    break;
+                case SENDOFFLINEMESSAGE:
+                    MessageListener.OfflineMessageListener messageListener= (MessageListener.OfflineMessageListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        messageListener.onOfflineMesssageSuccess(false,errorObject);
+                    }else{
+                        messageListener.onOfflineMesssageSuccess((Boolean) result,null);
                     }
                     break;
             }

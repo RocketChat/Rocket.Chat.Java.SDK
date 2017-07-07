@@ -5,6 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/LiveChatAPI.iml" filepath="$PROJECT_DIR$/.idea/modules/LiveChatAPI.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/LiveChatAPI_main.iml" filepath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_main.iml" group="LiveChatAPI" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/LiveChatAPI_test.iml" filepath="$PROJECT_DIR$/.idea/modules/LiveChatAPI_test.iml" group="LiveChatAPI" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RocketChatSDK.iml" filepath="$PROJECT_DIR$/.idea/modules/RocketChatSDK.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RocketChatSDK_main.iml" filepath="$PROJECT_DIR$/.idea/modules/RocketChatSDK_main.iml" group="RocketChatSDK" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/RocketChatSDK_test.iml" filepath="$PROJECT_DIR$/.idea/modules/RocketChatSDK_test.iml" group="RocketChatSDK" />
     </modules>
   </component>
 </project>

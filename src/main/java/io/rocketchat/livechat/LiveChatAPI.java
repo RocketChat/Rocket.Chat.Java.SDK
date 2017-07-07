@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 
+//Todo Make network layer pluggable (Any websocket library can be used with SDK)
+
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
@@ -81,6 +83,26 @@ public class LiveChatAPI extends Socket{
                 int uniqueID=integer.getAndIncrement();
                 liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.LOGIN);
                 ws.sendText(LiveChatBasicRPC.login(uniqueID,token));
+            }
+        });
+    }
+
+
+    public void sendOfflineMessage(final String name, final String email, final String message){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID=integer.getAndIncrement();
+                ws.sendText(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
+            }
+        });
+    }
+
+    public void sendOfflineMessage(final String name, final String email, final String message, final MessageListener.OfflineMessageListener listener){
+        EventThread.exec(new Runnable() {
+            public void run() {
+                int uniqueID=integer.getAndIncrement();
+                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.SENDOFFLINEMESSAGE);
+                ws.sendText(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
             }
         });
     }
@@ -193,7 +215,6 @@ public class LiveChatAPI extends Socket{
         });
     }
 
-
     public void connect(ConnectListener connectListener) {
         createSocket();
         ws.addListener(adapter);
@@ -205,6 +226,7 @@ public class LiveChatAPI extends Socket{
         ws.disconnect();
         selfDisconnect=true;
     }
+
 
     WebSocketAdapter getAdapter() {
 
@@ -218,7 +240,7 @@ public class LiveChatAPI extends Socket{
                 super.onConnected(websocket, headers);
             }
 
-            // TODO: 15/6/17 Need to find out disconnect event when internet connection is lost accidentally, or wifi is closed in the middle of active connection
+
             @Override
             public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                 System.out.println("Disconnected");
@@ -295,12 +317,18 @@ public class LiveChatAPI extends Socket{
         };
     }
 
+
     public ChatRoom createRoom(String userID,String authToken){
         String userName=userInfo.optString("username");
         String visitorToken= LiveChatBasicRPC.visitorToken;
         String roomID=Utils.shortUUID();
         return new ChatRoom(userName,roomID,userID,visitorToken,authToken);
     }
+
+    public ChatRoom createRoom(String s){
+        return new ChatRoom(s);
+    }
+
 
     public class ChatRoom{
 

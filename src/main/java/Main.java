@@ -1,17 +1,18 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.AuthListener;
 import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.callback.MessageListener;
-import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.model.DepartmentObject;
+import io.rocketchat.livechat.model.LiveChatConfigObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, AuthListener.LoginListener, AuthListener.RegisterListener, MessageListener.MessageAckListener {
+public class Main implements ConnectListener,  InitialDataListener{
 
     private LiveChatAPI liveChat;
     private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
@@ -32,7 +33,7 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.registerGuest("aza","aza@gmail.com",null,this);
+        liveChat.getInitialData(this);
     }
 
     @Override
@@ -46,35 +47,21 @@ public class Main implements ConnectListener, AuthListener.LoginListener, AuthLi
     }
 
     @Override
-    public void onRegister(GuestObject object, ErrorObject error) {
-        if (error==null) {
-            System.out.println("registration success");
-            liveChat.login(object.getToken(), this);
+    public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
+        System.out.println("Got initial data " + object);
+
+        ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
+        if (departmentObjects.size()==0){
+            System.out.println("No departments available");
         }else{
-            System.out.println("error occurred "+error);
+            System.out.println("Departments available "+departmentObjects);
         }
-    }
 
-    @Override
-    public void onLogin(GuestObject object, ErrorObject error) {
-        if (error==null) {
-            System.out.println("login is successful");
-            room = liveChat.createRoom(object.getUserID(), object.getToken()); //Auth data is passed to room for further communication using room API.
-            room.sendMessage("Hey aza, You are very smart",this);
+        //Getting DepartmentId of first department
 
-        }else{
-            System.out.println("error occurred "+error);
-        }
-    }
+        String departmentId=departmentObjects.get(0).getId();
 
-
-    @Override
-    public void onMessageAck(MessageObject object, ErrorObject error) {
-        if (error==null) {
-            System.out.println("got message in the callback " + object);
-        }else{
-            System.out.println("Error is "+error);
-        }
+//        liveChat.registerGuest("aditi","aditi@gmail.com",departmentId,this);
     }
 }
 

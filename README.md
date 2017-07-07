@@ -20,13 +20,13 @@ For java
 ```Gradle
 
 dependencies {
-    compile 'io.rocketchat:rocketchatjavasdk:0.4.0'
+    compile 'io.rocketchat:rocketchatjavasdk:0.4.4'
 }
 ```
 For android 
 
 ```Gradle
-compile ('io.rocketchat:rocketchatjavasdk:0.4.0'){
+compile ('io.rocketchat:rocketchatjavasdk:0.4.4'){
         exclude group :'org.json', module: 'json'
 }
 ```
@@ -85,14 +85,69 @@ Documentation
 ```
 
 
-#### 2. Registration of a user
+#### 2. Getting configuration data from server
 
-- Registration is a one time process.
-- It is done in order to communicate with agent using **email** and **password**. (assume no **departments** are available,so passing null as third parameter)
+- It is used to get **initial LiveChat configuration** from server.
+- It will consist conf. data like departments, number of agents available, offline form, registration success message etc.
+
+```java
+    public class Main implements ConnectListener,  InitialDataListener{
+    
+        private LiveChatAPI liveChat;
+        private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
+        private static String serverurl="wss://livechattest.rocket.chat/websocket";
+    
+    
+        public void call(){
+            liveChat=new LiveChatAPI(serverurl);
+            liveChat.setReconnectionStrategy(new ReconnectionStrategy(10,5000));
+            liveChat.connect(this);
+        }
+    
+        public static void main(String [] args){
+            new Main().call();
+        }
+    
+    
+        @Override
+        public void onConnect(String sessionID) {
+            System.out.println("Connected to server");
+            liveChat.getInitialData(this);
+        }
+    
+        @Override
+        public void onDisconnect(boolean closedByServer) {
+            System.out.println("Disconnected from server");
+        }
+    
+        @Override
+        public void onConnectError(Exception websocketException) {
+            System.out.println("Got connect error with the server");
+        }
+    
+        @Override
+        public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
+            System.out.println("Got initial data " + object);
+            ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
+            if (departmentObjects.size()==0){
+                    System.out.println("No departments available");
+            }else{
+                    System.out.println("Departments available "+departmentObjects);
+            }
+            
+        }
+    }
+```
+#### 3. Registration of a user
+
+- Registration is a one time process done after getting initial data (as it will consist of data for departments).
+- It is done in order to communicate with agent using **email** and **password**. 
+- If departments are available, pass third parameter as **DepartmentId**.
+- If no departments are available, pass third parameter as null.
 
 ```java 
 
-    public class Main implements ConnectListener ,AuthListener.RegisterListener {
+    public class Main implements ConnectListener ,AuthListener.RegisterListener ,InitialDataListener{
     
         private LiveChatAPI liveChat;
         private static String serverurl="wss://livechattest.rocket.chat/websocket";
@@ -111,7 +166,7 @@ Documentation
         @Override
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
-            liveChat.registerGuest("aditi","aditi@gmail.com",null,this);
+            liveChat.getInitialData(this);
         }
     
         @Override
@@ -123,7 +178,27 @@ Documentation
         public void onConnectError(Exception websocketException) {
             System.out.println("Got connect error with the server");
         }
+        
+        @Override
+        public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
+            System.out.println("Got initial data " + object);
     
+            ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
+            if (departmentObjects.size()==0){
+                System.out.println("No departments available");
+                liveChat.registerGuest("aditi","aditi@gmail.com",null,this);
+               
+            }else{
+                System.out.println("Departments available "+departmentObjects);
+                //Getting DepartmentId of first department
+                            
+                String departmentId=departmentObjects.get(0).getId();
+                    
+                liveChat.registerGuest("aditi","aditi@gmail.com",departmentId,this);
+            }
+            
+        }
+
         /**
          *
          * @param object Will consist of UserID and AuthToken
@@ -141,7 +216,7 @@ Documentation
 
 ```
 
-#### 3. Logging in
+#### 4. Logging in
 
 - It is done immediately after registration of a user.
 - Login will return **Guest Object (Authentication credentials)** in the callback, required for next login.
@@ -219,12 +294,12 @@ Documentation
         - It is possible to save state of a room in a file or database in the form of string.
         - So, it is possible to use room API for further login and communication with server (login method from `LiveChatAPI` can be avoided after first time login).
 
-#### 4. Further communication with server
+#### 5. Further communication with server
 
 - As room object is global accessible throughout Main class, it's methods can be called from anywhere after initialization.
 - Each method for communication with server is given in the [LiveChat Room API DOC](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/master/LIVECHATDOC.md) .
 
-#### 5. Handling re-connection with server
+#### 6. Handling re-connection with server
 - `reconnect` method in `LiveChatAPI` class can be used for reconnecting to the server.
 
 I. Manual reconnection
@@ -254,7 +329,7 @@ II. Automatic reconnection
         liveChat.setReconnectionStrategy(new ReconnectionStrategy(maxAttempts,timeInterval));  
 ```
 
-#### 6. Maintaining state of the room
+#### 7. Maintaining state of the room
 - Maintaining state means even if `room` object is destroyed, it can be reconstructed.
 - Whenever `room` object is created for the first time after login, call toString() method to get it's state.
 - Save this state in file or database (permanent storage), next time read the file and pass this string to `room` the constructor.

@@ -18,6 +18,7 @@ public class LiveChatBasicRPC extends RPC{
     private static String LOGIN="login";
     private static String GETAGENTDATA="livechat:getAgentData";
     private static String CLOSECONVERSATION="livechat:closeByVisitor";
+    private static String SENDOFFLINEMESSAGE="livechat:sendOfflineMessage";
 
     /**
      * Tested
@@ -97,6 +98,18 @@ public class LiveChatBasicRPC extends RPC{
 
     public static String closeConversation(int integer,String roomId){
         return getRemoteMethodObject(integer,CLOSECONVERSATION,roomId).toString();
+    }
+
+    public static String sendOfflineMessage(int integer,String name, String email, String message){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("name",name);
+            object.put("email",email);
+            object.put("message",message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getRemoteMethodObject(integer,SENDOFFLINEMESSAGE,object).toString();
     }
 
 }
