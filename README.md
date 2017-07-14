@@ -363,4 +363,4 @@ Example:
 Use-case Samples
 ----------------
 - Library is currently being used for development of [Rocket.Chat Android SDK](https://github.com/RocketChat/Rocket.Chat.Android.SDK) 
-- For more information(important library classes), checkout library use [here ](https://github.com/RocketChat/Rocket.Chat.Android.SDK/tree/develop/rocketchatsdk/src/main/java/com/github/rocketchat/livechat) 
+- For more information (important library classes), checkout library use [here ](https://github.com/RocketChat/Rocket.Chat.Android.SDK/tree/develop/rocketchatsdk/src/main/java/com/github/rocketchat/livechat) 
