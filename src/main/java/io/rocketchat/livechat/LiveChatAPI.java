@@ -1,7 +1,6 @@
 package io.rocketchat.livechat;
 
 import io.rocketchat.common.data.rpc.RPC;
-import io.rocketchat.common.network.EventThread;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.callback.*;
@@ -37,170 +36,114 @@ public class LiveChatAPI extends Socket{
         liveChatStreamMiddleware=LiveChatStreamMiddleware.getInstance();
     }
 
-
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
     }
 
     public void getInitialData(final InitialDataListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETINITIALDATA);
-                sendData(LiveChatBasicRPC.getInitialData(uniqueID));
-            }
-        });
-
-
+        int uniqueID=integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETINITIALDATA);
+        sendDataInBackground(LiveChatBasicRPC.getInitialData(uniqueID));
     }
 
     public void registerGuest(final String name, final String email, final String dept, final AuthListener.RegisterListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.REGISTER);
-                sendData(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
-            }
-        });
-
+        int uniqueID=integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.REGISTER);
+        sendDataInBackground(LiveChatBasicRPC.registerGuest(uniqueID,name,email,dept));
     }
 
     public void login(final String token, final AuthListener.LoginListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.LOGIN);
-                sendData(LiveChatBasicRPC.login(uniqueID,token));
-            }
-        });
+        int uniqueID=integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.LOGIN);
+        sendDataInBackground(LiveChatBasicRPC.login(uniqueID,token));
     }
 
 
     public void sendOfflineMessage(final String name, final String email, final String message){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID=integer.getAndIncrement();
-                sendData(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
-            }
-        });
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
     }
 
     public void sendOfflineMessage(final String name, final String email, final String message, final MessageListener.OfflineMessageListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID=integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.SENDOFFLINEMESSAGE);
-                sendData(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
-            }
-        });
+        int uniqueID=integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.SENDOFFLINEMESSAGE);
+        sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID,name,email,message));
     }
 
 
     private void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp, final LoadHistoryListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETCHATHISTORY);
-                sendData(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETCHATHISTORY);
+        sendDataInBackground(LiveChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
 
 
     private void getAgentData(final String roomId, final AgentListener.AgentDataListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETAGENTDATA);
-                sendData(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,listener, LiveChatMiddleware.ListenerType.GETAGENTDATA);
+        sendDataInBackground(LiveChatBasicRPC.getAgentData(uniqueID,roomId));
     }
 
 
     private void sendMessage(final String msgId, final String roomID, final String message, final String token){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                sendData(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
     }
 
     private void sendMessage(final String msgId, final String roomID, final String message, final String token, final MessageListener.MessageAckListener messageAckListener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                liveChatMiddleware.createCallback(uniqueID,messageAckListener, LiveChatMiddleware.ListenerType.SENDMESSAGE);
-                sendData(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        liveChatMiddleware.createCallback(uniqueID,messageAckListener, LiveChatMiddleware.ListenerType.SENDMESSAGE);
+        sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
     }
 
     private void sendIsTyping(final String roomId, final String username, final Boolean istyping){
-        EventThread.exec(new Runnable() {
-            @Override
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                sendData(LiveChatTypingRPC.streamNotifyRoom(uniqueID,roomId,username,istyping));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(LiveChatTypingRPC.streamNotifyRoom(uniqueID,roomId,username,istyping));
     }
 
 
     private void subscribeRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final MessageListener.SubscriptionListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMROOMMESSAGES);
-                }
-                if (listener!=null){
-                    liveChatStreamMiddleware.subscribeRoom(listener);
-                }
-                sendData(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
-            }
-        });
+
+        String uniqueID=Utils.shortUUID();
+        if (subscribeListener !=null) {
+            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMROOMMESSAGES);
+        }
+        if (listener!=null){
+            liveChatStreamMiddleware.subscribeRoom(listener);
+        }
+        sendDataInBackground(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
+
     }
 
     private void subscribeLiveChatRoom(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final AgentListener.AgentConnectListener agentConnectListener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMLIVECHATROOM);
-                }
-                if (agentConnectListener !=null){
-                    liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
-                }
-                sendData(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
-            }
-        });
+
+        String uniqueID=Utils.shortUUID();
+        if (subscribeListener !=null) {
+            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMLIVECHATROOM);
+        }
+        if (agentConnectListener !=null){
+            liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
+        }
+        sendDataInBackground(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
+
     }
 
     private void subscribeTyping(final String roomID, final Boolean enable, final SubscribeListener subscribeListener, final TypingListener listener){
-        EventThread.exec(new Runnable() {
-            public void run() {
-                String uniqueID=Utils.shortUUID();
-                if (subscribeListener !=null) {
-                    liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.NOTIFYROOM);
-                }
-                if (listener!=null){
-                    liveChatStreamMiddleware.subscribeTyping(listener);
-                }
-                sendData(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
-            }
-        });
+
+        String uniqueID=Utils.shortUUID();
+        if (subscribeListener !=null) {
+            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.NOTIFYROOM);
+        }
+        if (listener!=null){
+            liveChatStreamMiddleware.subscribeTyping(listener);
+        }
+        sendDataInBackground(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
+
     }
 
     private void closeConversation(final String roomId){
-        EventThread.exec(new Runnable() {
-            @Override
-            public void run() {
-                int uniqueID = integer.getAndIncrement();
-                sendData(LiveChatBasicRPC.closeConversation(uniqueID,roomId));
-            }
-        });
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(LiveChatBasicRPC.closeConversation(uniqueID,roomId));
     }
 
     public void connect(ConnectListener connectListener) {
@@ -212,7 +155,7 @@ public class LiveChatAPI extends Socket{
     @Override
     protected void onConnected() {
         integer.set(1);
-        sendData(LiveChatBasicRPC.ConnectObject());
+        sendDataInBackground(LiveChatBasicRPC.ConnectObject());
         super.onConnected();
     }
 
@@ -221,7 +164,7 @@ public class LiveChatAPI extends Socket{
         JSONObject object = new JSONObject(text);
         switch (RPC.parse(object.optString("msg"))) {
             case PING:
-                sendData("{\"msg\":\"pong\"}");
+                sendDataInBackground("{\"msg\":\"pong\"}");
                 break;
             case CONNECTED:
                 sessionId = object.optString("session");

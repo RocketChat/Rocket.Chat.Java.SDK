@@ -139,6 +139,15 @@ public class Socket {
         ws.sendText(message);
     }
 
+    protected void sendDataInBackground(final String message){
+        EventThread.exec(new Runnable() {
+            @Override
+            public void run() {
+                ws.sendText(message);
+            }
+        });
+    }
+
     protected void reconnect(){
         try {
             ws = ws.recreate(5000).connectAsynchronously();
