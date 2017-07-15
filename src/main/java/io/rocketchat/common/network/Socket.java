@@ -162,6 +162,7 @@ public class Socket {
     }
 
     protected void onConnected(){
+        strategy.setNumberOfAttempts(0);
         System.out.println("Connected");
     }
 
