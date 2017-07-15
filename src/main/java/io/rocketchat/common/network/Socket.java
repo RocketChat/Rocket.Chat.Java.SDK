@@ -190,6 +190,7 @@ public class Socket {
 
     protected void onConnectError(Exception websocketException){
         System.out.println("Onconnect Error");
+        onDisconnected(true);
     }
 
     protected void onTextMessage(String text) throws Exception{
