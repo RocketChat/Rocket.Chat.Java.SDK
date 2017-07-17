@@ -91,6 +91,7 @@ public class LoginTest extends ChatParent implements ConnectListener, InitialDat
 
     @After
     public void closeConversation(){
+        System.out.println("Closing conversation");
         room.closeConversation();
     }
 }

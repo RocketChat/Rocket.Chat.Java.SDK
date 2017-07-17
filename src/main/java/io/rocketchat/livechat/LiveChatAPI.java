@@ -330,7 +330,10 @@ public class LiveChatAPI extends Socket{
     }
 
     public ChatRoom createRoom(String userID,String authToken){
-        String userName=userInfo.optString("username");
+        String userName = null;
+        if (userInfo!=null) {
+            userName = userInfo.optString("username");
+        }
         String visitorToken= LiveChatBasicRPC.visitorToken;
         String roomID=Utils.shortUUID();
         return new ChatRoom(userName,roomID,userID,visitorToken,authToken);

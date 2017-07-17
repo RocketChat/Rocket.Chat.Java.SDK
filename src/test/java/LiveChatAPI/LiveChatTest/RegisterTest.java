@@ -86,6 +86,7 @@ public class RegisterTest extends ChatParent implements ConnectListener, Initial
 
     @After
     public void closeConversation(){
+        System.out.println("Closing conversation");
         room.closeConversation();
     }
 }
