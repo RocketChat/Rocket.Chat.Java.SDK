@@ -1,4 +1,4 @@
-package LiveChatAPI.LiveChatRoomTest;
+package LiveChatAPI.LiveChatRoomTest.ChatRoomParent;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
@@ -20,7 +20,7 @@ public class RoomParent implements ConnectListener, InitialDataListener, AuthLis
     private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
     LiveChatAPI api;
-    LiveChatAPI.ChatRoom room;
+    public LiveChatAPI.ChatRoom room;
 
     public void setUpBefore(){
         MockitoAnnotations.initMocks(this);

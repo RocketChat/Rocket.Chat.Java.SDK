@@ -1,5 +1,6 @@
 package LiveChatAPI.LiveChatRoomTest;
 
+import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.AgentListener;
 import io.rocketchat.livechat.model.AgentObject;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.timeout;
 /**
  * Created by sachin on 17/7/17.
  */
-public class GetAgentDataTest extends RoomParent{
+public class GetAgentDataTest extends RoomParent {
 
 
     @Mock

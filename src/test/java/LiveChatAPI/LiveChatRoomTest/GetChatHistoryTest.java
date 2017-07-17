@@ -1,5 +1,6 @@
 package LiveChatAPI.LiveChatRoomTest;
 
+import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
@@ -14,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import static org.mockito.Mockito.timeout;
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.timeout;
  * Created by sachin on 17/7/17.
  */
 
-public class GetChatHistoryTest extends RoomParent{
+public class GetChatHistoryTest extends RoomParent {
 
 
     @Mock
