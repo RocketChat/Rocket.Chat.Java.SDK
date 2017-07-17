@@ -1,4 +1,4 @@
-package LiveChatAPI.LiveChatTest;
+package LiveChatAPI.LiveChatRoomTest;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
@@ -8,37 +8,22 @@ import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-
-import static org.mockito.Mockito.timeout;
 
 /**
  * Created by sachin on 17/7/17.
  */
-public class RegisterTest implements ConnectListener, InitialDataListener {
+public class RoomParent implements ConnectListener, InitialDataListener, AuthListener.RegisterListener, AuthListener.LoginListener {
+
     private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
     LiveChatAPI api;
+    LiveChatAPI.ChatRoom room;
 
-    @Mock
-    AuthListener.RegisterListener listener;
-
-    @Captor
-    ArgumentCaptor <GuestObject> guestObjectArgumentCaptor;
-
-    @Captor
-    ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
-    private LiveChatAPI.ChatRoom room;
-
-    @Before
     public void setUpBefore(){
-        MockitoAnnotations.initMocks( this );
+        MockitoAnnotations.initMocks(this);
         System.out.println("before got called");
         api= new LiveChatAPI(serverurl);
         api.setReconnectionStrategy(null);
@@ -65,25 +50,25 @@ public class RegisterTest implements ConnectListener, InitialDataListener {
     public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
         String departmentId=null;
         if (error==null){
-            ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
+            ArrayList<DepartmentObject> departmentObjects=object.getDepartments();
             if (departmentObjects.size()>0){
                 departmentId=departmentObjects.get(0).getId();
             }
-            api.registerGuest("vishal","vishal34@gmail.com",departmentId,listener);
+            api.registerGuest("aditi","aditi89@gmail.com",departmentId,this);
         }
     }
 
-    @Test
-    public void registerTest(){
-        Mockito.verify(listener, timeout(6000).atLeastOnce()).onRegister(guestObjectArgumentCaptor.capture(),errorObjectArgumentCaptor.capture());
-        Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
-        Assert.assertTrue(guestObjectArgumentCaptor.getValue() != null);
-        GuestObject object=guestObjectArgumentCaptor.getValue();
-        System.out.println("Register Object is " + object);
+    @Override
+    public void onRegister(GuestObject object, ErrorObject error) {
+        api.login(object.getToken(),this);
+    }
+
+
+    @Override
+    public void onLogin(GuestObject object, ErrorObject error) {
         room=api.createRoom(object.getUserID(),object.getToken());
     }
 
-    @After
     public void closeConversation(){
         room.closeConversation();
     }

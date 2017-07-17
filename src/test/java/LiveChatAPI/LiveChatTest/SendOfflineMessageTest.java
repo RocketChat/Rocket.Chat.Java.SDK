@@ -57,7 +57,7 @@ public class SendOfflineMessageTest implements ConnectListener {
     public void sendOfflineTest(){
         Mockito.verify(listener, timeout(6000).atLeastOnce()).onOfflineMesssageSuccess(isSent.capture(),errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
-        Assert.assertTrue(isSent != null);
+        Assert.assertTrue(isSent.getValue() != null);
         System.out.println("Offline Message sent is " + isSent.getValue());
     }
 }

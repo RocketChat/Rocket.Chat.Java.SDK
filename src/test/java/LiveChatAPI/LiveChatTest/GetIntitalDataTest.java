@@ -43,7 +43,7 @@ public class GetIntitalDataTest implements ConnectListener {
     public void testInitialData(){
         Mockito.verify(dataListener, timeout(6000).atLeastOnce()).onInitialData(configObject.capture(),error.capture());
         Assert.assertTrue(error.getValue() == null);
-        Assert.assertNotNull(configObject);
+        Assert.assertNotNull(configObject.getValue());
         System.out.println("Configuration Object is " + configObject.getValue());
     }
 

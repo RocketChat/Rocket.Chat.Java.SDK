@@ -83,7 +83,7 @@ public class LoginTest implements ConnectListener, InitialDataListener, AuthList
     public void loginTest(){
         Mockito.verify(listener, timeout(8000).atLeastOnce()).onLogin(guestObjectArgumentCaptor.capture(),errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
-        Assert.assertTrue(guestObjectArgumentCaptor != null);
+        Assert.assertTrue(guestObjectArgumentCaptor.getValue() != null);
         GuestObject object=guestObjectArgumentCaptor.getValue();
         System.out.println("Login Object is " + object);
         room=api.createRoom(object.getUserID(),object.getToken());
