@@ -52,7 +52,7 @@ public class GetAgentDataTest extends RoomParent{
          * First part
          */
         Mockito.verify(listener, timeout(8000).atLeastOnce()).onAgentConnect(agentObjectArgumentCaptor.capture());
-        Assert.assertTrue(agentObjectArgumentCaptor != null);
+        Assert.assertTrue(agentObjectArgumentCaptor.getValue() != null);
         System.out.println("Agent assigned is "+agentObjectArgumentCaptor.getValue());
 
         /**
