@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63aa3452-a326-4d90-9051-8d9e68837f7c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTestSuite.java" afterPath="$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTestSuite.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/Main.java" afterPath="$PROJECT_DIR$/src/test/java/Main.java" />
     </list>
     <ignored path="LiveChatAPI.iws" />
@@ -42,11 +39,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="RocketChatAPI.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+            <state relative-caret-position="124">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -57,50 +54,10 @@
       <file leaf-file-name="LiveChatTestSuite.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTestSuite.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+            <state relative-caret-position="211">
+              <caret line="19" column="2" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/RegisterTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SendOfflineMessageTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/SendOfflineMessageTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="48" column="5" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1317#1318#0" expanded="true" />
-                <element signature="e#1379#1380#0" expanded="true" />
-                <element signature="e#1457#1458#0" expanded="true" />
-                <element signature="e#1518#1519#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -553,8 +510,8 @@
         <option value="$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/LoginTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/SendOfflineMessageTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" />
-        <option value="$PROJECT_DIR$/src/test/java/Main.java" />
         <option value="$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTestSuite.java" />
+        <option value="$PROJECT_DIR$/src/test/java/Main.java" />
       </list>
     </option>
   </component>
@@ -803,59 +760,7 @@
     <property name="js-jscs-nodeInterpreter" value="$USER_HOME$/.nvm/versions/node/v5.0.0/bin/node" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="JUnit.SendOfflineMessageTest">
-    <configuration default="false" name="LiveChatConnectionTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="LiveChatAPI.LiveChatTest.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="RocketChatSDK_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="LiveChatAPI.LiveChatTest" />
-      <option name="MAIN_CLASS_NAME" value="LiveChatAPI.LiveChatTest.LiveChatConnectionTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
-    <configuration default="false" name="GetIntitalDataTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
-        <pattern>
-          <option name="PATTERN" value="LiveChatAPI.LiveChatTest.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <module name="RocketChatSDK_test" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" value="LiveChatAPI.LiveChatTest" />
-      <option name="MAIN_CLASS_NAME" value="LiveChatAPI.LiveChatTest.GetIntitalDataTest" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.LiveChatTestSuite">
     <configuration default="false" name="RegisterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -920,6 +825,47 @@
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="LiveChatAPI.LiveChatTest" />
       <option name="MAIN_CLASS_NAME" value="LiveChatAPI.LiveChatTest.SendOfflineMessageTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="RocketChatSDK_test" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="LiveChatTestSuite" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="LiveChatAPI.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="RocketChatSDK_test" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="LiveChatAPI" />
+      <option name="MAIN_CLASS_NAME" value="LiveChatAPI.LiveChatTestSuite" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" value="-ea" />
@@ -1349,19 +1295,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="JUnit.LiveChatConnectionTest" />
-      <item index="1" class="java.lang.String" itemvalue="JUnit.GetIntitalDataTest" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.RegisterTest" />
-      <item index="3" class="java.lang.String" itemvalue="JUnit.LoginTest" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.SendOfflineMessageTest" />
+      <item index="0" class="java.lang.String" itemvalue="JUnit.RegisterTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.LoginTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.SendOfflineMessageTest" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Main" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.LiveChatTestSuite" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.SendOfflineMessageTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.LoginTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.RegisterTest" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.GetIntitalDataTest" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.LiveChatConnectionTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.LiveChatTestSuite" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Main" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.SendOfflineMessageTest" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.LoginTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.RegisterTest" />
       </list>
     </recent_temporary>
   </component>
@@ -1432,7 +1378,7 @@
       <workItem from="1500216405670" duration="602000" />
       <workItem from="1500219438933" duration="850000" />
       <workItem from="1500269656084" duration="4216000" />
-      <workItem from="1500276844331" duration="3455000" />
+      <workItem from="1500276844331" duration="3614000" />
     </task>
     <task id="LOCAL-00001" summary="changed styling">
       <created>1498578775927</created>
@@ -1484,7 +1430,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="240523000" />
+    <option name="totallyTimeSpent" value="240682000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1507,8 +1453,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35185185" sideWeight="0.51077414" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988048" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35185185" sideWeight="0.48922586" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37808642" sideWeight="0.49083665" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35185185" sideWeight="0.48922586" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26576218" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1545,7 +1491,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1930,16 +1876,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/RegisterTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="130">
@@ -1964,10 +1900,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="14" column="58" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="58" />
+        <state relative-caret-position="124">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1976,8 +1922,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTestSuite.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+        <state relative-caret-position="211">
+          <caret line="19" column="2" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

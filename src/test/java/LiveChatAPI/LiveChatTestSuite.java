@@ -17,6 +17,7 @@ import org.junit.runners.Suite;
         LoginTest.class,
         SendOfflineMessageTest.class
 })
+
 public class LiveChatTestSuite {
 
 }

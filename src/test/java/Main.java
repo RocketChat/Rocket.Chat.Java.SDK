@@ -9,8 +9,6 @@ import org.junit.runner.notification.Failure;
 
 public class Main {
 
-    public static String serverurl="wss://livechattest.rocket.chat/websocket";
-
     public static void main(String [] args ){
         Result result = JUnitCore.runClasses(LiveChatTestSuite.class);
 
