@@ -1,3 +1,4 @@
+import LiveChatAPI.LiveChatRoomTestSuite;
 import LiveChatAPI.LiveChatTestSuite;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -10,7 +11,10 @@ import org.junit.runner.notification.Failure;
 public class Main {
 
     public static void main(String [] args ){
-        Result result = JUnitCore.runClasses(LiveChatTestSuite.class);
+        /**
+         * It's recommended to run each test suite independently via IDE functionality.
+         */
+        Result result = JUnitCore.runClasses(LiveChatTestSuite.class, LiveChatRoomTestSuite.class);
 
         for (Failure failure : result.getFailures()) {
             System.out.println(failure.toString());
