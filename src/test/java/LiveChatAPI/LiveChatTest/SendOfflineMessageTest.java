@@ -1,23 +1,24 @@
 package LiveChatAPI.LiveChatTest;
 
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.ConnectListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.timeout;
 
 /**
  * Created by sachin on 17/7/17.
  */
-public class SendOfflineMessageTest implements ConnectListener {
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
+public class SendOfflineMessageTest extends ChatParent implements ConnectListener {
 
-    LiveChatAPI api;
 
     @Mock
     MessageListener.OfflineMessageListener listener;
@@ -29,11 +30,13 @@ public class SendOfflineMessageTest implements ConnectListener {
     ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
 
     @Before
-    public void setUpBefore(){
-        MockitoAnnotations.initMocks( this );
-        System.out.println("before got called");
-        api= new LiveChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+    public void setup(){
+        setUpBefore();
+    }
+
+    @Override
+    public void setUpBefore() {
+        super.setUpBefore();
         api.connect(this);
     }
 

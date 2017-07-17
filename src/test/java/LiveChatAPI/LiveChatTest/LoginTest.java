@@ -1,5 +1,6 @@
 package LiveChatAPI.LiveChatTest;
 
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
@@ -21,10 +22,8 @@ import static org.mockito.Mockito.timeout;
 /**
  * Created by sachin on 17/7/17.
  */
-public class LoginTest implements ConnectListener, InitialDataListener, AuthListener.RegisterListener {
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
+public class LoginTest extends ChatParent implements ConnectListener, InitialDataListener, AuthListener.RegisterListener {
 
-    LiveChatAPI api;
     LiveChatAPI.ChatRoom room;
 
     @Mock
@@ -37,14 +36,15 @@ public class LoginTest implements ConnectListener, InitialDataListener, AuthList
     ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
 
     @Before
-    public void setUpBefore(){
-        MockitoAnnotations.initMocks( this );
-        System.out.println("before got called");
-        api= new LiveChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+    public void setup(){
+        setUpBefore();
     }
 
+    @Override
+    public void setUpBefore() {
+        super.setUpBefore();
+        api.connect(this);
+    }
 
     @Override
     public void onConnect(String sessionID) {

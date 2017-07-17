@@ -1,5 +1,6 @@
 package LiveChatAPI.LiveChatTest;
 
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.ConnectListener;
 import org.junit.Assert;
@@ -14,11 +15,7 @@ import static org.mockito.Mockito.timeout;
  * Created by sachin on 15/7/17.
  */
 
-public class LiveChatConnectionTest {
-
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
-
-    LiveChatAPI api;
+public class LiveChatConnectionTest extends ChatParent{
 
     @Mock
     ConnectListener listener;
@@ -33,11 +30,8 @@ public class LiveChatConnectionTest {
     ArgumentCaptor <Exception> connectErrorCaptor;
 
     @Before
-    public void setUpBefore(){
-        MockitoAnnotations.initMocks( this );
-        System.out.println("before got called");
-        api= new LiveChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+    public void setup(){
+        setUpBefore();
     }
 
     @Test
