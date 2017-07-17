@@ -8,6 +8,7 @@ import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ public class LoginTest implements ConnectListener, InitialDataListener, AuthList
     private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
     LiveChatAPI api;
+    LiveChatAPI.ChatRoom room;
 
     @Mock
     AuthListener.LoginListener listener;
@@ -82,6 +84,13 @@ public class LoginTest implements ConnectListener, InitialDataListener, AuthList
         Mockito.verify(listener, timeout(8000).atLeastOnce()).onLogin(guestObjectArgumentCaptor.capture(),errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
         Assert.assertTrue(guestObjectArgumentCaptor != null);
-        System.out.println("Login Object is " + guestObjectArgumentCaptor.getValue());
+        GuestObject object=guestObjectArgumentCaptor.getValue();
+        System.out.println("Login Object is " + object);
+        room=api.createRoom(object.getUserID(),object.getToken());
+    }
+
+    @After
+    public void closeConversation(){
+        room.closeConversation();
     }
 }

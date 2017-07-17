@@ -8,6 +8,7 @@ import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class RegisterTest implements ConnectListener, InitialDataListener {
 
     @Captor
     ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
+    private LiveChatAPI.ChatRoom room;
 
     @Before
     public void setUpBefore(){
@@ -76,6 +78,13 @@ public class RegisterTest implements ConnectListener, InitialDataListener {
         Mockito.verify(listener, timeout(6000).atLeastOnce()).onRegister(guestObjectArgumentCaptor.capture(),errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
         Assert.assertTrue(guestObjectArgumentCaptor != null);
-        System.out.println("Register Object is " + guestObjectArgumentCaptor.getValue());
+        GuestObject object=guestObjectArgumentCaptor.getValue();
+        System.out.println("Register Object is " + object);
+        room=api.createRoom(object.getUserID(),object.getToken());
+    }
+
+    @After
+    public void closeConversation(){
+        room.closeConversation();
     }
 }
