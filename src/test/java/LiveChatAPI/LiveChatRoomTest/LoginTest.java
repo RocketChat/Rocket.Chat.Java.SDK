@@ -52,6 +52,7 @@ public class LoginTest extends RoomParent {
 
     @After
     public void closeTest(){
+        System.out.println("Closing the conversation");
         closeConversation();
     }
 }

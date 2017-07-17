@@ -68,6 +68,7 @@ public class GetAgentDataTest extends RoomParent {
 
     @After
     public void closeTest(){
+        System.out.println("Closing the conversation");
         closeConversation();
     }
 }
