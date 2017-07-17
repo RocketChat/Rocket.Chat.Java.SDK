@@ -22,6 +22,4 @@ public class RocketChatAPI extends Socket {
         createSocket();
         super.connect();
     }
-
-
 }
