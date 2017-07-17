@@ -1,5 +1,6 @@
 package io.rocketchat.core;
 import io.rocketchat.common.network.Socket;
+import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,6 +11,7 @@ public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;
     String sessionId;
+    JSONObject userInfo;
 
     public RocketChatAPI(String url) {
         super(url);
@@ -20,4 +22,6 @@ public class RocketChatAPI extends Socket {
         createSocket();
         super.connect();
     }
+
+
 }
