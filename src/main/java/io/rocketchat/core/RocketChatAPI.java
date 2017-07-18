@@ -1,8 +1,8 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
+import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +37,7 @@ public class RocketChatAPI extends Socket {
     @Override
     protected void onConnected() {
         integer.set(1);
-        sendDataInBackground(LiveChatBasicRPC.ConnectObject());
+        sendDataInBackground(BasicRPC.ConnectObject());
         super.onConnected();
     }
 
