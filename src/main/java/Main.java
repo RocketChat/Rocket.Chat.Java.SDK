@@ -1,28 +1,22 @@
-import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.network.ReconnectionStrategy;
-import io.rocketchat.livechat.LiveChatAPI;
+import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.callback.InitialDataListener;
-import io.rocketchat.livechat.model.DepartmentObject;
-import io.rocketchat.livechat.model.LiveChatConfigObject;
 
-import java.util.ArrayList;
-
-/**
+/** 
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener,  InitialDataListener{
+public class Main implements ConnectListener{
 
-    private LiveChatAPI liveChat;
-    private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
+
+    RocketChatAPI api;
     private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
 
     public void call(){
-        liveChat=new LiveChatAPI(serverurl);
-        liveChat.setReconnectionStrategy(new ReconnectionStrategy(10,5000));
-        liveChat.connect(this);
+        api=new RocketChatAPI(serverurl);
+        api.setReconnectionStrategy(null);
+        api.connect(this);
     }
 
     public static void main(String [] args){
@@ -32,8 +26,8 @@ public class Main implements ConnectListener,  InitialDataListener{
 
     @Override
     public void onConnect(String sessionID) {
-        System.out.println("Connected to server");
-        liveChat.getInitialData(this);
+        System.out.println("Connected to server with id "+sessionID);
+//        liveChat.getInitialData(this);
     }
 
     @Override
@@ -46,18 +40,6 @@ public class Main implements ConnectListener,  InitialDataListener{
         System.out.println("Got connect error with the server");
     }
 
-    @Override
-    public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
-        System.out.println("Got initial data " + object);
-
-        ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
-        if (departmentObjects.size()==0){
-            System.out.println("No departments available");
-        }else{
-            System.out.println("Departments available "+departmentObjects);
-        }
-
-    }
 }
 
 

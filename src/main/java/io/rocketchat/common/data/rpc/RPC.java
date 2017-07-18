@@ -46,6 +46,15 @@ public class RPC {
         }
     }
 
+    /**
+     * Tested
+     * @return
+     */
+
+    public static String ConnectObject(){
+        return "{\"msg\":\"connect\",\"version\":\"1\",\"support\":[\"1\",\"pre2\",\"pre1\"]}";
+    }
+
     public static JSONObject getRemoteMethodObject(int integer,String methodName, Object ... args){
         JSONObject object=new JSONObject();
         try {
