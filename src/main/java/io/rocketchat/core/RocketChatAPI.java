@@ -1,6 +1,7 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
+import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
@@ -27,8 +28,9 @@ public class RocketChatAPI extends Socket {
         coreMiddleware=CoreMiddleware.getInstance();
     }
 
-    public void login(String username,String password){
+    public void login(String username, String password, LoginListener loginListener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,loginListener, CoreMiddleware.ListenerType.LOGIN);
         sendDataInBackground(BasicRPC.login(uniqueID,username,password));
     }
 
@@ -68,6 +70,7 @@ public class RocketChatAPI extends Socket {
                 }
                 break;
             case RESULT:
+                coreMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
                 break;
             case READY:
                 break;

@@ -40,4 +40,13 @@ public class TokenObject {
     public Date getExpiry() {
         return Expiry;
     }
+
+    @Override
+    public String toString() {
+        return "TokenObject{" +
+                "userId='" + userId + '\'' +
+                ", AuthToken='" + AuthToken + '\'' +
+                ", Expiry=" + Expiry +
+                '}';
+    }
 }
