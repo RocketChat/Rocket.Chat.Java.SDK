@@ -25,9 +25,10 @@ public class LiveChatAPI extends Socket{
     String sessionId;
     JSONObject userInfo;
 
+    ConnectListener connectListener;
+
     LiveChatMiddleware liveChatMiddleware;
     LiveChatStreamMiddleware liveChatStreamMiddleware;
-    ConnectListener connectListener;
 
     public LiveChatAPI(String url) {
         super(url);
