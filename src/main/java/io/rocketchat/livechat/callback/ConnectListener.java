@@ -5,6 +5,8 @@ package io.rocketchat.livechat.callback;
  */
 
 
+import io.rocketchat.common.listener.Listener;
+
 /**
  * Gets called after successful connection with server
  */

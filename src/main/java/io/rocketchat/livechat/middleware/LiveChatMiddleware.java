@@ -1,6 +1,7 @@
 package io.rocketchat.livechat.middleware;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;

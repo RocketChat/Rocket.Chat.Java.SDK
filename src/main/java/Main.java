@@ -1,8 +1,7 @@
-import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.livechat.callback.ConnectListener;
 
-/** 
+/**
  * Created by sachin on 7/6/17.
  */
 
@@ -17,6 +16,7 @@ public class Main implements ConnectListener{
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
+
     }
 
     public static void main(String [] args){
@@ -27,6 +27,7 @@ public class Main implements ConnectListener{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
+        api.login("sachin.shinde","sachin9922");
 //        liveChat.getInitialData(this);
     }
 

@@ -14,6 +14,7 @@ public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;
     String sessionId;
+    JSONObject userInfo;
 
     ConnectListener connectListener;
 
@@ -23,6 +24,10 @@ public class RocketChatAPI extends Socket {
         integer=new AtomicInteger(1);
     }
 
+    public void login(String username,String password){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.login(uniqueID,username,password));
+    }
 
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
@@ -55,6 +60,9 @@ public class RocketChatAPI extends Socket {
                 }
                 break;
             case ADDED:
+                if (object.optString("collection").equals("users")) {
+                    userInfo = object.optJSONObject("fields");
+                }
                 break;
             case RESULT:
                 break;

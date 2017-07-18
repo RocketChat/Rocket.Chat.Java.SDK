@@ -1,6 +1,7 @@
 package io.rocketchat.livechat.callback;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.model.MessageObject;
 
 /**
@@ -12,7 +13,7 @@ import io.rocketchat.livechat.model.MessageObject;
  */
 
 public class MessageListener  {
-    public interface SubscriptionListener extends Listener{
+    public interface SubscriptionListener extends Listener {
         void onMessage(String roomId, MessageObject object);
         void onAgentDisconnect(String roomId, MessageObject object);
     }

@@ -16,6 +16,9 @@ public class BasicRPC extends RPC {
     public static String GETSUBSCRIPTIONS="subscriptions/get";
     public static String GETROOMS="rooms/get";
 
+    /**
+     * Not Tested
+     */
     public static String login(int integer, String username, String password){
 
         JSONObject loginObject=new JSONObject();
@@ -28,6 +31,9 @@ public class BasicRPC extends RPC {
         return getRemoteMethodObject(integer,LOGIN,loginObject).toString();
     }
 
+    /**
+     * Not Tested
+     */
     public static String loginUsingToken(int integer,String token){
         JSONObject loginObject=new JSONObject();
         try {
@@ -38,14 +44,25 @@ public class BasicRPC extends RPC {
         return getRemoteMethodObject(integer,LOGIN,loginObject).toString();
     }
 
+    /**
+     * Not Tested
+     */
+
     public static String getUserRoles(int integer){
         return getRemoteMethodObject(integer,GETUSERROLES).toString();
     }
+
+    /**
+     * Not Tested
+     */
 
     public static String getSubscriptions(int integer){
         return getRemoteMethodObject(integer,GETSUBSCRIPTIONS).toString();
     }
 
+    /**
+     * Not Tested
+     */
     public static String getRooms(int integer){
         return getRemoteMethodObject(integer,GETROOMS).toString();
     }
