@@ -57,11 +57,6 @@ public class Main implements ConnectListener,  InitialDataListener{
             System.out.println("Departments available "+departmentObjects);
         }
 
-        //Getting DepartmentId of first department
-
-        String departmentId=departmentObjects.get(0).getId();
-
-//        liveChat.registerGuest("aditi","aditi@gmail.com",departmentId,this);
     }
 }
 

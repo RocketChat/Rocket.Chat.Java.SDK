@@ -5,6 +5,8 @@ import com.neovisionaries.ws.client.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
@@ -14,11 +16,49 @@ public class Socket {
 
     String url;
     WebSocketFactory factory;
-    protected WebSocket ws;
+    private WebSocket ws;
+    private WebSocketAdapter adapter;
+    private ReconnectionStrategy strategy;
+    private Timer timer;
+    private boolean selfDisconnect;
 
     protected Socket(String url){
         this.url=url;
+        adapter=getAdapter();
         factory=new WebSocketFactory().setConnectionTimeout(5000);
+        selfDisconnect=false;
+    }
+
+    public void setReconnectionStrategy(ReconnectionStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    private WebSocketAdapter getAdapter() {
+        return new WebSocketAdapter(){
+            @Override
+            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                Socket.this.onConnected();
+                super.onConnected(websocket, headers);
+            }
+
+            @Override
+            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                Socket.this.onDisconnected(closedByServer);
+                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
+            }
+
+            @Override
+            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
+                Socket.this.onConnectError(exception);
+                super.onConnectError(websocket, exception);
+            }
+
+            @Override
+            public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                Socket.this.onTextMessage(text);
+                super.onTextMessage(websocket, text);
+            }
+        };
     }
 
     /**
@@ -38,6 +78,7 @@ public class Socket {
         ws.addHeader("Pragma","no-cache");
         ws.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
 
+        ws.addListener(adapter);
     }
 
     protected void connect() {
@@ -93,7 +134,21 @@ public class Socket {
         ws.connectAsynchronously();
     }
 
-    public void reconnect(){
+
+    protected void sendData(String message){
+        ws.sendText(message);
+    }
+
+    protected void sendDataInBackground(final String message){
+        EventThread.exec(new Runnable() {
+            @Override
+            public void run() {
+                ws.sendText(message);
+            }
+        });
+    }
+
+    protected void reconnect(){
         try {
             ws = ws.recreate(5000).connectAsynchronously();
         } catch (IOException e) {
@@ -101,4 +156,46 @@ public class Socket {
         }
     }
 
+    public void disconnect(){
+        ws.disconnect();
+        selfDisconnect=true;
+    }
+
+    protected void onConnected(){
+        strategy.setNumberOfAttempts(0);
+        System.out.println("Connected");
+    }
+
+    protected void onDisconnected(boolean closedByServer){
+        System.out.println("Disconnected");
+        if (strategy!=null && !selfDisconnect){
+            if (strategy.getNumberOfAttempts()<strategy.getMaxAttempts()){
+                timer=new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        reconnect();
+                        strategy.processAttempts();
+                        timer.cancel();
+                        timer.purge();
+                    }
+                },strategy.getReconnectInterval());
+
+            }else{
+                System.out.println("Number of attempts are complete");
+            }
+        }else{
+            selfDisconnect=false;
+        }
+    }
+
+    protected void onConnectError(Exception websocketException){
+        System.out.println("Onconnect Error");
+        onDisconnected(true);
+    }
+
+    protected void onTextMessage(String text) throws Exception{
+        System.out.println("Message is " + text);
+    }
 }
+
