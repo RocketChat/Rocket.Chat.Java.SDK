@@ -1,11 +1,9 @@
-package io.rocketchat.livechat.callback;
+package io.rocketchat.common.listener;
 
 /**
  * Created by sachin on 12/6/17.
  */
 
-
-import io.rocketchat.common.listener.Listener;
 
 /**
  * Gets called after successful connection with server

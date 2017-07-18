@@ -1,5 +1,5 @@
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.common.listener.ConnectListener;
 
 /**
  * Created by sachin on 7/6/17.
