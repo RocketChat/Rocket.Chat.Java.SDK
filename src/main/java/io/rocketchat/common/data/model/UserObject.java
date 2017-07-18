@@ -9,6 +9,7 @@ import org.json.JSONObject;
 public class UserObject {
     String userId;
     String userName;
+
     public UserObject(JSONObject object){
         try {
             userId=object.getString("_id");
