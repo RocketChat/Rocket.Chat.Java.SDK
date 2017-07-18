@@ -35,4 +35,8 @@ public class ReconnectionStrategy {
     public int getMaxAttempts() {
         return MaxAttempts;
     }
+
+    public void setNumberOfAttempts(int numberOfAttempts) {
+        this.numberOfAttempts = numberOfAttempts;
+    }
 }
