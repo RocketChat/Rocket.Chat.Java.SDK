@@ -1,7 +1,9 @@
 package io.rocketchat.core.middleware;
 
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
-import io.rocketchat.livechat.middleware.LiveChatMiddleware;
+import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.model.TokenObject;
 import org.json.JSONObject;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,7 +16,10 @@ public class CoreMiddleware {
 
     public enum ListenerType {
         LOGIN,
-
+        LOGINVIATOKEN,
+        GETUSERROLES,
+        GETSUBSCRIPTIONS,
+        GETROOMS
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -37,8 +42,28 @@ public class CoreMiddleware {
         if (callbacks.containsKey(i)) {
             Object[] objects = callbacks.remove(i);
             Listener listener = (Listener) objects[0];
-            LiveChatMiddleware.ListenerType type = (LiveChatMiddleware.ListenerType) objects[1];
+            CoreMiddleware.ListenerType type = (CoreMiddleware.ListenerType) objects[1];
             Object result = object.opt("result");
+            switch (type) {
+                case LOGIN:
+                    LoginListener loginListener= (LoginListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        loginListener.onLogin(null,errorObject);
+                    }else{
+                        TokenObject tokenObject=new TokenObject((JSONObject) result);
+                        loginListener.onLogin(tokenObject,null);
+                    }
+                    break;
+                case LOGINVIATOKEN:
+                    break;
+                case GETUSERROLES:
+                    break;
+                case GETSUBSCRIPTIONS:
+                    break;
+                case GETROOMS:
+                    break;
+            }
         }
     }
 }

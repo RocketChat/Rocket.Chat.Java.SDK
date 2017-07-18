@@ -1,6 +1,7 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
+import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
 import org.json.JSONObject;
@@ -18,10 +19,12 @@ public class RocketChatAPI extends Socket {
 
     ConnectListener connectListener;
 
+    CoreMiddleware coreMiddleware;
 
     public RocketChatAPI(String url) {
         super(url);
         integer=new AtomicInteger(1);
+        coreMiddleware=CoreMiddleware.getInstance();
     }
 
     public void login(String username,String password){

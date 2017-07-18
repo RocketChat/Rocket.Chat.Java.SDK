@@ -19,10 +19,14 @@ public class TokenObject {
         AuthToken = authToken;
         Expiry = expiry;
     }
-    public TokenObject(JSONObject object) throws JSONException {
-        userId =object.optString("id");
-        AuthToken=object.optString("token");
-        Expiry=new Date(object.optJSONObject("tokenExpires").getLong("$date"));
+    public TokenObject(JSONObject object) {
+        try {
+            userId = object.optString("id");
+            AuthToken = object.optString("token");
+            Expiry = new Date(object.optJSONObject("tokenExpires").getLong("$date"));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     public String getUserId() {
