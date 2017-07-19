@@ -17,7 +17,6 @@ public class CoreMiddleware {
 
     public enum ListenerType {
         LOGIN,
-        LOGINVIATOKEN,
         GETUSERROLES,
         GETSUBSCRIPTIONS,
         GETROOMS
@@ -55,8 +54,6 @@ public class CoreMiddleware {
                         TokenObject tokenObject=new TokenObject((JSONObject) result);
                         loginListener.onLogin(tokenObject,null);
                     }
-                    break;
-                case LOGINVIATOKEN:
                     break;
                 case GETUSERROLES:
                     break;

@@ -34,6 +34,13 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.login(uniqueID,username,password));
     }
 
+
+    public void loginUsingToken(String token,LoginListener loginListener){
+        int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,loginListener, CoreMiddleware.ListenerType.LOGIN);
+        sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
+    }
+
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
     }
