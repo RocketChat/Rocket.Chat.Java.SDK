@@ -41,6 +41,23 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
     }
 
+    public void getUserRoles(){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.getUserRoles(uniqueID));
+    }
+
+
+    public void getSubscriptions(){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.getSubscriptions(uniqueID));
+    }
+
+
+    public void getRooms(){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.getRooms(uniqueID));
+    }
+
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
     }

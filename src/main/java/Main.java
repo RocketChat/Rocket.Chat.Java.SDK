@@ -45,7 +45,7 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.loginUsingToken(token.getAuthToken(),this);
+        api.getSubscriptions();
     }
 }
 
