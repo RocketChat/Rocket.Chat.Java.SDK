@@ -11,6 +11,7 @@ import java.util.Date;
  */
 
 public class SubscriptionObject {
+
     String roomType;
     Date roomCreated;
     Date lastSeen;

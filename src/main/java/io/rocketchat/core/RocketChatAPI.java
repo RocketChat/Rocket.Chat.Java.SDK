@@ -1,16 +1,21 @@
 package io.rocketchat.core;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
+import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.callback.SubscribeListener;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -23,7 +28,7 @@ public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;
     String sessionId;
-    public JSONObject userInfo;
+    UserObject userInfo;
 
     ConnectListener connectListener;
 
@@ -33,6 +38,14 @@ public class RocketChatAPI extends Socket {
         super(url);
         integer=new AtomicInteger(1);
         coreMiddleware=CoreMiddleware.getInstance();
+    }
+
+    public String getMyUserName(){
+        return userInfo.getUserName();
+    }
+
+    public JSONArray getMyEmails(){
+        return userInfo.getEmails();
     }
 
     //Tested
@@ -133,7 +146,7 @@ public class RocketChatAPI extends Socket {
                 break;
             case ADDED:
                 if (object.optString("collection").equals("users")) {
-                    userInfo = object.optJSONObject("fields");
+                    userInfo = new UserObject(object.optJSONObject("fields"));
                 }
                 break;
             case RESULT:
@@ -164,5 +177,69 @@ public class RocketChatAPI extends Socket {
             connectListener.onDisconnect(closedByServer);
         }
         super.onDisconnected(closedByServer);
+    }
+
+    class ChatRoom{
+
+        private SubscriptionObject subscriptionObject;
+        private RoomObject roomObject;
+
+        String RoomName;
+        String RoomId;
+        String RoomType;
+        UserObject userInfo;
+
+        public ChatRoom(SubscriptionObject subscription){
+            this.subscriptionObject=subscription;
+            RoomName=subscription.getRoomName();
+            RoomId=subscription.getRoomId();
+            RoomType=subscription.getRoomType();
+            userInfo=subscription.getUserInfo();
+        }
+
+        public ChatRoom(RoomObject room){
+            this.roomObject=room;
+            RoomName=room.getRoomName();
+            RoomId=room.getRoomId();
+            RoomType=room.getRoomType();
+            userInfo=room.getUserInfo();
+        }
+
+
+        public Boolean isSubscriptionObject(){
+            return subscriptionObject!=null;
+        }
+
+        public String getRoomName() {
+            return RoomName;
+        }
+
+        public String getRoomId() {
+            return RoomId;
+        }
+
+        public String getRoomType() {
+            return RoomType;
+        }
+
+        public UserObject getUserInfo() {
+            return userInfo;
+        }
+
+        public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener){
+            RocketChatAPI.this.getChatHistory(getRoomId(),limit,oldestMessageTimestamp,lasttimestamp,listener);
+        }
+
+        public void sendIsTyping(Boolean istyping){
+            RocketChatAPI.this.sendIsTyping(getRoomId(),getMyUserName(),istyping);
+        }
+
+        public void sendMessage(String message){
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),getRoomId(),message);
+        }
+
+        public void subscribeRoom(){
+            RocketChatAPI.this.subscribeRoom(getRoomId());
+        }
     }
 }

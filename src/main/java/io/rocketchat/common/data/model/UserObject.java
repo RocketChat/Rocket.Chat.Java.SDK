@@ -58,12 +58,17 @@ public class UserObject {
         this.roles = roles;
     }
 
+    public JSONArray getEmails() {
+        return emails;
+    }
+
     @Override
     public String toString() {
         return "UserObject{" +
                 "userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", roles=" + roles +
+                ", emails=" + emails +
                 '}';
     }
 }
