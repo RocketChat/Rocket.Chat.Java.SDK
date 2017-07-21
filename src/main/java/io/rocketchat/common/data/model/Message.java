@@ -8,6 +8,10 @@ import java.util.Date;
 /**
  * Created by sachin on 19/7/17.
  */
+
+/**
+ *  // TODO: 21/7/17 Make this class to be base class for core, add extra fields in child class
+ */
 public class Message {
 
     protected String messageId;
