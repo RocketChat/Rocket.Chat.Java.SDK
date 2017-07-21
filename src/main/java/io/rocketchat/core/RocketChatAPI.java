@@ -1,10 +1,7 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
-import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.SubscriptionListener;
-import io.rocketchat.core.callback.UserListener;
+import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
@@ -71,9 +68,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.getRooms(uniqueID));
     }
 
-    public void getChatHistory(final String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp){
+    public void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener){
         int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID);
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.LOADHISTORY);
         sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
 
