@@ -1,21 +1,16 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.callback.SubscriptionListener;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener, HistoryListener {
+public class Main implements ConnectListener, LoginListener{
 
 
     RocketChatAPI api;
@@ -54,24 +49,9 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getSubscriptions(this);
     }
 
-    @Override
-    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-        roomId=subscriptions.get(0).getRoomId();
-        System.out.println("room is "+subscriptions.get(0).getRoomName());
-        api.getChatHistory(roomId,20,lasttimestamp,null,this);
-    }
 
-    @Override
-    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
-        for (RocketChatMessage message:list){
-            System.out.println("Message is "+message.getMessage());
-        }
-//        lasttimestamp=list.get(list.size()-1).getMsgTimestamp();
-//        api.getChatHistory(roomId,20,lasttimestamp,null,this);
-    }
 }
 
 
