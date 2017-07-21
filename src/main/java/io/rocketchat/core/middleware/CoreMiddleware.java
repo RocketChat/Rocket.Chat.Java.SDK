@@ -1,10 +1,12 @@
 package io.rocketchat.core.middleware;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.RoomListener;
 import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
@@ -63,7 +65,18 @@ public class CoreMiddleware {
                     }
                     break;
                 case GETUSERROLES:
-
+                    UserListener.getUserRoleListener userRoleListener= (UserListener.getUserRoleListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        userRoleListener.onUserRoles(null,errorObject);
+                    }else{
+                        ArrayList<UserObject> list=new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new UserObject(array.optJSONObject(j)));
+                        }
+                        userRoleListener.onUserRoles(list,null);
+                    }
                     break;
                 case GETSUBSCRIPTIONS:
                     SubscriptionListener.GetSubscriptionListener subscriptionListener= (SubscriptionListener.GetSubscriptionListener) listener;

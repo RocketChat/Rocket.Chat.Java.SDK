@@ -46,11 +46,20 @@ public class UserObject {
         this.userName = userName;
     }
 
+    public ArrayList<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(ArrayList<String> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "UserObject{" +
                 "userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

@@ -1,14 +1,18 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.TokenObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener {
+public class Main implements ConnectListener, LoginListener, UserListener.getUserRoleListener {
 
 
     RocketChatAPI api;
@@ -45,9 +49,15 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getUserRoles();
+        api.getUserRoles(this);
     }
 
+    @Override
+    public void onUserRoles(ArrayList<UserObject> users, ErrorObject error) {
+        for (UserObject object : users){
+            System.out.println("Name "+object.getUserName()+" role "+object.getRoles());
+        }
+    }
 }
 
 

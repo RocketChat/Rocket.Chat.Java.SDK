@@ -4,6 +4,7 @@ import io.rocketchat.common.network.Socket;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.RoomListener;
 import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
@@ -45,8 +46,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
     }
 
-    public void getUserRoles(){
+    public void getUserRoles(UserListener.getUserRoleListener userRoleListener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,userRoleListener, CoreMiddleware.ListenerType.GETUSERROLES);
         sendDataInBackground(BasicRPC.getUserRoles(uniqueID));
     }
 
