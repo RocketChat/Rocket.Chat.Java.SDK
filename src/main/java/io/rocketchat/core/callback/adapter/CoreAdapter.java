@@ -2,6 +2,7 @@ package io.rocketchat.core.callback.adapter;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
@@ -13,7 +14,12 @@ import java.util.ArrayList;
 /**
  * Created by sachin on 21/7/17.
  */
-public class CoreAdapter implements HistoryListener, LoginListener, RoomListener.GetRoomListener, SubscriptionListener.GetSubscriptionListener,UserListener.getUserRoleListener{
+public class CoreAdapter implements ConnectListener,
+        HistoryListener,
+        LoginListener,
+        RoomListener.GetRoomListener,
+        SubscriptionListener.GetSubscriptionListener,
+        UserListener.getUserRoleListener{
     @Override
     public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
@@ -36,6 +42,21 @@ public class CoreAdapter implements HistoryListener, LoginListener, RoomListener
 
     @Override
     public void onUserRoles(ArrayList<UserObject> users, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onConnect(String sessionID) {
+
+    }
+
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+
+    }
+
+    @Override
+    public void onConnectError(Exception websocketException) {
 
     }
 }

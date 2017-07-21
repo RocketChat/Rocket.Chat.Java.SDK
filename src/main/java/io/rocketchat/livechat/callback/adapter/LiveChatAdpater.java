@@ -1,6 +1,7 @@
 package io.rocketchat.livechat.callback.adapter;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.AgentObject;
@@ -13,7 +14,8 @@ import java.util.ArrayList;
 /**
  * Created by sachin on 21/7/17.
  */
-public class LiveChatAdpater implements AgentListener.AgentConnectListener,
+public class LiveChatAdpater implements ConnectListener,
+        AgentListener.AgentConnectListener,
         AgentListener.AgentDataListener,
         AuthListener.RegisterListener,
         AuthListener.LoginListener,
@@ -82,6 +84,21 @@ public class LiveChatAdpater implements AgentListener.AgentConnectListener,
 
     @Override
     public void onTyping(String roomId, String user, Boolean istyping) {
+
+    }
+
+    @Override
+    public void onConnect(String sessionID) {
+
+    }
+
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+
+    }
+
+    @Override
+    public void onConnectError(Exception websocketException) {
 
     }
 }

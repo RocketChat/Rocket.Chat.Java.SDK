@@ -1,7 +1,6 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.TokenObject;
 
 import java.util.Date;
@@ -10,7 +9,7 @@ import java.util.Date;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener{
+public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
@@ -28,6 +27,7 @@ public class Main implements ConnectListener, LoginListener{
     public static void main(String [] args){
         new Main().call();
     }
+
 
 
     @Override
