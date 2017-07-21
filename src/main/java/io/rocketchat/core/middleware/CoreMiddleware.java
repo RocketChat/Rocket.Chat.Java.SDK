@@ -28,7 +28,8 @@ public class CoreMiddleware {
         LOGIN,
         GETUSERROLES,
         GETSUBSCRIPTIONS,
-        GETROOMS
+        GETROOMS,
+        LOADHISTORY
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -105,6 +106,9 @@ public class CoreMiddleware {
                         }
                         getRoomListener.onGetRooms(list,null);
                     }
+                    break;
+                case LOADHISTORY:
+
                     break;
             }
         }

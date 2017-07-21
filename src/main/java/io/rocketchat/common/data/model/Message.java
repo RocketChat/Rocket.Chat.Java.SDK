@@ -28,6 +28,7 @@ public class Message {
                 msgTimestamp = new Date(object.getJSONObject("ts").getLong("$date"));
             }
             sender=new UserObject(object.optJSONObject("u"));
+            updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
 
             if (object.optJSONObject("editedAt")!=null) {
                 editedAt = new Date(object.getJSONObject("editedAt").getLong("$date"));

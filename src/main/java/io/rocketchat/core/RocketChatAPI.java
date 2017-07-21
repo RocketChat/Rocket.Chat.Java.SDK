@@ -8,10 +8,15 @@ import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.core.rpc.ChatHistoryRPC;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.callback.SubscribeListener;
+import io.rocketchat.livechat.middleware.LiveChatMiddleware;
+import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
 import org.json.JSONObject;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -64,6 +69,11 @@ public class RocketChatAPI extends Socket {
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,getRoomListener, CoreMiddleware.ListenerType.GETROOMS);
         sendDataInBackground(BasicRPC.getRooms(uniqueID));
+    }
+
+    public void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
 
     public void setConnectListener(ConnectListener connectListener) {
