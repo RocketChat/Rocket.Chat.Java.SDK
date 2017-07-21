@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 9/6/17.
  */
-public class MessageObject extends Message{
+public class LiveChatMessage extends Message{
 
     public static String MESSAGE_TYPE_COMMAND="command";
     public static String MESSAGE_TYPE_CLOSE="livechat-close";
@@ -16,7 +16,7 @@ public class MessageObject extends Message{
     Boolean showConnecting; //This message triggers showconnecting popup
     String sandstormSessionId;
 
-    public MessageObject(JSONObject object){
+    public LiveChatMessage(JSONObject object){
         super(object);
             visitorToken=object.optString("token");
             newRoom=object.optBoolean("newRoom");

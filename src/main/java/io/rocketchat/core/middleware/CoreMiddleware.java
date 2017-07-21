@@ -1,15 +1,13 @@
 package io.rocketchat.core.middleware;
 
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.data.model.Message;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.callback.*;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
-import io.rocketchat.livechat.callback.LoadHistoryListener;
-import io.rocketchat.livechat.model.MessageObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -112,10 +110,10 @@ public class CoreMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         historyListener.onLoadHistory(null, 0,errorObject);
                     }else {
-                        ArrayList<Message> list = new ArrayList<Message>();
+                        ArrayList<RocketChatMessage> list = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new Message(array.optJSONObject(j)));
+                            list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
                         int unreadNotLoaded = ((JSONObject)result).optInt("unreadNotLoaded");
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);

@@ -4,7 +4,7 @@ import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,7 +25,7 @@ public class SendMessageTest extends RoomParent {
     MessageListener.MessageAckListener messageAckListener;
 
     @Captor
-    ArgumentCaptor <MessageObject> messageObjectArgumentCaptor;
+    ArgumentCaptor <LiveChatMessage> messageObjectArgumentCaptor;
 
     @Captor
     ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
