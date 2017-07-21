@@ -9,7 +9,7 @@ public class TypingRPC extends RPC {
 
     public static String SENDTYPING="stream-notify-room";
 
-    public static String sendTyping(int integer, String room_id, Boolean istyping, String username){
+    public static String sendTyping(int integer, String room_id, String username,Boolean istyping){
 
         return getRemoteMethodObject(integer,SENDTYPING,room_id+"/typing",username,istyping).toString();
     }

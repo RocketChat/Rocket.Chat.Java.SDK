@@ -23,7 +23,7 @@ public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;
     String sessionId;
-    JSONObject userInfo;
+    public JSONObject userInfo;
 
     ConnectListener connectListener;
 
@@ -81,7 +81,7 @@ public class RocketChatAPI extends Socket {
 
     public void sendIsTyping(String roomId, String username, Boolean istyping){
         int uniqueID = integer.getAndIncrement();
-        sendDataInBackground(TypingRPC.sendTyping(uniqueID,roomId,istyping,username));
+        sendDataInBackground(TypingRPC.sendTyping(uniqueID,roomId,username,istyping));
     }
 
     public void sendMessage(String msgId, String roomID, String message){

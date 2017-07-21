@@ -13,6 +13,7 @@ public class UserObject {
     String userId;
     String userName;
     ArrayList <String> roles;
+    JSONArray emails;
 
     public UserObject(JSONObject object){
         try {
@@ -24,6 +25,9 @@ public class UserObject {
                 for (int i=0;i<array.length();i++){
                     roles.add(array.getString(i));
                 }
+            }
+            if (object.opt("emails")!=null){
+                emails=object.optJSONArray("emails");
             }
         } catch (JSONException e) {
             e.printStackTrace();

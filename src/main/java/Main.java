@@ -1,8 +1,10 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
+import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,7 +15,7 @@ public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="ws://localhost:3000/websocket";
     Date lasttimestamp;
     private String roomId;
 
@@ -28,12 +30,10 @@ public class Main extends CoreAdapter{
         new Main().call();
     }
 
-
-
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin.shinde","sachin123",this);
+        api.login("sachin","sachin9922",this);
     }
 
     @Override
@@ -49,9 +49,21 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
+        api.getSubscriptions(this);
     }
 
-
+    @Override
+    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+        String roomid = null;
+        for (SubscriptionObject subscriptionObject : subscriptions){
+            if (subscriptionObject.getRoomName().contains("demosachin")){
+                System.out.println("Got demo sachin");
+                roomid=subscriptionObject.getRoomId();
+            }
+        }
+        System.out.println("Userinfo is"+api.userInfo);
+        api.sendIsTyping(roomid,"sachin",true);
+    }
 }
 
 
