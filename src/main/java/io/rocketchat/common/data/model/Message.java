@@ -18,6 +18,8 @@ public class Message {
     protected Date updatedAt;  //Message saved on the server
     protected Date editedAt;
     protected UserObject editedBy;
+    String messagetype;
+    String senderAlias;
 
     public Message(JSONObject object){
         try {
@@ -34,7 +36,8 @@ public class Message {
                 editedAt = new Date(object.getJSONObject("editedAt").getLong("$date"));
                 editedBy = new UserObject(object.getJSONObject("editedBy"));
             }
-
+            messagetype=object.optString("t");
+            senderAlias=object.optString("alias");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -71,5 +74,13 @@ public class Message {
 
     public UserObject getEditedBy() {
         return editedBy;
+    }
+
+    public String getMessagetype() {
+        return messagetype;
+    }
+
+    public String getSenderAlias() {
+        return senderAlias;
     }
 }
