@@ -1,11 +1,11 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
+import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
-import io.rocketchat.core.rpc.BasicRPC;
+import io.rocketchat.core.rpc.*;
 import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.core.rpc.ChatHistoryRPC;
 import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.callback.SubscribeListener;
@@ -35,19 +35,21 @@ public class RocketChatAPI extends Socket {
         coreMiddleware=CoreMiddleware.getInstance();
     }
 
+    //Tested
     public void login(String username, String password, LoginListener loginListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,loginListener, CoreMiddleware.ListenerType.LOGIN);
         sendDataInBackground(BasicRPC.login(uniqueID,username,password));
     }
 
-
+    //Tested
     public void loginUsingToken(String token,LoginListener loginListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,loginListener, CoreMiddleware.ListenerType.LOGIN);
         sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
     }
 
+    //Tested
     public void getUserRoles(UserListener.getUserRoleListener userRoleListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,userRoleListener, CoreMiddleware.ListenerType.GETUSERROLES);
@@ -55,6 +57,7 @@ public class RocketChatAPI extends Socket {
     }
 
 
+    //Tested
     public void getSubscriptions(SubscriptionListener.GetSubscriptionListener getSubscriptionListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,getSubscriptionListener, CoreMiddleware.ListenerType.GETSUBSCRIPTIONS);
@@ -62,17 +65,41 @@ public class RocketChatAPI extends Socket {
     }
 
 
+    //Tested
     public void getRooms(RoomListener.GetRoomListener getRoomListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,getRoomListener, CoreMiddleware.ListenerType.GETROOMS);
         sendDataInBackground(BasicRPC.getRooms(uniqueID));
     }
 
+    //Tested
     public void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener){
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.LOADHISTORY);
         sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
+
+    public void sendIsTyping(String roomId, String username, Boolean istyping){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(TypingRPC.sendTyping(uniqueID,roomId,istyping,username));
+    }
+
+    public void sendMessage(String msgId, String roomID, String message){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
+    }
+
+    public void setStatus(PresenceRPC.Status s){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID,s));
+    }
+
+    public void subscribeRoom(String room_id){
+        String uniqueID= Utils.shortUUID();
+        sendDataInBackground(SubscriptionRPC.subscribeRoom(uniqueID,room_id));
+    }
+
+
 
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
