@@ -71,8 +71,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.getRooms(uniqueID));
     }
 
-    public void getChatHistory(final String roomID, final int limit, final Date oldestMessageTimestamp, final Date lasttimestamp){
+    public void getChatHistory(final String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp){
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID);
         sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
 
