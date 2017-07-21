@@ -2,17 +2,23 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener {
+public class Main implements ConnectListener, LoginListener, RoomListener.GetRoomListener {
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat/websocket";
 
 
     public void call(){
@@ -29,7 +35,7 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin.shinde","sachin9922",this);
+        api.login("sachin.shinde","sachin123",this);
     }
 
     @Override
@@ -45,7 +51,13 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getSubscriptions();
+        api.getRooms(this);
+    }
+
+
+    @Override
+    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+        System.out.println("Got rooms "+rooms);
     }
 }
 

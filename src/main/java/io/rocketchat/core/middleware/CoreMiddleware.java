@@ -63,18 +63,7 @@ public class CoreMiddleware {
                     }
                     break;
                 case GETUSERROLES:
-                    RoomListener.GetRoomListener getRoomListener= (RoomListener.GetRoomListener) listener;
-                    if (result==null){
-                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
-                        getRoomListener.onGetRooms(null,errorObject);
-                    }else{
-                        ArrayList<RoomObject> list=new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
-                        for (int j = 0; j < array.length(); j++) {
-                            list.add(new RoomObject(array.optJSONObject(j)));
-                        }
-                        getRoomListener.onGetRooms(list,null);
-                    }
+
                     break;
                 case GETSUBSCRIPTIONS:
                     SubscriptionListener.GetSubscriptionListener subscriptionListener= (SubscriptionListener.GetSubscriptionListener) listener;
@@ -91,7 +80,18 @@ public class CoreMiddleware {
                     }
                     break;
                 case GETROOMS:
-
+                    RoomListener.GetRoomListener getRoomListener= (RoomListener.GetRoomListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        getRoomListener.onGetRooms(null,errorObject);
+                    }else{
+                        ArrayList<RoomObject> list=new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new RoomObject(array.optJSONObject(j)));
+                        }
+                        getRoomListener.onGetRooms(list,null);
+                    }
                     break;
             }
         }

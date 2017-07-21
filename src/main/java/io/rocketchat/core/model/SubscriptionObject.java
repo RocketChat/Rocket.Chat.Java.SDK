@@ -29,7 +29,9 @@ public class SubscriptionObject {
             if (object.optJSONObject("ts")!=null) {
                 roomCreated = new Date(object.getJSONObject("ts").getLong("$date"));
             }
-            lastSeen = new Date(object.getJSONObject("ls").getLong("$date"));
+            if (object.optJSONObject("ls")!=null) {
+                lastSeen = new Date(object.getJSONObject("ls").getLong("$date"));
+            }
             roomName = object.getString("name");
             roomId = object.getString("rid");
             userInfo = object.getJSONObject("u");

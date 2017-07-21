@@ -2,9 +2,13 @@ package io.rocketchat.core;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.SubscriptionListener;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.livechat.callback.MessageListener;
+import io.rocketchat.livechat.callback.SubscribeListener;
 import org.json.JSONObject;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,14 +51,16 @@ public class RocketChatAPI extends Socket {
     }
 
 
-    public void getSubscriptions(){
+    public void getSubscriptions(SubscriptionListener.GetSubscriptionListener getSubscriptionListener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,getSubscriptionListener, CoreMiddleware.ListenerType.GETSUBSCRIPTIONS);
         sendDataInBackground(BasicRPC.getSubscriptions(uniqueID));
     }
 
 
-    public void getRooms(){
+    public void getRooms(RoomListener.GetRoomListener getRoomListener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,getRoomListener, CoreMiddleware.ListenerType.GETROOMS);
         sendDataInBackground(BasicRPC.getRooms(uniqueID));
     }
 
