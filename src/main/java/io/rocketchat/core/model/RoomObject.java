@@ -1,5 +1,6 @@
 package io.rocketchat.core.model;
 
+import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ public class RoomObject {
     String roomId;
     String roomType;
     String roomName;
-    JSONObject userInfo;
+    UserObject userInfo;
     String topic;
     JSONArray mutedUsers;
     Date jitsiTimeout;
@@ -25,7 +26,9 @@ public class RoomObject {
             roomId = object.getString("_id");
             roomType = object.getString("t");
             roomName = object.optString("name");
-            userInfo = object.optJSONObject("u");
+            if (object.optJSONObject("u")!=null){
+                userInfo=new UserObject(object.optJSONObject("u"));
+            }
             topic = object.optString("topic");
             mutedUsers = object.optJSONArray("muted");
             if (object.optJSONObject("jitsiTimeout")!=null) {
@@ -49,7 +52,7 @@ public class RoomObject {
         return roomName;
     }
 
-    public JSONObject getUserInfo() {
+    public UserObject getUserInfo() {
         return userInfo;
     }
 

@@ -1,5 +1,6 @@
 package io.rocketchat.core.model;
 
+import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +16,7 @@ public class SubscriptionObject {
     Date lastSeen;
     String roomName;
     String roomId;
-    JSONObject userInfo;
+    UserObject userInfo;
     Boolean open;
     Boolean alert;
     Integer unread;
@@ -34,7 +35,9 @@ public class SubscriptionObject {
             }
             roomName = object.getString("name");
             roomId = object.getString("rid");
-            userInfo = object.getJSONObject("u");
+            if (object.optJSONObject("u")!=null){
+                userInfo=new UserObject(object.optJSONObject("u"));
+            }
             open = object.getBoolean("open");
             alert = object.getBoolean("alert");
             unread = object.getInt("unread");
@@ -66,7 +69,7 @@ public class SubscriptionObject {
         return roomId;
     }
 
-    public JSONObject getUserInfo() {
+    public UserObject getUserInfo() {
         return userInfo;
     }
 

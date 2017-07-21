@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener, RoomListener.GetRoomListener {
+public class Main implements ConnectListener, LoginListener, RoomListener.GetRoomListener, SubscriptionListener.GetSubscriptionListener {
 
 
     RocketChatAPI api;
@@ -51,13 +51,18 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getRooms(this);
+        api.getSubscriptions(this);
     }
 
 
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        System.out.println("Got rooms "+rooms);
+
+    }
+
+    @Override
+    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+        System.out.println("subscriptions are "+subscriptions);
     }
 }
 
