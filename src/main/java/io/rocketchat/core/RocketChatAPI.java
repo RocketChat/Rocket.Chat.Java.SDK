@@ -8,7 +8,6 @@ import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
-import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
@@ -193,17 +192,36 @@ public class RocketChatAPI extends Socket {
     public ArrayList <ChatRoom> createChatRooms(ArrayList <Room> roomObjects){
         rooms=new ArrayList<>();
         for (Room room : roomObjects){
-            rooms.add(getChatRoom(room));
+            rooms.add(createChatRoom(room));
         }
         return rooms;
     }
 
-    public ChatRoom getChatRoom(Room room){
+    public ChatRoom createChatRoom(Room room){
         return new ChatRoom(room);
     }
 
+
     public ArrayList <ChatRoom> getChatRooms(){
         return rooms;
+    }
+
+    public ChatRoom getChatRoomByName(String roomName){
+        for (ChatRoom room : rooms){
+            if (room.getRoomData().getRoomName().equals(roomName)){
+                return room;
+            }
+        }
+        return null;
+    }
+
+    public ChatRoom getChatRoomById(String roomId){
+        for (ChatRoom room : rooms){
+            if (room.getRoomData().getRoomId().equals(roomId)){
+                return room;
+            }
+        }
+        return null;
     }
 
     class ChatRoom {
