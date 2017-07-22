@@ -6,18 +6,21 @@ import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
+import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by sachin on 8/6/17.
  */
+
 public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;
@@ -27,6 +30,10 @@ public class RocketChatAPI extends Socket {
     ConnectListener connectListener;
 
     CoreMiddleware coreMiddleware;
+    CoreStreamMiddleware streamMiddleware;
+
+    ArrayList <ChatRoom> rooms;
+
 
     public RocketChatAPI(String url) {
         super(url);
@@ -177,6 +184,31 @@ public class RocketChatAPI extends Socket {
         super.onDisconnected(closedByServer);
     }
 
+
+    /**
+     * ChatRoom APIS
+     */
+
+    public ArrayList <ChatRoom> createRooms(ArrayList <RoomObject> roomObjects){
+        rooms=new ArrayList<>();
+        for (RoomObject room : roomObjects){
+            rooms.add(getRoom(room));
+        }
+        return rooms;
+    }
+
+    public ChatRoom getRoom(RoomObject object){
+        return new ChatRoom(object);
+    }
+
+    public ChatRoom getRoom(SubscriptionObject object){
+        return new ChatRoom(object);
+    }
+
+    public ArrayList <ChatRoom> getRooms(){
+        return rooms;
+    }
+
     class ChatRoom{
 
         private SubscriptionObject subscriptionObject;
@@ -243,5 +275,16 @@ public class RocketChatAPI extends Socket {
         public void subscribeRoom(){
             RocketChatAPI.this.subscribeRoom(getRoomId());
         }
+
+        public SubscriptionObject getSubscriptionObject() {
+            return subscriptionObject;
+        }
+
+        public RoomObject getRoomObject() {
+            return roomObject;
+        }
     }
+
+
+
 }

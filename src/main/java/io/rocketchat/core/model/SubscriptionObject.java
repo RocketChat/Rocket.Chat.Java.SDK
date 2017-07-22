@@ -1,6 +1,6 @@
 package io.rocketchat.core.model;
 
-import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.common.data.model.Room;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,14 +10,10 @@ import java.util.Date;
  * Created by sachin on 19/7/17.
  */
 
-public class SubscriptionObject {
+public class SubscriptionObject extends Room{
 
-    String roomType;
     Date roomCreated;
     Date lastSeen;
-    String roomName;
-    String roomId;
-    UserObject userInfo;
     Boolean open;
     Boolean alert;
     Integer unread;
@@ -29,19 +25,13 @@ public class SubscriptionObject {
     String emailNotifications;
 
     public SubscriptionObject(JSONObject object)  {
-
+        super(object);
         try {
-            roomType=object.getString("t");
             if (object.optJSONObject("ts")!=null) {
                 roomCreated = new Date(object.getJSONObject("ts").getLong("$date"));
             }
             if (object.optJSONObject("ls")!=null) {
                 lastSeen = new Date(object.getJSONObject("ls").getLong("$date"));
-            }
-            roomName = object.getString("name");
-            roomId = object.getString("rid");
-            if (object.optJSONObject("u")!=null){
-                userInfo=new UserObject(object.optJSONObject("u"));
             }
             open = object.getBoolean("open");
             alert = object.getBoolean("alert");
@@ -55,13 +45,10 @@ public class SubscriptionObject {
 
         }catch (JSONException e) {
             e.printStackTrace();
-            System.out.println("name is "+roomName);
+            System.out.println("name is "+getRoomName());
         }
     }
 
-    public String getRoomType() {
-        return roomType;
-    }
 
     public Date getRoomCreated() {
         return roomCreated;
@@ -69,18 +56,6 @@ public class SubscriptionObject {
 
     public Date getLastSeen() {
         return lastSeen;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public UserObject getUserInfo() {
-        return userInfo;
     }
 
     public Boolean getOpen() {
