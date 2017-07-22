@@ -2,11 +2,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
-import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
@@ -16,7 +12,7 @@ public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="ws://localhost:3000/websocket";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -31,7 +27,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin.shinde","sachin123",this);
+        api.login("sachin","sachin9922",this);
     }
 
     @Override
@@ -47,21 +43,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-//        api.getSubscriptions(this);
         api.getRooms(this);
-    }
-
-    @Override
-    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-        RocketChatAPI.ChatRoom room=api.createChatRooms(subscriptions).getChatRoomByName("demosachin");
-        room.sendMessage("sending message via rooms");
-    }
-
-    @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        RocketChatAPI.ChatRoom room=api.createChatRooms(rooms).getChatRoomByName("demosachin");
-        System.out.println("Room name is "+room.getRoomData().getRoomName());
-//        room.sendMessage("sending message via rooms");
     }
 
     @Override
