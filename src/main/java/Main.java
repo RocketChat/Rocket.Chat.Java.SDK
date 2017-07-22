@@ -5,6 +5,7 @@ import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.livechat.LiveChatAPI;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,16 +54,8 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-        String roomid = null;
-        for (SubscriptionObject subscriptionObject : subscriptions){
-            if (subscriptionObject.getRoomName().contains("demosachin")){
-                System.out.println("Got demo sachin");
-                roomid=subscriptionObject.getRoomId();
-            }
-        }
-        System.out.println("Userinfo is"+api.getMyUserName());
-//        api.sendIsTyping(roomid,"sachin",true);
-        api.sendMessage(Utils.shortUUID(),roomid,"Hi sachin !!!!",this);
+        RocketChatAPI.ChatRoom room=api.createChatRooms(subscriptions).getChatRoomByName("demosachin");
+        room.sendMessage("Hey there");
     }
 
     @Override

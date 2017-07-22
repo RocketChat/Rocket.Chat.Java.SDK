@@ -189,12 +189,12 @@ public class RocketChatAPI extends Socket {
      * ChatRoom APIS
      */
 
-    public ArrayList <ChatRoom> createChatRooms(ArrayList <Room> roomObjects){
+    public RocketChatAPI createChatRooms(ArrayList <? extends Room> roomObjects){
         rooms=new ArrayList<>();
         for (Room room : roomObjects){
             rooms.add(createChatRoom(room));
         }
-        return rooms;
+        return this;
     }
 
     public ChatRoom createChatRoom(Room room){
@@ -224,7 +224,7 @@ public class RocketChatAPI extends Socket {
         return null;
     }
 
-    class ChatRoom {
+    public class ChatRoom {
 
         Room room;
 
