@@ -26,7 +26,8 @@ public class CoreMiddleware {
         GETUSERROLES,
         GETSUBSCRIPTIONS,
         GETROOMS,
-        LOADHISTORY
+        LOADHISTORY,
+        SENDMESSAGE
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -119,6 +120,16 @@ public class CoreMiddleware {
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);
                         break;
                     }
+                case SENDMESSAGE:
+                    MessageListener.MessageAckListener ackListener= (MessageListener.MessageAckListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        ackListener.onMessageAck(null,errorObject);
+                    }else{
+                        RocketChatMessage message=new RocketChatMessage((JSONObject) result);
+                        ackListener.onMessageAck(message,null);
+                    }
+                    break;
             }
         }
     }

@@ -1,6 +1,7 @@
 package io.rocketchat.core;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
@@ -8,13 +9,6 @@ import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
-import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.LoadHistoryListener;
-import io.rocketchat.livechat.callback.MessageListener;
-import io.rocketchat.livechat.callback.SubscribeListener;
-import io.rocketchat.livechat.middleware.LiveChatMiddleware;
-import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -99,6 +93,12 @@ public class RocketChatAPI extends Socket {
 
     public void sendMessage(String msgId, String roomID, String message){
         int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
+    }
+
+    public void sendMessage(String msgId, String roomID, String message, MessageListener.MessageAckListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.SENDMESSAGE);
         sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
     }
 
@@ -236,6 +236,10 @@ public class RocketChatAPI extends Socket {
 
         public void sendMessage(String message){
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),getRoomId(),message);
+        }
+
+        public void sendMessage(String message, MessageListener.MessageAckListener listener){
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),getRoomId(),message,listener);
         }
 
         public void subscribeRoom(){

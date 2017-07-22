@@ -17,9 +17,6 @@ public class Main extends CoreAdapter{
 
     RocketChatAPI api;
     private static String serverurl="ws://localhost:3000/websocket";
-    Date lasttimestamp;
-    private String roomId;
-
 
     public void call(){
         api=new RocketChatAPI(serverurl);
