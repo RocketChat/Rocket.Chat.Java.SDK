@@ -9,10 +9,10 @@ import org.json.JSONObject;
 
 public class Room {
 
-    String roomId;
-    String roomType;
-    String roomName;
-    UserObject userInfo;
+    protected String roomId;
+    protected String roomType;
+    protected String roomName;
+    protected UserObject userInfo;
 
     public Room(JSONObject object){
         try {

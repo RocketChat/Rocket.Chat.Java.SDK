@@ -27,6 +27,7 @@ public class SubscriptionObject extends Room{
     public SubscriptionObject(JSONObject object)  {
         super(object);
         try {
+            roomId = object.getString("rid");
             if (object.optJSONObject("ts")!=null) {
                 roomCreated = new Date(object.getJSONObject("ts").getLong("$date"));
             }

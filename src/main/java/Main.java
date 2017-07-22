@@ -54,8 +54,15 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-        RocketChatAPI.ChatRoom room=api.createChatRooms(subscriptions).getChatRoomByName("demosachin");
-        room.sendMessage("Hey there");
+        String roomid = null;
+        for (SubscriptionObject subscriptionObject : subscriptions){
+            if (subscriptionObject.getRoomName().equals("demosachin")){
+                roomid=subscriptionObject.getRoomId();
+                System.out.println("Id is "+roomid);
+            }
+        }
+
+        api.sendMessage(Utils.shortUUID(),roomid,"Hey there my friend");
     }
 
     @Override
