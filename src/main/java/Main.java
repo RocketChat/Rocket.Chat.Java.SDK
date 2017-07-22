@@ -1,14 +1,12 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
+import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
-import io.rocketchat.livechat.LiveChatAPI;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
@@ -18,7 +16,7 @@ public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    private static String serverurl="ws://localhost:3000/websocket";
+    private static String serverurl="wss://demo.rocket.chat/websocket";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -33,7 +31,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin","sachin9922",this);
+        api.login("sachin.shinde","sachin123",this);
     }
 
     @Override
@@ -49,20 +47,19 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getSubscriptions(this);
+//        api.getSubscriptions(this);
+        api.getRooms(this);
     }
 
     @Override
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-        String roomid = null;
-        for (SubscriptionObject subscriptionObject : subscriptions){
-            if (subscriptionObject.getRoomName().equals("demosachin")){
-                roomid=subscriptionObject.getRoomId();
-                System.out.println("Id is "+roomid);
-            }
-        }
 
-        api.sendMessage(Utils.shortUUID(),roomid,"Hey there my friend");
+    }
+
+    @Override
+    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+        RocketChatAPI.ChatRoom room=api.createChatRooms(rooms).getChatRoomByName("demosachin");
+        room.sendMessage("sending message via rooms");
     }
 
     @Override

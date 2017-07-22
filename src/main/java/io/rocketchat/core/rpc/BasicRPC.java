@@ -5,6 +5,8 @@ import io.rocketchat.common.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by sachin on 8/6/17.
  */
@@ -63,7 +65,13 @@ public class BasicRPC extends RPC {
     /**
      * Not Tested
      */
-    public static String getRooms(int integer){
-        return getRemoteMethodObject(integer,GETROOMS).toString();
+    public static String getRooms(int integer, Date date){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("$date",date.getTime());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getRemoteMethodObject(integer,GETROOMS,object).toString();
     }
 }
