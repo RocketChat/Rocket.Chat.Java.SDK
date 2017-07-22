@@ -83,7 +83,7 @@ public class RocketChatAPI extends Socket {
     public void getRooms(RoomListener.GetRoomListener getRoomListener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,getRoomListener, CoreMiddleware.ListenerType.GETROOMS);
-        sendDataInBackground(BasicRPC.getRooms(uniqueID,new Date()));
+        sendDataInBackground(BasicRPC.getRooms(uniqueID));
     }
 
     //Tested

@@ -53,13 +53,15 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-
+        RocketChatAPI.ChatRoom room=api.createChatRooms(subscriptions).getChatRoomByName("demosachin");
+        room.sendMessage("sending message via rooms");
     }
 
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         RocketChatAPI.ChatRoom room=api.createChatRooms(rooms).getChatRoomByName("demosachin");
-        room.sendMessage("sending message via rooms");
+        System.out.println("Room name is "+room.getRoomData().getRoomName());
+//        room.sendMessage("sending message via rooms");
     }
 
     @Override
