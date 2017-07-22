@@ -1,4 +1,5 @@
 package io.rocketchat.core;
+import io.rocketchat.common.data.model.Room;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
@@ -189,102 +190,58 @@ public class RocketChatAPI extends Socket {
      * ChatRoom APIS
      */
 
-    public ArrayList <ChatRoom> createRooms(ArrayList <RoomObject> roomObjects){
+    public ArrayList <ChatRoom> createChatRooms(ArrayList <Room> roomObjects){
         rooms=new ArrayList<>();
-        for (RoomObject room : roomObjects){
-            rooms.add(getRoom(room));
+        for (Room room : roomObjects){
+            rooms.add(getChatRoom(room));
         }
         return rooms;
     }
 
-    public ChatRoom getRoom(RoomObject object){
-        return new ChatRoom(object);
+    public ChatRoom getChatRoom(Room room){
+        return new ChatRoom(room);
     }
 
-    public ChatRoom getRoom(SubscriptionObject object){
-        return new ChatRoom(object);
-    }
-
-    public ArrayList <ChatRoom> getRooms(){
+    public ArrayList <ChatRoom> getChatRooms(){
         return rooms;
     }
 
-    class ChatRoom{
+    class ChatRoom {
 
-        private SubscriptionObject subscriptionObject;
-        private RoomObject roomObject;
+        Room room;
 
-        String RoomName;
-        String RoomId;
-        String RoomType;
-        UserObject userInfo;
-
-        public ChatRoom(SubscriptionObject subscription){
-            this.subscriptionObject=subscription;
-            RoomName=subscription.getRoomName();
-            RoomId=subscription.getRoomId();
-            RoomType=subscription.getRoomType();
-            userInfo=subscription.getUserInfo();
+        public ChatRoom(Room room){
+            this.room=room;
         }
-
-        public ChatRoom(RoomObject room){
-            this.roomObject=room;
-            RoomName=room.getRoomName();
-            RoomId=room.getRoomId();
-            RoomType=room.getRoomType();
-            userInfo=room.getUserInfo();
-        }
-
 
         public Boolean isSubscriptionObject(){
-            return subscriptionObject!=null;
+            return room instanceof SubscriptionObject;
         }
 
-        public String getRoomName() {
-            return RoomName;
-        }
-
-        public String getRoomId() {
-            return RoomId;
-        }
-
-        public String getRoomType() {
-            return RoomType;
-        }
-
-        public UserObject getUserInfo() {
-            return userInfo;
+        public Room getRoomData() {
+            return room;
         }
 
         public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener){
-            RocketChatAPI.this.getChatHistory(getRoomId(),limit,oldestMessageTimestamp,lasttimestamp,listener);
+            RocketChatAPI.this.getChatHistory(room.getRoomId(),limit,oldestMessageTimestamp,lasttimestamp,listener);
         }
 
         public void sendIsTyping(Boolean istyping){
-            RocketChatAPI.this.sendIsTyping(getRoomId(),getMyUserName(),istyping);
+            RocketChatAPI.this.sendIsTyping(room.getRoomId(),getMyUserName(),istyping);
         }
 
         public void sendMessage(String message){
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(),getRoomId(),message);
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message);
         }
 
         public void sendMessage(String message, MessageListener.MessageAckListener listener){
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(),getRoomId(),message,listener);
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
         }
 
         public void subscribeRoom(){
-            RocketChatAPI.this.subscribeRoom(getRoomId());
+            RocketChatAPI.this.subscribeRoom(room.getRoomId());
         }
 
-        public SubscriptionObject getSubscriptionObject() {
-            return subscriptionObject;
-        }
-
-        public RoomObject getRoomObject() {
-            return roomObject;
-        }
     }
-
-
 
 }
