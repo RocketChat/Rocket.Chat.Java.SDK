@@ -17,7 +17,7 @@ public class UserObject {
 
     public UserObject(JSONObject object){
         try {
-            userId=object.getString("_id");
+            userId=object.optString("_id");
             userName=object.getString("username");
             if (object.opt("roles")!=null){
                 roles=new ArrayList<>();

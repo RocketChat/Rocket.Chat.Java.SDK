@@ -24,6 +24,10 @@ public class SubscriptionObject {
     Date updatedAt;
     String subscriptionId;
 
+    String desktopNotifications;
+    String mobilePushNotifications;
+    String emailNotifications;
+
     public SubscriptionObject(JSONObject object)  {
 
         try {
@@ -44,6 +48,11 @@ public class SubscriptionObject {
             unread = object.getInt("unread");
             updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
             subscriptionId = object.getString("_id");
+
+            desktopNotifications=object.optString("desktopNotifications");
+            mobilePushNotifications=object.optString("mobilePushNotifications");
+            emailNotifications=object.optString("emailNotifications");
+
         }catch (JSONException e) {
             e.printStackTrace();
             System.out.println("name is "+roomName);
@@ -92,5 +101,17 @@ public class SubscriptionObject {
 
     public String getSubscriptionId() {
         return subscriptionId;
+    }
+
+    public String getDesktopNotifications() {
+        return desktopNotifications;
+    }
+
+    public String getMobilePushNotifications() {
+        return mobilePushNotifications;
+    }
+
+    public String getEmailNotifications() {
+        return emailNotifications;
     }
 }

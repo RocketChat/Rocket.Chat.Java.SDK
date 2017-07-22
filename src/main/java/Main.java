@@ -62,7 +62,7 @@ public class Main extends CoreAdapter{
                 roomid=subscriptionObject.getRoomId();
             }
         }
-        System.out.println("Userinfo is"+api.userInfo);
+        System.out.println("Userinfo is"+api.getMyUserName());
 //        api.sendIsTyping(roomid,"sachin",true);
         api.sendMessage(Utils.shortUUID(),roomid,"Hi there again");
     }
