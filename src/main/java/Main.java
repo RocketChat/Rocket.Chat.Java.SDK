@@ -2,6 +2,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
@@ -61,7 +62,12 @@ public class Main extends CoreAdapter{
         }
         System.out.println("Userinfo is"+api.getMyUserName());
 //        api.sendIsTyping(roomid,"sachin",true);
-        api.sendMessage(Utils.shortUUID(),roomid,"Hi there again");
+        api.sendMessage(Utils.shortUUID(),roomid,"Hi sachin !!!!",this);
+    }
+
+    @Override
+    public void onMessageAck(RocketChatMessage message, ErrorObject error) {
+        System.out.println("Go message in return "+message.getMessage());
     }
 }
 

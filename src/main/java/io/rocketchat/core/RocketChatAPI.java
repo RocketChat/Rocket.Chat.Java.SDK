@@ -112,8 +112,6 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(SubscriptionRPC.subscribeRoom(uniqueID,room_id));
     }
 
-
-
     public void setConnectListener(ConnectListener connectListener) {
         this.connectListener = connectListener;
     }

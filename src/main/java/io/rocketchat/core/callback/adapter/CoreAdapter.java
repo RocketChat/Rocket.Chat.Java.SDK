@@ -19,7 +19,8 @@ public class CoreAdapter implements ConnectListener,
         LoginListener,
         RoomListener.GetRoomListener,
         SubscriptionListener.GetSubscriptionListener,
-        UserListener.getUserRoleListener{
+        UserListener.getUserRoleListener,
+        MessageListener.MessageAckListener{
     @Override
     public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
@@ -57,6 +58,11 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onConnectError(Exception websocketException) {
+
+    }
+
+    @Override
+    public void onMessageAck(RocketChatMessage message, ErrorObject error) {
 
     }
 }
