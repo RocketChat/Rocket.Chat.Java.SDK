@@ -2,79 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63aa3452-a326-4d90-9051-8d9e68837f7c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" afterPath="$PROJECT_DIR$/.gradle/3.2.1/taskArtifacts/taskArtifacts.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/classes/main/io/rocketchat/common/network/Socket.class" afterPath="$PROJECT_DIR$/build/classes/main/io/rocketchat/common/network/Socket.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/Main.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/Main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/allclasses-noframe.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/constant-values.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/deprecated-list.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/help-doc.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index-all.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/index.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/ErrorObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/UserObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/data/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/EventThread.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/Socket.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/network/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/Utils.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/common/utils/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/RocketChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/BasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/core/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/LiveChatAPI.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/callback/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/LiveChatStreamMiddleware.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/middleware/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/AgentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/DepartmentObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/GuestObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/LiveChatConfigObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/MessageObject.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/model/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatBasicRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSendMsgRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatSubRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/LiveChatTypingRPC.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/io/rocketchat/livechat/rpc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/overview-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-frame.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-summary.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" afterPath="$PROJECT_DIR$/build/docs/javadoc/package-tree.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" afterPath="$PROJECT_DIR$/build/publications/MyPublication/pom-default.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" afterPath="$PROJECT_DIR$/build/tmp/javadoc/javadoc.options" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Frames.txt" afterPath="$PROJECT_DIR$/Frames.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java" />
     </list>
     <ignored path="LiveChatAPI.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -111,11 +41,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
+            <state relative-caret-position="1386">
               <caret line="77" column="36" selection-start-line="77" selection-start-column="36" selection-end-line="77" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RocketChatAPI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -124,12 +64,41 @@
       <file leaf-file-name="Socket.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="156" column="5" selection-start-line="156" selection-start-column="5" selection-end-line="156" selection-end-column="5" />
+            <state relative-caret-position="376">
+              <caret line="198" column="5" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Frames.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Frames.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="216">
+              <caret line="76" column="31" selection-start-line="76" selection-start-column="31" selection-end-line="76" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RPC.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
               <folding>
-                <element signature="e#745#746#0" expanded="true" />
-                <element signature="e#785#786#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LiveChatAPI.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="165" column="29" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -544,7 +513,6 @@
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/model/MessageObject.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/model/GuestObject.java" />
-        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSubRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatHistoryRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/InitialDataListener.java" />
@@ -554,7 +522,6 @@
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/AgentListener.java" />
         <option value="$PROJECT_DIR$/LIVECHATDOC.md" />
         <option value="$PROJECT_DIR$/settings.gradle" />
-        <option value="$PROJECT_DIR$/Frames.txt" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/MessageListener.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatBasicRPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/middleware/LiveChatMiddleware.java" />
@@ -583,6 +550,8 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java" />
         <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/Frames.txt" />
+        <option value="$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java" />
       </list>
     </option>
   </component>
@@ -633,8 +602,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -649,7 +619,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemId" value="RocketChatSDK" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -659,7 +629,21 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -667,7 +651,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -677,7 +661,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemId" value="RocketChatSDK" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -685,7 +669,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
+              <option name="myItemId" value="main" />
               <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -699,17 +683,146 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="LiveChatAPI" />
+              <option name="myItemId" value="RocketChatSDK" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rpc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RocketChatSDK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="org.jetbrains.plugins.gradle.projectView.GradleTreeStructureProvider$GradleSourceSetDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="io" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="rocketchat" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="data" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1348,6 +1461,9 @@
       <workItem from="1500354953023" duration="2110000" />
       <workItem from="1500482868930" duration="1041000" />
       <workItem from="1500492605559" duration="61000" />
+      <workItem from="1500754866300" duration="381000" />
+      <workItem from="1500797023294" duration="24000" />
+      <workItem from="1500819603631" duration="3767000" />
     </task>
     <task id="LOCAL-00001" summary="changed styling">
       <created>1498578775927</created>
@@ -1399,7 +1515,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="252694000" />
+    <option name="totallyTimeSpent" value="256866000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1421,7 +1537,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33333334" sideWeight="0.5171588" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988048" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31790122" sideWeight="0.4828412" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32253087" sideWeight="0.4828412" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26576218" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1531,13 +1647,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Frames.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/middleware/LiveChatMiddleware.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -1586,13 +1695,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/rpc/LiveChatSubRPC.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -1607,24 +1709,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/ConnectListener.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/callback/InitialDataListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
           <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="15" column="38" selection-start-line="15" selection-start-column="38" selection-end-line="15" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -1726,13 +1815,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="339" column="5" selection-start-line="339" selection-start-column="5" selection-end-line="339" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/LiveChatAPI/LiveChatTest/GetIntitalDataTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -1827,28 +1909,56 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="828">
           <caret line="64" column="10" selection-start-line="64" selection-start-column="10" selection-end-line="64" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="156" column="5" selection-start-line="156" selection-start-column="5" selection-end-line="156" selection-end-column="5" />
-          <folding>
-            <element signature="e#745#746#0" expanded="true" />
-            <element signature="e#785#786#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
+        <state relative-caret-position="1386">
           <caret line="77" column="36" selection-start-line="77" selection-start-column="36" selection-end-line="77" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/network/Socket.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="198" column="5" selection-start-line="198" selection-start-column="5" selection-end-line="198" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Frames.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="76" column="31" selection-start-line="76" selection-start-column="31" selection-end-line="76" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/livechat/LiveChatAPI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="165" column="29" selection-start-line="165" selection-start-column="29" selection-end-line="165" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/common/data/rpc/RPC.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
