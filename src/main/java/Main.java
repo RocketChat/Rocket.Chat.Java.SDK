@@ -1,8 +1,12 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
+import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RocketChatMessage;
+import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
@@ -47,8 +51,31 @@ public class Main extends CoreAdapter{
     }
 
     @Override
+    public void onMessage(String roomId, RocketChatMessage message) {
+        System.out.println("Got message "+message.getMessage()+ " from roomId "+roomId);
+    }
+
+    @Override
+    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+        System.out.println("Got rooms");
+        api.subscribeRoom(rooms.get(0).getRoomId(),true,this,this);
+    }
+
+    @Override
     public void onMessageAck(RocketChatMessage message, ErrorObject error) {
         System.out.println("Go message in return "+message.getMessage());
+    }
+
+    @Override
+    public void onSubscribe(CoreStreamMiddleware.SubType type, String subId) {
+        System.out.println("got here");
+        switch (type) {
+            case SUBSCRIBEROOM:
+                System.out.println("Successfully subscribed to room "+subId);
+                break;
+            case OTHER:
+                break;
+        }
     }
 }
 
@@ -60,4 +87,5 @@ public class Main extends CoreAdapter{
 /**
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
+
 

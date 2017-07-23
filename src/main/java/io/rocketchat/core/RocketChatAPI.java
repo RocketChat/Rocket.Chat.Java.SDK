@@ -30,7 +30,7 @@ public class RocketChatAPI extends Socket {
     ConnectListener connectListener;
 
     CoreMiddleware coreMiddleware;
-    CoreStreamMiddleware streamMiddleware;
+    CoreStreamMiddleware coreStreamMiddleware;
 
     ArrayList <ChatRoom> rooms;
 
@@ -39,6 +39,7 @@ public class RocketChatAPI extends Socket {
         super(url);
         integer=new AtomicInteger(1);
         coreMiddleware=CoreMiddleware.getInstance();
+        coreStreamMiddleware=CoreStreamMiddleware.getInstance();
     }
 
     public String getMyUserName(){
@@ -114,9 +115,15 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID,s));
     }
 
-    public void subscribeRoom(String room_id){
+    public void subscribeRoom(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
-        sendDataInBackground(SubscriptionRPC.subscribeRoom(uniqueID,room_id));
+        if (subscribeListener !=null) {
+            coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOM);
+        }
+        if (listener!=null){
+            coreStreamMiddleware.subscribeRoom(listener);
+        }
+        sendDataInBackground(SubscriptionRPC.subscribeRoom(uniqueID,room_id,enable));
     }
 
     public void setConnectListener(ConnectListener connectListener) {
@@ -158,8 +165,10 @@ public class RocketChatAPI extends Socket {
                 coreMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
                 break;
             case READY:
+                coreStreamMiddleware.processSubSuccess(object);
                 break;
             case CHANGED:
+                coreStreamMiddleware.processCallback(object);
                 break;
             case OTHER:
                 break;
@@ -256,8 +265,8 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
         }
 
-        public void subscribeRoom(){
-            RocketChatAPI.this.subscribeRoom(room.getRoomId());
+        public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+            RocketChatAPI.this.subscribeRoom(room.getRoomId(),true,subscribeListener,listener);
         }
 
     }
