@@ -1,5 +1,8 @@
 package io.rocketchat.core.middleware;
 
+import io.rocketchat.core.callback.SubscribeListener;
+import org.json.JSONObject;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -10,7 +13,8 @@ public class CoreStreamMiddleware {
 
 
     public enum SubType {
-
+        SUBSCRIBEROOM,
+        OTHER
     }
 
     public static CoreStreamMiddleware middleware=new CoreStreamMiddleware();
@@ -23,5 +27,21 @@ public class CoreStreamMiddleware {
 
     public static CoreStreamMiddleware getInstance(){
         return middleware;
+    }
+
+    public void createSubCallback(String id, SubscribeListener callback, SubType subscription){
+        subcallbacks.put(id,new Object[]{callback,subscription});
+    }
+
+    public void processCallback(JSONObject object){
+        String s = object.optString("collection");
+
+    }
+
+    public static SubType parse(String s){
+        if (s.equals("stream-room-messages")) {
+            return SubType.SUBSCRIBEROOM;
+        }
+        return SubType.OTHER;
     }
 }
