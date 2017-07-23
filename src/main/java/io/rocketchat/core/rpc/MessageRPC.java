@@ -23,4 +23,34 @@ public class MessageRPC extends RPC{
 
         return getRemoteMethodObject(integer,SENDMESSAGE,object).toString();
     }
+
+    // TODO: 24/7/17 Implement this
+    public static String deleteMessage(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement this
+    public static String updateMessage(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement this
+    public static String pinMessage(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement this
+    public static String unpinMessage(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement this
+    public static String starMessage(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement this
+    public static String setReaction(int integer){
+        return "";
+    }
 }

@@ -66,4 +66,26 @@ public class BasicRPC extends RPC {
     public static String getRooms(int integer){
         return getRemoteMethodObject(integer,GETROOMS).toString();
     }
+
+
+    // TODO: 24/7/17 implement and test it
+    public static String getRoomRoles(int integer){
+        return "";
+    }
+
+    /**
+     * Returns a list of custom emoji registered with the server. There’s no need for parameters.
+     * @param integer
+     * @return
+     */
+    public static String listCustomEmoji(int integer){
+        return "";
+    }
+
+    // TODO: 24/7/17 Implement and test logout
+    public static String logout(int integer){
+        return "";
+    }
+
+
 }
