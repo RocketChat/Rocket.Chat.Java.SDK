@@ -93,6 +93,7 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.getRoomRoles(uniqueID,roomId));
     }
 
+    //
     public void listCustomEmoji(){
         int uniqueID=integer.getAndIncrement();
         sendDataInBackground(BasicRPC.listCustomEmoji(uniqueID));

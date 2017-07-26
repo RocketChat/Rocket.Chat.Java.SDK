@@ -54,7 +54,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         System.out.println("Name is "+rooms.get(0).getRoomName());
-        api.getRoomRoles(rooms.get(0).getRoomId(),this);
+        api.listCustomEmoji();
 //        room=api.createChatRoom(rooms.get(0));
 //        room.getChatHistory(20,new Date(),null, this);
     }
