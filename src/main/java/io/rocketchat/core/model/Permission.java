@@ -20,6 +20,7 @@ public class Permission {
     public Permission(JSONObject object){
         try {
             id= object.getString("_id");
+            roles=new ArrayList<>();
             JSONArray array= object.getJSONArray("roles");
             for (int i=0;i<array.length();i++){
                 roles.add(array.getString(i));

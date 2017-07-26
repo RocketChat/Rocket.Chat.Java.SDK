@@ -5,10 +5,7 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
-import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
 
@@ -18,6 +15,8 @@ import java.util.ArrayList;
 public class CoreAdapter implements ConnectListener,
         HistoryListener,
         LoginListener,
+        AccountListener.getPermissionsListener,
+        AccountListener.getPublicSettingsListener,
         RoomListener.GetRoomListener,
         SubscriptionListener.GetSubscriptionListener,
         UserListener.getUserRoleListener,
@@ -76,6 +75,16 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onMessage(String roomId, RocketChatMessage message) {
+
+    }
+
+    @Override
+    public void onGetPermissions(ArrayList<Permission> permissions, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onGetPublicSettings(ArrayList<PublicSetting> settings, ErrorObject error) {
 
     }
 }

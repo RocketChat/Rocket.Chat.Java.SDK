@@ -2,6 +2,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
+import io.rocketchat.core.model.Permission;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
@@ -48,10 +49,13 @@ public class Main extends CoreAdapter{
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
 //        api.getRooms(this);
-        api.getPermissions();
+        api.getPermissions(this);
     }
 
-
+    @Override
+    public void onGetPermissions(ArrayList<Permission> permissions, ErrorObject error) {
+        System.out.println("got permissions");
+    }
 
     @Override
     public void onMessage(String roomId, RocketChatMessage message) {

@@ -19,7 +19,9 @@ public class MetaData {
             revision=object.getInt("revision");
             created=new Date(object.getInt("created"));
             version=object.getInt("version");
-            updated=new Date(object.getInt("updated"));
+            if (object.opt("updated")!=null) {
+                updated = new Date(object.getInt("updated"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

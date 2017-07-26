@@ -64,13 +64,15 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
     }
 
-    public void getPermissions(){
+    public void getPermissions(AccountListener.getPermissionsListener listener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.GETPERMISSIONS);
         sendDataInBackground(AccountRPC.getPermissions(uniqueID,null));
     }
 
-    public void getPublicSettings(){
+    public void getPublicSettings(AccountListener.getPublicSettingsListener listener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.GETPUBLICSETTINGS);
         sendDataInBackground(AccountRPC.getPublicSettings(uniqueID,null));
     }
 
