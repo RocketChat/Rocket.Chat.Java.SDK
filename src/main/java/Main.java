@@ -1,13 +1,11 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.SimpleListener;
-import io.rocketchat.common.utils.EmojiSheet;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
-import io.rocketchat.core.model.*;
+import io.rocketchat.core.model.RocketChatMessage;
+import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.TokenObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
@@ -17,7 +15,7 @@ public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    private static String serverurl="ws://localhost:3000/websocket";
+    private static String serverurl="wss://demo.rocket.chat/websocket";
     private RocketChatAPI.ChatRoom room;
 
     public void call(){
@@ -33,7 +31,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin","sachin9922",this);
+        api.login("sachin.shinde","sachin123",this);
     }
 
     @Override
@@ -55,8 +53,9 @@ public class Main extends CoreAdapter{
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         System.out.println("Name is "+rooms.get(0).getRoomName());
-        room=api.createChatRoom(rooms.get(0));
-        room.getChatHistory(20,new Date(),null, this);
+        api.getRoomRoles(rooms.get(0).getRoomId(),rooms.get(1).getRoomId());
+//        room=api.createChatRoom(rooms.get(0));
+//        room.getChatHistory(20,new Date(),null, this);
     }
 
     @Override

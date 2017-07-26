@@ -18,6 +18,7 @@ public class CoreAdapter implements ConnectListener,
         AccountListener.getPermissionsListener,
         AccountListener.getPublicSettingsListener,
         RoomListener.GetRoomListener,
+        RoomListener.RoomRolesListener,
         SubscriptionListener.GetSubscriptionListener,
         UserListener.getUserRoleListener,
         MessageListener.MessageAckListener,
@@ -85,6 +86,11 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onGetPublicSettings(ArrayList<PublicSetting> settings, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
 
     }
 }

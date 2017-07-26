@@ -107,3 +107,8 @@ a["{\"msg\":\"result\",\"id\":\"11\",\"result\":{\"update\":[{\"_id\":\"GENERAL\
 
 //Reply to message
 ["{\"msg\":\"method\",\"method\":\"sendMessage\",\"params\":[{\"_id\":\"phfZwdCS8xyNnFWAc\",\"rid\":\"GENERAL\",\"msg\":\"[ ](http://localhost:3000/channel/general?msg=qp9GFsD6hLWm4rpMs) @sachin Got it man\"}],\"id\":\"19\"}"]
+
+//get room roles
+Message is {"msg":"result","id":"3","result":[{"rid":"upidD5kfC2fES9tvN","u":{"_id":"Q5ypB7Yzc2gon6NLc","username":"fedor"},"roles":["owner"],"_id":"Ki7g4pEapcYAM9XiB"}]}
+
+Message is {"msg":"result","id":"3","result":[{"rid":"GENERAL","u":{"_id":"QC8QDtuZRxaw6XaJd","username":"staci.holmes.segarra"},"roles":["owner"],"_id":"gFKddMKZGYHJ5R7Hs"}]}

@@ -77,7 +77,7 @@ public class BasicRPC extends RPC {
      * @return
      */
     public static String getRoomRoles(int integer, String ... roomId){
-        return getRemoteMethodObject(integer,GETROOMROLES,roomId).toString();
+        return getRemoteMethodObject(integer,GETROOMROLES,(Object [])roomId).toString();
     }
 
     /**

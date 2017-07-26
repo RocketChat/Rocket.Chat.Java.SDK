@@ -9,7 +9,6 @@ import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
-import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
@@ -85,6 +84,21 @@ public class RocketChatAPI extends Socket {
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,userRoleListener, CoreMiddleware.ListenerType.GETUSERROLES);
         sendDataInBackground(BasicRPC.getUserRoles(uniqueID));
+    }
+
+    public void getRoomRoles(String ... roomId){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.getRoomRoles(uniqueID,roomId));
+    }
+
+    public void listCustomEmoji(){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.listCustomEmoji(uniqueID));
+    }
+
+    public void logout(){
+        int uniqueID=integer.getAndIncrement();
+        sendDataInBackground(BasicRPC.logout(uniqueID));
     }
 
 
