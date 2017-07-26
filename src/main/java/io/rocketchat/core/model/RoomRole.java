@@ -16,7 +16,7 @@ public class RoomRole {
     UserObject user;
     ArrayList <String> roles;
 
-    RoomRole(JSONObject object){
+    public RoomRole(JSONObject object){
         try {
             id= object.getString("_id");
             roomId=object.getString("rid");

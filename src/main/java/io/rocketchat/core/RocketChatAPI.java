@@ -86,8 +86,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.getUserRoles(uniqueID));
     }
 
-    public void getRoomRoles(String ... roomId){
+    public void getRoomRoles(String [] roomId,RoomListener.RoomRolesListener listener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.GETROOMROLES);
         sendDataInBackground(BasicRPC.getRoomRoles(uniqueID,roomId));
     }
 

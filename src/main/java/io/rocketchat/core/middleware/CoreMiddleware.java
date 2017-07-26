@@ -26,6 +26,7 @@ public class CoreMiddleware {
         GETUSERROLES,
         GETSUBSCRIPTIONS,
         GETROOMS,
+        GETROOMROLES,
         LOADHISTORY,
         SENDMESSAGE,
         MESSAGEOP
@@ -134,6 +135,20 @@ public class CoreMiddleware {
                             list.add(new RoomObject(array.optJSONObject(j)));
                         }
                         getRoomListener.onGetRooms(list,null);
+                    }
+                    break;
+                case GETROOMROLES:
+                    RoomListener.RoomRolesListener roomRolesListener= (RoomListener.RoomRolesListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        roomRolesListener.onGetRoomRoles(null,errorObject);
+                    }else{
+                        ArrayList<RoomRole> list=new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new RoomRole(array.optJSONObject(j)));
+                        }
+                        roomRolesListener.onGetRoomRoles(list,null);
                     }
                     break;
                 case LOADHISTORY:
