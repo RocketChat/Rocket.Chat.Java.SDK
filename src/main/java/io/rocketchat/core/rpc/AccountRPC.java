@@ -9,7 +9,6 @@ import java.util.Date;
 /**
  * Created by sachin on 24/7/17.
  */
-// TODO: 24/7/17 Implement AccountRPC required for signup
 public class AccountRPC extends RPC{
 
     public static String PUBLICSETTINGS="public-settings/get";
@@ -24,7 +23,7 @@ public class AccountRPC extends RPC{
         return getCommonData(integer,GETPERMISSIONS,date);
     }
 
-    public static String getCommonData(int integer, String methodName, Date date){
+    private static String getCommonData(int integer, String methodName, Date date){
         if (date==null) {
             return getRemoteMethodObject(integer, methodName).toString();
         }else{

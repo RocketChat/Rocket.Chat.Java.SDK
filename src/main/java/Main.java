@@ -47,8 +47,11 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getRooms(this);
+//        api.getRooms(this);
+        api.getPublicSettings();
     }
+
+
 
     @Override
     public void onMessage(String roomId, RocketChatMessage message) {
