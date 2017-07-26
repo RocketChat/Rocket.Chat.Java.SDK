@@ -1,4 +1,4 @@
-package io.rocketchat.core.callback.adapter;
+package io.rocketchat.core.adapter;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;

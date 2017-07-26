@@ -1,7 +1,7 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.callback.adapter.CoreAdapter;
+import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
