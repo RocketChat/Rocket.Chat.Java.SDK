@@ -27,6 +27,7 @@ public class CoreMiddleware {
         GETSUBSCRIPTIONS,
         GETROOMS,
         GETROOMROLES,
+        LISTCUSTOMEMOJI,
         LOADHISTORY,
         SENDMESSAGE,
         MESSAGEOP
@@ -149,6 +150,20 @@ public class CoreMiddleware {
                             list.add(new RoomRole(array.optJSONObject(j)));
                         }
                         roomRolesListener.onGetRoomRoles(list,null);
+                    }
+                    break;
+                case LISTCUSTOMEMOJI:
+                    EmojiListener emojiListener= (EmojiListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        emojiListener.onListCustomEmoji(null,errorObject);
+                    }else{
+                        ArrayList<Emoji> list=new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new Emoji(array.optJSONObject(j)));
+                        }
+                        emojiListener.onListCustomEmoji(list,null);
                     }
                     break;
                 case LOADHISTORY:

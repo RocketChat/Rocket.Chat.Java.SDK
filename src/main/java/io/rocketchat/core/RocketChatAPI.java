@@ -94,8 +94,9 @@ public class RocketChatAPI extends Socket {
     }
 
     //
-    public void listCustomEmoji(){
+    public void listCustomEmoji(EmojiListener listener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.LISTCUSTOMEMOJI);
         sendDataInBackground(BasicRPC.listCustomEmoji(uniqueID));
     }
 

@@ -19,6 +19,7 @@ public class CoreAdapter implements ConnectListener,
         AccountListener.getPublicSettingsListener,
         RoomListener.GetRoomListener,
         RoomListener.RoomRolesListener,
+        EmojiListener,
         SubscriptionListener.GetSubscriptionListener,
         UserListener.getUserRoleListener,
         MessageListener.MessageAckListener,
@@ -91,6 +92,11 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
 
     }
 }

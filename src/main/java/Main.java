@@ -1,10 +1,7 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
-import io.rocketchat.core.model.RoomRole;
-import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
 
@@ -48,15 +45,23 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.getRooms(this);
+        api.listCustomEmoji(this);
+//        api.getRooms(this);
     }
 
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         System.out.println("Name is "+rooms.get(0).getRoomName());
-        api.listCustomEmoji();
+        api.listCustomEmoji(this);
 //        room=api.createChatRoom(rooms.get(0));
 //        room.getChatHistory(20,new Date(),null, this);
+    }
+
+    @Override
+    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
+        for (Emoji emoji : emojis){
+            System.out.println("name is "+emoji.getName());
+        }
     }
 
     @Override
