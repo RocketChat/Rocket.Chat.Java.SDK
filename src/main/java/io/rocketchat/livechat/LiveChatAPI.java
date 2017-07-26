@@ -18,8 +18,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 
-//Todo Make network layer pluggable (Any websocket library can be used with SDK)
-
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;

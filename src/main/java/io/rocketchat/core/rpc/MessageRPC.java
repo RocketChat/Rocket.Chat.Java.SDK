@@ -10,6 +10,12 @@ import org.json.JSONObject;
 public class MessageRPC extends RPC{
 
     public static String SENDMESSAGE="sendMessage";
+    public static String DELETEMESSAGE="deleteMessage";
+    public static String UPDATEMESSAGE="updateMessage";
+    public static String PINMESSAGE="pinMessage";
+    public static String UNPINMESSAGE="unpinMessage";
+    public static String STARMESSAGE="starMessage";
+    public static String SETREACTION="setReaction";
 
     public static String sendMessage(int integer, String msgId, String roomId, String message){
         JSONObject object=new JSONObject();
@@ -24,33 +30,47 @@ public class MessageRPC extends RPC{
         return getRemoteMethodObject(integer,SENDMESSAGE,object).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String deleteMessage(int integer){
-        return "";
+
+    public static String deleteMessage(int integer, String msgId){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("_id",msgId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getRemoteMethodObject(integer,DELETEMESSAGE,object).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String updateMessage(int integer){
-        return "";
+
+    public static String updateMessage(int integer, JSONObject updatedMessage){
+        return getRemoteMethodObject(integer,UPDATEMESSAGE,updatedMessage).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String pinMessage(int integer){
-        return "";
+
+    public static String pinMessage(int integer, JSONObject message){
+        return getRemoteMethodObject(integer,PINMESSAGE,message).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String unpinMessage(int integer){
-        return "";
+
+    public static String unpinMessage(int integer, JSONObject message){
+        return getRemoteMethodObject(integer,UNPINMESSAGE,message).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String starMessage(int integer){
-        return "";
+
+    public static String starMessage(int integer, String msgId, String roomId, Boolean starred){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("_id",msgId);
+            object.put("rid",roomId);
+            object.put("starred",starred);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return getRemoteMethodObject(integer,STARMESSAGE,object).toString();
     }
 
-    // TODO: 24/7/17 Implement this
-    public static String setReaction(int integer){
-        return "";
+
+    public static String setReaction(int integer, String emojiId, String msgId){
+        return getRemoteMethodObject(integer,SETREACTION,emojiId,msgId).toString();
     }
 }
