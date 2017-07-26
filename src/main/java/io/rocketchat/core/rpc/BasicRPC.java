@@ -15,6 +15,9 @@ public class BasicRPC extends RPC {
     public static String GETUSERROLES="getUserRoles";
     public static String GETSUBSCRIPTIONS="subscriptions/get";
     public static String GETROOMS="rooms/get";
+    public static String GETROOMROLES="getRoomRoles";
+    public static String LISTEMOJI="listEmojiCustom";
+    public static String LOGOUT="logout";
 
     /**
      * Tested
@@ -67,10 +70,14 @@ public class BasicRPC extends RPC {
         return getRemoteMethodObject(integer,GETROOMS).toString();
     }
 
-
-    // TODO: 24/7/17 implement and test it
-    public static String getRoomRoles(int integer){
-        return "";
+    /**
+     * Used to return users with room roles
+     * @param integer
+     * @param roomId List of comma separated room Id to return room specific roles
+     * @return
+     */
+    public static String getRoomRoles(int integer, String ... roomId){
+        return getRemoteMethodObject(integer,GETROOMROLES,roomId).toString();
     }
 
     /**
@@ -79,12 +86,16 @@ public class BasicRPC extends RPC {
      * @return
      */
     public static String listCustomEmoji(int integer){
-        return "";
+        return getRemoteMethodObject(integer,LISTEMOJI).toString();
     }
 
-    // TODO: 24/7/17 Implement and test logout
+    /**
+     * Used to logout from server
+     * @param integer
+     * @return
+     */
     public static String logout(int integer){
-        return "";
+        return getRemoteMethodObject(integer,LOGOUT).toString();
     }
 
 
