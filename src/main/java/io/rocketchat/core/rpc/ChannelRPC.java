@@ -9,6 +9,17 @@ import io.rocketchat.common.data.rpc.RPC;
 // TODO: 24/7/17 Implement everything related to channels
 public class ChannelRPC extends RPC {
 
+    public static String CREATEPUBLICGROUP="createChannel";
+    public static String CREATEPRIVATEGROUP="createPrivateGroup";
+    public static String DELETEGROUP="eraseRoom";
+    public static String ARCHIVEROOM="archiveRoom";
+    public static String UNARCHIEVEROOM="unarchiveRoom";
+    public static String JOINPUBLICGROUP="joinRoom";
+    public static String LEAVEGROUP="leaveRoom";
+    public static String HIDEROOM="hideRoom";
+    public static String OPENROOM="openRoom";
+    public static String SETFAVOURITEROOM="toggleFavorite";
+    public static String SAVEROOMSETTINGS="saveRoomSettings";
     /**
      * Its a creating channel
      * @return
