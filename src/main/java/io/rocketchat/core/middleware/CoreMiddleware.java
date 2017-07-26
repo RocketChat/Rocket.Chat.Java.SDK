@@ -4,10 +4,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.callback.*;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
-import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,6 +20,8 @@ public class CoreMiddleware {
 
     public enum ListenerType {
         LOGIN,
+        GETPERMISSIONS,
+        GETPUBLICSETTINGS,
         GETUSERROLES,
         GETSUBSCRIPTIONS,
         GETROOMS,
@@ -61,6 +60,34 @@ public class CoreMiddleware {
                     }else{
                         TokenObject tokenObject=new TokenObject((JSONObject) result);
                         loginListener.onLogin(tokenObject,null);
+                    }
+                    break;
+                case GETPERMISSIONS:
+                    AccountListener.getPermissionsListener getPermissionsListener= (AccountListener.getPermissionsListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        getPermissionsListener.onGetPermissions(null, errorObject);
+                    }else{
+                        ArrayList <Permission> permissions= new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            permissions.add(new Permission(array.optJSONObject(j)));
+                        }
+                        getPermissionsListener.onGetPermissions(permissions,null);
+                    }
+                    break;
+                case GETPUBLICSETTINGS:
+                    AccountListener.getPublicSettingsListener getPublicSettingsListener= (AccountListener.getPublicSettingsListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        getPublicSettingsListener.onGetPublicSettings(null,errorObject);
+                    }else{
+                        ArrayList <PublicSetting> settings= new ArrayList<>();
+                        JSONArray array = (JSONArray) result;
+                        for (int j = 0; j < array.length(); j++) {
+                            settings.add(new PublicSetting(array.optJSONObject(j)));
+                        }
+                        getPublicSettingsListener.onGetPublicSettings(settings,null);
                     }
                     break;
                 case GETUSERROLES:
