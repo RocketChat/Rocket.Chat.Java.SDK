@@ -2,6 +2,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.utils.EmojiSheet;
 import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.*;
 

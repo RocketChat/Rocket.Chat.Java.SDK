@@ -9,6 +9,7 @@ import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
@@ -122,6 +123,7 @@ public class RocketChatAPI extends Socket {
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.SENDMESSAGE);
         sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
     }
+
 
     //Tested
     public void deleteMessage(String msgId, SimpleListener listener){
@@ -321,6 +323,11 @@ public class RocketChatAPI extends Socket {
         public void sendMessage(String message, MessageListener.MessageAckListener listener){
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
         }
+
+//        public void replyMessage(RocketChatMessage msg, String message, MessageListener.MessageAckListener listener){
+//            message="[ ](?msg="+msg.getMessageId()+") @"+msg.getSender().getUserName()+" "+message;
+//            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
+//        }
 
         public void deleteMessage(String msgId, SimpleListener listener){
             RocketChatAPI.this.deleteMessage(msgId ,listener);
