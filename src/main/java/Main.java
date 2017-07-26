@@ -1,4 +1,5 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.*;
@@ -45,8 +46,14 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-        api.listCustomEmoji(this);
-//        api.getRooms(this);
+        api.logout(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Logged out successfully");
+                }
+            }
+        });
     }
 
     @Override

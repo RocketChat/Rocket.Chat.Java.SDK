@@ -98,5 +98,4 @@ public class BasicRPC extends RPC {
         return getRemoteMethodObject(integer,LOGOUT).toString();
     }
 
-
 }

@@ -100,8 +100,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.listCustomEmoji(uniqueID));
     }
 
-    public void logout(){
+    public void logout(SimpleListener listener){
         int uniqueID=integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.LOGOUT);
         sendDataInBackground(BasicRPC.logout(uniqueID));
     }
 

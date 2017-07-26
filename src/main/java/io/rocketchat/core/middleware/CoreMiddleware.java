@@ -30,7 +30,8 @@ public class CoreMiddleware {
         LISTCUSTOMEMOJI,
         LOADHISTORY,
         SENDMESSAGE,
-        MESSAGEOP
+        MESSAGEOP,
+        LOGOUT
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -198,6 +199,14 @@ public class CoreMiddleware {
                         simpleListener.callback(null,errorObject);
                     }else {
                         simpleListener.callback(true, null);
+                    }
+                    break;
+                case LOGOUT:
+                    if (object.opt("error")!=null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        ((SimpleListener) listener).callback(null,errorObject);
+                    }else {
+                        ((SimpleListener) listener).callback(true, null);
                     }
                     break;
             }
