@@ -3,6 +3,7 @@ import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.RoomRole;
 import io.rocketchat.core.model.TokenObject;
 
 import java.util.ArrayList;
@@ -53,9 +54,14 @@ public class Main extends CoreAdapter{
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         System.out.println("Name is "+rooms.get(0).getRoomName());
-        api.getRoomRoles(rooms.get(0).getRoomId(),rooms.get(1).getRoomId());
+        api.getRoomRoles(rooms.get(0).getRoomId(),this);
 //        room=api.createChatRoom(rooms.get(0));
 //        room.getChatHistory(20,new Date(),null, this);
+    }
+
+    @Override
+    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
+
     }
 
     @Override
