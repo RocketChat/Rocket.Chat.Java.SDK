@@ -48,7 +48,7 @@ public class Main extends CoreAdapter{
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
 //        api.getRooms(this);
-        api.getPublicSettings();
+        api.getPermissions();
     }
 
 

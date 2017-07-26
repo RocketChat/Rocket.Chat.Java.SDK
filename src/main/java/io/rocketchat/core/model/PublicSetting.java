@@ -15,7 +15,7 @@ public class PublicSetting {
     JSONObject enableQuery;
     String group;
     Boolean hidden;
-    Object packageValue;
+    Object packageValue;   //Can be Boolean or String
     String valueSource;
     Boolean blocked;
     Integer sorter;
@@ -24,7 +24,7 @@ public class PublicSetting {
     Date timestamp;
     Date updatedAt;
     Date createdAt;
-    Object value;
+    Object value;          // Can be Boolean or String
     String meteorSettingsValue;
     MetaData metaData;
     Integer loki;
