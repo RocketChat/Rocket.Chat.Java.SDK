@@ -1,10 +1,12 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.common.utils.EmojiSheet;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.adapter.CoreAdapter;
-import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by sachin on 7/6/17.
@@ -15,6 +17,7 @@ public class Main extends CoreAdapter{
 
     RocketChatAPI api;
     private static String serverurl="ws://localhost:3000/websocket";
+    private RocketChatAPI.ChatRoom room;
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -45,46 +48,19 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token "+token);
-//        api.getRooms(this);
-        api.getPublicSettings(this);
-    }
-
-    @Override
-    public void onGetPermissions(ArrayList<Permission> permissions, ErrorObject error) {
-
-    }
-
-    @Override
-    public void onGetPublicSettings(ArrayList<PublicSetting> settings, ErrorObject error) {
-
-    }
-
-    @Override
-    public void onMessage(String roomId, RocketChatMessage message) {
-        System.out.println("Got message "+message.getMessage()+ " from roomId "+roomId);
+        api.getRooms(this);
     }
 
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        System.out.println("Got rooms");
-        api.subscribeRoom(rooms.get(0).getRoomId(),true,this,this);
+        System.out.println("Name is "+rooms.get(0).getRoomName());
+        room=api.createChatRoom(rooms.get(0));
+        room.getChatHistory(20,new Date(),null, this);
     }
 
     @Override
-    public void onMessageAck(RocketChatMessage message, ErrorObject error) {
-        System.out.println("Go message in return "+message.getMessage());
-    }
-
-    @Override
-    public void onSubscribe(CoreStreamMiddleware.SubType type, String subId) {
-        System.out.println("got here");
-        switch (type) {
-            case SUBSCRIBEROOM:
-                System.out.println("Successfully subscribed to room "+subId);
-                break;
-            case OTHER:
-                break;
-        }
+    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+        System.out.println("First message is "+list.get(0).getMessage());
     }
 }
 

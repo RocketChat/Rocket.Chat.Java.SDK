@@ -3,6 +3,7 @@ package io.rocketchat.core.middleware;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.model.*;
 import org.json.JSONArray;
@@ -26,7 +27,8 @@ public class CoreMiddleware {
         GETSUBSCRIPTIONS,
         GETROOMS,
         LOADHISTORY,
-        SENDMESSAGE
+        SENDMESSAGE,
+        MESSAGEOP
     }
 
     ConcurrentHashMap<Long,Object[]> callbacks;
@@ -42,7 +44,9 @@ public class CoreMiddleware {
     }
 
     public void createCallback(long i, Listener listener, CoreMiddleware.ListenerType type){
-        callbacks.put(i,new Object[]{listener,type});
+        if (listener!=null) {
+            callbacks.put(i, new Object[]{listener, type});
+        }
     }
 
     public void processCallback(long i, JSONObject object){
@@ -155,6 +159,15 @@ public class CoreMiddleware {
                     }else{
                         RocketChatMessage message=new RocketChatMessage((JSONObject) result);
                         ackListener.onMessageAck(message,null);
+                    }
+                    break;
+                case MESSAGEOP:
+                    SimpleListener simpleListener= (SimpleListener) listener;
+                    if (object.opt("error")!=null){
+                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
+                        simpleListener.callback(null,errorObject);
+                    }else {
+                        simpleListener.callback(true, null);
                     }
                     break;
             }

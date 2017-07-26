@@ -3,6 +3,7 @@ import io.rocketchat.common.data.model.Room;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
@@ -64,12 +65,14 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.loginUsingToken(uniqueID,token));
     }
 
+    //Tested
     public void getPermissions(AccountListener.getPermissionsListener listener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.GETPERMISSIONS);
         sendDataInBackground(AccountRPC.getPermissions(uniqueID,null));
     }
 
+    //Tested
     public void getPublicSettings(AccountListener.getPublicSettingsListener listener){
         int uniqueID=integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.GETPUBLICSETTINGS);
@@ -106,27 +109,69 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID,roomID,oldestMessageTimestamp,limit,lasttimestamp));
     }
 
+    //Tested
     public void sendIsTyping(String roomId, String username, Boolean istyping){
         int uniqueID = integer.getAndIncrement();
         sendDataInBackground(TypingRPC.sendTyping(uniqueID,roomId,username,istyping));
     }
 
-    public void sendMessage(String msgId, String roomID, String message){
-        int uniqueID = integer.getAndIncrement();
-        sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
-    }
 
+    //Tested
     public void sendMessage(String msgId, String roomID, String message, MessageListener.MessageAckListener listener){
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.SENDMESSAGE);
         sendDataInBackground(MessageRPC.sendMessage(uniqueID,msgId,roomID,message));
     }
 
+    //Tested
+    public void deleteMessage(String msgId, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.deleteMessage(uniqueID,msgId));
+    }
+
+    //Tested
+    public void updateMessage (String msgId, String roomId, String message, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.updateMessage(uniqueID,msgId,roomId,message));
+    }
+
+    //Tested
+    public void pinMessage ( JSONObject message, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.pinMessage(uniqueID,message));
+    }
+
+    //Tested
+    public void unpinMessage (JSONObject message, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.unpinMessage(uniqueID,message));
+    }
+
+    //Tested
+    public void starMessage( String msgId, String roomId, Boolean starred, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.starMessage(uniqueID,msgId,roomId,starred));
+    }
+
+    //Tested
+    public void setReaction (String emojiId, String msgId, SimpleListener listener){
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.MESSAGEOP);
+        sendDataInBackground(MessageRPC.setReaction(uniqueID,emojiId,msgId));
+    }
+
+    //Tested
     public void setStatus(PresenceRPC.Status s){
         int uniqueID = integer.getAndIncrement();
         sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID,s));
     }
 
+    //Tested
     public void subscribeRoom(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
         if (subscribeListener !=null) {
@@ -270,11 +315,35 @@ public class RocketChatAPI extends Socket {
         }
 
         public void sendMessage(String message){
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message);
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,null);
         }
 
         public void sendMessage(String message, MessageListener.MessageAckListener listener){
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
+        }
+
+        public void deleteMessage(String msgId, SimpleListener listener){
+            RocketChatAPI.this.deleteMessage(msgId ,listener);
+        }
+
+        public void updateMessage (String msgId, String message, SimpleListener listener){
+            RocketChatAPI.this.updateMessage(msgId, room.getRoomId(), message, listener);
+        }
+
+        public void pinMessage ( JSONObject message, SimpleListener listener){
+            RocketChatAPI.this.pinMessage(message, listener);
+        }
+
+        public void unpinMessage (JSONObject message, SimpleListener listener){
+            RocketChatAPI.this.unpinMessage(message, listener);
+        }
+
+        public void starMessage( String msgId, Boolean starred, SimpleListener listener){
+            RocketChatAPI.this.starMessage(msgId, room.getRoomId(),starred, listener);
+        }
+
+        public void setReaction (String emojiId, String msgId, SimpleListener listener){
+            RocketChatAPI.this.setReaction(emojiId,msgId,listener);
         }
 
         public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){

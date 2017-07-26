@@ -11,6 +11,7 @@ import org.json.JSONObject;
 /**
  * // TODO: 21/7/17 Convert members to strict data
  */
+
 public class RocketChatMessage extends Message {
 
     JSONArray mentions;
@@ -22,6 +23,8 @@ public class RocketChatMessage extends Message {
     Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
     JSONObject translations;
 
+    //This is required for message pin and unpin
+    JSONObject rawMessage;
 
     public RocketChatMessage(JSONObject object) {
         super(object);
@@ -33,6 +36,8 @@ public class RocketChatMessage extends Message {
         avatar=object.optString("avatar");
         parseUrls=object.optBoolean("parseUrls");
         translations=object.optJSONObject("translations");
+
+        rawMessage=object;
     }
 
     public JSONArray getMentions() {
@@ -65,5 +70,9 @@ public class RocketChatMessage extends Message {
 
     public JSONObject getTranslations() {
         return translations;
+    }
+
+    public JSONObject getRawJsonObject() {
+        return rawMessage;
     }
 }

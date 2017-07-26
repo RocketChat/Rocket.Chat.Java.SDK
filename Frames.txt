@@ -88,3 +88,22 @@ a["{\"msg\":\"result\",\"id\":\"11\",\"result\":{\"update\":[{\"_id\":\"GENERAL\
 // Message is {"msg":"ready","subs":["rhit65d8tso5"]}
 
 //Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"wtDLKHZHP2CR97tBx","rid":"GENERAL","msg":"Hey there","ts":{"$date":1500840766820},"u":{"_id":"YWrngQDYfc4icg8cu","username":"sachin","name":"sachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1500840766847}}]}}
+
+//Update message
+["{\"msg\":\"method\",\"method\":\"updateMessage\",\"params\":[{\"_id\":\"ZKq2kpXhTWHkZyg28\",\"msg\":\"Hey there, hello everyone\",\"rid\":\"GENERAL\"}],\"id\":\"18\"}"]
+
+//Pin message
+["{\"msg\":\"method\",\"method\":\"pinMessage\",\"params\":[{\"rid\":\"GENERAL\",\"msg\":\"Hey there, hello everyone\",\"ts\":{\"$date\":1500841355316},\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1501090368830},\"roles\":[\"admin\",null],\"_id\":\"ZKq2kpXhTWHkZyg28\",\"editedAt\":{\"$date\":1501090368827},\"editedBy\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"html\":\"Hey there, hello everyone\",\"tokens\":[],\"pinned\":true}],\"id\":\"20\"}"]
+
+
+//Unpin
+["{\"msg\":\"method\",\"method\":\"unpinMessage\",\"params\":[{\"rid\":\"GENERAL\",\"msg\":\"Hey there, hello everyone\",\"ts\":{\"$date\":1500841355316},\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1501090497820},\"roles\":[\"admin\",null],\"_id\":\"ZKq2kpXhTWHkZyg28\",\"editedAt\":{\"$date\":1501090368827},\"editedBy\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"pinned\":false,\"pinnedAt\":{\"$date\":1501090497820},\"pinnedBy\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"html\":\"Hey there, hello everyone\",\"tokens\":[]}],\"id\":\"21\"}"]
+
+//star message
+["{\"msg\":\"method\",\"method\":\"starMessage\",\"params\":[{\"rid\":\"GENERAL\",\"msg\":\"Hey there, hello everyone\",\"ts\":{\"$date\":1500841355316},\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1501090568191},\"roles\":[\"admin\",null],\"_id\":\"ZKq2kpXhTWHkZyg28\",\"editedAt\":{\"$date\":1501090368827},\"editedBy\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"pinned\":false,\"pinnedAt\":{\"$date\":1501090568191},\"pinnedBy\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"html\":\"Hey there, hello everyone\",\"tokens\":[],\"starred\":\"YWrngQDYfc4icg8cu\"}],\"id\":\"22\"}"]
+
+//Set reaction
+["{\"msg\":\"method\",\"method\":\"setReaction\",\"params\":[\":joy:\",\"ZKq2kpXhTWHkZyg28\"],\"id\":\"18\"}"]
+
+//Reply to message
+["{\"msg\":\"method\",\"method\":\"sendMessage\",\"params\":[{\"_id\":\"phfZwdCS8xyNnFWAc\",\"rid\":\"GENERAL\",\"msg\":\"[ ](http://localhost:3000/channel/general?msg=qp9GFsD6hLWm4rpMs) @sachin Got it man\"}],\"id\":\"19\"}"]

@@ -1,12 +1,14 @@
 package io.rocketchat.core.rpc;
 
 import io.rocketchat.common.data.rpc.RPC;
+import io.rocketchat.core.model.RocketChatMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by sachin on 21/7/17.
  */
+
 public class MessageRPC extends RPC{
 
     public static String SENDMESSAGE="sendMessage";
@@ -30,6 +32,10 @@ public class MessageRPC extends RPC{
         return getRemoteMethodObject(integer,SENDMESSAGE,object).toString();
     }
 
+    public static String replyToMessage(int integer, RocketChatMessage msg, String msgId, String roomId, String message){
+
+        return sendMessage(integer,msgId,roomId,message);
+    }
 
     public static String deleteMessage(int integer, String msgId){
         JSONObject object=new JSONObject();
@@ -42,8 +48,17 @@ public class MessageRPC extends RPC{
     }
 
 
-    public static String updateMessage(int integer, JSONObject updatedMessage){
-        return getRemoteMethodObject(integer,UPDATEMESSAGE,updatedMessage).toString();
+    public static String updateMessage(int integer, String msgId, String roomId, String message){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("_id",msgId);
+            object.put("msg",message);
+            object.put("rid",roomId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return getRemoteMethodObject(integer,UPDATEMESSAGE,object).toString();
     }
 
 
