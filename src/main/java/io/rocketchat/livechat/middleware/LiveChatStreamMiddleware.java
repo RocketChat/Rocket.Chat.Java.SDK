@@ -5,7 +5,7 @@ import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.callback.SubscribeListener;
 import io.rocketchat.livechat.callback.TypingListener;
 import io.rocketchat.livechat.model.AgentObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -66,12 +66,12 @@ public class LiveChatStreamMiddleware {
         switch (parse(s)) {
             case STREAMROOMMESSAGES:
                 if (subscriptionListener !=null) {
-                    MessageObject messageObject = new MessageObject(array.optJSONObject(0));
+                    LiveChatMessage liveChatMessage = new LiveChatMessage(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
-                    if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)) {
-                        subscriptionListener.onAgentDisconnect(roomId, messageObject);
+                    if (liveChatMessage.getMessagetype().equals(LiveChatMessage.MESSAGE_TYPE_CLOSE)) {
+                        subscriptionListener.onAgentDisconnect(roomId, liveChatMessage);
                     } else {
-                        subscriptionListener.onMessage(roomId, messageObject);
+                        subscriptionListener.onMessage(roomId, liveChatMessage);
                     }
                 }
                 break;

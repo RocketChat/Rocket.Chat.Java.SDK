@@ -4,7 +4,7 @@ import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.LoadHistoryListener;
 import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +29,7 @@ public class GetChatHistoryTest extends RoomParent {
     LoadHistoryListener loadHistoryListener;
 
     @Captor
-    ArgumentCaptor <ArrayList <MessageObject>> listArgumentCaptor;
+    ArgumentCaptor <ArrayList <LiveChatMessage>> listArgumentCaptor;
 
     @Captor
     ArgumentCaptor <Integer> unreadNotLoadedCaptor;

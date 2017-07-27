@@ -1,11 +1,12 @@
 package io.rocketchat.livechat.callback;
 
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 
 /**
  * Created by sachin on 12/6/17.
  */
-public interface SubscribeListener {
+public interface SubscribeListener extends Listener{
     /**
      *
      * @param type Subscription type : stream-room-messages, stream-livechat-room, typing stream

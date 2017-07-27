@@ -1,4 +1,4 @@
-package io.rocketchat.livechat.callback;
+package io.rocketchat.common.listener;
 
 /**
  * Created by sachin on 12/6/17.

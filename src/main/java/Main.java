@@ -1,10 +1,8 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.network.ReconnectionStrategy;
-import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.callback.InitialDataListener;
-import io.rocketchat.livechat.model.DepartmentObject;
-import io.rocketchat.livechat.model.LiveChatConfigObject;
+import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
 
@@ -12,28 +10,27 @@ import java.util.ArrayList;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener,  InitialDataListener{
+public class Main extends CoreAdapter{
 
-    private LiveChatAPI liveChat;
-    private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
+    RocketChatAPI api;
+    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private RocketChatAPI.ChatRoom room;
 
     public void call(){
-        liveChat=new LiveChatAPI(serverurl);
-        liveChat.setReconnectionStrategy(new ReconnectionStrategy(10,5000));
-        liveChat.connect(this);
+        api=new RocketChatAPI(serverurl);
+        api.setReconnectionStrategy(null);
+        api.connect(this);
     }
 
     public static void main(String [] args){
         new Main().call();
     }
 
-
     @Override
     public void onConnect(String sessionID) {
-        System.out.println("Connected to server");
-        liveChat.getInitialData(this);
+        System.out.println("Connected to server with id "+sessionID);
+        api.login("sachin.shinde","sachin123",this);
     }
 
     @Override
@@ -47,16 +44,41 @@ public class Main implements ConnectListener,  InitialDataListener{
     }
 
     @Override
-    public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
-        System.out.println("Got initial data " + object);
+    public void onLogin(TokenObject token, ErrorObject error) {
+        System.out.println("Logged in successfully with token "+token);
+        api.logout(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Logged out successfully");
+                }
+            }
+        });
+    }
 
-        ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
-        if (departmentObjects.size()==0){
-            System.out.println("No departments available");
-        }else{
-            System.out.println("Departments available "+departmentObjects);
+    @Override
+    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+        System.out.println("Name is "+rooms.get(0).getRoomName());
+        api.listCustomEmoji(this);
+//        room=api.createChatRoom(rooms.get(0));
+//        room.getChatHistory(20,new Date(),null, this);
+    }
+
+    @Override
+    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
+        for (Emoji emoji : emojis){
+            System.out.println("name is "+emoji.getName());
         }
+    }
 
+    @Override
+    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+        System.out.println("First message is "+list.get(0).getMessage());
     }
 }
 
@@ -68,4 +90,5 @@ public class Main implements ConnectListener,  InitialDataListener{
 /**
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
+
 
