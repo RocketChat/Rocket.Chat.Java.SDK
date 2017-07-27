@@ -9,6 +9,7 @@ import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
@@ -187,6 +188,47 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(MessageRPC.setReaction(uniqueID,emojiId,msgId));
     }
 
+
+    public void createPublicGroup(){
+
+    }
+
+    public void createPrivateGroup(){
+
+    }
+
+    public void deleteGroup(){
+
+    }
+
+    public void archieveRoom(){
+
+    }
+
+    public void unarchiveRoom(){
+
+    }
+
+    public void joinPublicGroup(){
+
+    }
+
+    public void leaveGroup(){
+
+    }
+
+    public void hideRoom(){
+
+    }
+
+    public void openRoom(){
+
+    }
+
+    public void setFavouriteRoom(){
+
+    }
+
     //Tested
     public void setStatus(PresenceRPC.Status s){
         int uniqueID = integer.getAndIncrement();
@@ -344,10 +386,11 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
         }
 
-//        public void replyMessage(RocketChatMessage msg, String message, MessageListener.MessageAckListener listener){
-//            message="[ ](?msg="+msg.getMessageId()+") @"+msg.getSender().getUserName()+" "+message;
-//            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
-//        }
+        // TODO: 27/7/17 Need more attention
+        private void replyMessage(RocketChatMessage msg, String message, MessageListener.MessageAckListener listener){
+            message="[ ](?msg="+msg.getMessageId()+") @"+msg.getSender().getUserName()+" "+message;
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
+        }
 
         public void deleteMessage(String msgId, SimpleListener listener){
             RocketChatAPI.this.deleteMessage(msgId ,listener);
@@ -376,7 +419,5 @@ public class RocketChatAPI extends Socket {
         public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
             RocketChatAPI.this.subscribeRoom(room.getRoomId(),true,subscribeListener,listener);
         }
-
     }
-
 }

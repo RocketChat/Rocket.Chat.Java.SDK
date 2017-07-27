@@ -7,7 +7,7 @@ import org.json.JSONArray;
  * Created by sachin on 24/7/17.
  */
 
-public class ChannelRPC extends RPC {
+public class RoomRPC extends RPC {
 
     public static String CREATEPUBLICGROUP="createChannel";
     public static String CREATEPRIVATEGROUP="createPrivateGroup";
