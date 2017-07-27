@@ -112,3 +112,22 @@ a["{\"msg\":\"result\",\"id\":\"11\",\"result\":{\"update\":[{\"_id\":\"GENERAL\
 Message is {"msg":"result","id":"3","result":[{"rid":"upidD5kfC2fES9tvN","u":{"_id":"Q5ypB7Yzc2gon6NLc","username":"fedor"},"roles":["owner"],"_id":"Ki7g4pEapcYAM9XiB"}]}
 
 Message is {"msg":"result","id":"3","result":[{"rid":"GENERAL","u":{"_id":"QC8QDtuZRxaw6XaJd","username":"staci.holmes.segarra"},"roles":["owner"],"_id":"gFKddMKZGYHJ5R7Hs"}]}
+
+
+//Create Public Group
+
+["{\"msg\":\"sub\",\"id\":\"FH63hhfXWRFp7SjXL\",\"name\":\"userAutocomplete\",\"params\":[{\"exceptions\":[\"sachin\",\"demosachin\"],\"term\":\"ra\"},{\"limit\":10,\"sort\":{\"username\":1}},\"UserAndRoom\"]}"]
+
+a["{\"msg\":\"added\",\"collection\":\"autocompleteRecords\",\"id\":\"rocket.cat\",\"fields\":{\"name\":\"Rocket.Cat\",\"status\":\"online\",\"username\":\"rocket.cat\"}}"]
+
+["{\"msg\":\"unsub\",\"id\":\"FH63hhfXWRFp7SjXL\"}"]
+
+["{\"msg\":\"sub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\",\"name\":\"userAutocomplete\",\"params\":[{\"exceptions\":[\"sachin\",\"demosachin\"],\"term\":\"r\"},{\"limit\":10,\"sort\":{\"username\":1}},\"UserAndRoom\"]}"]
+
+a["{\"msg\":\"added\",\"collection\":\"autocompleteRecords\",\"id\":\"rocket.cat\",\"fields\":{\"name\":\"Rocket.Cat\",\"status\":\"online\",\"username\":\"rocket.cat\"}}"]
+
+["{\"msg\":\"unsub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\"}"]
+
+["{\"msg\":\"method\",\"method\":\"createChannel\",\"params\":[\"mypublicchannel\",[\"demosachin\",\"rocket.cat\"],false],\"id\":\"14\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"rid\":\"Lgm3b8q4KPALupSYm\"}}"]
