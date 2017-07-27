@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="63aa3452-a326-4d90-9051-8d9e68837f7c" name="Default" comment="">
       <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/rpc/ChannelRPC.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/rpc/RoomRPC.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" afterPath="$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java" />
     </list>
     <ignored path="LiveChatAPI.iws" />
@@ -50,8 +51,8 @@
       <file leaf-file-name="RoomRPC.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/rpc/RoomRPC.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+            <state relative-caret-position="90">
+              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -1419,7 +1420,7 @@
       <workItem from="1501040346139" duration="15007000" />
       <workItem from="1501091825241" duration="12259000" />
       <workItem from="1501133232627" duration="5214000" />
-      <workItem from="1501154831558" duration="2643000" />
+      <workItem from="1501154831558" duration="2703000" />
     </task>
     <task id="LOCAL-00001" summary="changed styling">
       <created>1498578775927</created>
@@ -1471,7 +1472,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="303530000" />
+    <option name="totallyTimeSpent" value="303590000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1917,8 +1918,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/rpc/RoomRPC.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="29" column="25" selection-start-line="29" selection-start-column="25" selection-end-line="29" selection-end-column="25" />
+        <state relative-caret-position="90">
+          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

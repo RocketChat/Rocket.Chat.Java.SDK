@@ -39,7 +39,9 @@ public class CoreStreamMiddleware {
     }
 
     public void createSubCallback(String id, SubscribeListener callback, SubType subscription){
-        subcallbacks.put(id,new Object[]{callback,subscription});
+        if (callback!=null) {
+            subcallbacks.put(id, new Object[]{callback, subscription});
+        }
     }
 
     public void processCallback(JSONObject object){
