@@ -355,10 +355,11 @@ public class RocketChatAPI extends Socket {
      * ChatRoom class to access private methods
      */
 
-    // TODO: 29/7/17 add exceptions if method call violates permission required to execute given RPC
+    // TODO: 29/7/17 add throw custom exceptions if method call violates permission required to execute given RPC
     public class ChatRoom {
 
         Room room;
+
 
         public ChatRoom(Room room){
             this.room=room;
@@ -392,7 +393,7 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
         }
 
-        // TODO: 27/7/17 Need more attention
+        // TODO: 27/7/17 Need more attention on replying to message
         private void replyMessage(RocketChatMessage msg, String message, MessageListener.MessageAckListener listener){
             message="[ ](?msg="+msg.getMessageId()+") @"+msg.getSender().getUserName()+" "+message;
             RocketChatAPI.this.sendMessage(Utils.shortUUID(),room.getRoomId(),message,listener);
@@ -454,6 +455,6 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.setFavouriteRoom(room.getRoomId(),isFavoutite,listener);
         }
 
-        // TODO: 29/7/17 refresh methods to be added, changing data should change internal data
+        // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room
     }
 }
