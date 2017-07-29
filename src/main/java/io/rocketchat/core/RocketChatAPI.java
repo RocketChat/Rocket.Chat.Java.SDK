@@ -4,6 +4,7 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
@@ -274,15 +275,20 @@ public class RocketChatAPI extends Socket {
     //Tested
     private String subscribeRoomMessageEvent(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
-        if (subscribeListener !=null) {
-            coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOMMESSAGE);
-        }
-        if (listener!=null){
-            coreStreamMiddleware.subscribeRoomMessage(listener);
-        }
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOMMESSAGE);
+        coreStreamMiddleware.subscribeRoomMessage(listener);
         sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID,room_id,enable));
         return uniqueID;
     }
+
+    private String subscribeRoomTypingEvent(String room_id, Boolean enable, SubscribeListener subscribeListener, TypingListener listener){
+        String uniqueID= Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOMTYPING);
+        coreStreamMiddleware.subscribeRoomTyping(listener);
+        sendDataInBackground(CoreSubRPC.subscribeRoomTypingEvent(uniqueID,room_id,enable));
+        return uniqueID;
+    }
+
 
     private void unsubscribeRoom(String subId){
         sendDataInBackground(CoreSubRPC.unsubscribeRoom(subId));
@@ -469,9 +475,10 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        // TODO: 29/7/17 add code here
-        public void subscribeRoomTypingEvent(){
-
+        public void subscribeRoomTypingEvent(SubscribeListener subscribeListener, TypingListener listener){
+            if (typingSubId==null){
+                typingSubId= RocketChatAPI.this.subscribeRoomTypingEvent(room.getRoomId(), true, subscribeListener, listener);
+            }
         }
 
         public void unSubscribeRoomMessageEvent(){
