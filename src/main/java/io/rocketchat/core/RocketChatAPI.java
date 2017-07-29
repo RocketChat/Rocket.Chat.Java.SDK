@@ -338,6 +338,9 @@ public class RocketChatAPI extends Socket {
             case CHANGED:
                 coreStreamMiddleware.processCallback(object);
                 break;
+            case NOSUB:
+                System.out.println("No sub got called");
+                break;
             case OTHER:
                 break;
         }

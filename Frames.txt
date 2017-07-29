@@ -135,3 +135,11 @@ a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"rid\":\"Lgm3b8q4KPALupSYm\"}}
 //Subscribe typing
 ["{\"msg\":\"sub\",\"id\":\"gYQtnd5CGfZBvpNXd\",\"name\":\"stream-notify-room\",\"params\":[\"Lgm3b8q4KPALupSYm/typing\",false]}"]
 
+
+//Unsubscribe event
+
+request
+["{\"msg\":\"unsub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\"}"]
+
+response
+{"msg":"nosub","id":"ts56amurfm1v"}

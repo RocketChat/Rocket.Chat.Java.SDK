@@ -17,6 +17,7 @@ public class RPC {
         RESULT,
         READY,
         CHANGED,
+        NOSUB,
         OTHER
     }
 
@@ -27,12 +28,12 @@ public class RPC {
     public static String TYPE_RESULT="result";
     public static String TYPE_READY="ready";
     public static String TYPE_CHANGED="changed";
+    public static String TYPE_NOSUB = "nosub";
 
 
     //Maybe required in future
     public static String TYPE_UNSUB="unsub";
     public static String TYPE_SUB="sub";
-    public static String TYPE_NOSUB = "nosub";
     public static final String TYPE_REMOVED = "removed";
     public static final String TYPE_PONG = "pong";
     public static final String TYPE_UPDATED = "updated";
@@ -53,6 +54,8 @@ public class RPC {
             return MsgType.READY;
         }else if (s.equals(TYPE_CHANGED)){
             return MsgType.CHANGED;
+        }else if (s.equals(TYPE_NOSUB)){
+            return MsgType.NOSUB;
         }else {
             return MsgType.OTHER;
         }

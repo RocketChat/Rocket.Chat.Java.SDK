@@ -55,7 +55,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
         ChatRoomFactory factory=api.getFactory();
-        RocketChatAPI.ChatRoom room=factory.createChatRooms(rooms).getChatRoomByName("mypublicchannel");
+        room=factory.createChatRooms(rooms).getChatRoomByName("mypublicchannel");
         System.out.println("This is the room with id "+room.getRoomData().getRoomId());
         room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override
@@ -63,11 +63,13 @@ public class Main extends CoreAdapter{
                 System.out.println("Subscribed to typing successfully");
             }
         },this);
+
     }
 
     @Override
     public void onTyping(String roomId, String user, Boolean istyping) {
         System.out.println("Typing event arrived on roomId "+roomId +" by user "+user+ " typing is "+istyping);
+        room.unSubscribeRoomTypingEvent();
     }
 }
 
