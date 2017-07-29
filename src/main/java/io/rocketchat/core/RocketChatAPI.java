@@ -272,7 +272,7 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    public void subscribeRoom(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+    private void subscribeRoom(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
         if (subscribeListener !=null) {
             coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOM);
@@ -420,5 +420,7 @@ public class RocketChatAPI extends Socket {
         public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
             RocketChatAPI.this.subscribeRoom(room.getRoomId(),true,subscribeListener,listener);
         }
+
+        // TODO: 29/7/17 refresh methods to be added, changing data should change internal data
     }
 }
