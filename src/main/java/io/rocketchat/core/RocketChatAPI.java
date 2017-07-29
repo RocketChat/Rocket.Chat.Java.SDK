@@ -7,6 +7,7 @@ import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.core.callback.*;
+import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RocketChatMessage;
@@ -15,7 +16,6 @@ import io.rocketchat.core.rpc.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -34,13 +34,15 @@ public class RocketChatAPI extends Socket {
     CoreMiddleware coreMiddleware;
     CoreStreamMiddleware coreStreamMiddleware;
 
-
+// factory class
+    ChatRoomFactory factory;
 
     public RocketChatAPI(String url) {
         super(url);
         integer=new AtomicInteger(1);
         coreMiddleware=CoreMiddleware.getInstance();
         coreStreamMiddleware=CoreStreamMiddleware.getInstance();
+        factory=new ChatRoomFactory(this);
     }
 
     public String getMyUserName(){
@@ -49,6 +51,10 @@ public class RocketChatAPI extends Socket {
 
     public JSONArray getMyEmails(){
         return userInfo.getEmails();
+    }
+
+    public ChatRoomFactory getFactory() {
+        return factory;
     }
 
     //Tested
