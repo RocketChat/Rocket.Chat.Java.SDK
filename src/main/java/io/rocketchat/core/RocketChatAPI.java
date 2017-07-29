@@ -278,7 +278,7 @@ public class RocketChatAPI extends Socket {
             coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOMMESSAGE);
         }
         if (listener!=null){
-            coreStreamMiddleware.subscribeRoom(listener);
+            coreStreamMiddleware.subscribeRoomMessage(listener);
         }
         sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID,room_id,enable));
         return uniqueID;

@@ -1,5 +1,6 @@
 package io.rocketchat.core.middleware;
 
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.SubscribeListener;
 import io.rocketchat.core.model.RocketChatMessage;
@@ -21,9 +22,11 @@ public class CoreStreamMiddleware {
         OTHER
     }
 
-    private MessageListener.SubscriptionListener subscriptionListener;
 
     public static CoreStreamMiddleware middleware=new CoreStreamMiddleware();
+
+    MessageListener.SubscriptionListener subscriptionListener;
+    TypingListener typingListener;
 
     ConcurrentHashMap<String,Object[]> subcallbacks;
 
@@ -35,8 +38,12 @@ public class CoreStreamMiddleware {
         return middleware;
     }
 
-    public void subscribeRoom(MessageListener.SubscriptionListener subscription) {
+    public void subscribeRoomMessage(MessageListener.SubscriptionListener subscription) {
         this.subscriptionListener = subscription;
+    }
+
+    public void subscribeRoomTyping(TypingListener callback){
+        typingListener =callback;
     }
 
     public void createSubCallback(String id, SubscribeListener callback, SubType subscription){
@@ -51,11 +58,16 @@ public class CoreStreamMiddleware {
 
         switch (parse(s)) {
             case SUBSCRIBEROOMMESSAGE:
-                RocketChatMessage message=new RocketChatMessage(array.optJSONObject(0));
-                String roomId = object.optJSONObject("fields").optString("eventName");
-                subscriptionListener.onMessage(roomId,message);
+                if (subscriptionListener!=null) {
+                    RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
+                    String roomId = object.optJSONObject("fields").optString("eventName");
+                    subscriptionListener.onMessage(roomId, message);
+                }
                 break;
             case SUBSCRIBEROOMTYPING:
+                if (typingListener !=null) {
+                    typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
+                }
                 break;
             case OTHER:
                 break;
