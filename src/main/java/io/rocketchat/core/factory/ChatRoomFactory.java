@@ -15,20 +15,29 @@ public class ChatRoomFactory {
 
     public ChatRoomFactory(RocketChatAPI api) {
         this.api = api;
+        rooms=new ArrayList<>();
+    }
+
+    private RocketChatAPI.ChatRoom createChatRoom(Room room){
+        return api.new ChatRoom(room);
     }
 
     public ChatRoomFactory createChatRooms(ArrayList <? extends Room> roomObjects){
-        rooms=new ArrayList<>();
+        removeAllChatRooms();
         for (Room room : roomObjects){
             rooms.add(createChatRoom(room));
         }
         return this;
     }
 
-    public RocketChatAPI.ChatRoom createChatRoom(Room room){
-        return api.new ChatRoom(room);
-    }
 
+    public ChatRoomFactory addChatRoom(Room room){
+        if (getChatRoomByName(room.getRoomName())==null){
+            RocketChatAPI.ChatRoom newRoom= createChatRoom(room);
+            rooms.add(newRoom);
+        }
+        return this;
+    }
 
     public ArrayList <RocketChatAPI.ChatRoom> getChatRooms(){
         return rooms;
@@ -70,4 +79,11 @@ public class ChatRoomFactory {
         return false;
     }
 
+    public Boolean removeChatRoom(RocketChatAPI.ChatRoom room){
+        return rooms.remove(room);
+    }
+
+    public void removeAllChatRooms(){
+        rooms.clear();
+    }
 }
