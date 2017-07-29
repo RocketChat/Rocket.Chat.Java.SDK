@@ -471,11 +471,6 @@ public class RocketChatAPI extends Socket {
         }
 
         // TODO: 29/7/17 add code here
-        public void subscribeAllEvents(){
-
-        }
-
-        // TODO: 29/7/17 add code here
         public void unSubscribeRoomMessageEvent(){
             roomSubId=null;
         }
