@@ -9,15 +9,29 @@ import org.json.JSONObject;
 
 public class Room {
 
+
+    enum Type {
+        PUBLIC,
+        PRIVATE,
+        ONE_TO_ONE
+    }
+
     protected String roomId;
-    protected String roomType;
     protected String roomName;
     protected UserObject userInfo;
+    Type roomType;
 
     public Room(JSONObject object){
         try {
             roomId = object.getString("_id");
-            roomType = object.getString("t");
+            String type = object.getString("t");
+            if (type.equals("d")){
+                roomType=Type.ONE_TO_ONE;
+            }else if (type.equals("c")){
+                roomType=Type.PUBLIC;
+            }else{
+                roomType= Type.PRIVATE;
+            }
             roomName = object.optString("name");
             if (object.optJSONObject("u")!=null){
                 userInfo=new UserObject(object.optJSONObject("u"));
@@ -32,7 +46,7 @@ public class Room {
         return roomId;
     }
 
-    public String getRoomType() {
+    public Type getRoomType() {
         return roomType;
     }
 
