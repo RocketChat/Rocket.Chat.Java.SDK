@@ -18,4 +18,10 @@ public class RoomListener {
     public interface RoomRolesListener extends Listener{
         void onGetRoomRoles(ArrayList <RoomRole> roles, ErrorObject error);
     }
+
+    public interface PublicGroupListener extends Listener{
+        void onCreatePublicGroup(String roomId, ErrorObject error);
+    }
+
+
 }

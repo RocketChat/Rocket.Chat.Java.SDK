@@ -31,6 +31,7 @@ public class CoreMiddleware {
         LOADHISTORY,
         SENDMESSAGE,
         MESSAGEOP,
+        CREATEPUBLICGROUP,
         LOGOUT
     }
 
@@ -193,23 +194,31 @@ public class CoreMiddleware {
                     }
                     break;
                 case MESSAGEOP:
-                    SimpleListener simpleListener= (SimpleListener) listener;
-                    if (object.opt("error")!=null){
-                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
-                        simpleListener.callback(null,errorObject);
-                    }else {
-                        simpleListener.callback(true, null);
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case CREATEPUBLICGROUP:
+                    RoomListener.PublicGroupListener publicGroupListener = (RoomListener.PublicGroupListener) listener;
+                    if (object.opt("error")!=null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        publicGroupListener.onCreatePublicGroup(null,errorObject);
+                    }else{
+                        String roomId=((JSONObject)result).optString("rid");
+                        publicGroupListener.onCreatePublicGroup(roomId,null);
                     }
                     break;
                 case LOGOUT:
-                    if (object.opt("error")!=null){
-                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
-                        ((SimpleListener) listener).callback(null,errorObject);
-                    }else {
-                        ((SimpleListener) listener).callback(true, null);
-                    }
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
             }
+        }
+    }
+
+    public void handleCallbackBySimpleListener(SimpleListener listener, Object error){
+        if (error!=null){
+            ErrorObject errorObject=new ErrorObject((JSONObject) error);
+            listener.callback(null,errorObject);
+        }else {
+            listener.callback(true, null);
         }
     }
 }

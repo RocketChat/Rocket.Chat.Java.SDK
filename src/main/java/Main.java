@@ -1,10 +1,7 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.model.*;
-
-import java.util.ArrayList;
+import io.rocketchat.core.model.TokenObject;
 
 /**
  * Created by sachin on 7/6/17.
@@ -14,7 +11,7 @@ public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="ws://localhost:3000/websocket";
     private RocketChatAPI.ChatRoom room;
 
     public void call(){
@@ -30,7 +27,7 @@ public class Main extends CoreAdapter{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin.shinde","sachin123",this);
+        api.login("sachin","sachin9922",this);
     }
 
     @Override
@@ -45,40 +42,8 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        System.out.println("Logged in successfully with token "+token);
-        api.logout(new SimpleListener() {
-            @Override
-            public void callback(Boolean success, ErrorObject error) {
-                if (success){
-                    System.out.println("Logged out successfully");
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        System.out.println("Name is "+rooms.get(0).getRoomName());
-        api.listCustomEmoji(this);
-//        room=api.createChatRoom(rooms.get(0));
-//        room.getChatHistory(20,new Date(),null, this);
-    }
-
-    @Override
-    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
-        for (Emoji emoji : emojis){
-            System.out.println("name is "+emoji.getName());
-        }
-    }
-
-    @Override
-    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
-
-    }
-
-    @Override
-    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
-        System.out.println("First message is "+list.get(0).getMessage());
+        System.out.println("Logged in successfully with token " + token);
+        api.createPublicGroup("FairyTail",new String[]{"demosachin","rocket.cat"},true);
     }
 }
 

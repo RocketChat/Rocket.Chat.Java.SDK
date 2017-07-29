@@ -36,7 +36,6 @@ public class RocketChatAPI extends Socket {
 
     ArrayList <ChatRoom> rooms;
 
-
     public RocketChatAPI(String url) {
         super(url);
         integer=new AtomicInteger(1);
@@ -189,44 +188,55 @@ public class RocketChatAPI extends Socket {
     }
 
 
-    public void createPublicGroup(){
-
+    public void createPublicGroup(String groupName, String [] users, Boolean readOnly){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.createPublicGroup(uniqueID,groupName, users, readOnly));
     }
 
-    public void createPrivateGroup(){
-
+    public void createPrivateGroup(String groupName, String [] users){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.createPrivateGroup(uniqueID,groupName,users));
     }
 
-    public void deleteGroup(){
-
+    public void deleteGroup(String roomId){
+        //Apply simpleListener
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.deleteGroup(uniqueID,roomId));
     }
 
-    public void archieveRoom(){
-
+    public void archieveRoom(String roomId){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.archieveRoom(uniqueID,roomId));
     }
 
-    public void unarchiveRoom(){
-
+    public void unarchiveRoom(String roomId){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.unarchiveRoom(uniqueID,roomId));
     }
 
-    public void joinPublicGroup(){
-
+    public void joinPublicGroup(String roomId, String joinCode){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.joinPublicGroup(uniqueID,roomId,joinCode));
     }
 
-    public void leaveGroup(){
-
+    public void leaveGroup(String roomId){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.leaveGroup(uniqueID,roomId));
     }
 
-    public void hideRoom(){
-
+    public void hideRoom(String roomId){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.hideRoom(uniqueID,roomId));
     }
 
-    public void openRoom(){
-
+    public void openRoom(String roomId){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.openRoom(uniqueID,roomId));
     }
 
-    public void setFavouriteRoom(){
-
+    public void setFavouriteRoom(String roomId, Boolean isFavouriteRoom){
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(RoomRPC.setFavouriteRoom(uniqueID,roomId,isFavouriteRoom));
     }
 
     //Tested
