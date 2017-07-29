@@ -51,4 +51,23 @@ public class ChatRoomFactory {
         }
         return null;
     }
+
+    public Boolean removeChatRoomByName(String roomName){
+        for (RocketChatAPI.ChatRoom room : rooms){
+            if (room.getRoomData().getRoomName().equals(roomName)){
+                return rooms.remove(room);
+            }
+        }
+        return false;
+    }
+
+    public Boolean removeChatRoomById(String roomId){
+        for (RocketChatAPI.ChatRoom room : rooms){
+            if (room.getRoomData().getRoomId().equals(roomId)){
+                return rooms.remove(room);
+            }
+        }
+        return false;
+    }
+
 }
