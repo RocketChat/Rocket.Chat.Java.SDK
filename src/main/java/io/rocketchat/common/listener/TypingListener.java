@@ -1,10 +1,8 @@
-package io.rocketchat.livechat.callback;
+package io.rocketchat.common.listener;
 
 /**
  * Created by sachin on 10/6/17.
  */
-
-import io.rocketchat.common.listener.Listener;
 
 /**
  * Getting event about room-user whether he is typing or not

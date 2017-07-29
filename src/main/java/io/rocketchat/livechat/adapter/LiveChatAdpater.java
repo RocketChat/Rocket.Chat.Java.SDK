@@ -2,6 +2,7 @@ package io.rocketchat.livechat.adapter;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.AgentObject;
