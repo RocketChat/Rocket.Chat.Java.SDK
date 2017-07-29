@@ -375,8 +375,8 @@ public class RocketChatAPI extends Socket {
         Room room;
 
         //Subscription Ids for new subscriptions
-        String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
-        String typingSubId;
+        private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
+        private String typingSubId;
 
         public ChatRoom(Room room){
             this.room=room;
