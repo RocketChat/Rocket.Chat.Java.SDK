@@ -8,6 +8,9 @@ import java.util.ArrayList;
 /**
  * Created by sachin on 29/7/17.
  */
+
+// TODO: 29/7/17 add methods for getting rooms based on favourites, one to one and groups (public and private)
+// TODO: 29/7/17 might have to make separate arraylist for each type, seems little impossible, better to keep generic
 public class ChatRoomFactory {
 
     RocketChatAPI api;

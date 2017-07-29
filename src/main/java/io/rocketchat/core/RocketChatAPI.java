@@ -3,7 +3,6 @@ import io.rocketchat.common.data.model.Room;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.common.listener.Listener;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;

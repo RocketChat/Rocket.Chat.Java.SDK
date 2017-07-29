@@ -56,28 +56,50 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RocketChatAPI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RocketChatAPI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="430" column="20" selection-start-line="430" selection-start-column="20" selection-end-line="430" selection-end-column="20" />
+            <state relative-caret-position="198">
+              <caret line="277" column="43" selection-start-line="277" selection-start-column="43" selection-end-line="277" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1499#1500#0" expanded="true" />
-                <element signature="e#1544#1545#0" expanded="true" />
-                <element signature="e#1581#1582#0" expanded="true" />
-                <element signature="e#1624#1625#0" expanded="true" />
-                <element signature="e#1667#1668#0" expanded="true" />
-                <element signature="e#1697#1698#0" expanded="true" />
-                <element signature="e#12022#12023#0" expanded="true" />
-                <element signature="e#12076#12077#0" expanded="true" />
-                <element signature="e#14238#14239#0" expanded="true" />
-                <element signature="e#14276#14277#0" expanded="true" />
-                <element signature="e#14324#14325#0" expanded="true" />
-                <element signature="e#14389#14390#0" expanded="true" />
-                <element signature="e#14426#14427#0" expanded="true" />
-                <element signature="e#14461#14462#0" expanded="true" />
+                <element signature="e#1452#1453#0" expanded="true" />
+                <element signature="e#1497#1498#0" expanded="true" />
+                <element signature="e#1534#1535#0" expanded="true" />
+                <element signature="e#1577#1578#0" expanded="true" />
+                <element signature="e#1620#1621#0" expanded="true" />
+                <element signature="e#1650#1651#0" expanded="true" />
+                <element signature="e#11975#11976#0" expanded="true" />
+                <element signature="e#12029#12030#0" expanded="true" />
+                <element signature="e#14191#14192#0" expanded="true" />
+                <element signature="e#14229#14230#0" expanded="true" />
+                <element signature="e#14277#14278#0" expanded="true" />
+                <element signature="e#14342#14343#0" expanded="true" />
+                <element signature="e#14379#14380#0" expanded="true" />
+                <element signature="e#14414#14415#0" expanded="true" />
+                <element signature="e#16984#16985#0" expanded="true" />
+                <element signature="e#17065#17066#0" expanded="true" />
+                <element signature="e#17121#17122#0" expanded="true" />
+                <element signature="e#17203#17204#0" expanded="true" />
+                <element signature="e#17261#17262#0" expanded="true" />
+                <element signature="e#17344#17345#0" expanded="true" />
+                <element signature="e#17397#17398#0" expanded="true" />
+                <element signature="e#17477#17478#0" expanded="true" />
+                <element signature="e#17529#17530#0" expanded="true" />
+                <element signature="e#17607#17608#0" expanded="true" />
+                <element signature="e#17659#17660#0" expanded="true" />
+                <element signature="e#17737#17738#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CoreStreamMiddleware.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/middleware/CoreStreamMiddleware.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1429,7 +1451,7 @@
       <workItem from="1501133232627" duration="5214000" />
       <workItem from="1501154831558" duration="9747000" />
       <workItem from="1501258780586" duration="1625000" />
-      <workItem from="1501312300310" duration="12637000" />
+      <workItem from="1501312300310" duration="13752000" />
     </task>
     <task id="LOCAL-00001" summary="changed styling">
       <created>1498578775927</created>
@@ -1481,7 +1503,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="324896000" />
+    <option name="totallyTimeSpent" value="326011000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1834,19 +1856,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/middleware/CoreStreamMiddleware.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="28" column="34" selection-start-line="28" selection-start-column="34" selection-end-line="28" selection-end-column="34" />
-          <folding>
-            <element signature="e#690#691#0" expanded="false" />
-            <element signature="e#744#745#0" expanded="false" />
-            <element signature="e#799#800#0" expanded="false" />
-            <element signature="e#832#833#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/callback/RoomListener.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="324">
@@ -1941,25 +1950,45 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/RocketChatAPI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="430" column="20" selection-start-line="430" selection-start-column="20" selection-end-line="430" selection-end-column="20" />
+        <state relative-caret-position="198">
+          <caret line="277" column="43" selection-start-line="277" selection-start-column="43" selection-end-line="277" selection-end-column="43" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1499#1500#0" expanded="true" />
-            <element signature="e#1544#1545#0" expanded="true" />
-            <element signature="e#1581#1582#0" expanded="true" />
-            <element signature="e#1624#1625#0" expanded="true" />
-            <element signature="e#1667#1668#0" expanded="true" />
-            <element signature="e#1697#1698#0" expanded="true" />
-            <element signature="e#12022#12023#0" expanded="true" />
-            <element signature="e#12076#12077#0" expanded="true" />
-            <element signature="e#14238#14239#0" expanded="true" />
-            <element signature="e#14276#14277#0" expanded="true" />
-            <element signature="e#14324#14325#0" expanded="true" />
-            <element signature="e#14389#14390#0" expanded="true" />
-            <element signature="e#14426#14427#0" expanded="true" />
-            <element signature="e#14461#14462#0" expanded="true" />
+            <element signature="e#1452#1453#0" expanded="true" />
+            <element signature="e#1497#1498#0" expanded="true" />
+            <element signature="e#1534#1535#0" expanded="true" />
+            <element signature="e#1577#1578#0" expanded="true" />
+            <element signature="e#1620#1621#0" expanded="true" />
+            <element signature="e#1650#1651#0" expanded="true" />
+            <element signature="e#11975#11976#0" expanded="true" />
+            <element signature="e#12029#12030#0" expanded="true" />
+            <element signature="e#14191#14192#0" expanded="true" />
+            <element signature="e#14229#14230#0" expanded="true" />
+            <element signature="e#14277#14278#0" expanded="true" />
+            <element signature="e#14342#14343#0" expanded="true" />
+            <element signature="e#14379#14380#0" expanded="true" />
+            <element signature="e#14414#14415#0" expanded="true" />
+            <element signature="e#16984#16985#0" expanded="true" />
+            <element signature="e#17065#17066#0" expanded="true" />
+            <element signature="e#17121#17122#0" expanded="true" />
+            <element signature="e#17203#17204#0" expanded="true" />
+            <element signature="e#17261#17262#0" expanded="true" />
+            <element signature="e#17344#17345#0" expanded="true" />
+            <element signature="e#17397#17398#0" expanded="true" />
+            <element signature="e#17477#17478#0" expanded="true" />
+            <element signature="e#17529#17530#0" expanded="true" />
+            <element signature="e#17607#17608#0" expanded="true" />
+            <element signature="e#17659#17660#0" expanded="true" />
+            <element signature="e#17737#17738#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/io/rocketchat/core/middleware/CoreStreamMiddleware.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
