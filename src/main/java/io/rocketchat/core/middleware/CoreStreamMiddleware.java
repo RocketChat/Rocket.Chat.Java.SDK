@@ -16,7 +16,8 @@ public class CoreStreamMiddleware {
 
 
     public enum SubType {
-        SUBSCRIBEROOM,
+        SUBSCRIBEROOMMESSAGE,
+        SUBSCRIBEROOMTYPING,
         OTHER
     }
 
@@ -49,7 +50,7 @@ public class CoreStreamMiddleware {
         JSONArray array=object.optJSONObject("fields").optJSONArray("args");
 
         switch (parse(s)) {
-            case SUBSCRIBEROOM:
+            case SUBSCRIBEROOMMESSAGE:
                 RocketChatMessage message=new RocketChatMessage(array.optJSONObject(0));
                 String roomId = object.optJSONObject("fields").optString("eventName");
                 subscriptionListener.onMessage(roomId,message);
@@ -73,7 +74,7 @@ public class CoreStreamMiddleware {
 
     public static SubType parse(String s){
         if (s.equals("stream-room-messages")) {
-            return SubType.SUBSCRIBEROOM;
+            return SubType.SUBSCRIBEROOMMESSAGE;
         }
         return SubType.OTHER;
     }

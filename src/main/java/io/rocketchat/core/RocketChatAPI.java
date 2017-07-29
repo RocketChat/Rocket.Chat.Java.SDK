@@ -272,16 +272,20 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    private String subscribeRoom(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+    private String subscribeRoomMessageEvent(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
         if (subscribeListener !=null) {
-            coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOM);
+            coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener, CoreStreamMiddleware.SubType.SUBSCRIBEROOMMESSAGE);
         }
         if (listener!=null){
             coreStreamMiddleware.subscribeRoom(listener);
         }
-        sendDataInBackground(SubscriptionRPC.subscribeRoom(uniqueID,room_id,enable));
+        sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID,room_id,enable));
         return uniqueID;
+    }
+
+    private void unsubscribeRoom(String subId){
+        sendDataInBackground(CoreSubRPC.unsubscribeRoom(subId));
     }
 
     public void setConnectListener(ConnectListener connectListener) {
@@ -461,7 +465,7 @@ public class RocketChatAPI extends Socket {
 
         public void subscribeRoomMessageEvent(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
             if (roomSubId==null) {
-                roomSubId=RocketChatAPI.this.subscribeRoom(room.getRoomId(), true, subscribeListener, listener);
+                roomSubId=RocketChatAPI.this.subscribeRoomMessageEvent(room.getRoomId(), true, subscribeListener, listener);
             }
         }
 
@@ -470,20 +474,23 @@ public class RocketChatAPI extends Socket {
 
         }
 
-        // TODO: 29/7/17 add code here
         public void unSubscribeRoomMessageEvent(){
-            roomSubId=null;
+            if (roomSubId!=null) {
+                RocketChatAPI.this.unsubscribeRoom(roomSubId);
+                roomSubId = null;
+            }
         }
 
-        // TODO: 29/7/17 add code here
         public void unSubscribeRoomTypingEvent(){
-            typingSubId=null;
+            if (typingSubId!=null) {
+                RocketChatAPI.this.unsubscribeRoom(typingSubId);
+                typingSubId = null;
+            }
         }
 
-        // TODO: 29/7/17 add code here
         public void unSubscribeAllEvents(){
-            roomSubId=null;
-            typingSubId=null;
+            unSubscribeRoomMessageEvent();
+            unSubscribeRoomTypingEvent();
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room

@@ -131,3 +131,7 @@ a["{\"msg\":\"added\",\"collection\":\"autocompleteRecords\",\"id\":\"rocket.cat
 ["{\"msg\":\"method\",\"method\":\"createChannel\",\"params\":[\"mypublicchannel\",[\"demosachin\",\"rocket.cat\"],false],\"id\":\"14\"}"]
 
 a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"rid\":\"Lgm3b8q4KPALupSYm\"}}"]
+
+//Subscribe typing
+["{\"msg\":\"sub\",\"id\":\"gYQtnd5CGfZBvpNXd\",\"name\":\"stream-notify-room\",\"params\":[\"Lgm3b8q4KPALupSYm/typing\",false]}"]
+
