@@ -34,7 +34,7 @@ public class RocketChatAPI extends Socket {
     CoreMiddleware coreMiddleware;
     CoreStreamMiddleware coreStreamMiddleware;
 
-    ArrayList <ChatRoom> rooms;
+
 
     public RocketChatAPI(String url) {
         super(url);
@@ -345,43 +345,8 @@ public class RocketChatAPI extends Socket {
 
 
     /**
-     * ChatRoom APIS
+     * ChatRoom class to access private methods
      */
-
-    public RocketChatAPI createChatRooms(ArrayList <? extends Room> roomObjects){
-        rooms=new ArrayList<>();
-        for (Room room : roomObjects){
-            rooms.add(createChatRoom(room));
-        }
-        return this;
-    }
-
-    public ChatRoom createChatRoom(Room room){
-        return new ChatRoom(room);
-    }
-
-
-    public ArrayList <ChatRoom> getChatRooms(){
-        return rooms;
-    }
-
-    public ChatRoom getChatRoomByName(String roomName){
-        for (ChatRoom room : rooms){
-            if (room.getRoomData().getRoomName().equals(roomName)){
-                return room;
-            }
-        }
-        return null;
-    }
-
-    public ChatRoom getChatRoomById(String roomId){
-        for (ChatRoom room : rooms){
-            if (room.getRoomData().getRoomId().equals(roomId)){
-                return room;
-            }
-        }
-        return null;
-    }
 
     public class ChatRoom {
 
