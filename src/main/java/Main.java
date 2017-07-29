@@ -46,15 +46,6 @@ public class Main extends CoreAdapter{
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token " + token);
 
-        api.setFavouriteRoom("Rdn7keFYYa6dKFTgP", false, new SimpleListener() {
-            @Override
-            public void callback(Boolean success, ErrorObject error) {
-                if (success) {
-                    System.out.println("Set favourite false");
-                }
-            }
-        });
-
     }
 }
 
