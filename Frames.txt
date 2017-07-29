@@ -143,3 +143,37 @@ request
 
 response
 {"msg":"nosub","id":"ts56amurfm1v"}
+
+//get room via date
+request
+["{\"msg\":\"method\",\"method\":\"rooms/get\",\"params\":[{\"$date\":1501316423417}],\"id\":\"14\"}"]
+
+response
+a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"update\":[{\"_id\":\"3moJAzjK2s3jZfGvc\",\"name\":\"TigerClaw\",\"t\":\"p\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"archived\":false,\"ro\":false},{\"_id\":\"Rdn7keFYYa6dKFTgP\",\"name\":\"rockstar\",\"t\":\"c\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"ro\":false},{\"_id\":\"Lgm3b8q4KPALupSYm\",\"name\":\"mypublicchannel\",\"t\":\"c\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"ro\":false}],\"remove\":[]}}"]
+
+
+//get users of room : only online
+//request
+["{\"msg\":\"method\",\"method\":\"getUsersOfRoom\",\"params\":[\"Lgm3b8q4KPALupSYm\",false],\"id\":\"18\"}"]
+//response
+a["{\"msg\":\"result\",\"id\":\"18\",\"result\":{\"total\":3,\"records\":[{\"_id\":\"rocket.cat\",\"username\":\"rocket.cat\",\"name\":\"Rocket.Cat\"},{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"}]}}"]
+
+//get users of room : all users
+
+["{\"msg\":\"method\",\"method\":\"getUsersOfRoom\",\"params\":[\"Lgm3b8q4KPALupSYm\",true],\"id\":\"19\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"19\",\"result\":{\"total\":3,\"records\":[{\"_id\":\"N7fssgjkWmjiP7tv9\",\"username\":\"demosachin\",\"name\":\"demosachin\"},{\"_id\":\"rocket.cat\",\"username\":\"rocket.cat\",\"name\":\"Rocket.Cat\"},{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"}]}}"]
+
+// Users are needed to be stored, to be online or offline based on their ids
+// When particular associated user gets online
+
+a["{\"msg\":\"added\",\"collection\":\"users\",\"id\":\"N7fssgjkWmjiP7tv9\",\"fields\":{\"status\":\"online\",\"username\":\"demosachin\",\"utcOffset\":5.5}}"]
+
+// Message search inside box
+
+//request
+["{\"msg\":\"method\",\"method\":\"messageSearch\",\"params\":[\"hey\",\"Lgm3b8q4KPALupSYm\",20],\"id\":\"22\"}"]
+
+//response
+a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"messages\":[],\"users\":[],\"channels\":[]}}"]
+

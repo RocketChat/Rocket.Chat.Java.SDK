@@ -218,7 +218,7 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    private void archieveRoom(String roomId, SimpleListener listener){
+    private void archiveRoom(String roomId, SimpleListener listener){
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.ARCHIEVE);
         sendDataInBackground(RoomRPC.archieveRoom(uniqueID,roomId));
@@ -446,11 +446,11 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.deleteGroup(room.getRoomId(),listener);
         }
 
-        public void archieve(SimpleListener listener){
-            RocketChatAPI.this.archieveRoom(room.getRoomId(),listener);
+        public void archive(SimpleListener listener){
+            RocketChatAPI.this.archiveRoom(room.getRoomId(),listener);
         }
 
-        public void unarchieve(SimpleListener listener){
+        public void unarchive(SimpleListener listener){
             RocketChatAPI.this.unarchiveRoom(room.getRoomId(),listener);
         }
 
