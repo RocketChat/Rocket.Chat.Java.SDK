@@ -1,9 +1,13 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.SubscribeListener;
+import io.rocketchat.core.factory.ChatRoomFactory;
+import io.rocketchat.core.middleware.CoreStreamMiddleware;
+import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
@@ -45,7 +49,25 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token " + token);
+        api.getRooms(this);
+    }
 
+    @Override
+    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+        ChatRoomFactory factory=api.getFactory();
+        RocketChatAPI.ChatRoom room=factory.createChatRooms(rooms).getChatRoomByName("mypublicchannel");
+        System.out.println("This is the room with id "+room.getRoomData().getRoomId());
+        room.subscribeRoomTypingEvent(new SubscribeListener() {
+            @Override
+            public void onSubscribe(CoreStreamMiddleware.SubType type, String subId) {
+                System.out.println("Subscribed to typing successfully");
+            }
+        },this);
+    }
+
+    @Override
+    public void onTyping(String roomId, String user, Boolean istyping) {
+        System.out.println("Typing event arrived on roomId "+roomId +" by user "+user+ " typing is "+istyping);
     }
 }
 

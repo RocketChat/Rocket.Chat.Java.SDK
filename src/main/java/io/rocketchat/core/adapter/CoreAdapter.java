@@ -3,6 +3,7 @@ package io.rocketchat.core.adapter;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.callback.*;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.*;
@@ -24,7 +25,8 @@ public class CoreAdapter implements ConnectListener,
         UserListener.getUserRoleListener,
         MessageListener.MessageAckListener,
         MessageListener.SubscriptionListener,
-        SubscribeListener{
+        SubscribeListener,
+        TypingListener{
     @Override
     public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
@@ -97,6 +99,11 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
+
+    }
+
+    @Override
+    public void onTyping(String roomId, String user, Boolean istyping) {
 
     }
 }
