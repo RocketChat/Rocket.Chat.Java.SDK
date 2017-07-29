@@ -3,6 +3,7 @@ import io.rocketchat.common.data.model.Room;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
@@ -371,6 +372,10 @@ public class RocketChatAPI extends Socket {
             return room;
         }
 
+        public void getRoomRoles(RoomListener.RoomRolesListener listener){
+            RocketChatAPI.this.getRoomRoles(room.getRoomId(),listener);
+        }
+
         public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener){
             RocketChatAPI.this.getChatHistory(room.getRoomId(),limit,oldestMessageTimestamp,lasttimestamp,listener);
         }
@@ -417,8 +422,36 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.setReaction(emojiId,msgId,listener);
         }
 
-        public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+        public void subscribe(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
             RocketChatAPI.this.subscribeRoom(room.getRoomId(),true,subscribeListener,listener);
+        }
+
+        public void deleteGroup(SimpleListener listener){
+            RocketChatAPI.this.deleteGroup(room.getRoomId(),listener);
+        }
+
+        public void archieve(SimpleListener listener){
+            RocketChatAPI.this.archieveRoom(room.getRoomId(),listener);
+        }
+
+        public void unarchieve(SimpleListener listener){
+            RocketChatAPI.this.unarchiveRoom(room.getRoomId(),listener);
+        }
+
+        public void leave(SimpleListener listener){
+            RocketChatAPI.this.leaveGroup(room.getRoomId(),listener);
+        }
+
+        public void hide(SimpleListener listener){
+            RocketChatAPI.this.hideRoom(room.getRoomId(),listener);
+        }
+
+        public void open(SimpleListener listener){
+            RocketChatAPI.this.openRoom(room.getRoomId(),listener);
+        }
+
+        public void setFavourite(Boolean isFavoutite, SimpleListener listener){
+            RocketChatAPI.this.setFavouriteRoom(room.getRoomId(),isFavoutite,listener);
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data
