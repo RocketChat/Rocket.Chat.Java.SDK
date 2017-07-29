@@ -55,6 +55,8 @@ public class CoreStreamMiddleware {
                 String roomId = object.optJSONObject("fields").optString("eventName");
                 subscriptionListener.onMessage(roomId,message);
                 break;
+            case SUBSCRIBEROOMTYPING:
+                break;
             case OTHER:
                 break;
         }
@@ -75,6 +77,8 @@ public class CoreStreamMiddleware {
     public static SubType parse(String s){
         if (s.equals("stream-room-messages")) {
             return SubType.SUBSCRIBEROOMMESSAGE;
+        }else if (s.equals("stream-notify-room")){
+            return SubType.SUBSCRIBEROOMTYPING;
         }
         return SubType.OTHER;
     }
