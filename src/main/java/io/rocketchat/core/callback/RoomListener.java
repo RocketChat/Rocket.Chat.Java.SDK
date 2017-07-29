@@ -19,8 +19,8 @@ public class RoomListener {
         void onGetRoomRoles(ArrayList <RoomRole> roles, ErrorObject error);
     }
 
-    public interface PublicGroupListener extends Listener{
-        void onCreatePublicGroup(String roomId, ErrorObject error);
+    public interface GroupListener extends Listener{
+        void onCreateGroup(String roomId, ErrorObject error);
     }
 
 

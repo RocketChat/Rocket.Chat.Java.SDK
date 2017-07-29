@@ -188,19 +188,22 @@ public class RocketChatAPI extends Socket {
     }
 
 
-    public void createPublicGroup(String groupName, String [] users, Boolean readOnly){
+    public void createPublicGroup(String groupName, String [] users, Boolean readOnly,RoomListener.GroupListener listener){
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.CREATEGROUP);
         sendDataInBackground(RoomRPC.createPublicGroup(uniqueID,groupName, users, readOnly));
     }
 
-    public void createPrivateGroup(String groupName, String [] users){
+    public void createPrivateGroup(String groupName, String [] users, RoomListener.GroupListener listener){
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.CREATEGROUP);
         sendDataInBackground(RoomRPC.createPrivateGroup(uniqueID,groupName,users));
     }
 
-    public void deleteGroup(String roomId){
+    public void deleteGroup(String roomId, SimpleListener listener){
         //Apply simpleListener
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID,listener, CoreMiddleware.ListenerType.DELETEGROUP);
         sendDataInBackground(RoomRPC.deleteGroup(uniqueID,roomId));
     }
 

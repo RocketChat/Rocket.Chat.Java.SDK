@@ -43,7 +43,8 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token " + token);
-        api.createPublicGroup("FairyTail",new String[]{"demosachin","rocket.cat"},true);
+//        api.createPrivateGroup("FairyTail",new String[]{"demosachin","rocket.cat"});
+        api.deleteGroup("RQHWPLK5FYxDY7YY6");
     }
 }
 

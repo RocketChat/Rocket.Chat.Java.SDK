@@ -31,7 +31,8 @@ public class CoreMiddleware {
         LOADHISTORY,
         SENDMESSAGE,
         MESSAGEOP,
-        CREATEPUBLICGROUP,
+        CREATEGROUP,
+        DELETEGROUP,
         LOGOUT
     }
 
@@ -196,15 +197,18 @@ public class CoreMiddleware {
                 case MESSAGEOP:
                     handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
-                case CREATEPUBLICGROUP:
-                    RoomListener.PublicGroupListener publicGroupListener = (RoomListener.PublicGroupListener) listener;
+                case CREATEGROUP:
+                    RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
                     if (object.opt("error")!=null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        publicGroupListener.onCreatePublicGroup(null,errorObject);
+                        groupListener.onCreateGroup(null,errorObject);
                     }else{
                         String roomId=((JSONObject)result).optString("rid");
-                        publicGroupListener.onCreatePublicGroup(roomId,null);
+                        groupListener.onCreateGroup(roomId,null);
                     }
+                    break;
+                case DELETEGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
                 case LOGOUT:
                     handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
