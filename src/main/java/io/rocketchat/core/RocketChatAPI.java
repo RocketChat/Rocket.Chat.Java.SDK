@@ -355,6 +355,7 @@ public class RocketChatAPI extends Socket {
      * ChatRoom class to access private methods
      */
 
+    // TODO: 29/7/17 add exceptions if method call violates permission required to execute given RPC
     public class ChatRoom {
 
         Room room;
