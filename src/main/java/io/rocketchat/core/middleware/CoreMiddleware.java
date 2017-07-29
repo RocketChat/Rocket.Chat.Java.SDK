@@ -33,6 +33,13 @@ public class CoreMiddleware {
         MESSAGEOP,
         CREATEGROUP,
         DELETEGROUP,
+        ARCHIEVE,
+        UNARCHIEVE,
+        JOINPUBLICGROUP,
+        LEAVEGROUP,
+        OPENROOM,
+        HIDEROOM,
+        SETFAVOURITEROOM,
         LOGOUT
     }
 
@@ -208,6 +215,27 @@ public class CoreMiddleware {
                     }
                     break;
                 case DELETEGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case ARCHIEVE:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case UNARCHIEVE:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case JOINPUBLICGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case LEAVEGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case OPENROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case HIDEROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case SETFAVOURITEROOM:
                     handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
                 case LOGOUT:

@@ -1,6 +1,8 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.callback.RoomListener;
 import io.rocketchat.core.model.TokenObject;
 
 /**
@@ -43,8 +45,16 @@ public class Main extends CoreAdapter{
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully with token " + token);
-//        api.createPrivateGroup("FairyTail",new String[]{"demosachin","rocket.cat"});
-        api.deleteGroup("RQHWPLK5FYxDY7YY6");
+
+        api.setFavouriteRoom("Rdn7keFYYa6dKFTgP", false, new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success) {
+                    System.out.println("Set favourite false");
+                }
+            }
+        });
+
     }
 }
 
@@ -57,4 +67,5 @@ public class Main extends CoreAdapter{
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
-
+//Bugs
+// TODO: 29/7/17 Room created with a roomName, deleted again and created with same name mess up everything
