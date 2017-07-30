@@ -59,9 +59,7 @@ public class Main extends CoreAdapter{
         room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override
             public void onSubscribe(Boolean isSubscribed, String subId) {
-                if (isSubscribed){
                     System.out.println("Subscribed to typing" + isSubscribed);
-                }
             }
         },this);
     }
@@ -72,7 +70,7 @@ public class Main extends CoreAdapter{
         room.unSubscribeRoomTypingEvent(new SubscribeListener() {
             @Override
             public void onSubscribe(Boolean isSubscribed, String subId) {
-
+                System.out.println("Subscribed to typing" + isSubscribed);
             }
         });
     }
