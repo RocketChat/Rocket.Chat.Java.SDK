@@ -201,6 +201,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
+    // TODO: 30/7/17 Add methods for unsubscribing events
     public class ChatRoom{
 
         String userName;
