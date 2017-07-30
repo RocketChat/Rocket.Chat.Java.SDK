@@ -62,7 +62,7 @@ Documentation
 23. Getting room roles
 24. Logout
 
-- **User documentation can be found** => [Core SDK]()
+- **User documentation can be found here** => [Core SDK]()
 - Core SDK is under development ....
 
 ### 2. LiveChat SDK
@@ -78,4 +78,4 @@ Documentation
 7. Subscribe room
 8. Close conversation
 
-- **User documentation can be found** => [LiveChat SDK](https://github.com/sacOO7/Rocket.Chat.Java.SDK/blob/feature/CoreSDK/docs/LIVECHAT.md)
+- **User documentation can be found here** => [LiveChat SDK](https://github.com/sacOO7/Rocket.Chat.Java.SDK/blob/feature/CoreSDK/docs/LIVECHAT.md)
