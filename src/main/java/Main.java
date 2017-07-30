@@ -1,7 +1,7 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.callback.SubscribeListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RoomObject;
@@ -59,11 +59,12 @@ public class Main extends CoreAdapter{
         System.out.println("This is the room with id "+room.getRoomData().getRoomId());
         room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override
-            public void onSubscribe(CoreStreamMiddleware.SubType type, String subId) {
-                System.out.println("Subscribed to typing successfully");
+            public void onSubscribe(Boolean success, String subId) {
+                if (success){
+                    System.out.println("Subscribed to typing");
+                }
             }
         },this);
-
     }
 
     @Override
