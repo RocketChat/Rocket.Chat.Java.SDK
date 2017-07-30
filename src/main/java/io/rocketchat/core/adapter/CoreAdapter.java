@@ -5,7 +5,6 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.callback.*;
-import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.*;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ public class CoreAdapter implements ConnectListener,
         UserListener.getUserRoleListener,
         MessageListener.MessageAckListener,
         MessageListener.SubscriptionListener,
-        SubscribeListener,
         TypingListener{
     @Override
     public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
@@ -69,11 +67,6 @@ public class CoreAdapter implements ConnectListener,
 
     @Override
     public void onMessageAck(RocketChatMessage message, ErrorObject error) {
-
-    }
-
-    @Override
-    public void onSubscribe(CoreStreamMiddleware.SubType type, String subId) {
 
     }
 

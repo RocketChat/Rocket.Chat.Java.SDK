@@ -2,10 +2,8 @@ package io.rocketchat.livechat.adapter;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.livechat.callback.*;
-import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
@@ -26,7 +24,6 @@ public class LiveChatAdpater implements ConnectListener,
         MessageListener.MessageAckListener,
         MessageListener.OfflineMessageListener,
         MessageListener.SubscriptionListener,
-        SubscribeListener,
         TypingListener
 {
     @Override
@@ -79,10 +76,6 @@ public class LiveChatAdpater implements ConnectListener,
 
     }
 
-    @Override
-    public void onSubscribe(LiveChatStreamMiddleware.SubType type, String subId) {
-
-    }
 
     @Override
     public void onTyping(String roomId, String user, Boolean istyping) {
