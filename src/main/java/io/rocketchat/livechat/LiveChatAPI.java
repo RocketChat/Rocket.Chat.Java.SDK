@@ -2,6 +2,7 @@ package io.rocketchat.livechat;
 
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 
+// TODO: 30/7/17 Make it singletone like eventbus, add builder class to LiveChatAPI in order to use it anywhere
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
@@ -103,7 +105,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    private void subscribeRoom( String roomID,  Boolean enable,  SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
 
         String uniqueID=Utils.shortUUID();
         if (subscribeListener !=null) {

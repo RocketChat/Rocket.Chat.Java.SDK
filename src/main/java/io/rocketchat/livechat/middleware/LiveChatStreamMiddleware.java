@@ -2,7 +2,7 @@ package io.rocketchat.livechat.middleware;
 
 import io.rocketchat.livechat.callback.AgentListener;
 import io.rocketchat.livechat.callback.MessageListener;
-import io.rocketchat.livechat.callback.SubscribeListener;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.LiveChatMessage;

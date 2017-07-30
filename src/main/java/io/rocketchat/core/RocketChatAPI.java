@@ -4,6 +4,7 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 
+// TODO: 30/7/17 Make it singletone like eventbus, add builder class to RocketChatAPI in order to use it anywhere, maybe a common builder class
 public class RocketChatAPI extends Socket {
 
     AtomicInteger integer;

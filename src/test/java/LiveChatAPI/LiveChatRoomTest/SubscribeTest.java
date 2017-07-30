@@ -2,7 +2,7 @@ package LiveChatAPI.LiveChatRoomTest;
 
 import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.livechat.callback.SubscribeListener;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
 import io.rocketchat.livechat.model.GuestObject;
 import org.junit.After;
