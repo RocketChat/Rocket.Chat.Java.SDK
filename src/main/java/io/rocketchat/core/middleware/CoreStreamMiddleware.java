@@ -79,7 +79,7 @@ public class CoreStreamMiddleware {
         if (subObj.optJSONArray("subs")!=null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
-                SubscribeListener subscribeListener = subcallbacks.get(id);
+                SubscribeListener subscribeListener = subcallbacks.remove(id);
                 subscribeListener.onSubscribe(true,id);
             }
         }

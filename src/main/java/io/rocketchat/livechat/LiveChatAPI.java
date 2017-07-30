@@ -108,12 +108,8 @@ public class LiveChatAPI extends Socket{
     private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMROOMMESSAGES);
-        }
-        if (listener!=null){
-            liveChatStreamMiddleware.subscribeRoom(listener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeRoom(listener);
         sendDataInBackground(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
 
     }
@@ -121,12 +117,8 @@ public class LiveChatAPI extends Socket{
     private void subscribeLiveChatRoom( String roomID,  Boolean enable,  SubscribeListener subscribeListener,  AgentListener.AgentConnectListener agentConnectListener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMLIVECHATROOM);
-        }
-        if (agentConnectListener !=null){
-            liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
         sendDataInBackground(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
 
     }
@@ -134,12 +126,8 @@ public class LiveChatAPI extends Socket{
     private void subscribeTyping(String roomID, Boolean enable,  SubscribeListener subscribeListener,  TypingListener listener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.NOTIFYROOM);
-        }
-        if (listener!=null){
-            liveChatStreamMiddleware.subscribeTyping(listener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeTyping(listener);
         sendDataInBackground(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
 
     }

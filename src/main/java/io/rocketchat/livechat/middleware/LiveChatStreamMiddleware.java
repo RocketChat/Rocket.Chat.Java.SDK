@@ -32,7 +32,7 @@ public class LiveChatStreamMiddleware {
     AgentListener.AgentConnectListener agentConnectListener;
     TypingListener typingListener;
 
-    ConcurrentHashMap <String,Object[]> subcallbacks;
+    ConcurrentHashMap <String,SubscribeListener> subcallbacks;
 
 
     LiveChatStreamMiddleware(){
@@ -55,8 +55,10 @@ public class LiveChatStreamMiddleware {
         typingListener =callback;
     }
 
-    public void createSubCallbacks(String id, SubscribeListener callback, SubType subscription){
-        subcallbacks.put(id,new Object[]{callback,subscription});
+    public void createSubCallbacks(String id, SubscribeListener callback){
+        if (callback!=null) {
+            subcallbacks.put(id, callback);
+        }
     }
 
     public void processCallback(JSONObject object){
@@ -92,10 +94,8 @@ public class LiveChatStreamMiddleware {
         if (subObj.optJSONArray("subs")!=null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
-                Object object[] = subcallbacks.remove(id);
-                SubscribeListener subscribeListener = (SubscribeListener) object[0];
-                SubType subscription = (SubType) object[1];
-                subscribeListener.onSubscribe(subscription, id);
+                SubscribeListener subscribeListener = subcallbacks.remove(id);
+                subscribeListener.onSubscribe(true, id);
             }
         }
     }
