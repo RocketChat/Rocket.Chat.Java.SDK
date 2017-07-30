@@ -292,8 +292,9 @@ public class RocketChatAPI extends Socket {
     }
 
 
-    private void unsubscribeRoom(String subId){
+    private void unsubscribeRoom(String subId, SubscribeListener subscribeListener){
         sendDataInBackground(CoreSubRPC.unsubscribeRoom(subId));
+        coreStreamMiddleware.createSubCallback(subId, subscribeListener);
     }
 
     public void setConnectListener(ConnectListener connectListener) {
@@ -341,7 +342,7 @@ public class RocketChatAPI extends Socket {
                 coreStreamMiddleware.processCallback(object);
                 break;
             case NOSUB:
-                System.out.println("No sub got called");
+                coreStreamMiddleware.processUnsubSuccess(object);
                 break;
             case OTHER:
                 break;
@@ -486,23 +487,23 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        public void unSubscribeRoomMessageEvent(){
+        public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener){
             if (roomSubId!=null) {
-                RocketChatAPI.this.unsubscribeRoom(roomSubId);
+                RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
                 roomSubId = null;
             }
         }
 
-        public void unSubscribeRoomTypingEvent(){
+        public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener){
             if (typingSubId!=null) {
-                RocketChatAPI.this.unsubscribeRoom(typingSubId);
+                RocketChatAPI.this.unsubscribeRoom(typingSubId, subscribeListener);
                 typingSubId = null;
             }
         }
 
         public void unSubscribeAllEvents(){
-            unSubscribeRoomMessageEvent();
-            unSubscribeRoomTypingEvent();
+            unSubscribeRoomMessageEvent(null);
+            unSubscribeRoomTypingEvent(null);
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room

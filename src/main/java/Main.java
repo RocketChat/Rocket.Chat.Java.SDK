@@ -3,7 +3,6 @@ import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.factory.ChatRoomFactory;
-import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
 
@@ -59,9 +58,9 @@ public class Main extends CoreAdapter{
         System.out.println("This is the room with id "+room.getRoomData().getRoomId());
         room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override
-            public void onSubscribe(Boolean success, String subId) {
-                if (success){
-                    System.out.println("Subscribed to typing");
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                if (isSubscribed){
+                    System.out.println("Subscribed to typing" + isSubscribed);
                 }
             }
         },this);
@@ -70,7 +69,12 @@ public class Main extends CoreAdapter{
     @Override
     public void onTyping(String roomId, String user, Boolean istyping) {
         System.out.println("Typing event arrived on roomId "+roomId +" by user "+user+ " typing is "+istyping);
-        room.unSubscribeRoomTypingEvent();
+        room.unSubscribeRoomTypingEvent(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+
+            }
+        });
     }
 }
 

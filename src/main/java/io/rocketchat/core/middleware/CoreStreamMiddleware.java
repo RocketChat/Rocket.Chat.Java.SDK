@@ -85,6 +85,14 @@ public class CoreStreamMiddleware {
         }
     }
 
+    public void processUnsubSuccess(JSONObject unsubObj){
+        String id= unsubObj.optString("id");
+        if (subcallbacks.containsKey(id)) {
+            SubscribeListener subscribeListener = subcallbacks.remove(id);
+            subscribeListener.onSubscribe(false,id);
+        }
+    }
+
     public static SubType parse(String s){
         if (s.equals("stream-room-messages")) {
             return SubType.SUBSCRIBEROOMMESSAGE;
