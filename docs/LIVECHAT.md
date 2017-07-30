@@ -2,7 +2,7 @@
 - Before reading the documentation, go through all terms associated with LiveChat (Agent, Departments etc).
 - Docs can be found here [LIVECHAT USER DOC](https://rocket.chat/docs/administrator-guides/livechat/).
 - Make sure **LiveChat is properly configured** on the server.
-~~~~
+
 ### Overview
 
 - Primary requirement is to have **URL** of hosted server.
