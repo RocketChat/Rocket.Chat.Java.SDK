@@ -34,9 +34,7 @@ compile ('io.rocketchat:rocketchatjavasdk:0.5.1'){
 Documentation
 -------------
 
-Current development approach is focused on **LiveChat SDK**. </br>
-
-## 1. Core SDK
+### 1. Core SDK
 - This SDK is related to **chat** related API's available on the Rocket.Chat server.
 - Currently supports following features.
 1. Login/Resume Login
@@ -64,10 +62,10 @@ Current development approach is focused on **LiveChat SDK**. </br>
 23. Getting room roles
 24. Logout
 
-- User documentation
-- Still under development .... 
+- User documentation can be found here [Core SDK]()
+- Core SDK is under development ....
 
-## 2. LiveChat SDK
+### 2. LiveChat SDK
 - This SDK refers to providing helpDesk feature (LiveChat )in any JVM platform.
 - This currently supports following features.
 1. Getting LiveChat configuration data from server
@@ -80,4 +78,4 @@ Current development approach is focused on **LiveChat SDK**. </br>
 7. Subscribe room
 8. Close conversation
 
-- User documentation can be found here ....
+- User documentation can be found here [LiveChat SDK]()
