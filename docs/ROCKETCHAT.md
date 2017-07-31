@@ -119,7 +119,7 @@ public class Main implements ConnectListener{
 
 #### 2. Logging in
 - Above ways can be replicated for logging in.
-- Login can be done in username and password as well as using Token for next time Login.
+- Login can be done using _username_ and _password_ as well as using Token for next time Login.
 - It must be done after connecting to server.
 
 1. Using _username_ and _password_
@@ -173,6 +173,8 @@ public class Main implements ConnectListener, LoginListener {
 ```
 
 2. Using _token_ for resume login
+- Save token received from first time login using _username_ and _password_ in database or file.
+- Use it for next time login with server.
 
 ```
 public class Main implements ConnectListener, LoginListener {
