@@ -37,7 +37,20 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **2. sendMessage**
 
 ```java
-
+        //Without acknowledgement
+        room.sendMessage("This is some random message");
+        
+        //With acknowledgement
+        
+        room.sendMessage("Hi there", new MessageListener.MessageAckListener() {
+                @Override
+                public void onMessageAck(RocketChatMessage message, ErrorObject error) {
+                        if (error==null)
+                        {
+                            System.out.println("Got ack for sent message");
+                        }
+                }
+        });
 
 ```
 

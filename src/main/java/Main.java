@@ -4,6 +4,7 @@ import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.TokenObject;
 
@@ -27,7 +28,6 @@ public class Main implements ConnectListener, LoginListener{
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
-
     }
 
     public static void main(String [] args){
