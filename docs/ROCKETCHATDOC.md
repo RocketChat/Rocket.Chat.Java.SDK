@@ -139,9 +139,21 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **7. starMessage**
 
 ```java
-
+        String messageId="";
+        Boolean star;  //Enabled or disables star for message
+        //without ack
+        room.starMessage(messageId, star, null);
+        
+        //with ack
+        room.starMessage(messageId, star, new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                
+            }
+        });
 
 ```
+
 
 **8. deleteGroup**
 
