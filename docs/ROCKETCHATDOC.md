@@ -58,8 +58,19 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **3. deleteMessage**
 
 ```java
+        String messageId= "xxxx";
+        //without ack
+        room.deleteMessage(messageId,null);
 
-
+        //with ack
+        room.deleteMessage(messageId, new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Message deleted successfully");    
+                }
+            }
+        });
 ```
 
 

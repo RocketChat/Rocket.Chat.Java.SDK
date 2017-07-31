@@ -28,6 +28,8 @@ public class Main implements ConnectListener, LoginListener{
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
+
+
     }
 
     public static void main(String [] args){
