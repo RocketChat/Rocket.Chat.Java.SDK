@@ -350,7 +350,7 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
 
 ```
 
-#### 4. Creating logical rooms for communication with server
+#### 4. Creating logical rooms
 - ChatRoomFactory is used to create list of logical rooms to communicate with server.
 - Factory class can be used to get ChatRoom by Name or roomId once constructed.  
 - RocketChatAPI.ChatRoom class instance represents a unit logical room that can be used to perform different operations on the data. 
@@ -438,6 +438,39 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     }
 }
 ```
-#### 5. Log out
+
+#### 5. Further communication with server
+
+#### 6. Handling re-connection with server
+- `reconnect` method in `RocketChatAPI` class can be used for reconnecting to the server.
+
+I. Manual reconnection
+- Set reconnection to null before connecting to server.  
+
+```java
+    api.setReconnectionStrategy(null);
+    api.connect(this);
+```
+- After disconnect event, reconnect to the server
+
+```java
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+            api.reconnect();
+            System.out.println("Disconnected from server");
+    }
+
+```
+
+II. Automatic reconnection
+- Pass reconnection object while setting reconnection strategy
+
+```java
+        int maxAttempts=10;    //Number of attemps are 10
+        int timeInterval=5000; // in milliseconds, reconnection will be called after 5 seconds
+        api.setReconnectionStrategy(new ReconnectionStrategy(maxAttempts,timeInterval));  
+```
+
+#### 7. Log out
 - 
 - 
