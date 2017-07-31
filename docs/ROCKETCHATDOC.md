@@ -148,7 +148,9 @@ Following methods are provided by RocketChatAPI.ChatRoom API
         room.starMessage(messageId, star, new SimpleListener() {
             @Override
             public void callback(Boolean success, ErrorObject error) {
-                
+                if (success){
+                    System.out.println("executed successfully");
+                }                
             }
         });
 
@@ -158,8 +160,19 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **8. deleteGroup**
 
 ```java
-
-
+    
+    //wihout ack
+    room.deleteGroup(null);
+    
+    //with ack
+    room.deleteGroup(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                    if (success){
+                        System.out.println("group deleted successfully");
+                    }
+            }
+    });
 ```
 
 **9. archiveRoom**
