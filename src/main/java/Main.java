@@ -1,6 +1,8 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
@@ -18,7 +20,7 @@ import java.util.jar.Pack200;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener{
+public class Main implements ConnectListener, LoginListener {
 
 
     RocketChatAPI api;
@@ -30,7 +32,6 @@ public class Main implements ConnectListener, LoginListener{
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
-
 
 
 

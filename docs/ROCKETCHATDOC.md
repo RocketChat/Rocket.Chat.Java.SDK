@@ -281,3 +281,55 @@ Following methods are provided by RocketChatAPI.ChatRoom API
             }
         });
 ```
+
+**15. subscribeRoomMessageEvent**
+
+- Make parent class implement MessageListener.SubscriptionListener interface from core package.  
+
+```java
+
+        void subscribeMessage(){
+            room.subscribeRoomMessageEvent(new SubscribeListener() {
+                @Override
+                public void onSubscribe(Boolean isSubscribed, String subId) {
+                    if (isSubscribed) {
+                        System.out.println("subscribed to room successfully");
+                    }
+                }
+            },this);
+        }
+        
+        @Override
+        public void onMessage(String roomId, RocketChatMessage message) {
+            System.out.println("will receive new message here");  
+        }
+       
+        
+```
+
+
+**16. subscribeRoomTypingEvent**
+
+- Make parent class implement TypingListener interface.
+
+```java
+
+        void subscribeTyping(){
+                room.subscribeRoomTypingEvent(new SubscribeListener() {
+                @Override
+                public void onSubscribe(Boolean isSubscribed, String subId) {
+                    if (isSubscribed){
+                        System.out.println("subscribed to typing event successfylly");
+                    }
+                }
+                },this);
+        }
+        
+        
+        @Override
+        public void onTyping(String roomId, String user, Boolean istyping) {
+            
+        }
+
+```
+
