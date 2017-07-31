@@ -78,6 +78,19 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 ```java
 
+        //without ack
+        String messageId="";
+        room.updateMessage(messageId, "This is a updated message",null);
+        
+        //with ack
+        room.updateMessage(messageId, "This is a updated message", new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success) {
+                    System.out.println("Message updated successfully");
+                }
+            }
+        });
 
 ```
 
@@ -85,6 +98,20 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 ```java
 
+        RocketChatMessage message; //This is a message received from loading history
+        
+        //without ack
+        room.pinMessage(message.getRawJsonObject(),null);
+        
+        //with ack
+        room.pinMessage(message.getRawJsonObject(), new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Pinned message successfully");
+                }
+            }
+        });
 
 ```
 
@@ -92,6 +119,20 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 ```java
 
+        RocketChatMessage message; //This is a message received from loading history
+        
+        //without ack
+        room.unpinMessage(message.getRawJsonObject(),null);
+        
+        //with ack
+        room.unpinMessage(message.getRawJsonObject(), new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Unpinned message successfully");
+                }
+            }
+        });
 
 ```
 
