@@ -13,3 +13,105 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 - hide room (hide room from the list of channels)
 - open room (shows room on the left of list of channels)
 - set favorite room ( it will set room to be )
+- subscribe room for new messages (Room will receive messages in real-time)
+- subscribe room for typing events (Room will receive messages regarding typing events in real-time)
+ 
+**1. getChatHistory**
+
+```java
+
+
+```
+
+**2. sendMessage**
+
+```java
+
+
+```
+
+
+**3. deleteMessage**
+
+```java
+
+
+```
+
+
+**4. updateMessage**
+
+```java
+
+
+```
+
+**5. pinMessage**
+
+```java
+
+
+```
+
+**6. unPinMessage**
+
+```java
+
+
+```
+
+**7. starMessage**
+
+```java
+
+
+```
+
+**8. deleteGroup**
+
+```java
+
+
+```
+
+**9. archiveRoom**
+
+```java
+
+
+```
+
+**10. unArchiveRoom**
+
+```java
+
+
+```
+
+**11. leaveRoom**
+
+```java
+
+
+```
+
+**12. hideRoom**
+
+```java
+
+
+```
+
+**13. openRoom**
+
+```java
+
+
+```
+
+**14. setFavouriteRoom**
+
+```java
+
+
+```
