@@ -1,19 +1,18 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.callback.SubscriptionListener;
-import io.rocketchat.core.factory.ChatRoomFactory;
-import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener {
+public class Main implements ConnectListener, LoginListener{
 
 
     RocketChatAPI api;
@@ -40,48 +39,30 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     public void onLogin(TokenObject token, ErrorObject error) {
         if (error==null) {
             System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-            api.getSubscriptions(this);
+
+            //logging out after 2 seconds
+
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    logout();
+                }
+            },2000);
+
         }else{
             System.out.println("Got error "+error.getMessage());
         }
     }
 
-    @Override
-    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
-
-        //Creating Logical ChatRooms using factory class
-        ChatRoomFactory factory=api.getFactory();
-
-        /* Number of operations can be performed on below room object like
-         * sendMessage
-         * deleteMessage
-         * pinMessage
-         * leaveRoom
-         * starRoom
-         * hideRoom
-         * etc
-         * Note : This ChatRoom is logical, meant to perform operations
-         */
-
-        RocketChatAPI.ChatRoom room=factory.createChatRooms(subscriptions).getChatRoomByName("general");   //This should exist on server
-
-        //sending sample message to general
-
-        room.sendMessage("Hi there, message sent via code..");
-
-
-        /*
-        Getting list of rooms from factory class after creating logical ChatRooms
-         */
-
-        ArrayList <RocketChatAPI.ChatRoom> rooms=factory.getChatRooms();
-
-        for (RocketChatAPI.ChatRoom myroom : rooms){
-            System.out.println("Room id is "+myroom.getRoomData().getRoomId());
-            System.out.println("room name is "+myroom.getRoomData().getRoomName());
-            System.out.println("Room type is "+myroom.getRoomData().getRoomType());
-        }
-
+    private void logout() {
+       api.logout(new SimpleListener() {
+           @Override
+           public void callback(Boolean success, ErrorObject error) {
+               if (success){
+                   System.out.println("Logged out successfully");
+               }
+           }
+       });
     }
 
     @Override
