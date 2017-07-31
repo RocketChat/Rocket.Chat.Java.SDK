@@ -179,13 +179,35 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 ```java
 
-
+        //without ack
+        room.archive(null);
+        
+        //with ack
+        room.archive(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Archived successfully");
+                }
+            }
+        });
 ```
 
 **10. unArchiveRoom**
 
 ```java
-
+        //without ack
+        room.unarchive(null);
+        
+        //with ack
+        room.unarchive(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Archived successfully");
+                }
+            }
+        });
 
 ```
 
