@@ -1,23 +1,19 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.factory.ChatRoomFactory;
-import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.model.TokenObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main extends CoreAdapter{
+public class Main implements ConnectListener, LoginListener {
 
 
     RocketChatAPI api;
-    private static String serverurl="ws://localhost:3000/websocket";
-    private RocketChatAPI.ChatRoom room;
+    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String token="ju-c1BRuPmcUhKSFgLPoh9L6bhyEhHCrdMuX9NlKAe3";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -31,49 +27,29 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onConnect(String sessionID) {
-        System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin","sachin9922",this);
-    }
-
-    @Override
-    public void onDisconnect(boolean closedByServer) {
-        System.out.println("Disconnected from server");
-    }
-
-    @Override
-    public void onConnectError(Exception websocketException) {
-        System.out.println("Got connect error with the server");
+        System.out.println("Connected to server");
+        api.loginUsingToken("ju-c1BRuPmcUhKSFgLPoh9L6bhyEhHCrdMuX9NlKAe3",this);
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        System.out.println("Logged in successfully with token " + token);
-        api.getRooms(this);
+        if (error==null) {
+            System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
+        }else{
+            System.out.println("Got error "+error.getMessage());
+        }
     }
 
     @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        ChatRoomFactory factory=api.getFactory();
-        room=factory.createChatRooms(rooms).getChatRoomByName("mypublicchannel");
-        System.out.println("This is the room with id "+room.getRoomData().getRoomId());
-        room.subscribeRoomTypingEvent(new SubscribeListener() {
-            @Override
-            public void onSubscribe(Boolean isSubscribed, String subId) {
-                    System.out.println("Subscribed to typing" + isSubscribed);
-            }
-        },this);
+    public void onDisconnect(boolean closedByServer) {
+
     }
 
     @Override
-    public void onTyping(String roomId, String user, Boolean istyping) {
-        System.out.println("Typing event arrived on roomId "+roomId +" by user "+user+ " typing is "+istyping);
-        room.unSubscribeRoomTypingEvent(new SubscribeListener() {
-            @Override
-            public void onSubscribe(Boolean isSubscribed, String subId) {
-                System.out.println("Subscribed to typing" + isSubscribed);
-            }
-        });
+    public void onConnectError(Exception websocketException) {
+
     }
+
 }
 
 
