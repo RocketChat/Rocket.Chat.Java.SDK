@@ -3,6 +3,7 @@ import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
@@ -48,16 +49,39 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     @Override
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
 
-        if (error==null){
-            for (SubscriptionObject room : subscriptions){
-                System.out.println("Room name is "+room.getRoomName());
-                System.out.println("Room id is "+room.getRoomId());
-                System.out.println("Room created at "+room.getRoomCreated());
-                System.out.println("Room type is "+ room.getRoomType());
-            }
-        }else{
-            System.out.println("Got error "+error.getMessage());
+        //Creating Logical ChatRooms using factory class
+        ChatRoomFactory factory=api.getFactory();
+
+        /* Number of operations can be performed on below room object like
+         * sendMessage
+         * deleteMessage
+         * pinMessage
+         * leaveRoom
+         * starRoom
+         * hideRoom
+         * etc
+         * Note : This ChatRoom is logical, meant to perform operations
+         */
+
+        RocketChatAPI.ChatRoom room=factory.createChatRooms(subscriptions).getChatRoomByName("general");   //This should exist on server
+
+        //sending sample message to general
+
+        room.sendMessage("Hi there, message sent via code..");
+
+
+        /*
+        Getting list of rooms from factory class after creating logical ChatRooms
+         */
+
+        ArrayList <RocketChatAPI.ChatRoom> rooms=factory.getChatRooms();
+
+        for (RocketChatAPI.ChatRoom myroom : rooms){
+            System.out.println("Room id is "+myroom.getRoomData().getRoomId());
+            System.out.println("room name is "+myroom.getRoomData().getRoomName());
+            System.out.println("Room type is "+myroom.getRoomData().getRoomType());
         }
+
     }
 
     @Override
