@@ -289,6 +289,66 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
 
 2. Getting subscriptions
 
+```
+public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener {
+
+    RocketChatAPI api;
+    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String token="";
+
+    public void call(){
+        api=new RocketChatAPI(serverurl);
+        api.setReconnectionStrategy(null);
+        api.connect(this);
+    }
+
+    public static void main(String [] args){
+        new Main().call();
+    }
+
+    @Override
+    public void onConnect(String sessionID) {
+        System.out.println("Connected to server");
+        api.loginUsingToken(token,this);
+    }
+
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        if (error==null) {
+            System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
+            api.getSubscriptions(this);
+        }else{
+            System.out.println("Got error "+error.getMessage());
+        }
+    }
+
+    @Override
+    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+
+        if (error==null){
+            for (SubscriptionObject room : subscriptions){
+                System.out.println("Room name is "+room.getRoomName());
+                System.out.println("Room id is "+room.getRoomId());
+                System.out.println("Room created at "+room.getRoomCreated());
+                System.out.println("Room type is "+ room.getRoomType());
+            }
+        }else{
+            System.out.println("Got error "+error.getMessage());
+        }
+    }
+
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+
+    }
+
+    @Override
+    public void onConnectError(Exception websocketException) {
+
+    }
+}
+
+```
 
 #### 4. Creating logical rooms for communication with server
 - 

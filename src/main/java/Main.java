@@ -2,8 +2,8 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener, RoomListener.GetRoomListener {
+public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener {
 
 
     RocketChatAPI api;
@@ -39,27 +39,27 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
     public void onLogin(TokenObject token, ErrorObject error) {
         if (error==null) {
             System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-            api.getRooms(this);
+            api.getSubscriptions(this);
         }else{
             System.out.println("Got error "+error.getMessage());
         }
     }
 
-
     @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+
         if (error==null){
-            for (RoomObject room : rooms){
+            for (SubscriptionObject room : subscriptions){
                 System.out.println("Room name is "+room.getRoomName());
                 System.out.println("Room id is "+room.getRoomId());
-                System.out.println("Room topic is "+room.getTopic());
+                System.out.println("Room created at "+room.getRoomCreated());
                 System.out.println("Room type is "+ room.getRoomType());
-
             }
         }else{
             System.out.println("Got error "+error.getMessage());
         }
     }
+
     @Override
     public void onDisconnect(boolean closedByServer) {
 
@@ -69,6 +69,7 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
     public void onConnectError(Exception websocketException) {
 
     }
+
 
 }
 
