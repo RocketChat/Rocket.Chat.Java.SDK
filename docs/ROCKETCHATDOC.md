@@ -214,27 +214,70 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **11. leaveRoom**
 
 ```java
-
+        //without ack
+        room.leave(null);
+        
+        //with ack
+        room.leave(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("left room");
+                }
+            }
+        });
 
 ```
 
 **12. hideRoom**
 
 ```java
-
-
+        //without ack
+        room.hide(null);
+        
+        //with ack
+        room.hide(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("room is hidden");
+                }
+            }
+        });
 ```
 
 **13. openRoom**
 
 ```java
-
-
+        //without ack
+        room.open(null);
+        
+        //with ack
+        room.open(new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("opened room successfully");
+                }
+            }
+        });
 ```
 
 **14. setFavouriteRoom**
 
 ```java
 
-
+        Boolean isfavourite=true;
+        //without ack
+        room.setFavourite(isfavourite,null);
+        
+        //with ack
+        room.setFavourite(isfavourite, new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("Room is now favourite");
+                }
+            }
+        });
 ```

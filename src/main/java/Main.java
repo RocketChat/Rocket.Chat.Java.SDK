@@ -32,14 +32,7 @@ public class Main implements ConnectListener, LoginListener{
         api.connect(this);
 
 
-        room.unarchive(new SimpleListener() {
-            @Override
-            public void callback(Boolean success, ErrorObject error) {
-                if (success){
-                    System.out.println("Archived successfully");
-                }
-            }
-        });
+
 
     }
 
