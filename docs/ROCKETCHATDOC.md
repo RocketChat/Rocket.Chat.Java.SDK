@@ -19,8 +19,19 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 **1. getChatHistory**
 
 ```java
-
-
+/****
+     * @param oldestMessageTimestamp Used to do pagination (null means latest timestamp)
+     * @param count The message quantity, messages are loaded having timestamp older than @param oldestMessageTimestamp
+     * @param lastTimestamp Date of the last time when client got data (Used to calculate unread)[unread count suggests number of unread messages having timestamp above @param lastTimestamp]
+     **/
+    room.getChatHistory(count,oldestMessageTimestamp,lastTimestamp, new LoadHistoryListener() {
+                    @Override
+                    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+                        
+                    }
+    });
+    
+    Hint: pass count=20, oldestMessageTimestamp=new Date(),lastTimestamp=null for getting latest 20 messages
 ```
 
 **2. sendMessage**

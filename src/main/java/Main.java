@@ -2,9 +2,12 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.TokenObject;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -16,6 +19,7 @@ public class Main implements ConnectListener, LoginListener{
 
 
     RocketChatAPI api;
+    RocketChatAPI.ChatRoom room;
     private static String serverurl="wss://demo.rocket.chat/websocket";
     private static String token="ju-c1BRuPmcUhKSFgLPoh9L6bhyEhHCrdMuX9NlKAe3";
 
@@ -23,6 +27,7 @@ public class Main implements ConnectListener, LoginListener{
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
+
     }
 
     public static void main(String [] args){
