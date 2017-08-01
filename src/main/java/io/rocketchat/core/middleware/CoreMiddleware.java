@@ -31,6 +31,15 @@ public class CoreMiddleware {
         LOADHISTORY,
         SENDMESSAGE,
         MESSAGEOP,
+        CREATEGROUP,
+        DELETEGROUP,
+        ARCHIEVE,
+        UNARCHIEVE,
+        JOINPUBLICGROUP,
+        LEAVEGROUP,
+        OPENROOM,
+        HIDEROOM,
+        SETFAVOURITEROOM,
         LOGOUT
     }
 
@@ -193,23 +202,55 @@ public class CoreMiddleware {
                     }
                     break;
                 case MESSAGEOP:
-                    SimpleListener simpleListener= (SimpleListener) listener;
-                    if (object.opt("error")!=null){
-                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
-                        simpleListener.callback(null,errorObject);
-                    }else {
-                        simpleListener.callback(true, null);
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case CREATEGROUP:
+                    RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
+                    if (object.opt("error")!=null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        groupListener.onCreateGroup(null,errorObject);
+                    }else{
+                        String roomId=((JSONObject)result).optString("rid");
+                        groupListener.onCreateGroup(roomId,null);
                     }
+                    break;
+                case DELETEGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case ARCHIEVE:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case UNARCHIEVE:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case JOINPUBLICGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case LEAVEGROUP:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case OPENROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case HIDEROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
+                    break;
+                case SETFAVOURITEROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
                 case LOGOUT:
-                    if (object.opt("error")!=null){
-                        ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
-                        ((SimpleListener) listener).callback(null,errorObject);
-                    }else {
-                        ((SimpleListener) listener).callback(true, null);
-                    }
+                    handleCallbackBySimpleListener((SimpleListener) listener,object.opt("error"));
                     break;
             }
+        }
+    }
+
+    public void handleCallbackBySimpleListener(SimpleListener listener, Object error){
+        if (error!=null){
+            ErrorObject errorObject=new ErrorObject((JSONObject) error);
+            listener.callback(null,errorObject);
+        }else {
+            listener.callback(true, null);
         }
     }
 }

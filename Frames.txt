@@ -112,3 +112,68 @@ a["{\"msg\":\"result\",\"id\":\"11\",\"result\":{\"update\":[{\"_id\":\"GENERAL\
 Message is {"msg":"result","id":"3","result":[{"rid":"upidD5kfC2fES9tvN","u":{"_id":"Q5ypB7Yzc2gon6NLc","username":"fedor"},"roles":["owner"],"_id":"Ki7g4pEapcYAM9XiB"}]}
 
 Message is {"msg":"result","id":"3","result":[{"rid":"GENERAL","u":{"_id":"QC8QDtuZRxaw6XaJd","username":"staci.holmes.segarra"},"roles":["owner"],"_id":"gFKddMKZGYHJ5R7Hs"}]}
+
+
+//Create Public Group
+
+["{\"msg\":\"sub\",\"id\":\"FH63hhfXWRFp7SjXL\",\"name\":\"userAutocomplete\",\"params\":[{\"exceptions\":[\"sachin\",\"demosachin\"],\"term\":\"ra\"},{\"limit\":10,\"sort\":{\"username\":1}},\"UserAndRoom\"]}"]
+
+a["{\"msg\":\"added\",\"collection\":\"autocompleteRecords\",\"id\":\"rocket.cat\",\"fields\":{\"name\":\"Rocket.Cat\",\"status\":\"online\",\"username\":\"rocket.cat\"}}"]
+
+["{\"msg\":\"unsub\",\"id\":\"FH63hhfXWRFp7SjXL\"}"]
+
+["{\"msg\":\"sub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\",\"name\":\"userAutocomplete\",\"params\":[{\"exceptions\":[\"sachin\",\"demosachin\"],\"term\":\"r\"},{\"limit\":10,\"sort\":{\"username\":1}},\"UserAndRoom\"]}"]
+
+a["{\"msg\":\"added\",\"collection\":\"autocompleteRecords\",\"id\":\"rocket.cat\",\"fields\":{\"name\":\"Rocket.Cat\",\"status\":\"online\",\"username\":\"rocket.cat\"}}"]
+
+["{\"msg\":\"unsub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\"}"]
+
+["{\"msg\":\"method\",\"method\":\"createChannel\",\"params\":[\"mypublicchannel\",[\"demosachin\",\"rocket.cat\"],false],\"id\":\"14\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"rid\":\"Lgm3b8q4KPALupSYm\"}}"]
+
+//Subscribe typing
+["{\"msg\":\"sub\",\"id\":\"gYQtnd5CGfZBvpNXd\",\"name\":\"stream-notify-room\",\"params\":[\"Lgm3b8q4KPALupSYm/typing\",false]}"]
+
+
+//Unsubscribe event
+
+request
+["{\"msg\":\"unsub\",\"id\":\"Y7AaJRJXZ8wyzWGX4\"}"]
+
+response
+{"msg":"nosub","id":"ts56amurfm1v"}
+
+//get room via date
+request
+["{\"msg\":\"method\",\"method\":\"rooms/get\",\"params\":[{\"$date\":1501316423417}],\"id\":\"14\"}"]
+
+response
+a["{\"msg\":\"result\",\"id\":\"14\",\"result\":{\"update\":[{\"_id\":\"3moJAzjK2s3jZfGvc\",\"name\":\"TigerClaw\",\"t\":\"p\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"archived\":false,\"ro\":false},{\"_id\":\"Rdn7keFYYa6dKFTgP\",\"name\":\"rockstar\",\"t\":\"c\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"ro\":false},{\"_id\":\"Lgm3b8q4KPALupSYm\",\"name\":\"mypublicchannel\",\"t\":\"c\",\"u\":{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\"},\"ro\":false}],\"remove\":[]}}"]
+
+
+//get users of room : only online
+//request
+["{\"msg\":\"method\",\"method\":\"getUsersOfRoom\",\"params\":[\"Lgm3b8q4KPALupSYm\",false],\"id\":\"18\"}"]
+//response
+a["{\"msg\":\"result\",\"id\":\"18\",\"result\":{\"total\":3,\"records\":[{\"_id\":\"rocket.cat\",\"username\":\"rocket.cat\",\"name\":\"Rocket.Cat\"},{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"}]}}"]
+
+//get users of room : all users
+
+["{\"msg\":\"method\",\"method\":\"getUsersOfRoom\",\"params\":[\"Lgm3b8q4KPALupSYm\",true],\"id\":\"19\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"19\",\"result\":{\"total\":3,\"records\":[{\"_id\":\"N7fssgjkWmjiP7tv9\",\"username\":\"demosachin\",\"name\":\"demosachin\"},{\"_id\":\"rocket.cat\",\"username\":\"rocket.cat\",\"name\":\"Rocket.Cat\"},{\"_id\":\"YWrngQDYfc4icg8cu\",\"username\":\"sachin\",\"name\":\"sachin\"}]}}"]
+
+// Users are needed to be stored, to be online or offline based on their ids
+// When particular associated user gets online
+
+a["{\"msg\":\"added\",\"collection\":\"users\",\"id\":\"N7fssgjkWmjiP7tv9\",\"fields\":{\"status\":\"online\",\"username\":\"demosachin\",\"utcOffset\":5.5}}"]
+
+// Message search inside box
+
+//request
+["{\"msg\":\"method\",\"method\":\"messageSearch\",\"params\":[\"hey\",\"Lgm3b8q4KPALupSYm\",20],\"id\":\"22\"}"]
+
+//response
+a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"messages\":[],\"users\":[],\"channels\":[]}}"]
+

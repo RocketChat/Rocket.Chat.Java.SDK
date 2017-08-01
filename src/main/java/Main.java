@@ -1,26 +1,32 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.model.*;
+import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.model.TokenObject;
 
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main extends CoreAdapter{
+public class Main implements ConnectListener, LoginListener {
 
 
     RocketChatAPI api;
+    RocketChatAPI.ChatRoom room;
     private static String serverurl="wss://demo.rocket.chat/websocket";
-    private RocketChatAPI.ChatRoom room;
+    private static String token="";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
+
+
+
     }
 
     public static void main(String [] args){
@@ -29,57 +35,51 @@ public class Main extends CoreAdapter{
 
     @Override
     public void onConnect(String sessionID) {
-        System.out.println("Connected to server with id "+sessionID);
-        api.login("sachin.shinde","sachin123",this);
-    }
-
-    @Override
-    public void onDisconnect(boolean closedByServer) {
-        System.out.println("Disconnected from server");
-    }
-
-    @Override
-    public void onConnectError(Exception websocketException) {
-        System.out.println("Got connect error with the server");
+        System.out.println("Connected to server");
+        api.loginUsingToken(token,this);
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        System.out.println("Logged in successfully with token "+token);
-        api.logout(new SimpleListener() {
-            @Override
-            public void callback(Boolean success, ErrorObject error) {
-                if (success){
-                    System.out.println("Logged out successfully");
+        if (error==null) {
+            System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
+
+            //logging out after 2 seconds
+
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    logout();
                 }
-            }
-        });
-    }
+            },2000);
 
-    @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
-        System.out.println("Name is "+rooms.get(0).getRoomName());
-        api.listCustomEmoji(this);
-//        room=api.createChatRoom(rooms.get(0));
-//        room.getChatHistory(20,new Date(),null, this);
-    }
-
-    @Override
-    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
-        for (Emoji emoji : emojis){
-            System.out.println("name is "+emoji.getName());
+        }else{
+            System.out.println("Got error "+error.getMessage());
         }
     }
 
+    private void logout() {
+       api.logout(new SimpleListener() {
+           @Override
+           public void callback(Boolean success, ErrorObject error) {
+               if (success){
+                   System.out.println("Logged out successfully");
+               }
+           }
+       });
+    }
+
     @Override
-    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
+    public void onDisconnect(boolean closedByServer) {
 
     }
 
     @Override
-    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
-        System.out.println("First message is "+list.get(0).getMessage());
+    public void onConnectError(Exception websocketException) {
+
     }
+
+
 }
 
 
@@ -91,4 +91,5 @@ public class Main extends CoreAdapter{
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
-
+//Bugs
+// TODO: 29/7/17 Room created with a roomName, deleted again and created with same name mess up everything

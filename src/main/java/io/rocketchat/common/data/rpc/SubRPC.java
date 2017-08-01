@@ -26,4 +26,16 @@ public class SubRPC {
         }
         return object;
     }
+
+
+    public static JSONObject getRemoteUnsubscriptionObject(String subId){
+        JSONObject object=new JSONObject();
+        try {
+            object.put("msg", "unsub");
+            object.put("id",subId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
 }

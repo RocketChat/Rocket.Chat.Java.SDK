@@ -59,6 +59,7 @@ public class BasicRPC extends RPC {
      * Tested
      */
 
+    // TODO: 29/7/17 add getSubscriptions based on date
     public static String getSubscriptions(int integer){
         return getRemoteMethodObject(integer,GETSUBSCRIPTIONS).toString();
     }
@@ -66,6 +67,7 @@ public class BasicRPC extends RPC {
     /**
      * Tested
      */
+    // TODO: 29/7/17 add getRooms based on date
     public static String getRooms(int integer){
         return getRemoteMethodObject(integer,GETROOMS).toString();
     }

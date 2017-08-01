@@ -10,6 +10,7 @@ import java.util.Date;
  * Created by sachin on 19/7/17.
  */
 
+
 public class SubscriptionObject extends Room{
 
     Date roomCreated;
@@ -79,15 +80,15 @@ public class SubscriptionObject extends Room{
         return subscriptionId;
     }
 
-    public String getDesktopNotifications() {
-        return desktopNotifications;
-    }
-
-    public String getMobilePushNotifications() {
-        return mobilePushNotifications;
-    }
-
-    public String getEmailNotifications() {
-        return emailNotifications;
-    }
+//    public String getDesktopNotifications() {
+//        return desktopNotifications;
+//    }
+//
+//    public String getMobilePushNotifications() {
+//        return mobilePushNotifications;
+//    }
+//
+//    public String getEmailNotifications() {
+//        return emailNotifications;
+//    }
 }

@@ -2,6 +2,8 @@ package io.rocketchat.livechat;
 
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
 import io.rocketchat.livechat.callback.*;
@@ -18,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by sachin on 8/6/17.
  */
 
+// TODO: 30/7/17 Make it singletone like eventbus, add builder class to LiveChatAPI in order to use it anywhere
 public class LiveChatAPI extends Socket{
 
     AtomicInteger integer;
@@ -102,15 +105,11 @@ public class LiveChatAPI extends Socket{
     }
 
 
-    private void subscribeRoom( String roomID,  Boolean enable,  SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMROOMMESSAGES);
-        }
-        if (listener!=null){
-            liveChatStreamMiddleware.subscribeRoom(listener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeRoom(listener);
         sendDataInBackground(LiveChatSubRPC.streamRoomMessages(uniqueID,roomID,enable));
 
     }
@@ -118,12 +117,8 @@ public class LiveChatAPI extends Socket{
     private void subscribeLiveChatRoom( String roomID,  Boolean enable,  SubscribeListener subscribeListener,  AgentListener.AgentConnectListener agentConnectListener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.STREAMLIVECHATROOM);
-        }
-        if (agentConnectListener !=null){
-            liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
         sendDataInBackground(LiveChatSubRPC.streamLivechatRoom(uniqueID,roomID,enable));
 
     }
@@ -131,12 +126,8 @@ public class LiveChatAPI extends Socket{
     private void subscribeTyping(String roomID, Boolean enable,  SubscribeListener subscribeListener,  TypingListener listener){
 
         String uniqueID=Utils.shortUUID();
-        if (subscribeListener !=null) {
-            liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener, LiveChatStreamMiddleware.SubType.NOTIFYROOM);
-        }
-        if (listener!=null){
-            liveChatStreamMiddleware.subscribeTyping(listener);
-        }
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.subscribeTyping(listener);
         sendDataInBackground(LiveChatSubRPC.subscribeTyping(uniqueID,roomID,enable));
 
     }
@@ -210,6 +201,7 @@ public class LiveChatAPI extends Socket{
     }
 
 
+    // TODO: 30/7/17 Add methods for unsubscribing events
     public class ChatRoom{
 
         String userName;
