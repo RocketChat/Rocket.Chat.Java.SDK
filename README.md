@@ -78,4 +78,4 @@ Documentation
 7. Subscribe room
 8. Close conversation
 
-- **User documentation can be found here** => [LiveChat SDK](https://github.com/sacOO7/Rocket.Chat.Java.SDK/blob/feature/CoreSDK/docs/LIVECHAT.md)
+- **User documentation can be found here** => [LiveChat SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/feature/CoreSDK/docs/LIVECHAT.md)
