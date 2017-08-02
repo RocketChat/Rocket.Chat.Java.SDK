@@ -2,11 +2,18 @@ package RocketChatAPI.RocketChatTest;
 
 import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.core.callback.RoomListener;
 import io.rocketchat.core.model.TokenObject;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.timeout;
 
 /**
  * Created by sachin on 3/8/17.
@@ -15,6 +22,14 @@ public class CreatePrivateGroupTest extends RocketChatParent {
 
     String username="testuserrocks";
     String password="testuserrocks";
+
+    String groupName="PRIVATETESTGROUP";
+
+    @Mock
+    RoomListener.GroupListener listener;
+
+    @Captor
+    ArgumentCaptor <String> roomIdArgumentCaptor;
 
     @Captor
     ArgumentCaptor<ErrorObject> errorArgumentCaptor;
@@ -32,7 +47,15 @@ public class CreatePrivateGroupTest extends RocketChatParent {
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
+        api.createPrivateGroup(groupName,new String[]{},listener);
+    }
 
+    @Test
+    public void createPrivateGroupTest(){
+        Mockito.verify(listener, timeout(12000).atLeastOnce()).onCreateGroup(roomIdArgumentCaptor.capture(),errorArgumentCaptor.capture());
+        Assert.assertNotNull(roomIdArgumentCaptor.getValue());
+        Assert.assertNull(errorArgumentCaptor.getValue());
+        System.out.println("Room id is "+roomIdArgumentCaptor.getValue());
     }
 
     @After
