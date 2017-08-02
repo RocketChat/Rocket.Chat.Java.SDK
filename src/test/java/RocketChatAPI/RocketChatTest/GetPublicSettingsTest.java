@@ -2,11 +2,21 @@ package RocketChatAPI.RocketChatTest;
 
 import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.core.callback.AccountListener;
+import io.rocketchat.core.model.PublicSetting;
 import io.rocketchat.core.model.TokenObject;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import java.util.ArrayList;
+
+import static org.mockito.Mockito.timeout;
 
 /**
  * Created by sachin on 3/8/17.
@@ -15,6 +25,12 @@ public class GetPublicSettingsTest extends RocketChatParent {
 
     String username="testuserrocks";
     String password="testuserrocks";
+
+    @Mock
+    AccountListener.getPublicSettingsListener listener;
+
+    @Captor
+    ArgumentCaptor <ArrayList<PublicSetting>> listArgumentCaptor;
 
     @Captor
     ArgumentCaptor<ErrorObject> errorArgumentCaptor;
@@ -32,7 +48,15 @@ public class GetPublicSettingsTest extends RocketChatParent {
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
+        api.getPublicSettings(listener);
+    }
 
+    @Test
+    public void getPublicSettingsTest(){
+        Mockito.verify(listener, timeout(12000).atLeastOnce()).onGetPublicSettings(listArgumentCaptor.capture(),errorArgumentCaptor.capture());
+        Assert.assertNotNull(listArgumentCaptor.getValue());
+        Assert.assertNull(errorArgumentCaptor.getValue());
+        Assert.assertTrue(listArgumentCaptor.getValue().size()>0);
     }
 
     @After
