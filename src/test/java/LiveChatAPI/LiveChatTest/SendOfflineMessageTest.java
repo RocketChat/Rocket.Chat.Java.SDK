@@ -2,7 +2,7 @@ package LiveChatAPI.LiveChatTest;
 
 import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import org.junit.Assert;
 import org.junit.Before;

@@ -17,15 +17,28 @@ public class RPC {
         RESULT,
         READY,
         CHANGED,
+        NOSUB,
         OTHER
     }
 
+    //Currently Used
     public static String TYPE_PING="ping";
     public static String TYPE_CONNECTED="connected";
     public static String TYPE_ADDED="added";
     public static String TYPE_RESULT="result";
     public static String TYPE_READY="ready";
     public static String TYPE_CHANGED="changed";
+    public static String TYPE_NOSUB = "nosub";
+
+
+    //Maybe required in future
+    public static String TYPE_UNSUB="unsub";
+    public static String TYPE_SUB="sub";
+    public static final String TYPE_REMOVED = "removed";
+    public static final String TYPE_PONG = "pong";
+    public static final String TYPE_UPDATED = "updated";
+    public static final String TYPE_ERROR = "error";
+    public static final String TYPE_CLOSED = "closed";
 
 
     public static MsgType parse(String s){
@@ -41,9 +54,20 @@ public class RPC {
             return MsgType.READY;
         }else if (s.equals(TYPE_CHANGED)){
             return MsgType.CHANGED;
+        }else if (s.equals(TYPE_NOSUB)){
+            return MsgType.NOSUB;
         }else {
             return MsgType.OTHER;
         }
+    }
+
+    /**
+     * Tested
+     * @return
+     */
+
+    public static String ConnectObject(){
+        return "{\"msg\":\"connect\",\"version\":\"1\",\"support\":[\"1\",\"pre2\",\"pre1\"]}";
     }
 
     public static JSONObject getRemoteMethodObject(int integer,String methodName, Object ... args){

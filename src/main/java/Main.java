@@ -1,63 +1,85 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.network.ReconnectionStrategy;
-import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.ConnectListener;
-import io.rocketchat.livechat.callback.InitialDataListener;
-import io.rocketchat.livechat.model.DepartmentObject;
-import io.rocketchat.livechat.model.LiveChatConfigObject;
+import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.core.RocketChatAPI;
+import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.model.TokenObject;
 
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener,  InitialDataListener{
+public class Main implements ConnectListener, LoginListener {
 
-    private LiveChatAPI liveChat;
-    private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
 
+    RocketChatAPI api;
+    RocketChatAPI.ChatRoom room;
+    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String token="";
 
     public void call(){
-        liveChat=new LiveChatAPI(serverurl);
-        liveChat.setReconnectionStrategy(new ReconnectionStrategy(10,5000));
-        liveChat.connect(this);
+        api=new RocketChatAPI(serverurl);
+        api.setReconnectionStrategy(null);
+        api.connect(this);
+
+
+
     }
 
     public static void main(String [] args){
         new Main().call();
     }
 
-
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        liveChat.getInitialData(this);
+        api.loginUsingToken(token,this);
+    }
+
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        if (error==null) {
+            System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
+
+            //logging out after 2 seconds
+
+            new Timer().schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    logout();
+                }
+            },2000);
+
+        }else{
+            System.out.println("Got error "+error.getMessage());
+        }
+    }
+
+    private void logout() {
+       api.logout(new SimpleListener() {
+           @Override
+           public void callback(Boolean success, ErrorObject error) {
+               if (success){
+                   System.out.println("Logged out successfully");
+               }
+           }
+       });
     }
 
     @Override
     public void onDisconnect(boolean closedByServer) {
-        System.out.println("Disconnected from server");
+
     }
 
     @Override
     public void onConnectError(Exception websocketException) {
-        System.out.println("Got connect error with the server");
-    }
-
-    @Override
-    public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
-        System.out.println("Got initial data " + object);
-
-        ArrayList <DepartmentObject> departmentObjects=object.getDepartments();
-        if (departmentObjects.size()==0){
-            System.out.println("No departments available");
-        }else{
-            System.out.println("Departments available "+departmentObjects);
-        }
 
     }
+
+
 }
 
 
@@ -69,3 +91,5 @@ public class Main implements ConnectListener,  InitialDataListener{
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
+//Bugs
+// TODO: 29/7/17 Room created with a roomName, deleted again and created with same name mess up everything

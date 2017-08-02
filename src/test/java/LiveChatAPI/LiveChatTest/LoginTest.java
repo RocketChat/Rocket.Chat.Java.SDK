@@ -4,7 +4,7 @@ import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
-import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
 import io.rocketchat.livechat.model.GuestObject;

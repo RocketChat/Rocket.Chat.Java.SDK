@@ -1,8 +1,7 @@
 package LiveChatAPI.LiveChatTest;
 
 import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
-import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.ConnectListener;
+import io.rocketchat.common.listener.ConnectListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,11 +1,12 @@
 package io.rocketchat.livechat.middleware;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.callback.*;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -92,10 +93,10 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         historyListener.onLoadHistory(null, 0,errorObject);
                     }else {
-                        ArrayList <MessageObject> list=new ArrayList<MessageObject>();
+                        ArrayList <LiveChatMessage> list=new ArrayList<LiveChatMessage>();
                         JSONArray array = ((JSONObject)result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new MessageObject(array.optJSONObject(j)));
+                            list.add(new LiveChatMessage(array.optJSONObject(j)));
                         }
                         int unreadNotLoaded = object.optJSONObject("result").optInt("unreadNotLoaded");
                         historyListener.onLoadHistory(list, unreadNotLoaded,null);
@@ -117,8 +118,8 @@ public class LiveChatMiddleware {
                         ErrorObject errorObject=new ErrorObject(object.optJSONObject("error"));
                         messageAckListener.onMessageAck(null,errorObject);
                     }else {
-                        MessageObject messageObject=new MessageObject((JSONObject) result);
-                        messageAckListener.onMessageAck(messageObject,null);
+                        LiveChatMessage liveChatMessage =new LiveChatMessage((JSONObject) result);
+                        messageAckListener.onMessageAck(liveChatMessage,null);
                     }
                     break;
                 case SENDOFFLINEMESSAGE:

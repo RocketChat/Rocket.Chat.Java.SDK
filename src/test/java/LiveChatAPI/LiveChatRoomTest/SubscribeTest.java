@@ -2,8 +2,7 @@ package LiveChatAPI.LiveChatRoomTest;
 
 import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.livechat.callback.SubscribeListener;
-import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.livechat.model.GuestObject;
 import org.junit.After;
 import org.junit.Assert;
@@ -26,7 +25,7 @@ public class SubscribeTest extends RoomParent {
     SubscribeListener listener;
 
     @Captor
-    ArgumentCaptor <LiveChatStreamMiddleware.SubType> typeArgumentCaptor;
+    ArgumentCaptor <Boolean> typeArgumentCaptor;
 
     @Captor
     ArgumentCaptor <String> subscriptionId;

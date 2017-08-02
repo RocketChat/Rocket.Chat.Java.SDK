@@ -2,10 +2,10 @@ package io.rocketchat.livechat.middleware;
 
 import io.rocketchat.livechat.callback.AgentListener;
 import io.rocketchat.livechat.callback.MessageListener;
-import io.rocketchat.livechat.callback.SubscribeListener;
-import io.rocketchat.livechat.callback.TypingListener;
+import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.livechat.model.AgentObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class LiveChatStreamMiddleware {
     AgentListener.AgentConnectListener agentConnectListener;
     TypingListener typingListener;
 
-    ConcurrentHashMap <String,Object[]> subcallbacks;
+    ConcurrentHashMap <String,SubscribeListener> subcallbacks;
 
 
     LiveChatStreamMiddleware(){
@@ -55,8 +55,10 @@ public class LiveChatStreamMiddleware {
         typingListener =callback;
     }
 
-    public void createSubCallbacks(String id, SubscribeListener callback, SubType subscription){
-        subcallbacks.put(id,new Object[]{callback,subscription});
+    public void createSubCallbacks(String id, SubscribeListener callback){
+        if (callback!=null) {
+            subcallbacks.put(id, callback);
+        }
     }
 
     public void processCallback(JSONObject object){
@@ -66,12 +68,12 @@ public class LiveChatStreamMiddleware {
         switch (parse(s)) {
             case STREAMROOMMESSAGES:
                 if (subscriptionListener !=null) {
-                    MessageObject messageObject = new MessageObject(array.optJSONObject(0));
+                    LiveChatMessage liveChatMessage = new LiveChatMessage(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
-                    if (messageObject.getMessagetype().equals(MessageObject.MESSAGE_TYPE_CLOSE)) {
-                        subscriptionListener.onAgentDisconnect(roomId, messageObject);
+                    if (liveChatMessage.getMessagetype().equals(LiveChatMessage.MESSAGE_TYPE_CLOSE)) {
+                        subscriptionListener.onAgentDisconnect(roomId, liveChatMessage);
                     } else {
-                        subscriptionListener.onMessage(roomId, messageObject);
+                        subscriptionListener.onMessage(roomId, liveChatMessage);
                     }
                 }
                 break;
@@ -92,10 +94,8 @@ public class LiveChatStreamMiddleware {
         if (subObj.optJSONArray("subs")!=null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
-                Object object[] = subcallbacks.remove(id);
-                SubscribeListener subscribeListener = (SubscribeListener) object[0];
-                SubType subscription = (SubType) object[1];
-                subscribeListener.onSubscribe(subscription, id);
+                SubscribeListener subscribeListener = subcallbacks.remove(id);
+                subscribeListener.onSubscribe(true, id);
             }
         }
     }

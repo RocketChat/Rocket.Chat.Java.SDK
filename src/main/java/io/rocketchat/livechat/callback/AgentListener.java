@@ -1,6 +1,7 @@
 package io.rocketchat.livechat.callback;
 
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.model.AgentObject;
 
 /**
@@ -11,7 +12,7 @@ import io.rocketchat.livechat.model.AgentObject;
  * Getting agent info. from the server
  */
 public class AgentListener {
-    public interface AgentDataListener extends Listener{
+    public interface AgentDataListener extends Listener {
         void onAgentData(AgentObject agentObject, ErrorObject error);
     }
     public interface AgentConnectListener extends Listener{
