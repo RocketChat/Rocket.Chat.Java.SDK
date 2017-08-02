@@ -443,7 +443,7 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
 
 #### 5. Further communication with server
 - As room object is global accessible throughout Parent class, it's methods can be called from anywhere after initialization.
-- Each method for communication with server is given in the [LiveChat Room API DOC](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/master/LIVECHATDOC.md) .
+- Each method for communication with server is given in the [RocketChat Room API DOC](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHATDOC.md) .
 
 #### 6. Handling re-connection with server
 - `reconnect` method in `RocketChatAPI` class can be used for reconnecting to the server.
