@@ -148,7 +148,7 @@ public class Socket {
         });
     }
 
-    protected void reconnect(){
+    public void reconnect(){
         try {
             ws = ws.recreate(5000).connectAsynchronously();
         } catch (IOException e) {

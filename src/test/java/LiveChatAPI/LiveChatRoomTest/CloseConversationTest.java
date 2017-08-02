@@ -4,7 +4,7 @@ import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.MessageObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class CloseConversationTest  extends RoomParent {
     ArgumentCaptor <String > roomIdCaptor;
 
     @Captor
-    ArgumentCaptor <MessageObject> messageObjectArgumentCaptor;
+    ArgumentCaptor <LiveChatMessage> messageObjectArgumentCaptor;
 
     @Before
     public void setup(){
