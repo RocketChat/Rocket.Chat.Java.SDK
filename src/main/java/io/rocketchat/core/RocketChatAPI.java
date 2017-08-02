@@ -275,19 +275,19 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    private String subscribeRoomMessageEvent(String room_id, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
+    private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener){
         String uniqueID= Utils.shortUUID();
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
         coreStreamMiddleware.subscribeRoomMessage(listener);
-        sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID,room_id,enable));
+        sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID,roomId,enable));
         return uniqueID;
     }
 
-    private String subscribeRoomTypingEvent(String room_id, Boolean enable, SubscribeListener subscribeListener, TypingListener listener){
+    private String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener){
         String uniqueID= Utils.shortUUID();
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
         coreStreamMiddleware.subscribeRoomTyping(listener);
-        sendDataInBackground(CoreSubRPC.subscribeRoomTypingEvent(uniqueID,room_id,enable));
+        sendDataInBackground(CoreSubRPC.subscribeRoomTypingEvent(uniqueID,roomId,enable));
         return uniqueID;
     }
 
@@ -345,6 +345,9 @@ public class RocketChatAPI extends Socket {
                 coreStreamMiddleware.processUnsubSuccess(object);
                 break;
             case OTHER:
+                break;
+            default:
+
                 break;
         }
 
