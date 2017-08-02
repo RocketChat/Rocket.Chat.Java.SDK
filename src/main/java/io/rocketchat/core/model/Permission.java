@@ -25,7 +25,9 @@ public class Permission {
             for (int i=0;i<array.length();i++){
                 roles.add(array.getString(i));
             }
-            updatedAt= new Date( object.getJSONObject("_updatedAt").getInt("$date"));
+            if (object.opt("_updatedAt")!=null) {
+                updatedAt = new Date(object.getJSONObject("_updatedAt").getInt("$date"));
+            }
             metaData= new MetaData(object.getJSONObject("meta"));
             loki= object.optInt("$loki");
         } catch (JSONException e) {
