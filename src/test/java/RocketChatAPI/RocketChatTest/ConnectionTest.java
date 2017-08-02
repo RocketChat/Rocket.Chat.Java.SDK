@@ -1,26 +1,27 @@
-package LiveChatAPI.LiveChatTest;
+package RocketChatAPI.RocketChatTest;
 
-import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
 import io.rocketchat.common.listener.ConnectListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.timeout;
 
-
 /**
- * Created by sachin on 15/7/17.
+ * Created by sachin on 2/8/17.
  */
-
-public class LiveChatConnectionTest extends ChatParent{
+public class ConnectionTest extends RocketChatParent {
 
     @Mock
     ConnectListener listener;
 
     @Captor
-    ArgumentCaptor <String> connectCaptor;
+    ArgumentCaptor<String> connectCaptor;
 
     @Captor
     ArgumentCaptor <Boolean> disconnectCaptor;
@@ -28,9 +29,10 @@ public class LiveChatConnectionTest extends ChatParent{
     @Captor
     ArgumentCaptor <Exception> connectErrorCaptor;
 
+
     @Before
-    public void setup(){
-        setUpBefore();
+    public void setUp() {
+        super.setUpBefore(false);
     }
 
     @Test
