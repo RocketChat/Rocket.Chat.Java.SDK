@@ -2,9 +2,9 @@ package RocketChatAPI.RocketChatTest;
 
 import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.model.TokenObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +65,11 @@ public class LoginTest extends RocketChatParent{
 
         token=tokenArgumentCaptor.getValue().getAuthToken();
         System.out.println("value of token is "+token);
+    }
+
+    @After
+    public void logout(){
+        api.logout(null);
     }
 
 }
