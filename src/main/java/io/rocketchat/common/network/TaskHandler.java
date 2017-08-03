@@ -13,21 +13,9 @@ public class TaskHandler {
 
     public TaskHandler() {
         tasks=new ArrayList<TimerTask>();
-        /**
-         * Removes all garbage/cancelled tasks from the Timer queue after periodic time
-         */
-
-    }
-
-    public void startTimer(){
         timer=new Timer();
-        scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                timer.purge();
-            }
-        },20000,20000);
     }
+
 
     public void postDelayed(TimerTask timerTask, long delay){
         tasks.add(timerTask);
@@ -41,7 +29,7 @@ public class TaskHandler {
     }
 
     public void removeLast(){
-        if (tasks.size()>1) {
+        if (tasks.size()!=0) {
             tasks.remove(tasks.size() - 1).cancel();
         }
     }

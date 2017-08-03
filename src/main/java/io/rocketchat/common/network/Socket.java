@@ -47,7 +47,6 @@ public class Socket {
             @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 Socket.this.onConnected();
-                handler.startTimer();
                 super.onConnected(websocket, headers);
             }
 
