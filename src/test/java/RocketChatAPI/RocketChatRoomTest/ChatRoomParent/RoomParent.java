@@ -7,6 +7,7 @@ import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 import org.junit.After;
+import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -22,8 +23,10 @@ public class RoomParent extends CoreAdapter{
     String password="testuserrocks";
 
     public RocketChatAPI api;
+    public RocketChatAPI.ChatRoom room;
 
-    public void setUpBefore(Boolean connect){
+    @Before
+    public void setUpBefore(){
         MockitoAnnotations.initMocks( this );
         System.out.println("before got called");
         api= new RocketChatAPI(serverurl);
@@ -51,14 +54,9 @@ public class RoomParent extends CoreAdapter{
             System.out.println("Room type is "+room.getRoomData().getRoomType());
             System.out.println("Room id is "+room.getRoomData().getRoomId());
         }
-
-        RocketChatAPI.ChatRoom room=factory.createChatRooms(subscriptions).getChatRoomByName("PUBLICTESTGROUP");
-        onRoom(room);
+        room=factory.createChatRooms(subscriptions).getChatRoomByName("PUBLICTESTGROUP");
     }
 
-    public void onRoom(RocketChatAPI.ChatRoom room){
-
-    }
 
     @After
     public void logout(){
