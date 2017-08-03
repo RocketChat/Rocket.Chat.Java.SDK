@@ -191,12 +191,10 @@ public class Socket {
                 },strategy.getReconnectInterval());
 
             }else{
-                handler.removeAll();
                 handler.cancel();
                 System.out.println("Number of attempts are complete");
             }
         }else{
-            handler.removeAll();
             handler.cancel();
             selfDisconnect=false;
         }
@@ -225,7 +223,7 @@ public class Socket {
             @Override
             public void run() {
                 System.out.println("This is a disconnection");
-                ws.disconnect();
+                ws.disconnect(WebSocketCloseCode.NONE);
                 handler.remove(this);
             }
         },2*pingInterval);

@@ -34,11 +34,6 @@ public class TaskHandler {
         task.cancel();
     }
 
-    public void removeAll(){
-        task.cancel();
-        timer.purge();
-    }
-
     public void cancel(){
         timer.cancel();
         timer.purge();

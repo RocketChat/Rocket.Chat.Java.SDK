@@ -1,4 +1,3 @@
-import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 
@@ -14,8 +13,8 @@ public class Main extends CoreAdapter{
 
     public void call(){
         api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(new ReconnectionStrategy(10,2000));
-        api.setPingInterval(5000);
+        api.setReconnectionStrategy(null);
+        api.setPingInterval(3000);
         api.connect(this);
 
     }
@@ -29,7 +28,10 @@ public class Main extends CoreAdapter{
         System.out.println("Connected to server");
     }
 
-
+    @Override
+    public void onDisconnect(boolean closedByServer) {
+        System.out.println("Disconnect detected");
+    }
 }
 
 
