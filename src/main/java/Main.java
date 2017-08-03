@@ -15,7 +15,7 @@ public class Main extends CoreAdapter{
     public void call(){
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(new ReconnectionStrategy(10,2000));
-        api.setPingInterval(3000);
+        api.setPingInterval(5000);
         api.connect(this);
 
     }

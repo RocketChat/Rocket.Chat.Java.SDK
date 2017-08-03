@@ -211,7 +211,7 @@ public class Socket {
         System.out.println("Message is " + text);
     }
 
-    public void checkActiveConnection(){
+    public void sendPingFramesPeriodically(){
         handler.removeLast();
         handler.postDelayed(new TimerTask() {
             @Override
