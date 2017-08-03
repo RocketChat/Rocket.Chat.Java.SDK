@@ -35,7 +35,7 @@ Documentation
 -------------
 
 ### 1. Core SDK
-- This SDK is related to **chat** related API's available on the Rocket.Chat server.
+- This SDK consist of **chat** related API's available on the Rocket.Chat server.
 - Currently supports following features.
 1. Login/Resume Login
 2. Getting Permissions/Getting public settings
