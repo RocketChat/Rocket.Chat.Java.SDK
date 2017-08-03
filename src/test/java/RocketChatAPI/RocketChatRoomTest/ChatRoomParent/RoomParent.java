@@ -36,7 +36,8 @@ public class RoomParent extends CoreAdapter{
 
     @Override
     public void onConnect(String sessionID) {
-        api.login(username,password,this);
+        api.login(username,password,RoomParent.this);
+
     }
 
     @Override
@@ -59,7 +60,7 @@ public class RoomParent extends CoreAdapter{
 
 
     @After
-    public void logout(){
+    public void logout() throws InterruptedException {
         api.logout(null);
     }
 }

@@ -1,32 +1,20 @@
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.model.TokenObject;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import io.rocketchat.core.adapter.CoreAdapter;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main implements ConnectListener, LoginListener {
+public class Main extends CoreAdapter{
 
 
     RocketChatAPI api;
-    RocketChatAPI.ChatRoom room;
     private static String serverurl="wss://demo.rocket.chat/websocket";
-    private static String token="";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
-
-
-
     }
 
     public static void main(String [] args){
@@ -36,47 +24,6 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
-    }
-
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        if (error==null) {
-            System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-
-            //logging out after 2 seconds
-
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    logout();
-                }
-            },2000);
-
-        }else{
-            System.out.println("Got error "+error.getMessage());
-        }
-    }
-
-    private void logout() {
-       api.logout(new SimpleListener() {
-           @Override
-           public void callback(Boolean success, ErrorObject error) {
-               if (success){
-                   System.out.println("Logged out successfully");
-               }
-           }
-       });
-    }
-
-    @Override
-    public void onDisconnect(boolean closedByServer) {
-
-    }
-
-    @Override
-    public void onConnectError(Exception websocketException) {
-
     }
 
 

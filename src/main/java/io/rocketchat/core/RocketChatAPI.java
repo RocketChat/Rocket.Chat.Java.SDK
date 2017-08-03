@@ -319,13 +319,17 @@ public class RocketChatAPI extends Socket {
         JSONObject object = new JSONObject(text);
         switch (RPC.parse(object.optString("msg"))) {
             case PING:
-                sendDataInBackground("{\"msg\":\"pong\"}");
+                sendDataInBackground(BasicRPC.PONGMESSAGE);
+                break;
+            case PONG:
+                checkActiveConnection();
                 break;
             case CONNECTED:
                 sessionId = object.optString("session");
                 if (connectListener != null) {
                     connectListener.onConnect(sessionId);
                 }
+                sendDataInBackground(BasicRPC.PINGMESSAGE);
                 break;
             case ADDED:
                 if (object.optString("collection").equals("users")) {

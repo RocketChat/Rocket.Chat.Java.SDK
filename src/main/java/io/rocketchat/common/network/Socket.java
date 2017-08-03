@@ -1,6 +1,7 @@
 package io.rocketchat.common.network;
 
 import com.neovisionaries.ws.client.*;
+import io.rocketchat.common.data.rpc.RPC;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,16 +22,24 @@ public class Socket {
     private ReconnectionStrategy strategy;
     private Timer timer;
     private boolean selfDisconnect;
+    TaskHandler handler;
+    long pingInterval;
 
     protected Socket(String url){
         this.url=url;
         adapter=getAdapter();
         factory=new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect=false;
+        handler=new TaskHandler();
+        pingInterval=2000;
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
         this.strategy = strategy;
+    }
+
+    public void setPingInterval(long pingInterval) {
+        this.pingInterval = pingInterval;
     }
 
     private WebSocketAdapter getAdapter() {
@@ -38,6 +47,7 @@ public class Socket {
             @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 Socket.this.onConnected();
+                handler.startTimer();
                 super.onConnected(websocket, headers);
             }
 
@@ -182,9 +192,13 @@ public class Socket {
                 },strategy.getReconnectInterval());
 
             }else{
+                handler.removeAll();
+                handler.cancel();
                 System.out.println("Number of attempts are complete");
             }
         }else{
+            handler.removeAll();
+            handler.cancel();
             selfDisconnect=false;
         }
     }
@@ -196,6 +210,26 @@ public class Socket {
 
     protected void onTextMessage(String text) throws Exception{
         System.out.println("Message is " + text);
+    }
+
+    public void checkActiveConnection(){
+        handler.removeLast();
+        handler.postDelayed(new TimerTask() {
+            @Override
+            public void run() {
+                sendData(RPC.PINGMESSAGE);
+                System.out.println("Sending PING message");
+                handler.remove(this);
+            }
+        },pingInterval);
+        handler.postDelayed(new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("This is a disconnection");
+                ws.disconnect();
+                handler.remove(this);
+            }
+        },2*pingInterval);
     }
 }
 
