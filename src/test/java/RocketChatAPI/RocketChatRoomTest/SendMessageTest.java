@@ -44,4 +44,6 @@ public class SendMessageTest extends RoomParent{
         Assert.assertNull(errorArgumentCaptor.getValue());
         System.out.println("Message is "+messageArgumentCaptor.getValue().getMessage());
     }
+
+
 }
