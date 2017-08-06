@@ -1,5 +1,9 @@
 Rocket.Chat.Java.SDK
 =====================================
+- This SDK is used for handling **background communication** with server. 
+- Contains **set of remote procedure calls (RPC)** to communicate with server and return appropriate results. 
+- It doesn't have any user interface. All API's defined in SDK are **asynchronous/non-blocking.**
+
 Overview
 --------
 This SDK is divided into two parts
