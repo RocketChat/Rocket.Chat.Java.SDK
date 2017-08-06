@@ -1,6 +1,6 @@
 Rocket.Chat.Java.SDK
 =====================================
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) &nbsp;[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Rocket-Chat-Java-SDK/Lobby)
 
 - This SDK is used for handling **background communication** with server. 
 - Contains **set of remote procedure calls (RPC)** to communicate with server and return appropriate results. 
