@@ -32,7 +32,7 @@ compile ('io.rocketchat:rocketchatjavasdk:0.6.0'){
 }
 ```
 
-[ ![Download](https://api.bintray.com/packages/sacoo7/Maven/RocketChat-SDK/images/download.svg) ](https://bintray.com/sacoo7/Maven/RocketChat-SDK/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/sacoo7/Maven/RocketChat-SDK/images/download.svg) ](https://bintray.com/sacoo7/Maven/RocketChat-SDK/_latestVersion) <a href="http://www.methodscount.com/?lib=io.rocketchat%3Arocketchatjavasdk%3A0.6.0"><img src="https://img.shields.io/badge/Methods and size-core: 788 | deps: 1256 | 116 KB-e91e63.svg"/></a>
 
 
 Documentation
