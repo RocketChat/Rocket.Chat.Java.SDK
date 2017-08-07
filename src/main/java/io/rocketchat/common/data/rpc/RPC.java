@@ -12,6 +12,7 @@ public class RPC {
 
     public enum MsgType{
         PING,
+        PONG,
         CONNECTED,
         ADDED,
         RESULT,
@@ -29,13 +30,13 @@ public class RPC {
     public static String TYPE_READY="ready";
     public static String TYPE_CHANGED="changed";
     public static String TYPE_NOSUB = "nosub";
+    public static String TYPE_PONG = "pong";
 
 
     //Maybe required in future
     public static String TYPE_UNSUB="unsub";
     public static String TYPE_SUB="sub";
     public static final String TYPE_REMOVED = "removed";
-    public static final String TYPE_PONG = "pong";
     public static final String TYPE_UPDATED = "updated";
     public static final String TYPE_ERROR = "error";
     public static final String TYPE_CLOSED = "closed";
@@ -56,6 +57,8 @@ public class RPC {
             return MsgType.CHANGED;
         }else if (s.equals(TYPE_NOSUB)){
             return MsgType.NOSUB;
+        }else if (s.equals(TYPE_PONG)){
+            return MsgType.PONG;
         }else {
             return MsgType.OTHER;
         }
@@ -69,6 +72,9 @@ public class RPC {
     public static String ConnectObject(){
         return "{\"msg\":\"connect\",\"version\":\"1\",\"support\":[\"1\",\"pre2\",\"pre1\"]}";
     }
+
+    public static String PINGMESSAGE="{\"msg\":\"ping\"}";
+    public static String PONGMESSAGE="{\"msg\":\"pong\"}";
 
     public static JSONObject getRemoteMethodObject(int integer,String methodName, Object ... args){
         JSONObject object=new JSONObject();

@@ -14,7 +14,7 @@ import static org.mockito.Mockito.timeout;
  * Created by sachin on 15/7/17.
  */
 
-public class LiveChatConnectionTest extends ChatParent{
+public class ConnectionTest extends ChatParent{
 
     @Mock
     ConnectListener listener;
