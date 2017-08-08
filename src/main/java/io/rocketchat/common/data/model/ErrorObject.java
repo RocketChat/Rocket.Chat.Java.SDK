@@ -13,11 +13,11 @@ public class ErrorObject {
     long error;
     String message;
 
-    public ErrorObject(JSONObject object){
-        reason=object.optString("reason");
-        errorType=object.optString("errorType");
-        error=object.optLong("error");
-        message=object.optString("message");
+    public ErrorObject(JSONObject object) {
+        reason = object.optString("reason");
+        errorType = object.optString("errorType");
+        error = object.optLong("error");
+        message = object.optString("message");
     }
 
     public String getReason() {
@@ -38,12 +38,7 @@ public class ErrorObject {
 
     @Override
     public String toString() {
-        return "ErrorObject{" +
-                "reason='" + reason + '\'' +
-                ", errorType='" + errorType + '\'' +
-                ", error=" + error +
-                ", message='" + message + '\'' +
-                '}';
+        return "ErrorObject{" + "reason='" + reason + '\'' + ", errorType='" + errorType + '\'' + ", error=" + error + ", message='" + message + '\'' + '}';
     }
 }
 

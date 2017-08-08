@@ -11,30 +11,29 @@ public class TaskHandler {
     private TimerTask task;
 
     public TaskHandler() {
-        timer=new Timer();
+        timer = new Timer();
     }
 
-    public void postDelayed(TimerTask timerTask, long delay){
-        this.task=timerTask;
-        timer.schedule(timerTask,delay);
+    public void postDelayed(TimerTask timerTask, long delay) {
+        this.task = timerTask;
+        timer.schedule(timerTask, delay);
     }
 
-
-    public void scheduleAtFixedRate(TimerTask timerTask, long delay, long period){
-        timer.scheduleAtFixedRate(timerTask,delay,period);
+    public void scheduleAtFixedRate(TimerTask timerTask, long delay, long period) {
+        timer.scheduleAtFixedRate(timerTask, delay, period);
     }
 
-    public void removeLast(){
-        if (task!=null) {
+    public void removeLast() {
+        if (task != null) {
             task.cancel();
         }
     }
 
-    public void remove(TimerTask task){
+    public void remove(TimerTask task) {
         task.cancel();
     }
 
-    public void cancel(){
+    public void cancel() {
         timer.cancel();
         timer.purge();
     }

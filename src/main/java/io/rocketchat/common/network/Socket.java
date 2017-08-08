@@ -1,7 +1,13 @@
 package io.rocketchat.common.network;
 
-import com.neovisionaries.ws.client.*;
-import io.rocketchat.common.data.rpc.RPC;
+import com.neovisionaries.ws.client.OpeningHandshakeException;
+import com.neovisionaries.ws.client.StatusLine;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketCloseCode;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,29 +15,31 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.rocketchat.common.data.rpc.RPC;
+
 /**
  * Created by sachin on 7/6/17.
  */
 
 public class Socket {
 
-    String url;
-    WebSocketFactory factory;
+    private String url;
+    private WebSocketFactory factory;
+    private TaskHandler handler;
+    private long pingInterval;
     private WebSocket ws;
     private WebSocketAdapter adapter;
     private ReconnectionStrategy strategy;
     private Timer timer;
     private boolean selfDisconnect;
-    TaskHandler handler;
-    long pingInterval;
 
-    protected Socket(String url){
-        this.url=url;
-        adapter=getAdapter();
-        factory=new WebSocketFactory().setConnectionTimeout(5000);
-        selfDisconnect=false;
-        handler=new TaskHandler();
-        pingInterval=2000;
+    protected Socket(String url) {
+        this.url = url;
+        adapter = getAdapter();
+        factory = new WebSocketFactory().setConnectionTimeout(5000);
+        selfDisconnect = false;
+        handler = new TaskHandler();
+        pingInterval = 2000;
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
@@ -43,7 +51,7 @@ public class Socket {
     }
 
     private WebSocketAdapter getAdapter() {
-        return new WebSocketAdapter(){
+        return new WebSocketAdapter() {
             @Override
             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                 Socket.this.onConnected();
@@ -74,7 +82,7 @@ public class Socket {
      * Function for connecting to server
      */
 
-    protected void createSocket(){
+    protected void createSocket() {
         // Create a WebSocket with a socket connection timeout value.
         try {
             ws = factory.createSocket(url);
@@ -82,23 +90,20 @@ public class Socket {
             e.printStackTrace();
         }
         ws.addExtension("permessage-deflate; client_max_window_bits");
-        ws.addHeader("Accept-Encoding","gzip, deflate, sdch");
-        ws.addHeader("Accept-Language","en-US,en;q=0.8");
-        ws.addHeader("Pragma","no-cache");
-        ws.addHeader("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
+        ws.addHeader("Accept-Encoding", "gzip, deflate, sdch");
+        ws.addHeader("Accept-Language", "en-US,en;q=0.8");
+        ws.addHeader("Pragma", "no-cache");
+        ws.addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
 
         ws.addListener(adapter);
     }
 
     protected void connect() {
-        try
-        {
+        try {
             // Connect to the server and perform an opening handshake.
             // This method blocks until the opening handshake is finished.
             ws.connect();
-        }
-        catch (OpeningHandshakeException e)
-        {
+        } catch (OpeningHandshakeException e) {
             // A violation against the WebSocket protocol was detected
             // during the opening handshake.
             StatusLine sl = e.getStatusLine();
@@ -110,45 +115,39 @@ public class Socket {
             // HTTP headers.
             Map<String, List<String>> headers = e.getHeaders();
             System.out.println("=== HTTP Headers ===");
-            for (Map.Entry<String, List<String>> entry : headers.entrySet())
-            {
+            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
                 // Header name.
                 String name = entry.getKey();
 
                 // Values of the header.
                 List<String> values = entry.getValue();
 
-                if (values == null || values.size() == 0)
-                {
+                if (values == null || values.size() == 0) {
                     // Print the name only.
                     System.out.println(name);
                     continue;
                 }
 
-                for (String value : values)
-                {
+                for (String value : values) {
                     // Print the name and the value.
                     System.out.format("%s: %s\n", name, value);
                 }
             }
-        }
-        catch (WebSocketException e)
-        {
-            System.out.println("Got websocket exception "+e.getMessage());
+        } catch (WebSocketException e) {
+            System.out.println("Got websocket exception " + e.getMessage());
             // Failed to establish a WebSocket connection.
         }
     }
 
-    protected void connectAsync(){
+    protected void connectAsync() {
         ws.connectAsynchronously();
     }
 
-
-    protected void sendData(String message){
+    private void sendData(String message) {
         ws.sendText(message);
     }
 
-    protected void sendDataInBackground(final String message){
+    protected void sendDataInBackground(final String message) {
         EventThread.exec(new Runnable() {
             @Override
             public void run() {
@@ -157,7 +156,7 @@ public class Socket {
         });
     }
 
-    public void reconnect(){
+    private void reconnect() {
         try {
             ws = ws.recreate(5000).connectAsynchronously();
         } catch (IOException e) {
@@ -165,21 +164,21 @@ public class Socket {
         }
     }
 
-    public void disconnect(){
+    public void disconnect() {
         ws.disconnect();
-        selfDisconnect=true;
+        selfDisconnect = true;
     }
 
-    protected void onConnected(){
+    protected void onConnected() {
         strategy.setNumberOfAttempts(0);
         System.out.println("Connected");
     }
 
-    protected void onDisconnected(boolean closedByServer){
+    protected void onDisconnected(boolean closedByServer) {
         System.out.println("Disconnected");
-        if (strategy!=null && !selfDisconnect){
-            if (strategy.getNumberOfAttempts()<strategy.getMaxAttempts()){
-                timer=new Timer();
+        if (strategy != null && !selfDisconnect) {
+            if (strategy.getNumberOfAttempts() < strategy.getMaxAttempts()) {
+                timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -188,28 +187,28 @@ public class Socket {
                         timer.cancel();
                         timer.purge();
                     }
-                },strategy.getReconnectInterval());
+                }, strategy.getReconnectInterval());
 
-            }else{
+            } else {
                 handler.cancel();
                 System.out.println("Number of attempts are complete");
             }
-        }else{
+        } else {
             handler.cancel();
-            selfDisconnect=false;
+            selfDisconnect = false;
         }
     }
 
-    protected void onConnectError(Exception websocketException){
+    protected void onConnectError(Exception websocketException) {
         System.out.println("Onconnect Error");
         onDisconnected(true);
     }
 
-    protected void onTextMessage(String text) throws Exception{
+    protected void onTextMessage(String text) throws Exception {
         System.out.println("Message is " + text);
     }
 
-    public void sendPingFramesPeriodically(){
+    protected void sendPingFramesPeriodically() {
         handler.removeLast();
         handler.postDelayed(new TimerTask() {
             @Override
@@ -218,7 +217,7 @@ public class Socket {
                 System.out.println("Sending PING message");
                 handler.remove(this);
             }
-        },pingInterval);
+        }, pingInterval);
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
@@ -226,7 +225,7 @@ public class Socket {
                 ws.disconnect(WebSocketCloseCode.NONE);
                 handler.remove(this);
             }
-        },2*pingInterval);
+        }, 2 * pingInterval);
     }
 }
 

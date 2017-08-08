@@ -1,32 +1,34 @@
 package io.rocketchat.core.adapter;
 
+import java.util.List;
+
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.TypingListener;
-import io.rocketchat.core.callback.*;
-import io.rocketchat.core.model.*;
-
-import java.util.ArrayList;
+import io.rocketchat.core.callback.AccountListener;
+import io.rocketchat.core.callback.EmojiListener;
+import io.rocketchat.core.callback.HistoryListener;
+import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.MessageListener;
+import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.UserListener;
+import io.rocketchat.core.model.Emoji;
+import io.rocketchat.core.model.Permission;
+import io.rocketchat.core.model.PublicSetting;
+import io.rocketchat.core.model.RocketChatMessage;
+import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.RoomRole;
+import io.rocketchat.core.model.SubscriptionObject;
+import io.rocketchat.core.model.TokenObject;
 
 /**
  * Created by sachin on 21/7/17.
  */
-public class CoreAdapter implements ConnectListener,
-        HistoryListener,
-        LoginListener,
-        AccountListener.getPermissionsListener,
-        AccountListener.getPublicSettingsListener,
-        RoomListener.GetRoomListener,
-        RoomListener.RoomRolesListener,
-        EmojiListener,
-        SubscriptionListener.GetSubscriptionListener,
-        UserListener.getUserRoleListener,
-        MessageListener.MessageAckListener,
-        MessageListener.SubscriptionListener,
-        TypingListener{
+public class CoreAdapter implements ConnectListener, HistoryListener, LoginListener, AccountListener.getPermissionsListener, AccountListener.getPublicSettingsListener, RoomListener.GetRoomListener, RoomListener.RoomRolesListener, EmojiListener, SubscriptionListener.GetSubscriptionListener, UserListener.getUserRoleListener, MessageListener.MessageAckListener, MessageListener.SubscriptionListener, TypingListener {
     @Override
-    public void onLoadHistory(ArrayList<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+    public void onLoadHistory(List<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
     }
 
@@ -36,17 +38,17 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onGetRooms(ArrayList<RoomObject> rooms, ErrorObject error) {
+    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
 
     }
 
     @Override
-    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
 
     }
 
     @Override
-    public void onUserRoles(ArrayList<UserObject> users, ErrorObject error) {
+    public void onUserRoles(List<UserObject> users, ErrorObject error) {
 
     }
 
@@ -76,22 +78,22 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onGetPermissions(ArrayList<Permission> permissions, ErrorObject error) {
+    public void onGetPermissions(List<Permission> permissions, ErrorObject error) {
 
     }
 
     @Override
-    public void onGetPublicSettings(ArrayList<PublicSetting> settings, ErrorObject error) {
+    public void onGetPublicSettings(List<PublicSetting> settings, ErrorObject error) {
 
     }
 
     @Override
-    public void onGetRoomRoles(ArrayList<RoomRole> roles, ErrorObject error) {
+    public void onGetRoomRoles(List<RoomRole> roles, ErrorObject error) {
 
     }
 
     @Override
-    public void onListCustomEmoji(ArrayList<Emoji> emojis, ErrorObject error) {
+    public void onListCustomEmoji(List<Emoji> emojis, ErrorObject error) {
 
     }
 

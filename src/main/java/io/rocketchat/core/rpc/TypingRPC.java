@@ -7,10 +7,10 @@ import io.rocketchat.common.data.rpc.RPC;
  */
 public class TypingRPC extends RPC {
 
-    public static String SENDTYPING="stream-notify-room";
+    private static String SEND_TYPING = "stream-notify-room";
 
-    public static String sendTyping(int integer, String room_id, String username,Boolean istyping){
+    public static String sendTyping(int integer, String room_id, String username, Boolean istyping) {
 
-        return getRemoteMethodObject(integer,SENDTYPING,room_id+"/typing",username,istyping).toString();
+        return getRemoteMethodObject(integer, SEND_TYPING, room_id + "/typing", username, istyping).toString();
     }
 }

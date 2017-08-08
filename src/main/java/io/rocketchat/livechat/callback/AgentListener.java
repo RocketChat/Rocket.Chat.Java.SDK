@@ -15,7 +15,8 @@ public class AgentListener {
     public interface AgentDataListener extends Listener {
         void onAgentData(AgentObject agentObject, ErrorObject error);
     }
-    public interface AgentConnectListener extends Listener{
+
+    public interface AgentConnectListener extends Listener {
         void onAgentConnect(AgentObject agentObject);
     }
 }

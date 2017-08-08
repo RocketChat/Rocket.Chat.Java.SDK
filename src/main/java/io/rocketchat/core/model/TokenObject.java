@@ -10,21 +10,22 @@ import java.util.Date;
  */
 public class TokenObject {
 
-    String userId;
-    String AuthToken;
-    Date Expiry;
+    private String userId;
+    private String AuthToken;
+    private Date Expiry;
 
     public TokenObject(String userId, String authToken, Date expiry) {
         this.userId = userId;
         AuthToken = authToken;
         Expiry = expiry;
     }
+
     public TokenObject(JSONObject object) {
         try {
             userId = object.optString("id");
             AuthToken = object.optString("token");
             Expiry = new Date(object.optJSONObject("tokenExpires").getLong("$date"));
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -43,10 +44,6 @@ public class TokenObject {
 
     @Override
     public String toString() {
-        return "TokenObject{" +
-                "userId='" + userId + '\'' +
-                ", AuthToken='" + AuthToken + '\'' +
-                ", Expiry=" + Expiry +
-                '}';
+        return "TokenObject{" + "userId='" + userId + '\'' + ", AuthToken='" + AuthToken + '\'' + ", Expiry=" + Expiry + '}';
     }
 }

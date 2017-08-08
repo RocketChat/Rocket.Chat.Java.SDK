@@ -1,33 +1,34 @@
 package io.rocketchat.core.model;
 
-import io.rocketchat.common.data.model.Room;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
 
+import io.rocketchat.common.data.model.Room;
+
 /**
  * Created by sachin on 19/7/17.
  */
 
-public class RoomObject extends Room{
+public class RoomObject extends Room {
 
-    String topic;
-    JSONArray mutedUsers;
-    Date jitsiTimeout;
-    Boolean readOnly;
+    private String topic;
+    private JSONArray mutedUsers;
+    private Date jitsiTimeout;
+    private Boolean readOnly;
 
-    public RoomObject(JSONObject object){
+    public RoomObject(JSONObject object) {
         super(object);
         try {
             topic = object.optString("topic");
             mutedUsers = object.optJSONArray("muted");
-            if (object.optJSONObject("jitsiTimeout")!=null) {
+            if (object.optJSONObject("jitsiTimeout") != null) {
                 jitsiTimeout = new Date(object.getJSONObject("jitsiTimeout").getLong("$date"));
             }
             readOnly = object.optBoolean("ro");
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

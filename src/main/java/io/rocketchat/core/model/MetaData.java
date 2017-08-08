@@ -9,17 +9,17 @@ import java.util.Date;
  * Created by sachin on 26/7/17.
  */
 public class MetaData {
-    Integer revision;
-    Date created;
-    Integer version;
-    Date updated;
+    private Integer revision;
+    private Date created;
+    private Integer version;
+    private Date updated;
 
-    public MetaData(JSONObject object){
+    public MetaData(JSONObject object) {
         try {
-            revision=object.getInt("revision");
-            created=new Date(object.getInt("created"));
-            version=object.getInt("version");
-            if (object.opt("updated")!=null) {
+            revision = object.getInt("revision");
+            created = new Date(object.getInt("created"));
+            version = object.getInt("version");
+            if (object.opt("updated") != null) {
                 updated = new Date(object.getInt("updated"));
             }
         } catch (JSONException e) {

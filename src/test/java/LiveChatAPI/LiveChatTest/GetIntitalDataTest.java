@@ -1,14 +1,18 @@
 package LiveChatAPI.LiveChatTest;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
 import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.*;
 
 import static org.mockito.Mockito.timeout;
 
@@ -21,13 +25,13 @@ public class GetIntitalDataTest extends ChatParent implements ConnectListener {
     InitialDataListener dataListener;
 
     @Captor
-    ArgumentCaptor <LiveChatConfigObject> configObject;
+    ArgumentCaptor<LiveChatConfigObject> configObject;
 
     @Captor
-    ArgumentCaptor <ErrorObject> error;
+    ArgumentCaptor<ErrorObject> error;
 
     @Before
-    public void setup(){
+    public void setup() {
         setUpBefore();
     }
 
@@ -38,8 +42,8 @@ public class GetIntitalDataTest extends ChatParent implements ConnectListener {
     }
 
     @Test
-    public void testInitialData(){
-        Mockito.verify(dataListener, timeout(6000).atLeastOnce()).onInitialData(configObject.capture(),error.capture());
+    public void testInitialData() {
+        Mockito.verify(dataListener, timeout(6000).atLeastOnce()).onInitialData(configObject.capture(), error.capture());
         Assert.assertTrue(error.getValue() == null);
         Assert.assertNotNull(configObject.getValue());
         System.out.println("Configuration Object is " + configObject.getValue());

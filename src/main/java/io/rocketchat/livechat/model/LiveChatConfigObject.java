@@ -34,35 +34,34 @@ public class LiveChatConfigObject {
 
     public LiveChatConfigObject(JSONObject object) {
         try {
-        enabled=object.getBoolean("enabled");
-        popupTitle=object.getString("title");
-        colour=object.getString("color");
-        displayRegistrationForm=object.getBoolean("registrationForm");
-        room=object.getString("room");
+            enabled = object.getBoolean("enabled");
+            popupTitle = object.getString("title");
+            colour = object.getString("color");
+            displayRegistrationForm = object.getBoolean("registrationForm");
+            room = object.getString("room");
 
-        // Triggers need to be loaded
-        triggers=object.getJSONArray("triggers");
+            // Triggers need to be loaded
+            triggers = object.getJSONArray("triggers");
 
-        //Loading departments data
-        this.departments=new ArrayList<DepartmentObject>();
-        JSONArray departments=object.getJSONArray("departments");
-        for (int i=0;i<departments.length();i++){
-            this.departments.add(new DepartmentObject(departments.getJSONObject(i)));
-        }
+            //Loading departments data
+            this.departments = new ArrayList<DepartmentObject>();
+            JSONArray departments = object.getJSONArray("departments");
+            for (int i = 0; i < departments.length(); i++) {
+                this.departments.add(new DepartmentObject(departments.getJSONObject(i)));
+            }
 
-
-        allowSwitchingDepartments=object.getBoolean("allowSwitchingDepartments");
-        online=object.getBoolean("online");
-        offlineColour=object.getString("offlineColor");
-        offlineMessage=object.getString("offlineMessage");
-        offlineSuccessMessage=object.getString("offlineSuccessMessage");
-        offlineUnavailableMessage=object.getString("offlineUnavailableMessage");
-        displayOfflineFOrm=object.getBoolean("displayOfflineForm");
-        videoCall=object.getBoolean("videoCall");
-        offlineTitle=object.getString("offlineTitle");
-        language=object.getString("language");
-        transcript=object.getBoolean("transcript");
-        transcriptMessage=object.getString("transcriptMessage");
+            allowSwitchingDepartments = object.getBoolean("allowSwitchingDepartments");
+            online = object.getBoolean("online");
+            offlineColour = object.getString("offlineColor");
+            offlineMessage = object.getString("offlineMessage");
+            offlineSuccessMessage = object.getString("offlineSuccessMessage");
+            offlineUnavailableMessage = object.getString("offlineUnavailableMessage");
+            displayOfflineFOrm = object.getBoolean("displayOfflineForm");
+            videoCall = object.getBoolean("videoCall");
+            offlineTitle = object.getString("offlineTitle");
+            language = object.getString("language");
+            transcript = object.getBoolean("transcript");
+            transcriptMessage = object.getString("transcriptMessage");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -222,26 +221,6 @@ public class LiveChatConfigObject {
 
     @Override
     public String toString() {
-        return "LiveChatConfigObject{" +
-                "enabled=" + enabled +
-                ", popupTitle='" + popupTitle + '\'' +
-                ", colour='" + colour + '\'' +
-                ", displayRegistrationForm=" + displayRegistrationForm +
-                ", room='" + room + '\'' +
-                ", triggers=" + triggers +
-                ", departments=" + departments +
-                ", allowSwitchingDepartments=" + allowSwitchingDepartments +
-                ", online=" + online +
-                ", offlineColour='" + offlineColour + '\'' +
-                ", offlineMessage='" + offlineMessage + '\'' +
-                ", offlineSuccessMessage='" + offlineSuccessMessage + '\'' +
-                ", offlineUnavailableMessage='" + offlineUnavailableMessage + '\'' +
-                ", displayOfflineFOrm=" + displayOfflineFOrm +
-                ", videoCall=" + videoCall +
-                ", offlineTitle='" + offlineTitle + '\'' +
-                ", language='" + language + '\'' +
-                ", transcript=" + transcript +
-                ", transcriptMessage='" + transcriptMessage + '\'' +
-                '}';
+        return "LiveChatConfigObject{" + "enabled=" + enabled + ", popupTitle='" + popupTitle + '\'' + ", colour='" + colour + '\'' + ", displayRegistrationForm=" + displayRegistrationForm + ", room='" + room + '\'' + ", triggers=" + triggers + ", departments=" + departments + ", allowSwitchingDepartments=" + allowSwitchingDepartments + ", online=" + online + ", offlineColour='" + offlineColour + '\'' + ", offlineMessage='" + offlineMessage + '\'' + ", offlineSuccessMessage='" + offlineSuccessMessage + '\'' + ", offlineUnavailableMessage='" + offlineUnavailableMessage + '\'' + ", displayOfflineFOrm=" + displayOfflineFOrm + ", videoCall=" + videoCall + ", offlineTitle='" + offlineTitle + '\'' + ", language='" + language + '\'' + ", transcript=" + transcript + ", transcriptMessage='" + transcriptMessage + '\'' + '}';
     }
 }

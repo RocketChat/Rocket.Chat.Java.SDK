@@ -1,7 +1,5 @@
 package RocketChatAPI.RocketChatTest;
 
-import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
-import io.rocketchat.common.listener.ConnectListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +7,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
+import io.rocketchat.common.listener.ConnectListener;
 
 import static org.mockito.Mockito.timeout;
 
@@ -24,11 +25,10 @@ public class ConnectionTest extends RocketChatParent {
     ArgumentCaptor<String> connectCaptor;
 
     @Captor
-    ArgumentCaptor <Boolean> disconnectCaptor;
+    ArgumentCaptor<Boolean> disconnectCaptor;
 
     @Captor
-    ArgumentCaptor <Exception> connectErrorCaptor;
-
+    ArgumentCaptor<Exception> connectErrorCaptor;
 
     @Before
     public void setUp() {
@@ -36,7 +36,7 @@ public class ConnectionTest extends RocketChatParent {
     }
 
     @Test
-    public void connectTest(){
+    public void connectTest() {
         api.connect(listener);
         Mockito.verify(listener, timeout(5000).atLeastOnce()).onConnect(connectCaptor.capture());
         Assert.assertTrue(connectCaptor.getValue() != null);
@@ -44,12 +44,12 @@ public class ConnectionTest extends RocketChatParent {
     }
 
     @Test
-    public void disconnectTest(){
+    public void disconnectTest() {
 
     }
 
     @Test
-    public void connectErrorTest(){
+    public void connectErrorTest() {
 
     }
 }

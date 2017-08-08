@@ -6,6 +6,7 @@ import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,28 +20,28 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatStreamMiddleware {
 
-    public enum SubType {
-        STREAMROOMMESSAGES,
-        STREAMLIVECHATROOM,
-        NOTIFYROOM
-    }
-
-    public static LiveChatStreamMiddleware middleware=new LiveChatStreamMiddleware();
-
-
+    public static LiveChatStreamMiddleware middleware = new LiveChatStreamMiddleware();
     MessageListener.SubscriptionListener subscriptionListener;
     AgentListener.AgentConnectListener agentConnectListener;
     TypingListener typingListener;
+    ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
-    ConcurrentHashMap <String,SubscribeListener> subcallbacks;
-
-
-    LiveChatStreamMiddleware(){
-        subcallbacks=new ConcurrentHashMap<>();
+    LiveChatStreamMiddleware() {
+        subcallbacks = new ConcurrentHashMap<>();
     }
 
-    public static LiveChatStreamMiddleware getInstance(){
+    public static LiveChatStreamMiddleware getInstance() {
         return middleware;
+    }
+
+    public static SubType parse(String s) {
+        if (s.equals("stream-room-messages")) {
+            return SubType.STREAMROOMMESSAGES;
+        } else if (s.equals("stream-livechat-room")) {
+            return SubType.STREAMLIVECHATROOM;
+        } else {
+            return SubType.NOTIFYROOM;
+        }
     }
 
     public void subscribeRoom(MessageListener.SubscriptionListener subscription) {
@@ -51,23 +52,23 @@ public class LiveChatStreamMiddleware {
         this.agentConnectListener = agentConnectListener;
     }
 
-    public void subscribeTyping(TypingListener callback){
-        typingListener =callback;
+    public void subscribeTyping(TypingListener callback) {
+        typingListener = callback;
     }
 
-    public void createSubCallbacks(String id, SubscribeListener callback){
-        if (callback!=null) {
+    public void createSubCallbacks(String id, SubscribeListener callback) {
+        if (callback != null) {
             subcallbacks.put(id, callback);
         }
     }
 
-    public void processCallback(JSONObject object){
+    public void processCallback(JSONObject object) {
         String s = object.optString("collection");
-        JSONArray array=object.optJSONObject("fields").optJSONArray("args");
+        JSONArray array = object.optJSONObject("fields").optJSONArray("args");
 
         switch (parse(s)) {
             case STREAMROOMMESSAGES:
-                if (subscriptionListener !=null) {
+                if (subscriptionListener != null) {
                     LiveChatMessage liveChatMessage = new LiveChatMessage(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
                     if (liveChatMessage.getMessagetype().equals(LiveChatMessage.MESSAGE_TYPE_CLOSE)) {
@@ -78,20 +79,20 @@ public class LiveChatStreamMiddleware {
                 }
                 break;
             case STREAMLIVECHATROOM:
-                if (agentConnectListener !=null) {
+                if (agentConnectListener != null) {
                     agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0).optJSONObject("data")));
                 }
                 break;
             case NOTIFYROOM:
-                if (typingListener !=null) {
+                if (typingListener != null) {
                     typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
                 }
                 break;
         }
     }
 
-    public void processSubSuccess(JSONObject subObj){
-        if (subObj.optJSONArray("subs")!=null) {
+    public void processSubSuccess(JSONObject subObj) {
+        if (subObj.optJSONArray("subs") != null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
                 SubscribeListener subscribeListener = subcallbacks.remove(id);
@@ -100,14 +101,8 @@ public class LiveChatStreamMiddleware {
         }
     }
 
-    public static SubType parse(String s){
-        if (s.equals("stream-room-messages")){
-            return SubType.STREAMROOMMESSAGES;
-        }else if (s.equals("stream-livechat-room")){
-            return SubType.STREAMLIVECHATROOM;
-        }else {
-            return SubType.NOTIFYROOM;
-        }
+    public enum SubType {
+        STREAMROOMMESSAGES, STREAMLIVECHATROOM, NOTIFYROOM
     }
 
 }

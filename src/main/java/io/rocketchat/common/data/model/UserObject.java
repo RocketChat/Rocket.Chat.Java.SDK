@@ -12,22 +12,22 @@ import java.util.ArrayList;
 public class UserObject {
     String userId;
     String userName;
-    ArrayList <String> roles;
+    ArrayList<String> roles;
     JSONArray emails;
 
-    public UserObject(JSONObject object){
+    public UserObject(JSONObject object) {
         try {
-            userId=object.optString("_id");
-            userName=object.getString("username");
-            if (object.opt("roles")!=null){
-                roles=new ArrayList<>();
-                JSONArray array= object.optJSONArray("roles");
-                for (int i=0;i<array.length();i++){
+            userId = object.optString("_id");
+            userName = object.getString("username");
+            if (object.opt("roles") != null) {
+                roles = new ArrayList<>();
+                JSONArray array = object.optJSONArray("roles");
+                for (int i = 0; i < array.length(); i++) {
                     roles.add(array.getString(i));
                 }
             }
-            if (object.opt("emails")!=null){
-                emails=object.optJSONArray("emails");
+            if (object.opt("emails") != null) {
+                emails = object.optJSONArray("emails");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -64,11 +64,6 @@ public class UserObject {
 
     @Override
     public String toString() {
-        return "UserObject{" +
-                "userId='" + userId + '\'' +
-                ", userName='" + userName + '\'' +
-                ", roles=" + roles +
-                ", emails=" + emails +
-                '}';
+        return "UserObject{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", roles=" + roles + ", emails=" + emails + '}';
     }
 }

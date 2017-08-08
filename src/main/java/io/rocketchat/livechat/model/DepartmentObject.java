@@ -20,14 +20,14 @@ public class DepartmentObject {
     Boolean showOnRegistration;
     Date updatedAt;
 
-    DepartmentObject(JSONObject object){
+    DepartmentObject(JSONObject object) {
         try {
-            id=object.getString("_id");
-            enabled=object.getBoolean("enabled");
-            deptName=object.getString("name");
-            description=object.getString("description");
-            numAgents=object.getInt("numAgents");
-            showOnRegistration=object.getBoolean("showOnRegistration");
+            id = object.getString("_id");
+            enabled = object.getBoolean("enabled");
+            deptName = object.getString("name");
+            description = object.getString("description");
+            numAgents = object.getInt("numAgents");
+            showOnRegistration = object.getBoolean("showOnRegistration");
             updatedAt = new Date(new Timestamp(object.getJSONObject("_updatedAt").getLong("$date")).getTime());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -92,14 +92,6 @@ public class DepartmentObject {
 
     @Override
     public String toString() {
-        return "DepartmentObject{" +
-                "id='" + id + '\'' +
-                ", enabled=" + enabled +
-                ", deptName='" + deptName + '\'' +
-                ", description='" + description + '\'' +
-                ", numAgents=" + numAgents +
-                ", showOnRegistration=" + showOnRegistration +
-                ", updatedAt=" + updatedAt +
-                '}';
+        return "DepartmentObject{" + "id='" + id + '\'' + ", enabled=" + enabled + ", deptName='" + deptName + '\'' + ", description='" + description + '\'' + ", numAgents=" + numAgents + ", showOnRegistration=" + showOnRegistration + ", updatedAt=" + updatedAt + '}';
     }
 }

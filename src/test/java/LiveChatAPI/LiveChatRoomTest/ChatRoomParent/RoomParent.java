@@ -1,31 +1,31 @@
 package LiveChatAPI.LiveChatRoomTest.ChatRoomParent;
 
+import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.LiveChatAPI;
 import io.rocketchat.livechat.callback.AuthListener;
-import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.livechat.callback.InitialDataListener;
 import io.rocketchat.livechat.model.DepartmentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
 
 /**
  * Created by sachin on 17/7/17.
  */
 public class RoomParent implements ConnectListener, InitialDataListener, AuthListener.RegisterListener, AuthListener.LoginListener {
 
-    private static String serverurl="wss://livechattest.rocket.chat/websocket";
-
-    LiveChatAPI api;
+    private static String serverurl = "wss://livechattest.rocket.chat/websocket";
     public LiveChatAPI.ChatRoom room;
+    LiveChatAPI api;
 
-    public void setUpBefore(){
+    public void setUpBefore() {
         MockitoAnnotations.initMocks(this);
         System.out.println("before got called");
-        api= new LiveChatAPI(serverurl);
+        api = new LiveChatAPI(serverurl);
         api.setReconnectionStrategy(null);
         api.connect(this);
     }
@@ -48,28 +48,27 @@ public class RoomParent implements ConnectListener, InitialDataListener, AuthLis
 
     @Override
     public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
-        String departmentId=null;
-        if (error==null){
-            ArrayList<DepartmentObject> departmentObjects=object.getDepartments();
-            if (departmentObjects.size()>0){
-                departmentId=departmentObjects.get(0).getId();
+        String departmentId = null;
+        if (error == null) {
+            ArrayList<DepartmentObject> departmentObjects = object.getDepartments();
+            if (departmentObjects.size() > 0) {
+                departmentId = departmentObjects.get(0).getId();
             }
-            api.registerGuest("aditi","aditi89@gmail.com",departmentId,this);
+            api.registerGuest("aditi", "aditi89@gmail.com", departmentId, this);
         }
     }
 
     @Override
     public void onRegister(GuestObject object, ErrorObject error) {
-        api.login(object.getToken(),this);
+        api.login(object.getToken(), this);
     }
-
 
     @Override
     public void onLogin(GuestObject object, ErrorObject error) {
-        room=api.createRoom(object.getUserID(),object.getToken());
+        room = api.createRoom(object.getUserID(), object.getToken());
     }
 
-    public void closeConversation(){
+    public void closeConversation() {
         room.closeConversation();
     }
 }

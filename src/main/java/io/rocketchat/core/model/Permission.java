@@ -11,25 +11,25 @@ import java.util.Date;
  * Created by sachin on 26/7/17.
  */
 public class Permission {
-    String id;
-    ArrayList <String> roles;
-    Date updatedAt;
-    MetaData metaData;
-    Integer loki;
+    private String id;
+    private ArrayList<String> roles;
+    private Date updatedAt;
+    private MetaData metaData;
+    private Integer loki;
 
-    public Permission(JSONObject object){
+    public Permission(JSONObject object) {
         try {
-            id= object.getString("_id");
-            roles=new ArrayList<>();
-            JSONArray array= object.getJSONArray("roles");
-            for (int i=0;i<array.length();i++){
+            id = object.getString("_id");
+            roles = new ArrayList<>();
+            JSONArray array = object.getJSONArray("roles");
+            for (int i = 0; i < array.length(); i++) {
                 roles.add(array.getString(i));
             }
-            if (object.opt("_updatedAt")!=null) {
+            if (object.opt("_updatedAt") != null) {
                 updatedAt = new Date(object.getJSONObject("_updatedAt").getInt("$date"));
             }
-            metaData= new MetaData(object.getJSONObject("meta"));
-            loki= object.optInt("$loki");
+            metaData = new MetaData(object.getJSONObject("meta"));
+            loki = object.optInt("$loki");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package io.rocketchat.core.model;
+
 import org.json.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -8,54 +10,54 @@ import java.util.Date;
 
 public class PublicSetting {
 
-    String id;
-    String type;
-    Boolean ispublic;
-    String section;
-    JSONObject enableQuery;
-    String group;
-    Boolean hidden;
-    Object packageValue;   //Can be Boolean or String
-    String valueSource;
-    Boolean blocked;
-    Integer sorter;
-    String i18nLabel;
-    String i18nDescription;
-    Date timestamp;
-    Date updatedAt;
-    Date createdAt;
-    Object value;          // Can be Boolean or String
-    String meteorSettingsValue;
-    MetaData metaData;
-    Integer loki;
+    private String id;
+    private String type;
+    private Boolean ispublic;
+    private String section;
+    private JSONObject enableQuery;
+    private String group;
+    private Boolean hidden;
+    private Object packageValue;   //Can be Boolean or String
+    private String valueSource;
+    private Boolean blocked;
+    private Integer sorter;
+    private String i18nLabel;
+    private String i18nDescription;
+    private Date timestamp;
+    private Date updatedAt;
+    private Date createdAt;
+    private Object value;          // Can be Boolean or String
+    private String meteorSettingsValue;
+    private MetaData metaData;
+    private Integer loki;
 
-    public PublicSetting(JSONObject object){
-        id=object.optString("_id");
-        type=object.optString("type");
-        ispublic=object.optBoolean("public");
-        section=object.optString("section");
-        enableQuery=object.optJSONObject("enableQuery");
-        group=object.optString("group");
-        hidden=object.optBoolean("hidden");
-        packageValue=object.opt("packageValue");
-        valueSource=object.optString("valueSource");
-        blocked=object.optBoolean("blocked");
-        sorter=object.optInt("sorter");
-        i18nLabel=object.optString("i18nLabel");
-        i18nDescription=object.optString("i18nDescription");
-        if (object.opt("ts")!=null) {
+    public PublicSetting(JSONObject object) {
+        id = object.optString("_id");
+        type = object.optString("type");
+        ispublic = object.optBoolean("public");
+        section = object.optString("section");
+        enableQuery = object.optJSONObject("enableQuery");
+        group = object.optString("group");
+        hidden = object.optBoolean("hidden");
+        packageValue = object.opt("packageValue");
+        valueSource = object.optString("valueSource");
+        blocked = object.optBoolean("blocked");
+        sorter = object.optInt("sorter");
+        i18nLabel = object.optString("i18nLabel");
+        i18nDescription = object.optString("i18nDescription");
+        if (object.opt("ts") != null) {
             timestamp = new Date(object.optJSONObject("ts").optInt("$date"));
         }
-        if (object.opt("_updatedAt")!=null) {
+        if (object.opt("_updatedAt") != null) {
             updatedAt = new Date(object.optJSONObject("_updatedAt").optInt("$date"));
         }
-        if (object.opt("createdAt")!=null) {
+        if (object.opt("createdAt") != null) {
             createdAt = new Date(object.optJSONObject("createdAt").optInt("$date"));
         }
-        value= object.opt("value");
-        meteorSettingsValue=object.optString("meteorSettingsValue");
-        metaData=new MetaData(object.optJSONObject("meta"));
-        loki= object.optInt("$loki");
+        value = object.opt("value");
+        meteorSettingsValue = object.optString("meteorSettingsValue");
+        metaData = new MetaData(object.optJSONObject("meta"));
+        loki = object.optInt("$loki");
     }
 
     public String getId() {

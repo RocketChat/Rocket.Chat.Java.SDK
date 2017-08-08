@@ -1,9 +1,5 @@
 package LiveChatAPI.LiveChatTest;
 
-import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.livechat.callback.MessageListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +8,11 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
+import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.livechat.callback.MessageListener;
+
 import static org.mockito.Mockito.timeout;
 
 /**
@@ -19,18 +20,17 @@ import static org.mockito.Mockito.timeout;
  */
 public class SendOfflineMessageTest extends ChatParent implements ConnectListener {
 
-
     @Mock
     MessageListener.OfflineMessageListener listener;
 
     @Captor
-    ArgumentCaptor <Boolean> isSent;
+    ArgumentCaptor<Boolean> isSent;
 
     @Captor
-    ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
+    ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
 
     @Before
-    public void setup(){
+    public void setup() {
         setUpBefore();
     }
 
@@ -43,7 +43,7 @@ public class SendOfflineMessageTest extends ChatParent implements ConnectListene
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.sendOfflineMessage("aditya","aditya123@gmail.com","This is a test message",listener);
+        api.sendOfflineMessage("aditya", "aditya123@gmail.com", "This is a test message", listener);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class SendOfflineMessageTest extends ChatParent implements ConnectListene
     }
 
     @Test
-    public void sendOfflineTest(){
-        Mockito.verify(listener, timeout(6000).atLeastOnce()).onOfflineMesssageSuccess(isSent.capture(),errorObjectArgumentCaptor.capture());
+    public void sendOfflineTest() {
+        Mockito.verify(listener, timeout(6000).atLeastOnce()).onOfflineMesssageSuccess(isSent.capture(), errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
         Assert.assertTrue(isSent.getValue() != null);
         System.out.println("Offline Message sent is " + isSent.getValue());

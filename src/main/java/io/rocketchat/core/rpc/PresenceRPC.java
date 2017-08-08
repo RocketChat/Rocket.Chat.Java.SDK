@@ -5,42 +5,39 @@ import io.rocketchat.common.data.rpc.RPC;
 /**
  * Created by sachin on 21/7/17.
  */
-public class PresenceRPC extends RPC{
+public class PresenceRPC extends RPC {
 
-    public static String DEFAULTSTATUS="UserPresence:setDefaultStatus";
-    public static String TEMPSTATUS="UserPresence:";
+    private static String DEFAULT_STATUS = "UserPresence:setDefaultStatus";
+    private static String TEMP_STATUS = "UserPresence:";
 
-    public enum Status{
-        ONLINE,
-        BUSY,
-        AWAY,
-        OFFLINE
-    }
-
-    public static String setDefaultStatus(int integer,Status status){
-        String defaultStat="online";
+    public static String setDefaultStatus(int integer, Status status) {
+        String defaultStat = "online";
         switch (status) {
             case ONLINE:
-                defaultStat="online";
+                defaultStat = "online";
                 break;
             case BUSY:
-                defaultStat="busy";
+                defaultStat = "busy";
                 break;
             case AWAY:
-                defaultStat="away";
+                defaultStat = "away";
                 break;
             case OFFLINE:
-                defaultStat="offline";
+                defaultStat = "offline";
                 break;
         }
-        return getRemoteMethodObject(integer,DEFAULTSTATUS,defaultStat).toString();
+        return getRemoteMethodObject(integer, DEFAULT_STATUS, defaultStat).toString();
     }
 
-    public static String setTemporaryStatus(int integer,Status status){
-        String defaultStat="online";
-        if (status==Status.AWAY){
-            defaultStat="away";
+    public static String setTemporaryStatus(int integer, Status status) {
+        String defaultStat = "online";
+        if (status == Status.AWAY) {
+            defaultStat = "away";
         }
-        return getRemoteMethodObject(integer,TEMPSTATUS+defaultStat).toString();
+        return getRemoteMethodObject(integer, TEMP_STATUS + defaultStat).toString();
+    }
+
+    public enum Status {
+        ONLINE, BUSY, AWAY, OFFLINE
     }
 }

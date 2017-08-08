@@ -9,17 +9,17 @@ import org.json.JSONObject;
  */
 public class SubRPC {
 
-    public static JSONObject getRemoteSubscriptionObject(String uniqueId, String methodname, Object ... args){
-        JSONObject object=new JSONObject();
+    public static JSONObject getRemoteSubscriptionObject(String uniqueId, String methodname, Object... args) {
+        JSONObject object = new JSONObject();
         try {
-            object.put("msg","sub");
-            object.put("name",methodname);
-            object.put("id",uniqueId);
-            JSONArray params=new JSONArray();
-            for (int i=0;i<args.length;i++){
+            object.put("msg", "sub");
+            object.put("name", methodname);
+            object.put("id", uniqueId);
+            JSONArray params = new JSONArray();
+            for (int i = 0; i < args.length; i++) {
                 params.put(args[i]);
             }
-            object.put("params",params);
+            object.put("params", params);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -27,12 +27,11 @@ public class SubRPC {
         return object;
     }
 
-
-    public static JSONObject getRemoteUnsubscriptionObject(String subId){
-        JSONObject object=new JSONObject();
+    public static JSONObject getRemoteUnsubscriptionObject(String subId) {
+        JSONObject object = new JSONObject();
         try {
             object.put("msg", "unsub");
-            object.put("id",subId);
+            object.put("id", subId);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -13,12 +13,12 @@ public class AgentObject {
     JSONArray emails;
     String agentId;
 
-    public AgentObject(JSONObject object){
+    public AgentObject(JSONObject object) {
         try {
-            agentId=object.getString("_id");
-            name=object.getString("name");
-            username=object.getString("username");
-            emails=object.getJSONArray("emails");
+            agentId = object.getString("_id");
+            name = object.getString("name");
+            username = object.getString("username");
+            emails = object.getJSONArray("emails");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -58,11 +58,6 @@ public class AgentObject {
 
     @Override
     public String toString() {
-        return "AgentObject{" +
-                "name='" + name + '\'' +
-                ", username='" + username + '\'' +
-                ", emails=" + emails +
-                ", agentId='" + agentId + '\'' +
-                '}';
+        return "AgentObject{" + "name='" + name + '\'' + ", username='" + username + '\'' + ", emails=" + emails + ", agentId='" + agentId + '\'' + '}';
     }
 }

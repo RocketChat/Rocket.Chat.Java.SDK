@@ -5,38 +5,38 @@ package io.rocketchat.common.network;
  */
 
 public class ReconnectionStrategy {
-    int MaxAttempts;
-    int numberOfAttempts;
-    int reconnectInterval;
-    int maxReconnectInterval=30000;
+    private int MaxAttempts;
+    private int numberOfAttempts;
+    private int reconnectInterval;
+    private int maxReconnectInterval = 30000;
 
     public ReconnectionStrategy(int maxAttempts, int reconnectInterval) {
         MaxAttempts = maxAttempts;
-        if (reconnectInterval<maxReconnectInterval) {
+        if (reconnectInterval < maxReconnectInterval) {
             this.reconnectInterval = reconnectInterval;
-        }else{
-            this.reconnectInterval=maxReconnectInterval;
+        } else {
+            this.reconnectInterval = maxReconnectInterval;
         }
-        numberOfAttempts=0;
+        numberOfAttempts = 0;
     }
 
     public int getNumberOfAttempts() {
         return numberOfAttempts;
     }
 
+    public void setNumberOfAttempts(int numberOfAttempts) {
+        this.numberOfAttempts = numberOfAttempts;
+    }
+
     public int getReconnectInterval() {
         return reconnectInterval;
     }
 
-    public void processAttempts(){
+    public void processAttempts() {
         numberOfAttempts++;
     }
 
     public int getMaxAttempts() {
         return MaxAttempts;
-    }
-
-    public void setNumberOfAttempts(int numberOfAttempts) {
-        this.numberOfAttempts = numberOfAttempts;
     }
 }

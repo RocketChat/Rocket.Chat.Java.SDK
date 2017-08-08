@@ -15,5 +15,5 @@ import java.util.ArrayList;
  */
 
 public interface LoadHistoryListener extends Listener {
-    void onLoadHistory(ArrayList <LiveChatMessage> list, int unreadNotLoaded, ErrorObject error);
+    void onLoadHistory(ArrayList<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error);
 }

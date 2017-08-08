@@ -15,14 +15,14 @@ public class GuestObject {
     String token;
     Date tokenExpiry;
 
-    public GuestObject(JSONObject object){
+    public GuestObject(JSONObject object) {
         try {
-            userID= object.optString("userId");
-            token=object.getString("token");
-            if (object.optJSONObject("tokenExpires")!=null) {
+            userID = object.optString("userId");
+            token = object.getString("token");
+            if (object.optJSONObject("tokenExpires") != null) {
                 tokenExpiry = new Date(new Timestamp(object.getJSONObject("tokenExpires").getLong("$date")).getTime());
             }
-            if (object.opt("id")!=null) {
+            if (object.opt("id") != null) {
                 userID = object.optString("id");
             }
         } catch (JSONException e) {
@@ -56,10 +56,6 @@ public class GuestObject {
 
     @Override
     public String toString() {
-        return "GuestObject{" +
-                "userID='" + userID + '\'' +
-                ", AuthToken='" + token + '\'' +
-                ", tokenExpiry=" + tokenExpiry +
-                '}';
+        return "GuestObject{" + "userID='" + userID + '\'' + ", AuthToken='" + token + '\'' + ", tokenExpiry=" + tokenExpiry + '}';
     }
 }

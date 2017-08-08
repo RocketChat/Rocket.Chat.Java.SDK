@@ -1,29 +1,30 @@
 package io.rocketchat.core.model;
 
-import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.rocketchat.common.data.model.UserObject;
+
 /**
  * Created by sachin on 27/7/17.
  */
 public class RoomRole {
-    String id;
-    String roomId;
-    UserObject user;
-    ArrayList <String> roles;
+    private String id;
+    private String roomId;
+    private UserObject user;
+    private ArrayList<String> roles;
 
-    public RoomRole(JSONObject object){
+    public RoomRole(JSONObject object) {
         try {
-            id= object.getString("_id");
-            roomId=object.getString("rid");
-            user= new UserObject(object.getJSONObject("u"));
-            roles=new ArrayList<>();
-            JSONArray array= object.optJSONArray("roles");
-            for (int i=0;i<array.length();i++){
+            id = object.getString("_id");
+            roomId = object.getString("rid");
+            user = new UserObject(object.getJSONObject("u"));
+            roles = new ArrayList<>();
+            JSONArray array = object.optJSONArray("roles");
+            for (int i = 0; i < array.length(); i++) {
                 roles.add(array.getString(i));
             }
 
