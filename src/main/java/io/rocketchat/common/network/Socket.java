@@ -208,6 +208,7 @@ public class Socket {
         System.out.println("Message is " + text);
     }
 
+    // TODO: 10/8/17 Solve problem while commonRoomTest while sending multiple PING frames at each step
     protected void sendPingFramesPeriodically() {
         handler.removeLast();
         handler.postDelayed(new TimerTask() {
