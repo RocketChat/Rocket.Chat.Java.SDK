@@ -14,13 +14,14 @@ public class RoomRPC extends RPC {
     private static final String CREATE_PRIVATE_GROUP = "createPrivateGroup";
     private static final String DELETE_GROUP = "eraseRoom";
     private static final String ARCHIVE_ROOM = "archiveRoom";
-    private static final String UNARCHIEVE_ROOM = "unarchiveRoom";
+    private static final String UNARCHIVE_ROOM = "unarchiveRoom";
     private static final String JOIN_PUBLIC_GROUP = "joinRoom";
     private static final String LEAVE_GROUP = "leaveRoom";
     private static final String HIDE_ROOM = "hideRoom";
     private static final String OPEN_ROOM = "openRoom";
     private static final String SET_FAVOURITE_ROOM = "toggleFavorite";
     private static final String SAVE_ROOM_SETTINGS = "saveRoomSettings";
+    private static final String GET_ROOM_MEMBERS="getUsersOfRoom";
 
     /**
      * Creates a public channel.
@@ -71,7 +72,7 @@ public class RoomRPC extends RPC {
      * Unarchiving a room removes it from being read only and then adds it back to the channel list on the left.
      */
     public static String unarchiveRoom(int integer, String roomId) {
-        return getRemoteMethodObject(integer, UNARCHIEVE_ROOM, roomId).toString();
+        return getRemoteMethodObject(integer, UNARCHIVE_ROOM, roomId).toString();
     }
 
     /**
@@ -132,4 +133,10 @@ public class RoomRPC extends RPC {
     public static String saveRoomSettings(int integer, String roomId, String setting, String value) {
         return getRemoteMethodObject(integer, SAVE_ROOM_SETTINGS, roomId, setting, value).toString();
     }
+
+    public static String getRoomMembers(int integer, String roomId, Boolean allUsers) {
+        return getRemoteMethodObject(integer, GET_ROOM_MEMBERS, roomId, allUsers).toString();
+    }
+
+
 }

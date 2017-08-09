@@ -1,11 +1,12 @@
 package io.rocketchat.core.callback;
 
-import java.util.List;
-
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.RoomRole;
+
+import java.util.List;
 
 /**
  * Created by sachin on 20/7/17.
@@ -21,6 +22,10 @@ public class RoomListener {
 
     public interface GroupListener extends Listener {
         void onCreateGroup(String roomId, ErrorObject error);
+    }
+
+    public interface GetMembersListener extends Listener {
+        void onGetRoomMembers(Integer total, List <UserObject> members, ErrorObject error);
     }
 
 }

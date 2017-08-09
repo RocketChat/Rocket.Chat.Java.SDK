@@ -178,8 +178,23 @@ public class CoreMiddleware {
                         }
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);
-                        break;
                     }
+                    break;
+                case GET_ROOM_MEMBERS:
+                    RoomListener.GetMembersListener membersListener= (RoomListener.GetMembersListener) listener;
+                    if (result==null){
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        membersListener.onGetRoomMembers(null,null,errorObject);
+                    }else {
+                        ArrayList <UserObject> users=new ArrayList<>();
+                        JSONArray array = ((JSONObject) result).optJSONArray("records");
+                        for (int j = 0; j < array.length(); j++) {
+                            users.add(new UserObject(array.optJSONObject(j)));
+                        }
+                        Integer total = ((JSONObject) result).optInt("total");
+                        membersListener.onGetRoomMembers(total,users,null);
+                    }
+                    break;
                 case SEND_MESSAGE:
                     MessageListener.MessageAckListener ackListener = (MessageListener.MessageAckListener) listener;
                     if (result == null) {
@@ -253,6 +268,7 @@ public class CoreMiddleware {
         GET_ROOM_ROLES,
         LIST_CUSTOM_EMOJI,
         LOAD_HISTORY,
+        GET_ROOM_MEMBERS,
         SEND_MESSAGE,
         MESSAGE_OP,
         CREATE_GROUP,
