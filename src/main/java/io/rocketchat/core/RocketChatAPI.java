@@ -153,6 +153,12 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(ChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
+    private void getRoomMembers(String roomID, Boolean allUsers, RoomListener.GetMembersListener listener) {
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.GET_ROOM_MEMBERS);
+        sendDataInBackground(RoomRPC.getRoomMembers(uniqueID, roomID, allUsers));
+    }
+
     //Tested
     private void sendIsTyping(String roomId, String username, Boolean istyping) {
         int uniqueID = integer.getAndIncrement();
@@ -417,6 +423,10 @@ public class RocketChatAPI extends Socket {
 
         public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, HistoryListener listener) {
             RocketChatAPI.this.getChatHistory(room.getRoomId(), limit, oldestMessageTimestamp, lasttimestamp, listener);
+        }
+
+        public void getMembers(Boolean allUsers, RoomListener.GetMembersListener membersListener){
+            RocketChatAPI.this.getRoomMembers(room.getRoomId(), allUsers, membersListener);
         }
 
         public void sendIsTyping(Boolean istyping) {
