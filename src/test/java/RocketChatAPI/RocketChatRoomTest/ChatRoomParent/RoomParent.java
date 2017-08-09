@@ -60,6 +60,7 @@ public class RoomParent extends CoreAdapter {
     @After
     public void logout() throws InterruptedException {
         api.logout(null);
+        api.disconnect();
     }
 }
 

@@ -34,6 +34,7 @@ public class TaskHandler {
     }
 
     public void cancel() {
+        removeLast();
         timer.cancel();
         timer.purge();
     }
