@@ -1,5 +1,11 @@
+import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.TokenObject;
+
+import java.util.List;
 
 /**
  * Created by sachin on 7/6/17.
@@ -25,6 +31,37 @@ public class Main extends CoreAdapter {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
+        api.login("testuserrocks","testuserrocks",this);
+    }
+
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getRooms(this);
+    }
+
+    @Override
+    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
+        System.out.println("Got here");
+//        try {
+            RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
+//        }catch (Exception e){
+//            System.out.println("got exception here" + e.getMessage());
+//        }
+//        System.out.println("got here");
+//        room.sendMessage("Hey there");
+        room.getMembers(false,this);
+//        if (room==null){
+//            System.out.println("room is null");
+//        }else {
+//            room.getMembers(true, null);
+//        }
+    }
+
+    @Override
+    public void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error) {
+        System.out.println("Total are "+total);
+        System.out.println("Size is "+members.size());
+
     }
 
     @Override

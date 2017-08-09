@@ -338,7 +338,9 @@ public class RocketChatAPI extends Socket {
                 sendDataInBackground(BasicRPC.PONGMESSAGE);
                 break;
             case PONG:
-                sendPingFramesPeriodically();
+                if (isPingEnabled()) {
+                    sendPingFramesPeriodically();
+                }
                 break;
             case CONNECTED:
                 sessionId = object.optString("session");

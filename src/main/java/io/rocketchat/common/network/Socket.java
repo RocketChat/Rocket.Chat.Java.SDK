@@ -32,12 +32,14 @@ public class Socket {
     private ReconnectionStrategy strategy;
     private Timer timer;
     private boolean selfDisconnect;
+    private boolean pingEnable;
 
     protected Socket(String url) {
         this.url = url;
         adapter = getAdapter();
         factory = new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect = false;
+        pingEnable=false;
         handler = new TaskHandler();
         pingInterval = 2000;
     }
@@ -47,7 +49,17 @@ public class Socket {
     }
 
     public void setPingInterval(long pingInterval) {
+        pingEnable=true;
         this.pingInterval = pingInterval;
+    }
+
+    public void disablePing() {
+        handler.cancel();
+        pingEnable=false;
+    }
+
+    public boolean isPingEnabled() {
+        return pingEnable;
     }
 
     private WebSocketAdapter getAdapter() {
