@@ -8,9 +8,9 @@ import io.rocketchat.common.data.rpc.SubRPC;
 
 public class LiveChatSubRPC extends SubRPC {
 
-    private static String STREAMROOM = "stream-room-messages";
-    private static String STREAMLIVECHATROOM = "stream-livechat-room";
-    private static String NOTIFYROOM = "stream-notify-room";
+    private static final String STREAM_ROOM = "stream-room-messages";
+    private static final String STREAM_LIVECHAT_ROOM = "stream-livechat-room";
+    private static final String NOTIFY_ROOM = "stream-notify-room";
 
     /**
      * TESTED
@@ -22,11 +22,11 @@ public class LiveChatSubRPC extends SubRPC {
      */
 
     public static String streamRoomMessages(String uniqueid, String room_id, Boolean persistenceEnable) {
-        return getRemoteSubscriptionObject(uniqueid, STREAMROOM, room_id, persistenceEnable).toString();
+        return getRemoteSubscriptionObject(uniqueid, STREAM_ROOM, room_id, persistenceEnable).toString();
     }
 
     public static String streamLivechatRoom(String uniqueid, String room_id, Boolean persistenceEnable) {
-        return getRemoteSubscriptionObject(uniqueid, STREAMLIVECHATROOM, room_id, persistenceEnable).toString();
+        return getRemoteSubscriptionObject(uniqueid, STREAM_LIVECHAT_ROOM, room_id, persistenceEnable).toString();
     }
 
     /**
@@ -38,7 +38,7 @@ public class LiveChatSubRPC extends SubRPC {
      * @return
      */
     public static String subscribeTyping(String uniqueid, String room_id, Boolean persistenceEnable) {
-        return getRemoteSubscriptionObject(uniqueid, NOTIFYROOM, room_id + "/typing", persistenceEnable).toString();
+        return getRemoteSubscriptionObject(uniqueid, NOTIFY_ROOM, room_id + "/typing", persistenceEnable).toString();
     }
 
 }

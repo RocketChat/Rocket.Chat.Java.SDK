@@ -32,14 +32,14 @@ import io.rocketchat.livechat.rpc.LiveChatTypingRPC;
 // TODO: 30/7/17 Make it singletone like eventbus, add builder class to LiveChatAPI in order to use it anywhere
 public class LiveChatAPI extends Socket {
 
-    AtomicInteger integer;
-    String sessionId;
-    JSONObject userInfo;
+    private AtomicInteger integer;
+    private String sessionId;
+    private JSONObject userInfo;
 
-    ConnectListener connectListener;
+    private ConnectListener connectListener;
 
-    LiveChatMiddleware liveChatMiddleware;
-    LiveChatStreamMiddleware liveChatStreamMiddleware;
+    private LiveChatMiddleware liveChatMiddleware;
+    private LiveChatStreamMiddleware liveChatStreamMiddleware;
 
     public LiveChatAPI(String url) {
         super(url);
@@ -54,7 +54,7 @@ public class LiveChatAPI extends Socket {
 
     public void getInitialData(InitialDataListener listener) {
         int uniqueID = integer.getAndIncrement();
-        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GETINITIALDATA);
+        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GET_INITIAL_DATA);
         sendDataInBackground(LiveChatBasicRPC.getInitialData(uniqueID));
     }
 
@@ -77,19 +77,19 @@ public class LiveChatAPI extends Socket {
 
     public void sendOfflineMessage(String name, String email, String message, MessageListener.OfflineMessageListener listener) {
         int uniqueID = integer.getAndIncrement();
-        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.SENDOFFLINEMESSAGE);
+        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.SEND_OFFLINE_MESSAGE);
         sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID, name, email, message));
     }
 
     private void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp, LoadHistoryListener listener) {
         int uniqueID = integer.getAndIncrement();
-        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GETCHATHISTORY);
+        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GET_CHAT_HISTORY);
         sendDataInBackground(LiveChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
     private void getAgentData(String roomId, AgentListener.AgentDataListener listener) {
         int uniqueID = integer.getAndIncrement();
-        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GETAGENTDATA);
+        liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GET_AGENT_DATA);
         sendDataInBackground(LiveChatBasicRPC.getAgentData(uniqueID, roomId));
     }
 
@@ -100,7 +100,7 @@ public class LiveChatAPI extends Socket {
 
     private void sendMessage(String msgId, String roomID, String message, String token, MessageListener.MessageAckListener messageAckListener) {
         int uniqueID = integer.getAndIncrement();
-        liveChatMiddleware.createCallback(uniqueID, messageAckListener, LiveChatMiddleware.ListenerType.SENDMESSAGE);
+        liveChatMiddleware.createCallback(uniqueID, messageAckListener, LiveChatMiddleware.ListenerType.SEND_MESSAGE);
         sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
     }
 
@@ -328,7 +328,13 @@ public class LiveChatAPI extends Socket {
 
         @Override
         public String toString() {
-            return "{" + "\"userName\":\"" + userName + '\"' + ",\"roomId\":\"" + roomId + '\"' + ",\"userId\":\"" + userId + '\"' + ",\"visitorToken\":\"" + visitorToken + '\"' + ",\"authToken\":\"" + authToken + '\"' + '}';
+            return "ChatRoom{" +
+                    "userName='" + userName + '\'' +
+                    ", roomId='" + roomId + '\'' +
+                    ", userId='" + userId + '\'' +
+                    ", visitorToken='" + visitorToken + '\'' +
+                    ", authToken='" + authToken + '\'' +
+                    '}';
         }
     }
 }

@@ -14,12 +14,12 @@ public class LiveChatBasicRPC extends RPC {
 
     public static String visitorToken = Utils.generateRandomHexToken(16);
 
-    private static String GETINITIALDATA = "livechat:getInitialData";
-    private static String REGISTERGUEST = "livechat:registerGuest";
-    private static String LOGIN = "login";
-    private static String GETAGENTDATA = "livechat:getAgentData";
-    private static String CLOSECONVERSATION = "livechat:closeByVisitor";
-    private static String SENDOFFLINEMESSAGE = "livechat:sendOfflineMessage";
+    private static final String GET_INITIAL_DATA = "livechat:getInitialData";
+    private static final String REGISTER_GUEST = "livechat:registerGuest";
+    private static final String LOGIN = "login";
+    private static final String GET_AGENT_DATA = "livechat:getAgentData";
+    private static final String CLOSE_CONVERSATION = "livechat:closeByVisitor";
+    private static final String SEND_OFFLINE_MESSAGE = "livechat:sendOfflineMessage";
 
     /**
      * Tested
@@ -29,7 +29,7 @@ public class LiveChatBasicRPC extends RPC {
      */
 
     public static String getInitialData(int integer) {
-        return getRemoteMethodObject(integer, GETINITIALDATA, visitorToken).toString();
+        return getRemoteMethodObject(integer, GET_INITIAL_DATA, visitorToken).toString();
     }
 
     /**
@@ -53,7 +53,7 @@ public class LiveChatBasicRPC extends RPC {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return getRemoteMethodObject(integer, REGISTERGUEST, object).toString();
+        return getRemoteMethodObject(integer, REGISTER_GUEST, object).toString();
     }
 
     /**
@@ -82,7 +82,7 @@ public class LiveChatBasicRPC extends RPC {
      * @return
      */
     public static String getAgentData(int integer, String roomId) {
-        return getRemoteMethodObject(integer, GETAGENTDATA, roomId).toString();
+        return getRemoteMethodObject(integer, GET_AGENT_DATA, roomId).toString();
     }
 
     /**
@@ -94,7 +94,7 @@ public class LiveChatBasicRPC extends RPC {
      */
 
     public static String closeConversation(int integer, String roomId) {
-        return getRemoteMethodObject(integer, CLOSECONVERSATION, roomId).toString();
+        return getRemoteMethodObject(integer, CLOSE_CONVERSATION, roomId).toString();
     }
 
     public static String sendOfflineMessage(int integer, String name, String email, String message) {
@@ -106,7 +106,7 @@ public class LiveChatBasicRPC extends RPC {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return getRemoteMethodObject(integer, SENDOFFLINEMESSAGE, object).toString();
+        return getRemoteMethodObject(integer, SEND_OFFLINE_MESSAGE, object).toString();
     }
 
 }

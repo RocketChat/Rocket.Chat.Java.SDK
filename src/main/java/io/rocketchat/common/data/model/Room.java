@@ -10,9 +10,10 @@ import org.json.JSONObject;
 public class Room {
 
     protected String roomId;
-    protected String roomName;
-    protected UserObject userInfo;
-    Type roomType;
+    private String roomName;
+    private UserObject userInfo;
+    private Type roomType;
+
     public Room(JSONObject object) {
         try {
             roomId = object.getString("_id");
@@ -31,7 +32,6 @@ public class Room {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     public String getRoomId() {
@@ -51,6 +51,8 @@ public class Room {
     }
 
     enum Type {
-        PUBLIC, PRIVATE, ONE_TO_ONE
+        PUBLIC,
+        PRIVATE,
+        ONE_TO_ONE
     }
 }

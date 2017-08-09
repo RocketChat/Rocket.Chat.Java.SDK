@@ -11,13 +11,13 @@ import io.rocketchat.common.data.rpc.RPC;
 
 public class MessageRPC extends RPC {
 
-    private static String SEND_MESSAGE = "sendMessage";
-    private static String DELETE_MESSAGE = "deleteMessage";
-    private static String UPDATE_MESSAGE = "updateMessage";
-    private static String PIN_MESSAGE = "pinMessage";
-    private static String UNPIN_MESSAGE = "unpinMessage";
-    private static String STAR_MESSAGE = "starMessage";
-    private static String SET_REACTION = "setReaction";
+    private static final String SEND_MESSAGE = "sendMessage";
+    private static final String DELETE_MESSAGE = "deleteMessage";
+    private static final String UPDATE_MESSAGE = "updateMessage";
+    private static final String PIN_MESSAGE = "pinMessage";
+    private static final String UNPIN_MESSAGE = "unpinMessage";
+    private static final String STAR_MESSAGE = "starMessage";
+    private static final String SET_REACTION = "setReaction";
 
     public static String sendMessage(int integer, String msgId, String roomId, String message) {
         JSONObject object = new JSONObject();

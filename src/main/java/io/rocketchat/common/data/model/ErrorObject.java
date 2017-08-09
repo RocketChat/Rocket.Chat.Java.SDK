@@ -8,10 +8,10 @@ import org.json.JSONObject;
 
 public class ErrorObject {
 
-    String reason;
-    String errorType;
-    long error;
-    String message;
+    private String reason;
+    private String errorType;
+    private long error;
+    private String message;
 
     public ErrorObject(JSONObject object) {
         reason = object.optString("reason");
@@ -38,7 +38,12 @@ public class ErrorObject {
 
     @Override
     public String toString() {
-        return "ErrorObject{" + "reason='" + reason + '\'' + ", errorType='" + errorType + '\'' + ", error=" + error + ", message='" + message + '\'' + '}';
+        return "ErrorObject{" +
+                "reason='" + reason + '\'' +
+                ", errorType='" + errorType + '\'' +
+                ", error=" + error +
+                ", message='" + message + '\'' +
+                '}';
     }
 }
 

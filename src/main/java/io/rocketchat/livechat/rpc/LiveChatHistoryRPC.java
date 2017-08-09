@@ -13,7 +13,7 @@ import io.rocketchat.common.data.rpc.RPC;
 
 public class LiveChatHistoryRPC extends RPC {
 
-    public static String HISTORY = "loadHistory";
+    private static final String HISTORY = "loadHistory";
 
     /**
      * TODO: 18/6/17 look for unread messages or new messages

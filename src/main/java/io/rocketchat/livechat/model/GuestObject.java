@@ -11,9 +11,9 @@ import java.util.Date;
  */
 public class GuestObject {
 
-    String userID;
-    String token;
-    Date tokenExpiry;
+    private String userID;
+    private String token;
+    private Date tokenExpiry;
 
     public GuestObject(JSONObject object) {
         try {
@@ -56,6 +56,10 @@ public class GuestObject {
 
     @Override
     public String toString() {
-        return "GuestObject{" + "userID='" + userID + '\'' + ", AuthToken='" + token + '\'' + ", tokenExpiry=" + tokenExpiry + '}';
+        return "GuestObject{" +
+                "userID='" + userID + '\'' +
+                ", token='" + token + '\'' +
+                ", tokenExpiry=" + tokenExpiry +
+                '}';
     }
 }

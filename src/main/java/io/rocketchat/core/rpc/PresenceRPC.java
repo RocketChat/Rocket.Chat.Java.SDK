@@ -7,8 +7,8 @@ import io.rocketchat.common.data.rpc.RPC;
  */
 public class PresenceRPC extends RPC {
 
-    private static String DEFAULT_STATUS = "UserPresence:setDefaultStatus";
-    private static String TEMP_STATUS = "UserPresence:";
+    private static final String DEFAULT_STATUS = "UserPresence:setDefaultStatus";
+    private static final String TEMP_STATUS = "UserPresence:";
 
     public static String setDefaultStatus(int integer, Status status) {
         String defaultStat = "online";

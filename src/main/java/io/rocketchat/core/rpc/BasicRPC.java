@@ -12,13 +12,13 @@ import io.rocketchat.common.utils.Utils;
 
 public class BasicRPC extends RPC {
 
-    private static String LOGIN = "login";
-    private static String GET_USER_ROLES = "getUserRoles";
-    private static String GET_SUBSCRIPTIONS = "subscriptions/get";
-    private static String GET_ROOMS = "rooms/get";
-    private static String GET_ROOM_ROLES = "getRoomRoles";
-    private static String LIST_EMOJI = "listEmojiCustom";
-    private static String LOGOUT = "logout";
+    private static final String LOGIN = "login";
+    private static final String GET_USER_ROLES = "getUserRoles";
+    private static final String GET_SUBSCRIPTIONS = "subscriptions/get";
+    private static final String GET_ROOMS = "rooms/get";
+    private static final String GET_ROOM_ROLES = "getRoomRoles";
+    private static final String LIST_EMOJI = "listEmojiCustom";
+    private static final String LOGOUT = "logout";
 
     /**
      * Tested

@@ -24,7 +24,7 @@ public class LiveChatMiddleware {
     //Each new response will trigger each of the callback
 
     private static LiveChatMiddleware middleware = new LiveChatMiddleware();
-    ConcurrentHashMap<Long, Object[]> callbacks;
+    private ConcurrentHashMap<Long, Object[]> callbacks;
 
     private LiveChatMiddleware() {
         callbacks = new ConcurrentHashMap<>();
@@ -45,7 +45,7 @@ public class LiveChatMiddleware {
             ListenerType type = (ListenerType) objects[1];
             Object result = object.opt("result");
             switch (type) {
-                case GETINITIALDATA:
+                case GET_INITIAL_DATA:
                     InitialDataListener dataListener = (InitialDataListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -76,7 +76,7 @@ public class LiveChatMiddleware {
                         loginListener.onLogin(guestObject, null);
                     }
                     break;
-                case GETCHATHISTORY:
+                case GET_CHAT_HISTORY:
                     LoadHistoryListener historyListener = (LoadHistoryListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -91,7 +91,7 @@ public class LiveChatMiddleware {
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);
                     }
                     break;
-                case GETAGENTDATA:
+                case GET_AGENT_DATA:
                     AgentListener.AgentDataListener agentDataListener = (AgentListener.AgentDataListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -101,7 +101,7 @@ public class LiveChatMiddleware {
                         agentDataListener.onAgentData(agentObject, null);
                     }
                     break;
-                case SENDMESSAGE:
+                case SEND_MESSAGE:
                     MessageListener.MessageAckListener messageAckListener = (MessageListener.MessageAckListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -111,7 +111,7 @@ public class LiveChatMiddleware {
                         messageAckListener.onMessageAck(liveChatMessage, null);
                     }
                     break;
-                case SENDOFFLINEMESSAGE:
+                case SEND_OFFLINE_MESSAGE:
                     MessageListener.OfflineMessageListener messageListener = (MessageListener.OfflineMessageListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -127,6 +127,12 @@ public class LiveChatMiddleware {
     }
 
     public enum ListenerType {
-        GETINITIALDATA, REGISTER, LOGIN, GETCHATHISTORY, GETAGENTDATA, SENDMESSAGE, SENDOFFLINEMESSAGE
+        GET_INITIAL_DATA,
+        REGISTER,
+        LOGIN,
+        GET_CHAT_HISTORY,
+        GET_AGENT_DATA,
+        SEND_MESSAGE,
+        SEND_OFFLINE_MESSAGE
     }
 }

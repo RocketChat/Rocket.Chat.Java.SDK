@@ -12,13 +12,13 @@ import java.util.Date;
 
 public class DepartmentObject {
 
-    String id;
-    Boolean enabled;
-    String deptName;
-    String description;
-    int numAgents;
-    Boolean showOnRegistration;
-    Date updatedAt;
+    private String id;
+    private Boolean enabled;
+    private String deptName;
+    private String description;
+    private int numAgents;
+    private Boolean showOnRegistration;
+    private Date updatedAt;
 
     DepartmentObject(JSONObject object) {
         try {
@@ -92,6 +92,14 @@ public class DepartmentObject {
 
     @Override
     public String toString() {
-        return "DepartmentObject{" + "id='" + id + '\'' + ", enabled=" + enabled + ", deptName='" + deptName + '\'' + ", description='" + description + '\'' + ", numAgents=" + numAgents + ", showOnRegistration=" + showOnRegistration + ", updatedAt=" + updatedAt + '}';
+        return "DepartmentObject{" +
+                "id='" + id + '\'' +
+                ", enabled=" + enabled +
+                ", deptName='" + deptName + '\'' +
+                ", description='" + description + '\'' +
+                ", numAgents=" + numAgents +
+                ", showOnRegistration=" + showOnRegistration +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

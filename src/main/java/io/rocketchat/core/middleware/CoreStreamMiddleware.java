@@ -31,9 +31,9 @@ public class CoreStreamMiddleware {
 
     private static SubType parse(String s) {
         if (s.equals("stream-room-messages")) {
-            return SubType.SUBSCRIBEROOMMESSAGE;
+            return SubType.SUBSCRIBE_ROOM_MESSAGE;
         } else if (s.equals("stream-notify-room")) {
-            return SubType.SUBSCRIBEROOMTYPING;
+            return SubType.SUBSCRIBE_ROOM_TYPING;
         }
         return SubType.OTHER;
     }
@@ -57,14 +57,14 @@ public class CoreStreamMiddleware {
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
 
         switch (parse(s)) {
-            case SUBSCRIBEROOMMESSAGE:
+            case SUBSCRIBE_ROOM_MESSAGE:
                 if (subscriptionListener != null) {
                     RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
                     subscriptionListener.onMessage(roomId, message);
                 }
                 break;
-            case SUBSCRIBEROOMTYPING:
+            case SUBSCRIBE_ROOM_TYPING:
                 if (typingListener != null) {
                     typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
                 }
@@ -94,6 +94,8 @@ public class CoreStreamMiddleware {
     }
 
     public enum SubType {
-        SUBSCRIBEROOMMESSAGE, SUBSCRIBEROOMTYPING, OTHER
+        SUBSCRIBE_ROOM_MESSAGE,
+        SUBSCRIBE_ROOM_TYPING,
+        OTHER
     }
 }

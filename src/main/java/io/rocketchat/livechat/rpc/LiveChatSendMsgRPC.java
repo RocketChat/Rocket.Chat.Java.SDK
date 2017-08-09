@@ -11,7 +11,7 @@ import io.rocketchat.common.data.rpc.RPC;
 
 public class LiveChatSendMsgRPC extends RPC {
 
-    public static String SENDMESSAGE = "sendMessageLivechat";
+    private static final String SEND_MESSAGE = "sendMessageLivechat";
 
     /**
      * TESTED
@@ -34,6 +34,6 @@ public class LiveChatSendMsgRPC extends RPC {
             e.printStackTrace();
         }
 
-        return getRemoteMethodObject(integer, SENDMESSAGE, object).toString();
+        return getRemoteMethodObject(integer, SEND_MESSAGE, object).toString();
     }
 }

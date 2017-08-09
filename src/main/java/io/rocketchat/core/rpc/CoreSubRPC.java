@@ -6,8 +6,8 @@ import io.rocketchat.common.data.rpc.SubRPC;
  * Created by sachin on 21/7/17.
  */
 public class CoreSubRPC extends SubRPC {
-    private static String STREAM_ROOM_MESSAGES = "stream-room-messages";
-    private static String STREAM_NOTIFY_ROOM = "stream-notify-room";
+    private static final String STREAM_ROOM_MESSAGES = "stream-room-messages";
+    private static final String STREAM_NOTIFY_ROOM = "stream-notify-room";
 
     public static String subscribeRoomMessageEvent(String uniqueid, String room_id, Boolean persistenceEnable) {
         return getRemoteSubscriptionObject(uniqueid, STREAM_ROOM_MESSAGES, room_id, persistenceEnable).toString();

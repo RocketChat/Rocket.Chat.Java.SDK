@@ -9,7 +9,7 @@ import org.json.JSONObject;
  */
 public class SubRPC {
 
-    public static JSONObject getRemoteSubscriptionObject(String uniqueId, String methodname, Object... args) {
+    protected static JSONObject getRemoteSubscriptionObject(String uniqueId, String methodname, Object... args) {
         JSONObject object = new JSONObject();
         try {
             object.put("msg", "sub");
@@ -27,7 +27,7 @@ public class SubRPC {
         return object;
     }
 
-    public static JSONObject getRemoteUnsubscriptionObject(String subId) {
+    protected static JSONObject getRemoteUnsubscriptionObject(String subId) {
         JSONObject object = new JSONObject();
         try {
             object.put("msg", "unsub");

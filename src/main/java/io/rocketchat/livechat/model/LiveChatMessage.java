@@ -12,10 +12,10 @@ public class LiveChatMessage extends Message {
     public static String MESSAGE_TYPE_COMMAND = "command";
     public static String MESSAGE_TYPE_CLOSE = "livechat-close";
 
-    String visitorToken;
-    Boolean newRoom;
-    Boolean showConnecting; //This message triggers showconnecting popup
-    String sandstormSessionId;
+    private String visitorToken;
+    private Boolean newRoom;
+    private Boolean showConnecting; //This message triggers showconnecting popup
+    private String sandstormSessionId;
 
     public LiveChatMessage(JSONObject object) {
         super(object);

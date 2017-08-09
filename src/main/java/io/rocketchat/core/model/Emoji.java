@@ -47,6 +47,12 @@ public class Emoji {
 
     @Override
     public String toString() {
-        return "Emoji{" + "id='" + id + '\'' + ", name='" + name + '\'' + ", aliases=" + aliases + ", extension='" + extension + '\'' + ", updatedAt=" + updatedAt + '}';
+        return "Emoji{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", aliases=" + aliases +
+                ", extension='" + extension + '\'' +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

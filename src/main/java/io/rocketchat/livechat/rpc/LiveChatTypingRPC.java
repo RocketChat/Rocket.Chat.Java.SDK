@@ -8,7 +8,7 @@ import io.rocketchat.common.data.rpc.RPC;
 
 public class LiveChatTypingRPC extends RPC {
 
-    private static String NOTIFYROOM = "stream-notify-room";
+    private static final String NOTIFY_ROOM = "stream-notify-room";
 
     /**
      * TESTED
@@ -24,6 +24,6 @@ public class LiveChatTypingRPC extends RPC {
 
     public static String streamNotifyRoom(int integer, String room_id, String username, Boolean istyping) {
 
-        return getRemoteMethodObject(integer, NOTIFYROOM, room_id + "/typing", username, istyping).toString();
+        return getRemoteMethodObject(integer, NOTIFY_ROOM, room_id + "/typing", username, istyping).toString();
     }
 }

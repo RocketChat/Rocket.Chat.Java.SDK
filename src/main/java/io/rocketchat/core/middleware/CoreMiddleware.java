@@ -67,7 +67,7 @@ public class CoreMiddleware {
                         loginListener.onLogin(tokenObject, null);
                     }
                     break;
-                case GETPERMISSIONS:
+                case GET_PERMISSIONS:
                     AccountListener.getPermissionsListener getPermissionsListener = (AccountListener.getPermissionsListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -81,7 +81,7 @@ public class CoreMiddleware {
                         getPermissionsListener.onGetPermissions(permissions, null);
                     }
                     break;
-                case GETPUBLICSETTINGS:
+                case GET_PUBLIC_SETTINGS:
                     AccountListener.getPublicSettingsListener getPublicSettingsListener = (AccountListener.getPublicSettingsListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -95,7 +95,7 @@ public class CoreMiddleware {
                         getPublicSettingsListener.onGetPublicSettings(settings, null);
                     }
                     break;
-                case GETUSERROLES:
+                case GET_USER_ROLES:
                     UserListener.getUserRoleListener userRoleListener = (UserListener.getUserRoleListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -109,7 +109,7 @@ public class CoreMiddleware {
                         userRoleListener.onUserRoles(list, null);
                     }
                     break;
-                case GETSUBSCRIPTIONS:
+                case GET_SUBSCRIPTIONS:
                     SubscriptionListener.GetSubscriptionListener subscriptionListener = (SubscriptionListener.GetSubscriptionListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -123,7 +123,7 @@ public class CoreMiddleware {
                         subscriptionListener.onGetSubscriptions(list, null);
                     }
                     break;
-                case GETROOMS:
+                case GET_ROOMS:
                     RoomListener.GetRoomListener getRoomListener = (RoomListener.GetRoomListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -137,7 +137,7 @@ public class CoreMiddleware {
                         getRoomListener.onGetRooms(list, null);
                     }
                     break;
-                case GETROOMROLES:
+                case GET_ROOM_ROLES:
                     RoomListener.RoomRolesListener roomRolesListener = (RoomListener.RoomRolesListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -151,7 +151,7 @@ public class CoreMiddleware {
                         roomRolesListener.onGetRoomRoles(list, null);
                     }
                     break;
-                case LISTCUSTOMEMOJI:
+                case LIST_CUSTOM_EMOJI:
                     EmojiListener emojiListener = (EmojiListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -165,7 +165,7 @@ public class CoreMiddleware {
                         emojiListener.onListCustomEmoji(list, null);
                     }
                     break;
-                case LOADHISTORY:
+                case LOAD_HISTORY:
                     HistoryListener historyListener = (HistoryListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -180,7 +180,7 @@ public class CoreMiddleware {
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);
                         break;
                     }
-                case SENDMESSAGE:
+                case SEND_MESSAGE:
                     MessageListener.MessageAckListener ackListener = (MessageListener.MessageAckListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -190,10 +190,10 @@ public class CoreMiddleware {
                         ackListener.onMessageAck(message, null);
                     }
                     break;
-                case MESSAGEOP:
+                case MESSAGE_OP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case CREATEGROUP:
+                case CREATE_GROUP:
                     RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
                     if (object.opt("error") != null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -203,7 +203,7 @@ public class CoreMiddleware {
                         groupListener.onCreateGroup(roomId, null);
                     }
                     break;
-                case DELETEGROUP:
+                case DELETE_GROUP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case ARCHIEVE:
@@ -212,19 +212,19 @@ public class CoreMiddleware {
                 case UNARCHIEVE:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case JOINPUBLICGROUP:
+                case JOIN_PUBLIC_GROUP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case LEAVEGROUP:
+                case LEAVE_GROUP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case OPENROOM:
+                case OPEN_ROOM:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case HIDEROOM:
+                case HIDE_ROOM:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case SETFAVOURITEROOM:
+                case SET_FAVOURITE_ROOM:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case LOGOUT:
@@ -234,7 +234,7 @@ public class CoreMiddleware {
         }
     }
 
-    public void handleCallbackBySimpleListener(SimpleListener listener, Object error) {
+    private void handleCallbackBySimpleListener(SimpleListener listener, Object error) {
         if (error != null) {
             ErrorObject errorObject = new ErrorObject((JSONObject) error);
             listener.callback(null, errorObject);
@@ -244,6 +244,26 @@ public class CoreMiddleware {
     }
 
     public enum ListenerType {
-        LOGIN, GETPERMISSIONS, GETPUBLICSETTINGS, GETUSERROLES, GETSUBSCRIPTIONS, GETROOMS, GETROOMROLES, LISTCUSTOMEMOJI, LOADHISTORY, SENDMESSAGE, MESSAGEOP, CREATEGROUP, DELETEGROUP, ARCHIEVE, UNARCHIEVE, JOINPUBLICGROUP, LEAVEGROUP, OPENROOM, HIDEROOM, SETFAVOURITEROOM, LOGOUT
+        LOGIN,
+        GET_PERMISSIONS,
+        GET_PUBLIC_SETTINGS,
+        GET_USER_ROLES,
+        GET_SUBSCRIPTIONS,
+        GET_ROOMS,
+        GET_ROOM_ROLES,
+        LIST_CUSTOM_EMOJI,
+        LOAD_HISTORY,
+        SEND_MESSAGE,
+        MESSAGE_OP,
+        CREATE_GROUP,
+        DELETE_GROUP,
+        ARCHIEVE,
+        UNARCHIEVE,
+        JOIN_PUBLIC_GROUP,
+        LEAVE_GROUP,
+        OPEN_ROOM,
+        HIDE_ROOM,
+        SET_FAVOURITE_ROOM,
+        LOGOUT
     }
 }

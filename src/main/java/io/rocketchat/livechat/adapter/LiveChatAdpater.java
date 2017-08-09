@@ -1,6 +1,6 @@
 package io.rocketchat.livechat.adapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
@@ -45,7 +45,7 @@ public class LiveChatAdpater implements ConnectListener, AgentListener.AgentConn
     }
 
     @Override
-    public void onLoadHistory(ArrayList<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+    public void onLoadHistory(List<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
     }
 

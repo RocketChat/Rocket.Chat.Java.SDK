@@ -44,6 +44,10 @@ public class TokenObject {
 
     @Override
     public String toString() {
-        return "TokenObject{" + "userId='" + userId + '\'' + ", AuthToken='" + AuthToken + '\'' + ", Expiry=" + Expiry + '}';
+        return "TokenObject{" +
+                "userId='" + userId + '\'' +
+                ", AuthToken='" + AuthToken + '\'' +
+                ", Expiry=" + Expiry +
+                '}';
     }
 }

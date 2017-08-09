@@ -8,10 +8,10 @@ import org.json.JSONObject;
  * Created by sachin on 9/6/17.
  */
 public class AgentObject {
-    String name;
-    String username;
-    JSONArray emails;
-    String agentId;
+    private String name;
+    private String username;
+    private JSONArray emails;
+    private String agentId;
 
     public AgentObject(JSONObject object) {
         try {
@@ -58,6 +58,11 @@ public class AgentObject {
 
     @Override
     public String toString() {
-        return "AgentObject{" + "name='" + name + '\'' + ", username='" + username + '\'' + ", emails=" + emails + ", agentId='" + agentId + '\'' + '}';
+        return "AgentObject{" +
+                "name='" + name + '\'' +
+                ", username='" + username + '\'' +
+                ", emails=" + emails +
+                ", agentId='" + agentId + '\'' +
+                '}';
     }
 }

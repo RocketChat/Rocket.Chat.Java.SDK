@@ -20,11 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatStreamMiddleware {
 
-    public static LiveChatStreamMiddleware middleware = new LiveChatStreamMiddleware();
-    MessageListener.SubscriptionListener subscriptionListener;
-    AgentListener.AgentConnectListener agentConnectListener;
-    TypingListener typingListener;
-    ConcurrentHashMap<String, SubscribeListener> subcallbacks;
+    private static LiveChatStreamMiddleware middleware = new LiveChatStreamMiddleware();
+    private MessageListener.SubscriptionListener subscriptionListener;
+    private AgentListener.AgentConnectListener agentConnectListener;
+    private TypingListener typingListener;
+    private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
     LiveChatStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
@@ -34,13 +34,13 @@ public class LiveChatStreamMiddleware {
         return middleware;
     }
 
-    public static SubType parse(String s) {
+    private static SubType parse(String s) {
         if (s.equals("stream-room-messages")) {
-            return SubType.STREAMROOMMESSAGES;
+            return SubType.STREAM_ROOM_MESSAGES;
         } else if (s.equals("stream-livechat-room")) {
-            return SubType.STREAMLIVECHATROOM;
+            return SubType.STREAM_LIVECHAT_ROOM;
         } else {
-            return SubType.NOTIFYROOM;
+            return SubType.NOTIFY_ROOM;
         }
     }
 
@@ -67,7 +67,7 @@ public class LiveChatStreamMiddleware {
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
 
         switch (parse(s)) {
-            case STREAMROOMMESSAGES:
+            case STREAM_ROOM_MESSAGES:
                 if (subscriptionListener != null) {
                     LiveChatMessage liveChatMessage = new LiveChatMessage(array.optJSONObject(0));
                     String roomId = object.optJSONObject("fields").optString("eventName");
@@ -78,12 +78,12 @@ public class LiveChatStreamMiddleware {
                     }
                 }
                 break;
-            case STREAMLIVECHATROOM:
+            case STREAM_LIVECHAT_ROOM:
                 if (agentConnectListener != null) {
                     agentConnectListener.onAgentConnect(new AgentObject(array.optJSONObject(0).optJSONObject("data")));
                 }
                 break;
-            case NOTIFYROOM:
+            case NOTIFY_ROOM:
                 if (typingListener != null) {
                     typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
                 }
@@ -102,7 +102,9 @@ public class LiveChatStreamMiddleware {
     }
 
     public enum SubType {
-        STREAMROOMMESSAGES, STREAMLIVECHATROOM, NOTIFYROOM
+        STREAM_ROOM_MESSAGES,
+        STREAM_LIVECHAT_ROOM,
+        NOTIFY_ROOM
     }
 
 }

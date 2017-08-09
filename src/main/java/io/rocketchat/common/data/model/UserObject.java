@@ -10,10 +10,10 @@ import java.util.ArrayList;
  * Created by sachin on 12/6/17.
  */
 public class UserObject {
-    String userId;
-    String userName;
-    ArrayList<String> roles;
-    JSONArray emails;
+    private String userId;
+    private String userName;
+    private ArrayList<String> roles;
+    private JSONArray emails;
 
     public UserObject(JSONObject object) {
         try {
@@ -64,6 +64,11 @@ public class UserObject {
 
     @Override
     public String toString() {
-        return "UserObject{" + "userId='" + userId + '\'' + ", userName='" + userName + '\'' + ", roles=" + roles + ", emails=" + emails + '}';
+        return "UserObject{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", roles=" + roles +
+                ", emails=" + emails +
+                '}';
     }
 }

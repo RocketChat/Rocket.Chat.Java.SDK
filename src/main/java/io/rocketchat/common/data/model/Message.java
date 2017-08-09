@@ -11,16 +11,16 @@ import java.util.Date;
 
 public class Message {
 
-    protected String messageId;
+    private String messageId;
     protected String roomId;
     protected String message;
-    protected Date msgTimestamp;
-    protected UserObject sender;
-    protected Date updatedAt;  //Message saved on the server
-    protected Date editedAt;
-    protected UserObject editedBy;
-    String messagetype;
-    String senderAlias;
+    private Date msgTimestamp;
+    private UserObject sender;
+    private Date updatedAt;  //Message saved on the server
+    private Date editedAt;
+    private UserObject editedBy;
+    private String messagetype;
+    private String senderAlias;
 
     public Message(JSONObject object) {
         try {

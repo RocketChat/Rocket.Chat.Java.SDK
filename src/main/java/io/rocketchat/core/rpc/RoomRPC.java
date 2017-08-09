@@ -10,17 +10,17 @@ import io.rocketchat.common.data.rpc.RPC;
 
 public class RoomRPC extends RPC {
 
-    private static String CREATE_PUBLIC_GROUP = "createChannel";
-    private static String CREATE_PRIVATE_GROUP = "createPrivateGroup";
-    private static String DELETE_GROUP = "eraseRoom";
-    private static String ARCHIVE_ROOM = "archiveRoom";
-    private static String UNARCHIEVE_ROOM = "unarchiveRoom";
-    private static String JOIN_PUBLIC_GROUP = "joinRoom";
-    private static String LEAVE_GROUP = "leaveRoom";
-    private static String HIDE_ROOM = "hideRoom";
-    private static String OPEN_ROOM = "openRoom";
-    private static String SET_FAVOURITE_ROOM = "toggleFavorite";
-    private static String SAVE_ROOM_SETTINGS = "saveRoomSettings";
+    private static final String CREATE_PUBLIC_GROUP = "createChannel";
+    private static final String CREATE_PRIVATE_GROUP = "createPrivateGroup";
+    private static final String DELETE_GROUP = "eraseRoom";
+    private static final String ARCHIVE_ROOM = "archiveRoom";
+    private static final String UNARCHIEVE_ROOM = "unarchiveRoom";
+    private static final String JOIN_PUBLIC_GROUP = "joinRoom";
+    private static final String LEAVE_GROUP = "leaveRoom";
+    private static final String HIDE_ROOM = "hideRoom";
+    private static final String OPEN_ROOM = "openRoom";
+    private static final String SET_FAVOURITE_ROOM = "toggleFavorite";
+    private static final String SAVE_ROOM_SETTINGS = "saveRoomSettings";
 
     /**
      * Creates a public channel.

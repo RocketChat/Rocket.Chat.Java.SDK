@@ -7,7 +7,7 @@ import io.rocketchat.common.data.rpc.RPC;
  */
 public class TypingRPC extends RPC {
 
-    private static String SEND_TYPING = "stream-notify-room";
+    private static final String SEND_TYPING = "stream-notify-room";
 
     public static String sendTyping(int integer, String room_id, String username, Boolean istyping) {
 

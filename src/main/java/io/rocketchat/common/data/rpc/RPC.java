@@ -79,7 +79,15 @@ public class RPC {
     }
 
     public enum MsgType {
-        PING, PONG, CONNECTED, ADDED, RESULT, READY, CHANGED, NOSUB, OTHER
+        PING,
+        PONG,
+        CONNECTED,
+        ADDED,
+        RESULT,
+        READY,
+        CHANGED,
+        NOSUB,
+        OTHER
     }
 
 }
