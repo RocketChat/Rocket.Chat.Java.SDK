@@ -16,7 +16,13 @@ import LiveChatAPI.LiveChatRoomTest.SubscribeTest;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({LoginTest.class, GetAgentDataTest.class, SubscribeTest.class, GetChatHistoryTest.class, SendMessageTest.class, CloseConversationTest.class})
+@Suite.SuiteClasses({
+        LoginTest.class,
+        GetAgentDataTest.class,
+        SubscribeTest.class,
+        GetChatHistoryTest.class,
+        SendMessageTest.class,
+        CloseConversationTest.class})
 
 public class LiveChatRoomTestSuite {
 

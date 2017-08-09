@@ -171,7 +171,7 @@ a["{\"msg\":\"added\",\"collection\":\"users\",\"id\":\"N7fssgjkWmjiP7tv9\",\"fi
 
 // Message search inside box
 
-//request
+//request                                                                    (room id)
 ["{\"msg\":\"method\",\"method\":\"messageSearch\",\"params\":[\"hey\",\"Lgm3b8q4KPALupSYm\",20],\"id\":\"22\"}"]
 
 //response

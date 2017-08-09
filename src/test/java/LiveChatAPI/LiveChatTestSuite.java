@@ -15,7 +15,12 @@ import LiveChatAPI.LiveChatTest.SendOfflineMessageTest;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({ConnectionTest.class, GetIntitalDataTest.class, RegisterTest.class, LoginTest.class, SendOfflineMessageTest.class})
+@Suite.SuiteClasses({
+        ConnectionTest.class,
+        GetIntitalDataTest.class,
+        RegisterTest.class,
+        LoginTest.class,
+        SendOfflineMessageTest.class})
 
 public class LiveChatTestSuite {
 
