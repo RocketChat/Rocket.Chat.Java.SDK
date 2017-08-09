@@ -3,17 +3,18 @@ package io.rocketchat.common.network;
 /**
  * Created by sachin on 9/6/17.
  */
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 /**
  * Eventthread class for looping though all runables
- *
  */
 
 public class EventThread extends Thread {
 
+    private static EventThread thread;
     private static final ThreadFactory THREAD_FACTORY = new ThreadFactory() {
         public Thread newThread(Runnable runnable) {
             thread = new EventThread(runnable);
@@ -21,13 +22,9 @@ public class EventThread extends Thread {
             return thread;
         }
     };
-
-    private static EventThread thread;
-
     private static ExecutorService service;
 
     private static int counter = 0;
-
 
     private EventThread(Runnable runnable) {
         super(runnable);

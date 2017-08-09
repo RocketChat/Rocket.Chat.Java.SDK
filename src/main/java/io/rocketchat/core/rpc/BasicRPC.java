@@ -1,9 +1,10 @@
 package io.rocketchat.core.rpc;
 
-import io.rocketchat.common.data.rpc.RPC;
-import io.rocketchat.common.utils.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import io.rocketchat.common.data.rpc.RPC;
+import io.rocketchat.common.utils.Utils;
 
 /**
  * Created by sachin on 8/6/17.
@@ -11,48 +12,48 @@ import org.json.JSONObject;
 
 public class BasicRPC extends RPC {
 
-    public static String LOGIN="login";
-    public static String GETUSERROLES="getUserRoles";
-    public static String GETSUBSCRIPTIONS="subscriptions/get";
-    public static String GETROOMS="rooms/get";
-    public static String GETROOMROLES="getRoomRoles";
-    public static String LISTEMOJI="listEmojiCustom";
-    public static String LOGOUT="logout";
+    private static final String LOGIN = "login";
+    private static final String GET_USER_ROLES = "getUserRoles";
+    private static final String GET_SUBSCRIPTIONS = "subscriptions/get";
+    private static final String GET_ROOMS = "rooms/get";
+    private static final String GET_ROOM_ROLES = "getRoomRoles";
+    private static final String LIST_EMOJI = "listEmojiCustom";
+    private static final String LOGOUT = "logout";
 
     /**
      * Tested
      */
-    public static String login(int integer, String username, String password){
+    public static String login(int integer, String username, String password) {
 
-        JSONObject loginObject=new JSONObject();
+        JSONObject loginObject = new JSONObject();
         try {
-            loginObject.put("user",new JSONObject().put("username",username));
-            loginObject.put("password",new JSONObject().put("digest", Utils.getDigest(password)).put("algorithm","sha-256"));
+            loginObject.put("user", new JSONObject().put("username", username));
+            loginObject.put("password", new JSONObject().put("digest", Utils.getDigest(password)).put("algorithm", "sha-256"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return getRemoteMethodObject(integer,LOGIN,loginObject).toString();
+        return getRemoteMethodObject(integer, LOGIN, loginObject).toString();
     }
 
     /**
      * Tested
      */
-    public static String loginUsingToken(int integer,String token){
-        JSONObject loginObject=new JSONObject();
+    public static String loginUsingToken(int integer, String token) {
+        JSONObject loginObject = new JSONObject();
         try {
-            loginObject.put("resume",token);
+            loginObject.put("resume", token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return getRemoteMethodObject(integer,LOGIN,loginObject).toString();
+        return getRemoteMethodObject(integer, LOGIN, loginObject).toString();
     }
 
     /**
      * Tested
      */
 
-    public static String getUserRoles(int integer){
-        return getRemoteMethodObject(integer,GETUSERROLES).toString();
+    public static String getUserRoles(int integer) {
+        return getRemoteMethodObject(integer, GET_USER_ROLES).toString();
     }
 
     /**
@@ -60,44 +61,47 @@ public class BasicRPC extends RPC {
      */
 
     // TODO: 29/7/17 add getSubscriptions based on date
-    public static String getSubscriptions(int integer){
-        return getRemoteMethodObject(integer,GETSUBSCRIPTIONS).toString();
+    public static String getSubscriptions(int integer) {
+        return getRemoteMethodObject(integer, GET_SUBSCRIPTIONS).toString();
     }
 
     /**
      * Tested
      */
     // TODO: 29/7/17 add getRooms based on date
-    public static String getRooms(int integer){
-        return getRemoteMethodObject(integer,GETROOMS).toString();
+    public static String getRooms(int integer) {
+        return getRemoteMethodObject(integer, GET_ROOMS).toString();
     }
 
     /**
      * Used to return users with room roles
+     *
      * @param integer
-     * @param roomId List of comma separated room Id to return room specific roles
+     * @param roomId  List of comma separated room Id to return room specific roles
      * @return
      */
-    public static String getRoomRoles(int integer, String ... roomId){
-        return getRemoteMethodObject(integer,GETROOMROLES,(Object [])roomId).toString();
+    public static String getRoomRoles(int integer, String... roomId) {
+        return getRemoteMethodObject(integer, GET_ROOM_ROLES, (Object[]) roomId).toString();
     }
 
     /**
      * Returns a list of custom emoji registered with the server. There’s no need for parameters.
+     *
      * @param integer
      * @return
      */
-    public static String listCustomEmoji(int integer){
-        return getRemoteMethodObject(integer,LISTEMOJI).toString();
+    public static String listCustomEmoji(int integer) {
+        return getRemoteMethodObject(integer, LIST_EMOJI).toString();
     }
 
     /**
      * Used to logout from server
+     *
      * @param integer
      * @return
      */
-    public static String logout(int integer){
-        return getRemoteMethodObject(integer,LOGOUT).toString();
+    public static String logout(int integer) {
+        return getRemoteMethodObject(integer, LOGOUT).toString();
     }
 
 }

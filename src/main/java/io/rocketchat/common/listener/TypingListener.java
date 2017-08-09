@@ -8,6 +8,6 @@ package io.rocketchat.common.listener;
  * Getting event about room-user whether he is typing or not
  */
 
-public interface TypingListener extends Listener{
+public interface TypingListener extends Listener {
     void onTyping(String roomId, String user, Boolean istyping);
 }

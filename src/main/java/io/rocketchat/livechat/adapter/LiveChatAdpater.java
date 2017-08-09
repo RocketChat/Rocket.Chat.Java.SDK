@@ -1,31 +1,24 @@
 package io.rocketchat.livechat.adapter;
 
+import java.util.List;
+
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.TypingListener;
-import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
 
-import java.util.ArrayList;
-
 /**
  * Created by sachin on 21/7/17.
  */
-public class LiveChatAdpater implements ConnectListener,
-        AgentListener.AgentConnectListener,
-        AgentListener.AgentDataListener,
-        AuthListener.RegisterListener,
-        AuthListener.LoginListener,
-        InitialDataListener,
-        LoadHistoryListener,
-        MessageListener.MessageAckListener,
-        MessageListener.OfflineMessageListener,
-        MessageListener.SubscriptionListener,
-        TypingListener
-{
+public class LiveChatAdpater implements ConnectListener, AgentListener.AgentConnectListener, AgentListener.AgentDataListener, AuthListener.RegisterListener, AuthListener.LoginListener, InitialDataListener, LoadHistoryListener, MessageListener.MessageAckListener, MessageListener.OfflineMessageListener, MessageListener.SubscriptionListener, TypingListener {
     @Override
     public void onAgentConnect(AgentObject agentObject) {
 
@@ -52,7 +45,7 @@ public class LiveChatAdpater implements ConnectListener,
     }
 
     @Override
-    public void onLoadHistory(ArrayList<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+    public void onLoadHistory(List<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error) {
 
     }
 
@@ -75,7 +68,6 @@ public class LiveChatAdpater implements ConnectListener,
     public void onAgentDisconnect(String roomId, LiveChatMessage object) {
 
     }
-
 
     @Override
     public void onTyping(String roomId, String user, Boolean istyping) {

@@ -6,14 +6,15 @@ import io.rocketchat.common.data.rpc.RPC;
  * Created by sachin on 9/6/17.
  */
 
-public class LiveChatTypingRPC extends RPC{
+public class LiveChatTypingRPC extends RPC {
 
+    private static final String NOTIFY_ROOM = "stream-notify-room";
 
-    private static String NOTIFYROOM="stream-notify-room";
     /**
      * TESTED
      * Username and User ID are both different
      * It requires only username to be sent or it won't work
+     *
      * @param integer
      * @param room_id
      * @param username
@@ -21,8 +22,8 @@ public class LiveChatTypingRPC extends RPC{
      * @return
      */
 
-    public static String streamNotifyRoom(int integer, String room_id, String username, Boolean istyping){
+    public static String streamNotifyRoom(int integer, String room_id, String username, Boolean istyping) {
 
-        return getRemoteMethodObject(integer,NOTIFYROOM,room_id+"/typing",username,istyping).toString();
+        return getRemoteMethodObject(integer, NOTIFY_ROOM, room_id + "/typing", username, istyping).toString();
     }
 }

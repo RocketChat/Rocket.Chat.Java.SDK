@@ -12,22 +12,22 @@ import java.util.Date;
 
 public class DepartmentObject {
 
-    String id;
-    Boolean enabled;
-    String deptName;
-    String description;
-    int numAgents;
-    Boolean showOnRegistration;
-    Date updatedAt;
+    private String id;
+    private Boolean enabled;
+    private String deptName;
+    private String description;
+    private int numAgents;
+    private Boolean showOnRegistration;
+    private Date updatedAt;
 
-    DepartmentObject(JSONObject object){
+    DepartmentObject(JSONObject object) {
         try {
-            id=object.getString("_id");
-            enabled=object.getBoolean("enabled");
-            deptName=object.getString("name");
-            description=object.getString("description");
-            numAgents=object.getInt("numAgents");
-            showOnRegistration=object.getBoolean("showOnRegistration");
+            id = object.getString("_id");
+            enabled = object.getBoolean("enabled");
+            deptName = object.getString("name");
+            description = object.getString("description");
+            numAgents = object.getInt("numAgents");
+            showOnRegistration = object.getBoolean("showOnRegistration");
             updatedAt = new Date(new Timestamp(object.getJSONObject("_updatedAt").getLong("$date")).getTime());
         } catch (JSONException e) {
             e.printStackTrace();

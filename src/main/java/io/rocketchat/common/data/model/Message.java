@@ -9,37 +9,36 @@ import java.util.Date;
  * Created by sachin on 19/7/17.
  */
 
-
 public class Message {
 
-    protected String messageId;
+    private String messageId;
     protected String roomId;
     protected String message;
-    protected Date msgTimestamp;
-    protected UserObject sender;
-    protected Date updatedAt;  //Message saved on the server
-    protected Date editedAt;
-    protected UserObject editedBy;
-    String messagetype;
-    String senderAlias;
+    private Date msgTimestamp;
+    private UserObject sender;
+    private Date updatedAt;  //Message saved on the server
+    private Date editedAt;
+    private UserObject editedBy;
+    private String messagetype;
+    private String senderAlias;
 
-    public Message(JSONObject object){
+    public Message(JSONObject object) {
         try {
-            messageId=object.optString("_id");
-            roomId=object.optString("rid");
-            message=object.optString("msg");
-            if (object.optJSONObject("ts")!=null) {
+            messageId = object.optString("_id");
+            roomId = object.optString("rid");
+            message = object.optString("msg");
+            if (object.optJSONObject("ts") != null) {
                 msgTimestamp = new Date(object.getJSONObject("ts").getLong("$date"));
             }
-            sender=new UserObject(object.optJSONObject("u"));
+            sender = new UserObject(object.optJSONObject("u"));
             updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
 
-            if (object.optJSONObject("editedAt")!=null) {
+            if (object.optJSONObject("editedAt") != null) {
                 editedAt = new Date(object.getJSONObject("editedAt").getLong("$date"));
                 editedBy = new UserObject(object.getJSONObject("editedBy"));
             }
-            messagetype=object.optString("t");
-            senderAlias=object.optString("alias");
+            messagetype = object.optString("t");
+            senderAlias = object.optString("alias");
         } catch (JSONException e) {
             e.printStackTrace();
         }

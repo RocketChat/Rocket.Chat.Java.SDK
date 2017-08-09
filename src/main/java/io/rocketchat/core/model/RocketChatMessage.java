@@ -1,8 +1,9 @@
 package io.rocketchat.core.model;
 
-import io.rocketchat.common.data.model.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import io.rocketchat.common.data.model.Message;
 
 /**
  * Created by sachin on 21/7/17.
@@ -14,30 +15,30 @@ import org.json.JSONObject;
 
 public class RocketChatMessage extends Message {
 
-    JSONArray mentions;
-    JSONArray channels;
-    Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
-    JSONArray urls; //A collection of URLs metadata. Available when the message contains at least one URL
-    JSONArray attachments; //A collection of attachment objects, available only when the message has at least one attachment
-    String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
-    Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
-    JSONObject translations;
+    private JSONArray mentions;
+    private JSONArray channels;
+    private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
+    private JSONArray urls; //A collection of URLs metadata. Available when the message contains at least one URL
+    private JSONArray attachments; //A collection of attachment objects, available only when the message has at least one attachment
+    private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
+    private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
+    private JSONObject translations;
 
     //This is required for message pin and unpin
-    JSONObject rawMessage;
+    private JSONObject rawMessage;
 
     public RocketChatMessage(JSONObject object) {
         super(object);
-        mentions=object.optJSONArray("mentions");
-        channels=object.optJSONArray("channels");
-        groupable=object.optBoolean("groupable");
-        urls=object.optJSONArray("urls");
-        attachments=object.optJSONArray("attachments");
-        avatar=object.optString("avatar");
-        parseUrls=object.optBoolean("parseUrls");
-        translations=object.optJSONObject("translations");
+        mentions = object.optJSONArray("mentions");
+        channels = object.optJSONArray("channels");
+        groupable = object.optBoolean("groupable");
+        urls = object.optJSONArray("urls");
+        attachments = object.optJSONArray("attachments");
+        avatar = object.optString("avatar");
+        parseUrls = object.optBoolean("parseUrls");
+        translations = object.optJSONObject("translations");
 
-        rawMessage=object;
+        rawMessage = object;
     }
 
     public JSONArray getMentions() {

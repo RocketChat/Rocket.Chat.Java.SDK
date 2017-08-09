@@ -1,21 +1,25 @@
 package LiveChatAPI.LiveChatTest;
 
-import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.livechat.LiveChatAPI;
-import io.rocketchat.livechat.callback.AuthListener;
-import io.rocketchat.common.listener.ConnectListener;
-import io.rocketchat.livechat.callback.InitialDataListener;
-import io.rocketchat.livechat.model.DepartmentObject;
-import io.rocketchat.livechat.model.GuestObject;
-import io.rocketchat.livechat.model.LiveChatConfigObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
+
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
+import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.ConnectListener;
+import io.rocketchat.livechat.LiveChatAPI;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.model.DepartmentObject;
+import io.rocketchat.livechat.model.GuestObject;
+import io.rocketchat.livechat.model.LiveChatConfigObject;
 
 import static org.mockito.Mockito.timeout;
 
@@ -33,10 +37,10 @@ public class LoginTest extends ChatParent implements ConnectListener, InitialDat
     ArgumentCaptor<GuestObject> guestObjectArgumentCaptor;
 
     @Captor
-    ArgumentCaptor <ErrorObject> errorObjectArgumentCaptor;
+    ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
 
     @Before
-    public void setup(){
+    public void setup() {
         setUpBefore();
     }
 
@@ -64,33 +68,33 @@ public class LoginTest extends ChatParent implements ConnectListener, InitialDat
 
     @Override
     public void onInitialData(LiveChatConfigObject object, ErrorObject error) {
-        String departmentId=null;
-        if (error==null){
-            ArrayList<DepartmentObject> departmentObjects=object.getDepartments();
-            if (departmentObjects.size()>0){
-                departmentId=departmentObjects.get(0).getId();
+        String departmentId = null;
+        if (error == null) {
+            ArrayList<DepartmentObject> departmentObjects = object.getDepartments();
+            if (departmentObjects.size() > 0) {
+                departmentId = departmentObjects.get(0).getId();
             }
-            api.registerGuest("vijaya","vijaya67@gmail.com",departmentId,this);
+            api.registerGuest("vijaya", "vijaya67@gmail.com", departmentId, this);
         }
     }
 
     @Override
     public void onRegister(GuestObject object, ErrorObject error) {
-        api.login(object.getToken(),listener);
+        api.login(object.getToken(), listener);
     }
 
     @Test
-    public void loginTest(){
-        Mockito.verify(listener, timeout(8000).atLeastOnce()).onLogin(guestObjectArgumentCaptor.capture(),errorObjectArgumentCaptor.capture());
+    public void loginTest() {
+        Mockito.verify(listener, timeout(8000).atLeastOnce()).onLogin(guestObjectArgumentCaptor.capture(), errorObjectArgumentCaptor.capture());
         Assert.assertTrue(errorObjectArgumentCaptor.getValue() == null);
         Assert.assertTrue(guestObjectArgumentCaptor.getValue() != null);
-        GuestObject object=guestObjectArgumentCaptor.getValue();
+        GuestObject object = guestObjectArgumentCaptor.getValue();
         System.out.println("Login Object is " + object);
-        room=api.createRoom(object.getUserID(),object.getToken());
+        room = api.createRoom(object.getUserID(), object.getToken());
     }
 
     @After
-    public void closeConversation(){
+    public void closeConversation() {
         System.out.println("Closing conversation");
         room.closeConversation();
     }

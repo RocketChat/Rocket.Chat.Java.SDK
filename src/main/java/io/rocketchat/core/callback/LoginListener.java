@@ -7,6 +7,6 @@ import io.rocketchat.core.model.TokenObject;
 /**
  * Created by sachin on 18/7/17.
  */
-public interface LoginListener extends Listener{
+public interface LoginListener extends Listener {
     void onLogin(TokenObject token, ErrorObject error);
 }

@@ -1,10 +1,5 @@
 package RocketChatAPI.RocketChatTest;
 
-import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.data.model.UserObject;
-import io.rocketchat.core.callback.UserListener;
-import io.rocketchat.core.model.TokenObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,21 +11,27 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
+import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.core.callback.UserListener;
+import io.rocketchat.core.model.TokenObject;
+
 import static org.mockito.Mockito.timeout;
 
 /**
  * Created by sachin on 3/8/17.
  */
-public class GetUserRolesTest extends RocketChatParent{
+public class GetUserRolesTest extends RocketChatParent {
 
-    String username="testuserrocks";
-    String password="testuserrocks";
+    String username = "testuserrocks";
+    String password = "testuserrocks";
 
     @Mock
     UserListener.getUserRoleListener listener;
 
     @Captor
-    ArgumentCaptor <ArrayList<UserObject>> listArgumentCaptor;
+    ArgumentCaptor<ArrayList<UserObject>> listArgumentCaptor;
     @Captor
     ArgumentCaptor<ErrorObject> errorArgumentCaptor;
 
@@ -42,7 +43,7 @@ public class GetUserRolesTest extends RocketChatParent{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected successfully");
-        api.login(username,password,this);
+        api.login(username, password, this);
     }
 
     @Override
@@ -51,15 +52,15 @@ public class GetUserRolesTest extends RocketChatParent{
     }
 
     @Test
-    public void getUserRolesTest(){
-        Mockito.verify(listener, timeout(12000).atLeastOnce()).onUserRoles(listArgumentCaptor.capture(),errorArgumentCaptor.capture());
+    public void getUserRolesTest() {
+        Mockito.verify(listener, timeout(12000).atLeastOnce()).onUserRoles(listArgumentCaptor.capture(), errorArgumentCaptor.capture());
         Assert.assertNotNull(listArgumentCaptor.getValue());
         Assert.assertNull(errorArgumentCaptor.getValue());
-        Assert.assertTrue(listArgumentCaptor.getValue().size()>0);
+        Assert.assertTrue(listArgumentCaptor.getValue().size() > 0);
     }
 
     @After
-    public void logout(){
+    public void logout() {
         api.logout(null);
     }
 }

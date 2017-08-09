@@ -12,57 +12,56 @@ import java.util.ArrayList;
 
 public class LiveChatConfigObject {
 
-    Boolean enabled;
-    String popupTitle;
-    String colour;
-    Boolean displayRegistrationForm;
-    String room;
-    JSONArray triggers;
-    ArrayList<DepartmentObject> departments;
-    Boolean allowSwitchingDepartments;
-    Boolean online;
-    String offlineColour;
-    String offlineMessage;
-    String offlineSuccessMessage;
-    String offlineUnavailableMessage;
-    Boolean displayOfflineFOrm;
-    Boolean videoCall;
-    String offlineTitle;
-    String language;
-    Boolean transcript;
-    String transcriptMessage;
+    private Boolean enabled;
+    private String popupTitle;
+    private String colour;
+    private Boolean displayRegistrationForm;
+    private String room;
+    private JSONArray triggers;
+    private ArrayList<DepartmentObject> departments;
+    private Boolean allowSwitchingDepartments;
+    private Boolean online;
+    private String offlineColour;
+    private String offlineMessage;
+    private String offlineSuccessMessage;
+    private String offlineUnavailableMessage;
+    private Boolean displayOfflineFOrm;
+    private Boolean videoCall;
+    private String offlineTitle;
+    private String language;
+    private Boolean transcript;
+    private String transcriptMessage;
 
     public LiveChatConfigObject(JSONObject object) {
         try {
-        enabled=object.getBoolean("enabled");
-        popupTitle=object.getString("title");
-        colour=object.getString("color");
-        displayRegistrationForm=object.getBoolean("registrationForm");
-        room=object.getString("room");
+            enabled = object.getBoolean("enabled");
+            popupTitle = object.getString("title");
+            colour = object.getString("color");
+            displayRegistrationForm = object.getBoolean("registrationForm");
+            room = object.getString("room");
 
-        // Triggers need to be loaded
-        triggers=object.getJSONArray("triggers");
+            // Triggers need to be loaded
+            triggers = object.getJSONArray("triggers");
 
-        //Loading departments data
-        this.departments=new ArrayList<DepartmentObject>();
-        JSONArray departments=object.getJSONArray("departments");
-        for (int i=0;i<departments.length();i++){
-            this.departments.add(new DepartmentObject(departments.getJSONObject(i)));
-        }
+            //Loading departments data
+            this.departments = new ArrayList<DepartmentObject>();
+            JSONArray departments = object.getJSONArray("departments");
+            for (int i = 0; i < departments.length(); i++) {
+                this.departments.add(new DepartmentObject(departments.getJSONObject(i)));
+            }
 
-
-        allowSwitchingDepartments=object.getBoolean("allowSwitchingDepartments");
-        online=object.getBoolean("online");
-        offlineColour=object.getString("offlineColor");
-        offlineMessage=object.getString("offlineMessage");
-        offlineSuccessMessage=object.getString("offlineSuccessMessage");
-        offlineUnavailableMessage=object.getString("offlineUnavailableMessage");
-        displayOfflineFOrm=object.getBoolean("displayOfflineForm");
-        videoCall=object.getBoolean("videoCall");
-        offlineTitle=object.getString("offlineTitle");
-        language=object.getString("language");
-        transcript=object.getBoolean("transcript");
-        transcriptMessage=object.getString("transcriptMessage");
+            allowSwitchingDepartments = object.getBoolean("allowSwitchingDepartments");
+            online = object.getBoolean("online");
+            offlineColour = object.getString("offlineColor");
+            offlineMessage = object.getString("offlineMessage");
+            offlineSuccessMessage = object.getString("offlineSuccessMessage");
+            offlineUnavailableMessage = object.getString("offlineUnavailableMessage");
+            displayOfflineFOrm = object.getBoolean("displayOfflineForm");
+            videoCall = object.getBoolean("videoCall");
+            offlineTitle = object.getString("offlineTitle");
+            language = object.getString("language");
+            transcript = object.getBoolean("transcript");
+            transcriptMessage = object.getString("transcriptMessage");
         } catch (JSONException e) {
             e.printStackTrace();
         }

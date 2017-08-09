@@ -10,24 +10,24 @@ import java.util.ArrayList;
  * Created by sachin on 12/6/17.
  */
 public class UserObject {
-    String userId;
-    String userName;
-    ArrayList <String> roles;
-    JSONArray emails;
+    private String userId;
+    private String userName;
+    private ArrayList<String> roles;
+    private JSONArray emails;
 
-    public UserObject(JSONObject object){
+    public UserObject(JSONObject object) {
         try {
-            userId=object.optString("_id");
-            userName=object.getString("username");
-            if (object.opt("roles")!=null){
-                roles=new ArrayList<>();
-                JSONArray array= object.optJSONArray("roles");
-                for (int i=0;i<array.length();i++){
+            userId = object.optString("_id");
+            userName = object.getString("username");
+            if (object.opt("roles") != null) {
+                roles = new ArrayList<>();
+                JSONArray array = object.optJSONArray("roles");
+                for (int i = 0; i < array.length(); i++) {
                     roles.add(array.getString(i));
                 }
             }
-            if (object.opt("emails")!=null){
-                emails=object.optJSONArray("emails");
+            if (object.opt("emails") != null) {
+                emails = object.optJSONArray("emails");
             }
         } catch (JSONException e) {
             e.printStackTrace();

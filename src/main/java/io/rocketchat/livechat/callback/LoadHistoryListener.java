@@ -4,7 +4,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.livechat.model.LiveChatMessage;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sachin on 9/6/17.
@@ -15,5 +15,5 @@ import java.util.ArrayList;
  */
 
 public interface LoadHistoryListener extends Listener {
-    void onLoadHistory(ArrayList <LiveChatMessage> list, int unreadNotLoaded, ErrorObject error);
+    void onLoadHistory(List<LiveChatMessage> list, int unreadNotLoaded, ErrorObject error);
 }

@@ -1,8 +1,9 @@
-import LiveChatAPI.LiveChatRoomTestSuite;
-import LiveChatAPI.LiveChatTestSuite;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+
+import LiveChatAPI.LiveChatRoomTestSuite;
+import LiveChatAPI.LiveChatTestSuite;
 
 /**
  * Created by sachin on 15/7/17.
@@ -10,7 +11,7 @@ import org.junit.runner.notification.Failure;
 
 public class Main {
 
-    public static void main(String [] args ){
+    public static void main(String[] args) {
         /**
          * It's recommended to run each test suite independently via IDE functionality.
          */

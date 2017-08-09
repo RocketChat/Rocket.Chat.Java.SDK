@@ -1,40 +1,41 @@
 package io.rocketchat.core.rpc;
 
-import io.rocketchat.common.data.rpc.RPC;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
 
+import io.rocketchat.common.data.rpc.RPC;
+
 /**
  * Created by sachin on 24/7/17.
  */
-public class AccountRPC extends RPC{
+public class AccountRPC extends RPC {
 
-    public static String PUBLICSETTINGS="public-settings/get";
+    private static final String PUBLIC_SETTINGS = "public-settings/get";
 
-    public static String GETPERMISSIONS="permissions/get";
+    private static final String GET_PERMISSIONS = "permissions/get";
 
-    public static String getPublicSettings(int integer, Date date){
-        return getCommonData(integer,PUBLICSETTINGS,date);
+    public static String getPublicSettings(int integer, Date date) {
+        return getCommonData(integer, PUBLIC_SETTINGS, date);
     }
 
-    public static String getPermissions(int integer,Date date){
-        return getCommonData(integer,GETPERMISSIONS,date);
+    public static String getPermissions(int integer, Date date) {
+        return getCommonData(integer, GET_PERMISSIONS, date);
     }
 
-    private static String getCommonData(int integer, String methodName, Date date){
-        if (date==null) {
+    private static String getCommonData(int integer, String methodName, Date date) {
+        if (date == null) {
             return getRemoteMethodObject(integer, methodName).toString();
-        }else{
+        } else {
 
-            JSONObject dt=new JSONObject();
+            JSONObject dt = new JSONObject();
             try {
-                dt.put("$date",date.getTime());
+                dt.put("$date", date.getTime());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return getRemoteMethodObject(integer, methodName,dt).toString();
+            return getRemoteMethodObject(integer, methodName, dt).toString();
         }
     }
 }

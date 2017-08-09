@@ -11,18 +11,18 @@ import java.util.Date;
  */
 public class GuestObject {
 
-    String userID;
-    String token;
-    Date tokenExpiry;
+    private String userID;
+    private String token;
+    private Date tokenExpiry;
 
-    public GuestObject(JSONObject object){
+    public GuestObject(JSONObject object) {
         try {
-            userID= object.optString("userId");
-            token=object.getString("token");
-            if (object.optJSONObject("tokenExpires")!=null) {
+            userID = object.optString("userId");
+            token = object.getString("token");
+            if (object.optJSONObject("tokenExpires") != null) {
                 tokenExpiry = new Date(new Timestamp(object.getJSONObject("tokenExpires").getLong("$date")).getTime());
             }
-            if (object.opt("id")!=null) {
+            if (object.opt("id") != null) {
                 userID = object.optString("id");
             }
         } catch (JSONException e) {
@@ -58,7 +58,7 @@ public class GuestObject {
     public String toString() {
         return "GuestObject{" +
                 "userID='" + userID + '\'' +
-                ", AuthToken='" + token + '\'' +
+                ", token='" + token + '\'' +
                 ", tokenExpiry=" + tokenExpiry +
                 '}';
     }

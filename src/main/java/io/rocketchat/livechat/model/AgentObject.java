@@ -8,17 +8,17 @@ import org.json.JSONObject;
  * Created by sachin on 9/6/17.
  */
 public class AgentObject {
-    String name;
-    String username;
-    JSONArray emails;
-    String agentId;
+    private String name;
+    private String username;
+    private JSONArray emails;
+    private String agentId;
 
-    public AgentObject(JSONObject object){
+    public AgentObject(JSONObject object) {
         try {
-            agentId=object.getString("_id");
-            name=object.getString("name");
-            username=object.getString("username");
-            emails=object.getJSONArray("emails");
+            agentId = object.getString("_id");
+            name = object.getString("name");
+            username = object.getString("username");
+            emails = object.getJSONArray("emails");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -8,16 +8,16 @@ import org.json.JSONObject;
 
 public class ErrorObject {
 
-    String reason;
-    String errorType;
-    long error;
-    String message;
+    private String reason;
+    private String errorType;
+    private long error;
+    private String message;
 
-    public ErrorObject(JSONObject object){
-        reason=object.optString("reason");
-        errorType=object.optString("errorType");
-        error=object.optLong("error");
-        message=object.optString("message");
+    public ErrorObject(JSONObject object) {
+        reason = object.optString("reason");
+        errorType = object.optString("errorType");
+        error = object.optLong("error");
+        message = object.optString("message");
     }
 
     public String getReason() {
