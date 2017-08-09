@@ -27,7 +27,7 @@ public class ChatRoomFactory {
         return api.new ChatRoom(room);
     }
 
-    public ChatRoomFactory createChatRooms(List<SubscriptionObject> roomObjects) {
+    public ChatRoomFactory createChatRooms(List<? extends Room> roomObjects) {
         removeAllChatRooms();
         for (Room room : roomObjects) {
             rooms.add(createChatRoom(room));
