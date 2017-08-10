@@ -183,3 +183,5 @@ a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"messages\":[],\"users\":[],\"
 ["{\"msg\":\"sub\",\"id\":\"9dRRoeN4g83cpTbDm\",\"name\":\"stream-notify-room\",\"params\":[\"tn3EiAYecbtXGEBDn/deleteMessage\",false]}"]
 
 a["{\"msg\":\"ready\",\"subs\":[\"9dRRoeN4g83cpTbDm\"]}"]
+
+a["{\"msg\":\"changed\",\"collection\":\"stream-room-messages\",\"id\":\"id\",\"fields\":{\"eventName\":\"g9vNPgp6C4nDpSp8Ws5yHbsDHPiD5w4znv\",\"args\":[{\"_id\":\"STvoB5ZgXuuMvifsx\",\"rid\":\"g9vNPgp6C4nDpSp8Ws5yHbsDHPiD5w4znv\",\"msg\":\"\",\"ts\":{\"$date\":1502396616782},\"u\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\",\"name\":\"sachin shinde\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1502396681648},\"t\":\"rm\",\"urls\":[],\"attachments\":[],\"reactions\":[],\"editedAt\":{\"$date\":1502396681648},\"editedBy\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\"}}]}}"]
