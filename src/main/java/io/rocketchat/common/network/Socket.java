@@ -1,13 +1,6 @@
 package io.rocketchat.common.network;
 
-import com.neovisionaries.ws.client.OpeningHandshakeException;
-import com.neovisionaries.ws.client.StatusLine;
-import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketCloseCode;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
-import com.neovisionaries.ws.client.WebSocketFrame;
+import com.neovisionaries.ws.client.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +26,7 @@ public class Socket {
     private Timer timer;
     private boolean selfDisconnect;
     private boolean pingEnable;
+    private State socketState;
 
     protected Socket(String url) {
         this.url = url;
@@ -55,6 +49,7 @@ public class Socket {
         }
     }
 
+
     public void disablePing() {
         handler.cancel();
         pingEnable=false;
@@ -62,6 +57,24 @@ public class Socket {
 
     public boolean isPingEnabled() {
         return pingEnable;
+    }
+
+    public State getState(){
+        switch (ws.getState()) {
+            case CREATED:
+                return State.CREATED;
+            case CONNECTING:
+                return State.CONNETCTING;
+            case OPEN:
+                return State.CONNECTED;
+            case CLOSING:
+                return State.DISCONNECTING;
+            case CLOSED:
+                return State.DISCONNECTED;
+            default:
+                return State.DISCONNECTED;
+        }
+
     }
 
     private WebSocketAdapter getAdapter() {
@@ -237,10 +250,19 @@ public class Socket {
             @Override
             public void run() {
                 System.out.println("This is a disconnection");
-                ws.disconnect(WebSocketCloseCode.NONE);
+                ws.disconnect(WebSocketCloseCode.NONE,"PONG RECEIVE FAILED",0);
                 handler.remove(this);
             }
         }, 2 * pingInterval);
     }
+
+    enum State {
+        CONNETCTING,
+        CONNECTED,
+        DISCONNECTING,
+        DISCONNECTED,
+        CREATED
+    }
+
 }
 
