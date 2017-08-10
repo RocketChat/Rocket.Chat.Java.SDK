@@ -16,7 +16,7 @@ import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.Emoji;
 import io.rocketchat.core.model.Permission;
@@ -105,7 +105,7 @@ public class CoreMiddleware {
                     }
                     break;
                 case GET_SUBSCRIPTIONS:
-                    SubscriptionListener.GetSubscriptionListener subscriptionListener = (SubscriptionListener.GetSubscriptionListener) listener;
+                    GetSubscriptionListener subscriptionListener = (GetSubscriptionListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
                         subscriptionListener.onGetSubscriptions(null, errorObject);

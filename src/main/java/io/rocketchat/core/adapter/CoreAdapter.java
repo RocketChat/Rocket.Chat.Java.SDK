@@ -12,7 +12,7 @@ import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.Emoji;
 import io.rocketchat.core.model.Permission;
@@ -35,7 +35,7 @@ public class CoreAdapter implements ConnectListener,
         RoomListener.RoomRolesListener,
         RoomListener.GetMembersListener,
         EmojiListener,
-        SubscriptionListener.GetSubscriptionListener,
+        GetSubscriptionListener,
         UserListener.getUserRoleListener,
         MessageListener.MessageAckListener,
         MessageListener.SubscriptionListener,

@@ -21,7 +21,7 @@ import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
@@ -126,7 +126,7 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    public void getSubscriptions(SubscriptionListener.GetSubscriptionListener getSubscriptionListener) {
+    public void getSubscriptions(GetSubscriptionListener getSubscriptionListener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, getSubscriptionListener, CoreMiddleware.ListenerType.GET_SUBSCRIPTIONS);
         sendDataInBackground(BasicRPC.getSubscriptions(uniqueID));
@@ -302,7 +302,7 @@ public class RocketChatAPI extends Socket {
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
-        coreStreamMiddleware.subscribeRoomMessage(listener);
+        coreStreamMiddleware.createSub(uniqueID,listener);
         sendDataInBackground(CoreSubRPC.subscribeRoomMessageEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
@@ -310,7 +310,7 @@ public class RocketChatAPI extends Socket {
     private String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
         String uniqueID = Utils.shortUUID();
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
-        coreStreamMiddleware.subscribeRoomTyping(listener);
+        coreStreamMiddleware.createSub(uniqueID,listener);
         sendDataInBackground(CoreSubRPC.subscribeRoomTypingEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
