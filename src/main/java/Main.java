@@ -1,11 +1,13 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
+import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 import io.rocketchat.core.rpc.PresenceRPC;
 
@@ -39,36 +41,38 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getRooms(this);
-        api.setStatus(PresenceRPC.Status.OFFLINE, new SimpleListener() {
-            @Override
-            public void callback(Boolean success, ErrorObject error) {
-                if (success){
-                    System.out.println("status set to offline successfully");
-                }
-            }
-        });
+        api.getSubscriptions(this);
     }
 
     @Override
-    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
-        RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
-        room.searchMessage("Hi", 40, new MessageListener.SearchMessageListener() {
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+        RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(subscriptions).getChatRoomByName("sachin.shinde");
+
+        room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override
-            public void onSearchMessage(List<RocketChatMessage> messageList, ErrorObject error) {
-                System.out.println("Got new messages "+messageList.size());
-                for (RocketChatMessage message : messageList){
-                    System.out.println("Message is "+ message.getMessage());
-                }
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                System.out.println("subscribed to typing successfully");
             }
-        });
+        },this);
+
+        room.subscribeRoomMessageEvent(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                System.out.println("subscribed for receiving messages");
+            }
+        }, this);
+    }
+
+
+
+    @Override
+    public void onTyping(String roomId, String user, Boolean istyping) {
+        System.out.println("got typing from "+ user +" "+istyping);
     }
 
     @Override
-    public void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error) {
-        System.out.println("Total are "+total);
-        System.out.println("Size is "+members.size());
-
+    public void onMessage(String roomId, RocketChatMessage message) {
+        System.out.println("got message "+message.getMessage());
     }
 
     @Override
@@ -87,5 +91,3 @@ public class Main extends CoreAdapter {
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
-//Bugs
-// TODO: 29/7/17 Room created with a roomName, deleted again and created with same name mess up everything

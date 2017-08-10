@@ -26,37 +26,41 @@ public class CoreStreamMiddleware {
     }
 
 
-    public void createSub(String id, Listener listener) {
+    public void createSub(String roomId, Listener listener) {
         if (listener != null){
-            subs.put(id, listener);
+            subs.put(roomId, listener);
         }
     }
 
-    public void createSubCallback(String id, SubscribeListener callback) {
+    public void removeSub(String roomId){
+        subs.remove(roomId);
+    }
+
+    public void createSubCallback(String subId, SubscribeListener callback) {
         if (callback != null) {
-            subcallbacks.put(id, callback);
+            subcallbacks.put(subId, callback);
         }
     }
 
     public void processCallback(JSONObject object) {
         String s = object.optString("collection");
-        String id = object.optString("id");
-        System.out.println("id is "+id);
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
+        String roomId = object.optJSONObject("fields").optString("eventName").replace("/typing","");
 
-        if (subs.containsKey(id)) {
-            Listener listener = subs.remove(id);
+        if (subs.containsKey(roomId)) {
+            Listener listener = subs.get(roomId);
+
+            System.out.println("Type is "+listener.getClass());
 
             switch (parse(s)) {
                 case SUBSCRIBE_ROOM_MESSAGE:
                     MessageListener.SubscriptionListener subscriptionListener = (MessageListener.SubscriptionListener) listener;
                     RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
-                    String roomId = object.optJSONObject("fields").optString("eventName");
                     subscriptionListener.onMessage(roomId, message);
                     break;
                 case SUBSCRIBE_ROOM_TYPING:
                     TypingListener typingListener = (TypingListener) listener;
-                    typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
+                    typingListener.onTyping(roomId, array.optString(0), array.optBoolean(1));
                     break;
                 case OTHER:
                     break;
