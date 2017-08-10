@@ -8,6 +8,7 @@ import io.rocketchat.core.model.RocketChatMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,7 +19,7 @@ public class CoreStreamMiddleware {
 
 
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
-    private ConcurrentHashMap<String, Listener> subs;
+    private ConcurrentHashMap<String, ConcurrentHashMap <SubType, Listener>> subs;
 
     public CoreStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
@@ -26,15 +27,28 @@ public class CoreStreamMiddleware {
     }
 
 
-    public void createSub(String roomId, Listener listener) {
+    public void createSub(String roomId, Listener listener, SubType type) {
         if (listener != null){
-            subs.put(roomId, listener);
+            if (subs.containsKey(roomId)) {
+                subs.get(roomId).put(type, listener);
+            } else {
+                ConcurrentHashMap<SubType, Listener> map = new ConcurrentHashMap();
+                map.put(type, listener);
+                subs.put(roomId, map);
+            }
         }
     }
 
-    public void removeSub(String roomId){
+    public void removeAllSub(String roomId) {
         subs.remove(roomId);
     }
+
+    public void removeSub(String roomId, SubType type) {
+        if (subs.containsKey(roomId)){
+            subs.get(roomId).remove(type);
+        }
+    }
+
 
     public void createSubCallback(String subId, SubscribeListener callback) {
         if (callback != null) {
@@ -46,19 +60,19 @@ public class CoreStreamMiddleware {
         String s = object.optString("collection");
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
         String roomId = object.optJSONObject("fields").optString("eventName").replace("/typing","");
+        Listener listener;
 
         if (subs.containsKey(roomId)) {
-            Listener listener = subs.get(roomId);
-
-            System.out.println("Type is "+listener.getClass());
 
             switch (parse(s)) {
                 case SUBSCRIBE_ROOM_MESSAGE:
+                    listener = subs.get(roomId).get(SubType.SUBSCRIBE_ROOM_MESSAGE);
                     MessageListener.SubscriptionListener subscriptionListener = (MessageListener.SubscriptionListener) listener;
                     RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
                     subscriptionListener.onMessage(roomId, message);
                     break;
                 case SUBSCRIBE_ROOM_TYPING:
+                    listener = subs.get(roomId).get(SubType.SUBSCRIBE_ROOM_TYPING);
                     TypingListener typingListener = (TypingListener) listener;
                     typingListener.onTyping(roomId, array.optString(0), array.optBoolean(1));
                     break;
