@@ -59,8 +59,8 @@ public class RocketChatAPI extends Socket {
     public RocketChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
-        coreMiddleware = CoreMiddleware.getInstance();
-        coreStreamMiddleware = CoreStreamMiddleware.getInstance();
+        coreMiddleware = new CoreMiddleware();
+        coreStreamMiddleware = new CoreStreamMiddleware();
         factory = new ChatRoomFactory(this);
     }
 

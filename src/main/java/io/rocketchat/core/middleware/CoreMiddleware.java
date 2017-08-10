@@ -33,15 +33,10 @@ import io.rocketchat.core.model.TokenObject;
 
 public class CoreMiddleware {
 
-    private static CoreMiddleware middleware = new CoreMiddleware();
     private ConcurrentHashMap<Long, Object[]> callbacks;
 
-    private CoreMiddleware() {
+    public CoreMiddleware() {
         callbacks = new ConcurrentHashMap<>();
-    }
-
-    public static CoreMiddleware getInstance() {
-        return middleware;
     }
 
     public void createCallback(long i, Listener listener, CoreMiddleware.ListenerType type) {

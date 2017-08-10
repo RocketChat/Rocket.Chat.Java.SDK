@@ -257,11 +257,11 @@ public class Socket {
     }
 
     enum State {
+        CREATED,
         CONNECTING,
         CONNECTED,
         DISCONNECTING,
         DISCONNECTED,
-        CREATED
     }
 
 }

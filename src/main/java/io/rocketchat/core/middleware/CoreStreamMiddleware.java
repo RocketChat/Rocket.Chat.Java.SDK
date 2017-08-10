@@ -16,17 +16,12 @@ import io.rocketchat.core.model.RocketChatMessage;
 
 public class CoreStreamMiddleware {
 
-    private static CoreStreamMiddleware middleware = new CoreStreamMiddleware();
     private MessageListener.SubscriptionListener subscriptionListener;
     private TypingListener typingListener;
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
-    private CoreStreamMiddleware() {
+    public CoreStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
-    }
-
-    public static CoreStreamMiddleware getInstance() {
-        return middleware;
     }
 
     private static SubType parse(String s) {
