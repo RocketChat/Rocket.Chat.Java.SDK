@@ -242,6 +242,9 @@ public class CoreMiddleware {
                 case SET_FAVOURITE_ROOM:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
+                case SET_STATUS:
+                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
+                    break;
                 case LOGOUT:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;

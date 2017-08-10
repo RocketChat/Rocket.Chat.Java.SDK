@@ -286,8 +286,9 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    public void setStatus(PresenceRPC.Status s) {
+    public void setStatus(PresenceRPC.Status s, SimpleListener listener) {
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SET_STATUS);
         sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID, s));
     }
 
