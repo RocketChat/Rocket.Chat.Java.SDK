@@ -1,15 +1,10 @@
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.data.model.UserObject;
-import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
-import io.rocketchat.core.rpc.PresenceRPC;
 
 import java.util.List;
 
@@ -29,6 +24,7 @@ public class Main extends CoreAdapter {
     public void call() {
         api = new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
+        api.setPingInterval(3000);
         api.connect(this);
 
     }

@@ -242,15 +242,16 @@ public class Socket {
             @Override
             public void run() {
                 sendData(RPC.PINGMESSAGE);
-                System.out.println("Sending PING message");
+                System.out.println("SENDING PING");
                 handler.remove(this);
             }
         }, pingInterval);
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("This is a disconnection");
-                ws.disconnect(WebSocketCloseCode.NONE,"PONG RECEIVE FAILED",0);
+                if (getState() != State.DISCONNECTING && getState() != State.DISCONNECTED) {
+                    ws.disconnect(WebSocketCloseCode.NONE, "PONG RECEIVE FAILED", 0);
+                }
                 handler.remove(this);
             }
         }, 2 * pingInterval);

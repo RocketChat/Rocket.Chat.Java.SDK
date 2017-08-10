@@ -8,7 +8,6 @@ import io.rocketchat.core.model.RocketChatMessage;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

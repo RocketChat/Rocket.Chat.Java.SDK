@@ -177,3 +177,9 @@ a["{\"msg\":\"added\",\"collection\":\"users\",\"id\":\"N7fssgjkWmjiP7tv9\",\"fi
 //response
 a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"messages\":[],\"users\":[],\"channels\":[]}}"]
 
+
+//Delete message
+
+["{\"msg\":\"sub\",\"id\":\"9dRRoeN4g83cpTbDm\",\"name\":\"stream-notify-room\",\"params\":[\"tn3EiAYecbtXGEBDn/deleteMessage\",false]}"]
+
+a["{\"msg\":\"ready\",\"subs\":[\"9dRRoeN4g83cpTbDm\"]}"]
