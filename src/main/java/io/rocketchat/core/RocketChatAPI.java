@@ -214,6 +214,11 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(MessageRPC.setReaction(uniqueID, emojiId, msgId));
     }
 
+    private void searchMessage(String message, String roomId, int limit) {
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(MessageRPC.searchMessage(uniqueID, message, roomId, limit));
+    }
+
     //Tested
     public void createPublicGroup(String groupName, String[] users, Boolean readOnly, RoomListener.GroupListener listener) {
         int uniqueID = integer.getAndIncrement();
@@ -472,6 +477,10 @@ public class RocketChatAPI extends Socket {
 
         public void setReaction(String emojiId, String msgId, SimpleListener listener) {
             RocketChatAPI.this.setReaction(emojiId, msgId, listener);
+        }
+
+        public void searchMessage(String message, int limit) {
+            RocketChatAPI.this.searchMessage(message, room.getRoomId(), limit);
         }
 
         public void deleteGroup(SimpleListener listener) {

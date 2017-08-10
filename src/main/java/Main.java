@@ -1,5 +1,6 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RoomObject;
@@ -24,7 +25,6 @@ public class Main extends CoreAdapter {
     public void call() {
         api = new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(null);
-        api.setPingInterval(3000);
         api.connect(this);
 
     }
@@ -38,13 +38,20 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getRooms(this);
-        api.setStatus(PresenceRPC.Status.OFFLINE);
+        api.setStatus(PresenceRPC.Status.OFFLINE, new SimpleListener() {
+            @Override
+            public void callback(Boolean success, ErrorObject error) {
+                if (success){
+                    System.out.println("status set to offline successfully");
+                }
+            }
+        });
     }
 
     @Override
     public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
         RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
-        room.getMembers(false,this);
+        room.searchMessage("Hi",20);
     }
 
     @Override

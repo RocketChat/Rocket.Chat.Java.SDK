@@ -18,6 +18,7 @@ public class MessageRPC extends RPC {
     private static final String UNPIN_MESSAGE = "unpinMessage";
     private static final String STAR_MESSAGE = "starMessage";
     private static final String SET_REACTION = "setReaction";
+    private static final String SEARCH_MESSAGE = "messageSearch";
 
     public static String sendMessage(int integer, String msgId, String roomId, String message) {
         JSONObject object = new JSONObject();
@@ -77,5 +78,9 @@ public class MessageRPC extends RPC {
 
     public static String setReaction(int integer, String emojiId, String msgId) {
         return getRemoteMethodObject(integer, SET_REACTION, emojiId, msgId).toString();
+    }
+
+    public static String searchMessage(int integer, String message, String roomId, int limit) {
+        return getRemoteMethodObject(integer, SEARCH_MESSAGE, message, roomId, limit).toString();
     }
 }
