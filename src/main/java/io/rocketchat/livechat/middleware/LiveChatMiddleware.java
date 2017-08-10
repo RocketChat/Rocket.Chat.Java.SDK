@@ -20,18 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatMiddleware {
 
-    //It will contain ConcurrentArrayList of all callback
-    //Each new response will trigger each of the callback
 
-    private static LiveChatMiddleware middleware = new LiveChatMiddleware();
     private ConcurrentHashMap<Long, Object[]> callbacks;
 
-    private LiveChatMiddleware() {
+    public LiveChatMiddleware() {
         callbacks = new ConcurrentHashMap<>();
-    }
-
-    public static LiveChatMiddleware getInstance() {
-        return middleware;
     }
 
     public void createCallback(long i, Listener listener, ListenerType type) {

@@ -20,19 +20,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatStreamMiddleware {
 
-    private static LiveChatStreamMiddleware middleware = new LiveChatStreamMiddleware();
     private MessageListener.SubscriptionListener subscriptionListener;
     private AgentListener.AgentConnectListener agentConnectListener;
     private TypingListener typingListener;
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
-    LiveChatStreamMiddleware() {
+    public LiveChatStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
     }
 
-    public static LiveChatStreamMiddleware getInstance() {
-        return middleware;
-    }
 
     private static SubType parse(String s) {
         if (s.equals("stream-room-messages")) {
