@@ -280,6 +280,7 @@ public class CoreMiddleware {
         OPEN_ROOM,
         HIDE_ROOM,
         SET_FAVOURITE_ROOM,
+        SET_STATUS,
         LOGOUT
     }
 }

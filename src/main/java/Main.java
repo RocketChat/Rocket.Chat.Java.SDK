@@ -4,6 +4,7 @@ import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.rpc.PresenceRPC;
 
 import java.util.List;
 
@@ -37,24 +38,13 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getRooms(this);
+        api.setStatus(PresenceRPC.Status.OFFLINE);
     }
 
     @Override
     public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
-        System.out.println("Got here");
-//        try {
-            RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
-//        }catch (Exception e){
-//            System.out.println("got exception here" + e.getMessage());
-//        }
-//        System.out.println("got here");
-//        room.sendMessage("Hey there");
+        RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
         room.getMembers(false,this);
-//        if (room==null){
-//            System.out.println("room is null");
-//        }else {
-//            room.getMembers(true, null);
-//        }
     }
 
     @Override
