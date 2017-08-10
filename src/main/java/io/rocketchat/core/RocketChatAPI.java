@@ -244,14 +244,14 @@ public class RocketChatAPI extends Socket {
     //Tested
     private void archiveRoom(String roomId, SimpleListener listener) {
         int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.ARCHIEVE);
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.ARCHIVE);
         sendDataInBackground(RoomRPC.archieveRoom(uniqueID, roomId));
     }
 
     //Tested
     private void unarchiveRoom(String roomId, SimpleListener listener) {
         int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UNARCHIEVE);
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UNARCHIVE);
         sendDataInBackground(RoomRPC.unarchiveRoom(uniqueID, roomId));
     }
 

@@ -208,6 +208,20 @@ public class CoreMiddleware {
                 case MESSAGE_OP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
+                case SEARCH_MESSAGE:
+                    MessageListener.SearchMessageListener searchMessageListener = (MessageListener.SearchMessageListener) listener;
+                    if (result == null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        searchMessageListener.onSearchMessage(null, errorObject);
+                    } else {
+                        ArrayList <RocketChatMessage> list = new ArrayList<>();
+                        JSONArray array = ((JSONObject)result).optJSONArray("messages");
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new RocketChatMessage(array.optJSONObject(j)));
+                        }
+                        searchMessageListener.onSearchMessage(list, null);
+                    }
+                    break;
                 case CREATE_GROUP:
                     RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
                     if (object.opt("error") != null) {
@@ -221,10 +235,10 @@ public class CoreMiddleware {
                 case DELETE_GROUP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case ARCHIEVE:
+                case ARCHIVE:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case UNARCHIEVE:
+                case UNARCHIVE:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case JOIN_PUBLIC_GROUP:
@@ -274,10 +288,11 @@ public class CoreMiddleware {
         GET_ROOM_MEMBERS,
         SEND_MESSAGE,
         MESSAGE_OP,
+        SEARCH_MESSAGE,
         CREATE_GROUP,
         DELETE_GROUP,
-        ARCHIEVE,
-        UNARCHIEVE,
+        ARCHIVE,
+        UNARCHIVE,
         JOIN_PUBLIC_GROUP,
         LEAVE_GROUP,
         OPEN_ROOM,
