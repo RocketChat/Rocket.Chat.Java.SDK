@@ -64,7 +64,7 @@ public class Socket {
             case CREATED:
                 return State.CREATED;
             case CONNECTING:
-                return State.CONNETCTING;
+                return State.CONNECTING;
             case OPEN:
                 return State.CONNECTED;
             case CLOSING:
@@ -257,7 +257,7 @@ public class Socket {
     }
 
     enum State {
-        CONNETCTING,
+        CONNECTING,
         CONNECTED,
         DISCONNECTING,
         DISCONNECTED,
