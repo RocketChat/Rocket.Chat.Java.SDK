@@ -44,8 +44,8 @@ public class LiveChatAPI extends Socket {
     public LiveChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
-        liveChatMiddleware = LiveChatMiddleware.getInstance();
-        liveChatStreamMiddleware = LiveChatStreamMiddleware.getInstance();
+        liveChatMiddleware = new LiveChatMiddleware();
+        liveChatStreamMiddleware = new LiveChatStreamMiddleware();
     }
 
     public void setConnectListener(ConnectListener connectListener) {

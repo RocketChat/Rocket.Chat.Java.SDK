@@ -23,12 +23,12 @@ public class LiveChatStreamMiddleware {
     private MessageListener.SubscriptionListener subscriptionListener;
     private AgentListener.AgentConnectListener agentConnectListener;
     private TypingListener typingListener;
+
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
     public LiveChatStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
     }
-
 
     private static SubType parse(String s) {
         if (s.equals("stream-room-messages")) {
