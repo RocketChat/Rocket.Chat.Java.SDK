@@ -214,8 +214,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(MessageRPC.setReaction(uniqueID, emojiId, msgId));
     }
 
-    private void searchMessage(String message, String roomId, int limit) {
+    private void searchMessage(String message, String roomId, int limit, MessageListener.SearchMessageListener listener) {
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SEARCH_MESSAGE);
         sendDataInBackground(MessageRPC.searchMessage(uniqueID, message, roomId, limit));
     }
 
@@ -479,8 +480,8 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.setReaction(emojiId, msgId, listener);
         }
 
-        public void searchMessage(String message, int limit) {
-            RocketChatAPI.this.searchMessage(message, room.getRoomId(), limit);
+        public void searchMessage(String message, int limit, MessageListener.SearchMessageListener listener) {
+            RocketChatAPI.this.searchMessage(message, room.getRoomId(), limit, listener);
         }
 
         public void deleteGroup(SimpleListener listener) {

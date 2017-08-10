@@ -50,7 +50,9 @@ public class Socket {
 
     public void setPingInterval(long pingInterval) {
         pingEnable=true;
-        this.pingInterval = pingInterval;
+        if (pingInterval> this.pingInterval) {
+            this.pingInterval = pingInterval;
+        }
     }
 
     public void disablePing() {

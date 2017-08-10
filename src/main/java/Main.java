@@ -3,6 +3,8 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.callback.MessageListener;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.TokenObject;
 import io.rocketchat.core.rpc.PresenceRPC;
@@ -51,7 +53,15 @@ public class Main extends CoreAdapter {
     @Override
     public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
         RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(rooms).getChatRoomByName("general");
-        room.searchMessage("Hi",20);
+        room.searchMessage("Hi", 40, new MessageListener.SearchMessageListener() {
+            @Override
+            public void onSearchMessage(List<RocketChatMessage> messageList, ErrorObject error) {
+                System.out.println("Got new messages "+messageList.size());
+                for (RocketChatMessage message : messageList){
+                    System.out.println("Message is "+ message.getMessage());
+                }
+            }
+        });
     }
 
     @Override
