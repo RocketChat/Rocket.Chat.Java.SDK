@@ -26,7 +26,7 @@ public class Socket {
     private Timer timer;
     private boolean selfDisconnect;
     private boolean pingEnable;
-    private State socketState;
+    protected ConnectivityManager connectivityManager;
 
     protected Socket(String url) {
         this.url = url;
@@ -36,6 +36,7 @@ public class Socket {
         pingEnable=false;
         handler = new TaskHandler();
         pingInterval = 2000;
+        connectivityManager = new ConnectivityManager();
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {

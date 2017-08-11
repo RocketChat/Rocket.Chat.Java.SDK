@@ -1,6 +1,5 @@
 package io.rocketchat.core;
 
-import io.rocketchat.common.network.ConnectivityManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -49,8 +48,6 @@ public class RocketChatAPI extends Socket {
     private String sessionId;
     private UserObject userInfo;
 
-    private ConnectivityManager manager;
-
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
 
@@ -60,7 +57,6 @@ public class RocketChatAPI extends Socket {
     public RocketChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
-        manager = new ConnectivityManager();
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
         factory = new ChatRoomFactory(this);
@@ -323,12 +319,16 @@ public class RocketChatAPI extends Socket {
     }
 
     public void registerConnectListener(ConnectListener connectListener) {
-        manager.register(connectListener);
+        connectivityManager.register(connectListener);
+    }
+
+    public void unRegisterConnnectListener(ConnectListener connectListener) {
+        connectivityManager.unRegister(connectListener);
     }
 
     public void connect(ConnectListener connectListener) {
         createSocket();
-        manager.register(connectListener);
+        connectivityManager.register(connectListener);
         super.connectAsync();
     }
 
@@ -353,9 +353,7 @@ public class RocketChatAPI extends Socket {
                 break;
             case CONNECTED:
                 sessionId = object.optString("session");
-                if (connectListener != null) {
-                    connectListener.onConnect(sessionId);
-                }
+                connectivityManager.publishConnect(sessionId);
                 sendDataInBackground(BasicRPC.PINGMESSAGE);
                 break;
             case ADDED:
@@ -387,17 +385,13 @@ public class RocketChatAPI extends Socket {
 
     @Override
     protected void onConnectError(Exception websocketException) {
-        if (connectListener != null) {
-            connectListener.onConnectError(websocketException);
-        }
+        connectivityManager.publishConnectError(websocketException);
         super.onConnectError(websocketException);
     }
 
     @Override
     protected void onDisconnected(boolean closedByServer) {
-        if (connectListener != null) {
-            connectListener.onDisconnect(closedByServer);
-        }
+        connectivityManager.publishDisconnect(closedByServer);
         super.onDisconnected(closedByServer);
     }
 
