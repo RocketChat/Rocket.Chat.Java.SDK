@@ -126,6 +126,33 @@ public class Message {
     }
 
     public static Type getType(String s) {
+        if (s.equals(TYPE_MESSAGE_REMOVED)) {
+            return Type.MESSAGE_REMOVED;
+        }else if (s.equals(TYPE_ROOM_NAME_CHANGED)) {
+            return Type.ROOM_NAME_CHANGED;
+        }else if (s.equals(TYPE_ROOM_ARCHIVED)) {
+            return Type.ROOM_ARCHIVED;
+        }else if (s.equals(TYPE_ROOM_UNARCHIVED)) {
+            return Type.ROOM_UNARCHIVED;
+        }else if (s.equals(TYPE_USER_ADDED)) {
+            return Type.USER_ADDED;
+        }else if (s.equals(TYPE_USER_REMOVED)) {
+            return Type.USER_REMOVED;
+        }else if (s.equals(TYPE_USER_JOINED)) {
+            return Type.USER_JOINED;
+        }else if (s.equals(TYPE_USER_LEFT)) {
+            return Type.USER_LEFT;
+        }else if (s.equals(TYPE_USER_MUTED)) {
+            return Type.USER_MUTED;
+        }else if (s.equals(TYPE_USER_UNMUTED)) {
+            return Type.USER_UNMUTED;
+        }else if (s.equals(TYPE_WELCOME)) {
+            return Type.WELCOME;
+        }else if (s.equals(TYPE_SUBSCRIPTION_ROLE_ADDED)) {
+            return Type.SUBSCRIPTION_ROLE_ADDED;
+        }else if (s.equals(TYPE_SUBSCRIPTION_ROLE_REMOVED)) {
+            return Type.SUBSCRIPTION_ROLE_REMOVED;
+        }
         return Type.OTHER;
     }
 
