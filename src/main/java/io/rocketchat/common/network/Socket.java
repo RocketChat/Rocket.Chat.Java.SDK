@@ -171,14 +171,18 @@ public class Socket {
     }
 
     private void sendData(String message) {
-        ws.sendText(message);
+        if (getState() == State.CONNECTED ) {
+            ws.sendText(message);
+        }
     }
 
     protected void sendDataInBackground(final String message) {
         EventThread.exec(new Runnable() {
             @Override
             public void run() {
-                ws.sendText(message);
+                if (getState() == State.CONNECTED) {
+                    ws.sendText(message);
+                }
             }
         });
     }
