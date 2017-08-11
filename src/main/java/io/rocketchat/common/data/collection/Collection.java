@@ -1,4 +1,4 @@
-package io.rocketchat.common.data;
+package io.rocketchat.common.data.collection;
 
 import java.util.ArrayList;
 import java.util.Map;

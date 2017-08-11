@@ -1,5 +1,7 @@
 package io.rocketchat.core.rpc;
 
+import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.common.data.model.UserObject.Status;
 import io.rocketchat.common.data.rpc.RPC;
 
 /**
@@ -11,33 +13,30 @@ public class PresenceRPC extends RPC {
     private static final String TEMP_STATUS = "UserPresence:";
 
     public static String setDefaultStatus(int integer, Status status) {
-        String defaultStat = "online";
+        String defaultStat = UserObject.ONLINE;
         switch (status) {
             case ONLINE:
-                defaultStat = "online";
+                defaultStat = UserObject.ONLINE;
                 break;
             case BUSY:
-                defaultStat = "busy";
+                defaultStat = UserObject.BUSY;
                 break;
             case AWAY:
-                defaultStat = "away";
+                defaultStat = UserObject.AWAY;
                 break;
             case OFFLINE:
-                defaultStat = "offline";
+                defaultStat = UserObject.OFFLINE;
                 break;
         }
         return getRemoteMethodObject(integer, DEFAULT_STATUS, defaultStat).toString();
     }
 
     public static String setTemporaryStatus(int integer, Status status) {
-        String defaultStat = "online";
+        String tempStat = UserObject.ONLINE;
         if (status == Status.AWAY) {
-            defaultStat = "away";
+            tempStat = UserObject.AWAY;
         }
-        return getRemoteMethodObject(integer, TEMP_STATUS + defaultStat).toString();
+        return getRemoteMethodObject(integer, TEMP_STATUS + tempStat).toString();
     }
 
-    public enum Status {
-        ONLINE, BUSY, AWAY, OFFLINE
-    }
 }

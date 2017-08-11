@@ -15,6 +15,12 @@ public class UserObject {
     private ArrayList<String> roles;
     private JSONArray emails;
 
+
+    // Extra fields can be null
+    private String name;
+    private Status status;
+    private String utcOffset;
+
     public UserObject(JSONObject object) {
         try {
             userId = object.optString("_id");
@@ -70,5 +76,32 @@ public class UserObject {
                 ", roles=" + roles +
                 ", emails=" + emails +
                 '}';
+    }
+
+
+    public enum Status {
+        ONLINE,
+        BUSY,
+        AWAY,
+        OFFLINE,
+        OTHER
+    }
+
+    public static final String ONLINE = "online";
+    public static final String OFFLINE = "offline";
+    public static final String BUSY = "busy";
+    public static final String AWAY = "away";
+
+    public static Status getStatus(String s) {
+        if (s.equals(ONLINE)) {
+            return Status.ONLINE;
+        }else if (s.equals(OFFLINE)) {
+            return Status.OFFLINE;
+        }else if (s.equals(BUSY)) {
+            return Status.BUSY;
+        }else if (s.equals(AWAY)){
+            return Status.AWAY;
+        }
+        return Status.OTHER;
     }
 }

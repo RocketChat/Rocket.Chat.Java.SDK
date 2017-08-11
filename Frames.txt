@@ -185,3 +185,16 @@ a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"messages\":[],\"users\":[],\"
 a["{\"msg\":\"ready\",\"subs\":[\"9dRRoeN4g83cpTbDm\"]}"]
 
 a["{\"msg\":\"changed\",\"collection\":\"stream-room-messages\",\"id\":\"id\",\"fields\":{\"eventName\":\"g9vNPgp6C4nDpSp8Ws5yHbsDHPiD5w4znv\",\"args\":[{\"_id\":\"STvoB5ZgXuuMvifsx\",\"rid\":\"g9vNPgp6C4nDpSp8Ws5yHbsDHPiD5w4znv\",\"msg\":\"\",\"ts\":{\"$date\":1502396616782},\"u\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\",\"name\":\"sachin shinde\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1502396681648},\"t\":\"rm\",\"urls\":[],\"attachments\":[],\"reactions\":[],\"editedAt\":{\"$date\":1502396681648},\"editedBy\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\"}}]}}"]
+
+
+a["{\"msg\":\"changed\",\"collection\":\"users\",\"id\":\"g9vNPgp6C4nDpSp8W\",\"fields\":{\"active\":true,\"avatarOrigin\":\"upload\",\"name\":\"sachin shinde\",\"roles\":[\"user\"],\"services\":{\"github\":{\"id\":16723785,\"accessToken\":\"afcedb9358784e3779bf27c1ffd420bd20099a6c\",\"email\":\"sachinshinde7676@gmail.com\",\"username\":\"sacOO7\",\"emails\":[{\"email\":\"sachinshinde7676@gmail.com\",\"primary\":true,\"verified\":true,\"visibility\":\"public\"}]},\"password\":{\"bcrypt\":\"$2a$10$3heaa00o1xhNmuTsK6hQxu9emRIy1DOwzD7IFumLO2Cg/oBkElcES\"}},\"settings\":{\"profile\":{}},\"status\":\"offline\",\"statusConnection\":\"online\",\"statusDefault\":\"offline\",\"utcOffset\":5.5}}"]
+
+
+
+a["{\"msg\":\"changed\",\"collection\":\"users\",\"id\":\"HDMj9az7nT9DySjhu\",\"fields\":{\"status\":\"online\"}}"]
+
+a["{\"msg\":\"added\",\"collection\":\"meteor_accounts_loginServiceConfiguration\",\"id\":\"7q6mLifq8iBFgp2Tn\",\"fields\":{\"service\":\"github\",\"clientId\":\"886a7b2a1fb067b10d3a\"}}"]
+
+a["{\"msg\":\"added\",\"collection\":\"rocketchat_roles\",\"id\":\"anonymous\",\"fields\":{\"scope\":\"Users\",\"description\":\"\",\"protected\":true,\"_updatedAt\":{\"$date\":1502411092079}}}"]
+
+a["{\"msg\":\"added\",\"collection\":\"meteor_autoupdate_clientVersions\",\"id\":\"version\",\"fields\":{\"version\":\"662d6600ebb9cd04529d002fd057848ff6d152e1\"}}"]
