@@ -22,6 +22,23 @@ public class Message {
     private String messagetype;
     private String senderAlias;
 
+
+    private static final String TYPE_MESSAGE_REMOVED = "rm";
+    private static final String TYPE_ROOM_NAME_CHANGED = "r";
+    private static final String TYPE_ROOM_ARCHIVED = "room-archived";
+    private static final String TYPE_ROOM_UNARCHIVED = "room-unarchived";
+    private static final String TYPE_USER_ADDED = "au";
+    private static final String TYPE_USER_REMOVED = "ru";
+    private static final String TYPE_USER_JOINED = "uj";
+    private static final String TYPE_USER_LEFT = "ul";
+    private static final String TYPE_USER_MUTED = "user-muted";
+    private static final String TYPE_USER_UNMUTED = "user-unmuted";
+    private static final String TYPE_WELCOME = "wm";
+    private static final String TYPE_SUBSCRIPTION_ROLE_ADDED = "subscription-role-added";
+    private static final String TYPE_SUBSCRIPTION_ROLE_REMOVED = "subscription-role-removed";
+
+
+
     public Message(JSONObject object) {
         try {
             messageId = object.optString("_id");
@@ -84,4 +101,32 @@ public class Message {
     public String getSenderAlias() {
         return senderAlias;
     }
+
+    enum Type {
+        TEXT,
+        TEXT_ATTACHMENT,
+        IMAGE,
+        AUDIO,
+        VIDEO,
+        URL,
+        MESSAGE_REMOVED,
+        ROOM_NAME_CHANGED,
+        ROOM_ARCHIVED,
+        ROOM_UNARCHIVED,
+        USER_ADDED,
+        USER_REMOVED,
+        USER_JOINED,
+        USER_LEFT,
+        USER_MUTED,
+        USER_UNMUTED,
+        WELCOME,
+        SUBSCRIPTION_ROLE_ADDED,
+        SUBSCRIPTION_ROLE_REMOVED,
+        OTHER
+    }
+
+    public static Type getType(String s) {
+        return Type.OTHER;
+    }
+
 }

@@ -36,6 +36,11 @@ public class Main extends CoreAdapter {
     }
 
     @Override
+    public void onConnectError(Exception websocketException) {
+        System.out.println("Got connect error here");
+    }
+
+    @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
     }
