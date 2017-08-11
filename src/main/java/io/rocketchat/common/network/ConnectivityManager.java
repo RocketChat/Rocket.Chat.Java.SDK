@@ -15,8 +15,12 @@ public class ConnectivityManager {
     public void register(ConnectListener listener) {
         if (listeners == null){
             listeners = new ConcurrentLinkedQueue<>();
+            listeners.add(listener);
+        } else {
+            if (!listeners.contains(listener)) {
+                listeners.add(listener);
+            }
         }
-        listeners.add(listener);
     }
 
     public void publishConnect (String sessionId) {

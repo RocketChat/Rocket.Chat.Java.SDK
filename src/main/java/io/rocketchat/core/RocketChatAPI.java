@@ -1,5 +1,6 @@
 package io.rocketchat.core;
 
+import io.rocketchat.common.network.ConnectivityManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -48,7 +49,7 @@ public class RocketChatAPI extends Socket {
     private String sessionId;
     private UserObject userInfo;
 
-    private ConnectListener connectListener;
+    private ConnectivityManager manager;
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
@@ -59,6 +60,7 @@ public class RocketChatAPI extends Socket {
     public RocketChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
+        manager = new ConnectivityManager();
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
         factory = new ChatRoomFactory(this);
@@ -320,13 +322,13 @@ public class RocketChatAPI extends Socket {
         coreStreamMiddleware.createSubCallback(subId, subscribeListener);
     }
 
-    public void setConnectListener(ConnectListener connectListener) {
-        this.connectListener = connectListener;
+    public void registerConnectListener(ConnectListener connectListener) {
+        manager.register(connectListener);
     }
 
     public void connect(ConnectListener connectListener) {
         createSocket();
-        this.connectListener = connectListener;
+        manager.register(connectListener);
         super.connectAsync();
     }
 
