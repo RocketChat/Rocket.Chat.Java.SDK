@@ -11,24 +11,28 @@ public class ConnectivityManager {
 
     ConcurrentLinkedQueue <ConnectListener> listeners;
 
+
     public void register(ConnectListener listener) {
+        if (listeners == null){
+            listeners = new ConcurrentLinkedQueue<>();
+        }
         listeners.add(listener);
     }
 
     public void publishConnect (String sessionId) {
-        for (ConnectListener listener : listeners){
+        for (ConnectListener listener : listeners) {
             listener.onConnect(sessionId);
         }
     }
 
     public void publishDisconnect(boolean closedByServer) {
-        for (ConnectListener listener : listeners){
+        for (ConnectListener listener : listeners) {
             listener.onDisconnect(closedByServer);
         }
     }
 
     public void publishConnectError(Exception websocketException) {
-        for (ConnectListener listener : listeners){
+        for (ConnectListener listener : listeners) {
             listener.onConnectError(websocketException);
         }
     }
