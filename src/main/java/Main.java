@@ -7,6 +7,8 @@ import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by sachin on 7/6/17.
@@ -27,6 +29,12 @@ public class Main extends CoreAdapter {
         api.setPingInterval(3000);
         api.connect(this);
 
+        api.getCollectionManager().addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                System.out.println("Got notification for collection change");
+            }
+        });
     }
 
     @Override
@@ -42,6 +50,7 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
+
         api.subscribeUserData(new SubscribeListener() {
             @Override
             public void onSubscribe(Boolean isSubscribed, String subId) {
@@ -50,7 +59,9 @@ public class Main extends CoreAdapter {
                 }
             }
         });
-        api.getSubscriptions(this);
+
+
+//        api.getSubscriptions(this);
     }
 
     @Override

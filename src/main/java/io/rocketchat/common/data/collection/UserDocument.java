@@ -31,7 +31,7 @@ public class UserDocument extends UserObject{
             statusConnection = UserObject.getStatus(object.optString("statusConnection"));
             statusDefault = UserObject.getStatus(object.optString("statusDefault"));
             utcOffset = object.optInt("utcOffset");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -105,8 +105,21 @@ public class UserDocument extends UserObject{
             if (object.opt("utcOffset") != null) {
                 utcOffset = object.optInt("utcOffset");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "UserDocument{" +
+                "active=" + active +
+                ", name='" + name + '\'' +
+                ", services=" + services +
+                ", status=" + status +
+                ", statusConnection=" + statusConnection +
+                ", statusDefault=" + statusDefault +
+                ", utcOffset=" + utcOffset +
+                '}';
     }
 }
