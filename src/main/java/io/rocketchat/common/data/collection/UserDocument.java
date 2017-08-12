@@ -4,6 +4,8 @@ import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by sachin on 13/8/17.
  */
@@ -18,15 +20,20 @@ public class UserDocument extends UserObject{
     private Integer utcOffset;
 
     public UserDocument (JSONObject object) {
+
         super(object);
 
-        active = object.optBoolean("active");
-        name = object.optString("name");
-        services = object.optJSONObject("services");
-        status = UserObject.getStatus(object.optString("status"));
-        statusConnection = UserObject.getStatus(object.optString("statusConnection"));
-        statusDefault = UserObject.getStatus(object.optString("statusDefault"));
-        utcOffset = object.optInt("utcOffset");
+        try {
+            active = object.optBoolean("active");
+            name = object.optString("name");
+            services = object.optJSONObject("services");
+            status = UserObject.getStatus(object.optString("status"));
+            statusConnection = UserObject.getStatus(object.optString("statusConnection"));
+            statusDefault = UserObject.getStatus(object.optString("statusDefault"));
+            utcOffset = object.optInt("utcOffset");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public Boolean getActive() {
@@ -59,33 +66,47 @@ public class UserDocument extends UserObject{
 
     public void update (JSONObject object) {
 
-        if (object.opt("username") != null) {
-            userName = object.optString("username");
-        }
-        if (object.opt("roles") != null) {
-            roles.clear();
-            JSONArray array = object.optJSONArray("roles");
-            for (int i = 0; i < array.length(); i++) {
-                roles.add(array.optString(i));
+        try {
+            if (object.opt("username") != null) {
+                userName = object.optString("username");
             }
-        }
-        if (object.opt("emails") != null) {
-            emails = object.optJSONArray("emails");
-        }
-        if (object.opt("active") != null) {
-            active = object.optBoolean("active");
-        }if (object.opt("name") != null) {
-            name = object.optString("name");
-        }if (object.opt("services") != null) {
-            services = object.optJSONObject("services");
-        }if (object.opt("status") != null) {
-            status = UserObject.getStatus(object.optString("status"));
-        }if (object.opt("statusConnection") != null) {
-            statusConnection = UserObject.getStatus(object.optString("statusConnection"));
-        }if (object.opt("statusDefault") != null) {
-            statusDefault = UserObject.getStatus(object.optString("statusDefault"));
-        }if (object.opt("utcOffset") != null) {
-            utcOffset = object.optInt("utcOffset");
+            if (object.opt("roles") != null) {
+                if (roles != null) {
+                    roles.clear();
+                }else {
+                    roles = new ArrayList<>();
+                }
+                JSONArray array = object.optJSONArray("roles");
+                for (int i = 0; i < array.length(); i++) {
+                    roles.add(array.optString(i));
+                }
+            }
+            if (object.opt("emails") != null) {
+                emails = object.optJSONArray("emails");
+            }
+            if (object.opt("active") != null) {
+                active = object.optBoolean("active");
+            }
+            if (object.opt("name") != null) {
+                name = object.optString("name");
+            }
+            if (object.opt("services") != null) {
+                services = object.optJSONObject("services");
+            }
+            if (object.opt("status") != null) {
+                status = UserObject.getStatus(object.optString("status"));
+            }
+            if (object.opt("statusConnection") != null) {
+                statusConnection = UserObject.getStatus(object.optString("statusConnection"));
+            }
+            if (object.opt("statusDefault") != null) {
+                statusDefault = UserObject.getStatus(object.optString("statusDefault"));
+            }
+            if (object.opt("utcOffset") != null) {
+                utcOffset = object.optInt("utcOffset");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

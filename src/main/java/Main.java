@@ -50,7 +50,7 @@ public class Main extends CoreAdapter {
                 }
             }
         });
-//        api.getSubscriptions(this);
+        api.getSubscriptions(this);
     }
 
     @Override

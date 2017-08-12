@@ -34,8 +34,7 @@ public class CollectionManager extends Observable{
     public void update(JSONObject object, RPC.MsgType type) {
         String collectionName = object.optString("collection");
         if (collectionName.equals(TYPE_USERS)){
-//            updateUsers(object,type);
-            System.out.println("I got where I wanted to go");
+            updateUsers(object,type);
         }
     }
 
@@ -48,16 +47,19 @@ public class CollectionManager extends Observable{
                 usersCollection.add(id, userDocument);
                 setChanged();
                 notifyObservers(userDocument);
+                System.out.println("Added got called");
                 break;
             case CHANGED:
                 usersCollection.get(id).update(object.optJSONObject("fields"));
                 setChanged();
                 notifyObservers(usersCollection.get(id));
+                System.out.println("Changed got called");
                 break;
             case REMOVED:
                 usersCollection.remove(id);
                 setChanged();
                 notifyObservers();
+                System.out.println("Removed got called");
                 break;
             case OTHER:
                 break;
