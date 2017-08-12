@@ -56,6 +56,8 @@ public class CollectionManager extends Observable{
                 break;
             case REMOVED:
                 usersCollection.remove(id);
+                setChanged();
+                notifyObservers();
                 break;
             case OTHER:
                 break;
