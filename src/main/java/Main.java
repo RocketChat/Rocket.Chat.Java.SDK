@@ -1,4 +1,4 @@
-import io.rocketchat.common.data.lightDb.document.UserDocument;
+import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;

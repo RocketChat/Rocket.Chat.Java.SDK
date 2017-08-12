@@ -1,6 +1,6 @@
 package io.rocketchat.core;
 
-import io.rocketchat.common.data.lightDb.DbManager;
+import io.rocketchat.common.data.lightdb.DbManager;
 import io.rocketchat.common.data.model.Room;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;

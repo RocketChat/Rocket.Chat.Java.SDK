@@ -1,7 +1,7 @@
-package io.rocketchat.common.data.lightDb;
+package io.rocketchat.common.data.lightdb;
 
-import io.rocketchat.common.data.lightDb.collection.Collection;
-import io.rocketchat.common.data.lightDb.document.UserDocument;
+import io.rocketchat.common.data.lightdb.collection.Collection;
+import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import org.json.JSONObject;

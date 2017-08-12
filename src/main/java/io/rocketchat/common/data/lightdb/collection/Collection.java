@@ -1,4 +1,4 @@
-package io.rocketchat.common.data.lightDb.collection;
+package io.rocketchat.common.data.lightdb.collection;
 
 import java.util.ArrayList;
 import java.util.Map;
