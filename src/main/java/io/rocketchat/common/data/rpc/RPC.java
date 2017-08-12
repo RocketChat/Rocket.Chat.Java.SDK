@@ -10,9 +10,7 @@ import org.json.JSONObject;
 
 public class RPC {
 
-    public static final String TYPE_UPDATED = "updated";
-    public static final String TYPE_ERROR = "error";
-    public static final String TYPE_CLOSED = "closed";
+
     //Currently Used
     private static final String TYPE_PING = "ping";
     private static final String TYPE_CONNECTED = "connected";
@@ -26,6 +24,9 @@ public class RPC {
     public static final String PING_MESSAGE = "{\"msg\":\"ping\"}";
     public static final String PONG_MESSAGE = "{\"msg\":\"pong\"}";
     //Maybe required in future
+    public static final String TYPE_UPDATED = "updated";
+    public static final String TYPE_ERROR = "error";
+    public static final String TYPE_CLOSED = "closed";
     public static final String TYPE_UNSUB = "unsub";
     public static final String TYPE_SUB = "sub";
 
