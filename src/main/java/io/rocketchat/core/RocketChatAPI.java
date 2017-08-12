@@ -53,7 +53,9 @@ public class RocketChatAPI extends Socket {
         return dbManager.getUser(userId).getUserName();
     }
 
-
+    public String getMyUserId() {
+        return userId;
+    }
     public ChatRoomFactory getChatRoomFactory() {
         return chatRoomFactory;
     }

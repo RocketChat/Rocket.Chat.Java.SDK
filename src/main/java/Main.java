@@ -58,6 +58,8 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
 
+        System.out.println("My username is "+ api.getMyUserName());
+
         api.subscribeUserData(new SubscribeListener() {
             @Override
             public void onSubscribe(Boolean isSubscribed, String subId) {
