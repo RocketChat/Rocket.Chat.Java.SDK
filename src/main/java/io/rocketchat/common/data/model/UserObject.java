@@ -19,7 +19,7 @@ public class UserObject {
     // Extra fields can be null
     private String name;
     private Status status;
-    private String utcOffset;
+    private Integer utcOffset;
 
     public UserObject(JSONObject object) {
         try {
@@ -35,6 +35,11 @@ public class UserObject {
             if (object.opt("emails") != null) {
                 emails = object.optJSONArray("emails");
             }
+
+            name = object.optString("name");
+            status = getStatus(object.optString("status"));
+            utcOffset = object.optInt("utcOffset");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,6 +71,18 @@ public class UserObject {
 
     public JSONArray getEmails() {
         return emails;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Integer getUtcOffset() {
+        return utcOffset;
     }
 
     @Override

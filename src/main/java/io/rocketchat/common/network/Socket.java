@@ -246,7 +246,7 @@ public class Socket {
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                sendData(RPC.PINGMESSAGE);
+                sendData(RPC.PING_MESSAGE);
                 System.out.println("SENDING PING");
                 handler.remove(this);
             }

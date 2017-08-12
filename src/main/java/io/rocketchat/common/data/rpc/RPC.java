@@ -10,24 +10,25 @@ import org.json.JSONObject;
 
 public class RPC {
 
-    public static final String TYPE_REMOVED = "removed";
     public static final String TYPE_UPDATED = "updated";
     public static final String TYPE_ERROR = "error";
     public static final String TYPE_CLOSED = "closed";
     //Currently Used
-    private static String TYPE_PING = "ping";
-    private static String TYPE_CONNECTED = "connected";
-    private static String TYPE_ADDED = "added";
-    private static String TYPE_RESULT = "result";
-    private static String TYPE_READY = "ready";
-    private static String TYPE_CHANGED = "changed";
-    private static String TYPE_NOSUB = "nosub";
-    private static String TYPE_PONG = "pong";
+    private static final String TYPE_PING = "ping";
+    private static final String TYPE_CONNECTED = "connected";
+    private static final String TYPE_ADDED = "added";
+    private static final String TYPE_RESULT = "result";
+    private static final String TYPE_READY = "ready";
+    private static final String TYPE_CHANGED = "changed";
+    private static final String TYPE_REMOVED = "removed";
+    private static final String TYPE_NOSUB = "nosub";
+    private static final String TYPE_PONG = "pong";
+    public static final String PING_MESSAGE = "{\"msg\":\"ping\"}";
+    public static final String PONG_MESSAGE = "{\"msg\":\"pong\"}";
     //Maybe required in future
-    public static String TYPE_UNSUB = "unsub";
-    public static String TYPE_SUB = "sub";
-    public static String PINGMESSAGE = "{\"msg\":\"ping\"}";
-    public static String PONGMESSAGE = "{\"msg\":\"pong\"}";
+    public static final String TYPE_UNSUB = "unsub";
+    public static final String TYPE_SUB = "sub";
+
 
     public static MsgType parse(String s) {
         if (s.equals(TYPE_PING)) {
@@ -42,6 +43,8 @@ public class RPC {
             return MsgType.READY;
         } else if (s.equals(TYPE_CHANGED)) {
             return MsgType.CHANGED;
+        } else if (s.equals(TYPE_REMOVED)) {
+            return MsgType.REMOVED;
         } else if (s.equals(TYPE_NOSUB)) {
             return MsgType.NOSUB;
         } else if (s.equals(TYPE_PONG)) {
@@ -86,6 +89,7 @@ public class RPC {
         RESULT,
         READY,
         CHANGED,
+        REMOVED,
         NOSUB,
         OTHER
     }

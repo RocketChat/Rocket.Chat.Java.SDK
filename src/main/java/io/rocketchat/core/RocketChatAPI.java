@@ -1,5 +1,6 @@
 package io.rocketchat.core;
 
+import io.rocketchat.common.data.collection.CollectionManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,6 +51,7 @@ public class RocketChatAPI extends Socket {
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
+    private CollectionManager manager;
 
     // factory class
     private ChatRoomFactory factory;
@@ -59,6 +61,7 @@ public class RocketChatAPI extends Socket {
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
+        manager = new CollectionManager();
         factory = new ChatRoomFactory(this);
     }
 
@@ -290,7 +293,7 @@ public class RocketChatAPI extends Socket {
     }
 
     //Tested
-    public void setStatus(PresenceRPC.Status s, SimpleListener listener) {
+    public void setStatus(UserObject.Status s, SimpleListener listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SET_STATUS);
         sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID, s));
@@ -344,22 +347,13 @@ public class RocketChatAPI extends Socket {
         JSONObject object = new JSONObject(text);
         switch (RPC.parse(object.optString("msg"))) {
             case PING:
-                sendDataInBackground(BasicRPC.PONGMESSAGE);
+                sendDataInBackground(BasicRPC.PONG_MESSAGE);
                 break;
             case PONG:
-                if (isPingEnabled()) {
-                    sendPingFramesPeriodically();
-                }
+                sendPingFrames();
                 break;
             case CONNECTED:
-                sessionId = object.optString("session");
-                connectivityManager.publishConnect(sessionId);
-                sendDataInBackground(BasicRPC.PINGMESSAGE);
-                break;
-            case ADDED:
-                if (object.optString("collection").equals("users")) {
-                    userInfo = new UserObject(object.optJSONObject("fields"));
-                }
+                processOnConnected(object);
                 break;
             case RESULT:
                 coreMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
@@ -367,8 +361,17 @@ public class RocketChatAPI extends Socket {
             case READY:
                 coreStreamMiddleware.processSubSuccess(object);
                 break;
+            case ADDED:
+//                if (object.optString("collection").equals("users")) {
+//                    userInfo = new UserObject(object.optJSONObject("fields"));
+//                }
+                manager.update(object, RPC.MsgType.ADDED);
+                break;
             case CHANGED:
-                coreStreamMiddleware.processCallback(object);
+                processCollectionsChanged(object);
+                break;
+            case REMOVED:
+                manager.update(object, RPC.MsgType.REMOVED);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubSuccess(object);
@@ -381,6 +384,29 @@ public class RocketChatAPI extends Socket {
         }
 
         super.onTextMessage(text);
+    }
+
+    private void sendPingFrames(){
+        if (isPingEnabled()) {
+            sendPingFramesPeriodically();
+        }
+    }
+
+    private void processOnConnected(JSONObject object){
+        sessionId = object.optString("session");
+        connectivityManager.publishConnect(sessionId);
+        sendDataInBackground(BasicRPC.PING_MESSAGE);
+    }
+
+    private void processCollectionsChanged(JSONObject object) {
+        switch (CollectionManager.getCollectionType(object)) {
+            case STREAM:
+                coreStreamMiddleware.processCallback(object);
+                break;
+            case COLLECTION:
+                manager.update(object, RPC.MsgType.CHANGED);
+                break;
+        }
     }
 
     @Override
@@ -430,8 +456,8 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.getChatHistory(room.getRoomId(), limit, oldestMessageTimestamp, lasttimestamp, listener);
         }
 
-        public void getMembers(Boolean allUsers, RoomListener.GetMembersListener membersListener){
-            RocketChatAPI.this.getRoomMembers(room.getRoomId(), allUsers, membersListener);
+        public void getMembers(RoomListener.GetMembersListener membersListener) {
+            RocketChatAPI.this.getRoomMembers(room.getRoomId(), false, membersListener);
         }
 
         public void sendIsTyping(Boolean istyping) {
