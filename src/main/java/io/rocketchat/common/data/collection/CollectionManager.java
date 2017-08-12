@@ -4,6 +4,7 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 /**
@@ -22,8 +23,12 @@ public class CollectionManager extends Observable{
         usersCollection= new Collection<>();
     }
 
-    public Collection<String, UserObject> getUsersCollection() {
-        return usersCollection;
+    public UserObject getUser(String userId) {
+        return usersCollection.get(userId);
+    }
+
+    public ArrayList<UserObject> getUserCollection(){
+        return usersCollection.getData();
     }
 
     public void update(JSONObject object, RPC.MsgType type) {
