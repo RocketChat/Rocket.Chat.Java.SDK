@@ -78,6 +78,10 @@ public class Socket {
 
     }
 
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
+    }
+
     private WebSocketAdapter getAdapter() {
         return new WebSocketAdapter() {
             @Override

@@ -51,18 +51,18 @@ public class RocketChatAPI extends Socket {
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
-    private CollectionManager manager;
+    private CollectionManager collectionManager;
 
-    // factory class
-    private ChatRoomFactory factory;
+    // chatRoomFactory class
+    private ChatRoomFactory chatRoomFactory;
 
     public RocketChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
-        manager = new CollectionManager();
-        factory = new ChatRoomFactory(this);
+        collectionManager = new CollectionManager();
+        chatRoomFactory = new ChatRoomFactory(this);
     }
 
     public String getMyUserName() {
@@ -73,8 +73,12 @@ public class RocketChatAPI extends Socket {
         return userInfo.getEmails();
     }
 
-    public ChatRoomFactory getFactory() {
-        return factory;
+    public ChatRoomFactory getChatRoomFactory() {
+        return chatRoomFactory;
+    }
+
+    public CollectionManager getCollectionManager() {
+        return collectionManager;
     }
 
     //Tested
@@ -321,14 +325,6 @@ public class RocketChatAPI extends Socket {
         coreStreamMiddleware.createSubCallback(subId, subscribeListener);
     }
 
-    public void registerConnectListener(ConnectListener connectListener) {
-        connectivityManager.register(connectListener);
-    }
-
-    public void unRegisterConnnectListener(ConnectListener connectListener) {
-        connectivityManager.unRegister(connectListener);
-    }
-
     public void connect(ConnectListener connectListener) {
         createSocket();
         connectivityManager.register(connectListener);
@@ -365,13 +361,13 @@ public class RocketChatAPI extends Socket {
 //                if (object.optString("collection").equals("users")) {
 //                    userInfo = new UserObject(object.optJSONObject("fields"));
 //                }
-                manager.update(object, RPC.MsgType.ADDED);
+                collectionManager.update(object, RPC.MsgType.ADDED);
                 break;
             case CHANGED:
                 processCollectionsChanged(object);
                 break;
             case REMOVED:
-                manager.update(object, RPC.MsgType.REMOVED);
+                collectionManager.update(object, RPC.MsgType.REMOVED);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubSuccess(object);
@@ -404,7 +400,7 @@ public class RocketChatAPI extends Socket {
                 coreStreamMiddleware.processCallback(object);
                 break;
             case COLLECTION:
-                manager.update(object, RPC.MsgType.CHANGED);
+                collectionManager.update(object, RPC.MsgType.CHANGED);
                 break;
         }
     }

@@ -47,7 +47,7 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        RocketChatAPI.ChatRoom room = api.getFactory().createChatRooms(subscriptions).getChatRoomByName("sachin.shinde");
+        RocketChatAPI.ChatRoom room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("sachin.shinde");
 
         room.subscribeRoomTypingEvent(new SubscribeListener() {
             @Override

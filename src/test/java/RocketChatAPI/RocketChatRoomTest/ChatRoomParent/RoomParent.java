@@ -47,7 +47,7 @@ public class RoomParent extends CoreAdapter {
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = api.getFactory();
+        ChatRoomFactory factory = api.getChatRoomFactory();
         //Listing number of rooms
         for (RocketChatAPI.ChatRoom room : factory.getChatRooms()) {
             System.out.println("Room name is " + room.getRoomData().getRoomName());
