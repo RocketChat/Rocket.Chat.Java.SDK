@@ -11,15 +11,10 @@ import java.util.ArrayList;
  */
 public class UserObject {
     private String userId;
-    private String userName;
-    private ArrayList<String> roles;
-    private JSONArray emails;
+    protected String userName;
+    protected ArrayList<String> roles;
+    protected JSONArray emails;
 
-
-    // Extra fields can be null
-    private String name;
-    private Status status;
-    private Integer utcOffset;
 
     public UserObject(JSONObject object) {
         try {
@@ -36,9 +31,6 @@ public class UserObject {
                 emails = object.optJSONArray("emails");
             }
 
-            name = object.optString("name");
-            status = getStatus(object.optString("status"));
-            utcOffset = object.optInt("utcOffset");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,17 +65,7 @@ public class UserObject {
         return emails;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public Integer getUtcOffset() {
-        return utcOffset;
-    }
 
     @Override
     public String toString() {

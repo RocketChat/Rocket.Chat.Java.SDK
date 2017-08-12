@@ -47,7 +47,6 @@ public class RocketChatAPI extends Socket {
 
     private AtomicInteger integer;
     private String sessionId;
-    private UserObject userInfo;
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
@@ -66,12 +65,9 @@ public class RocketChatAPI extends Socket {
     }
 
     public String getMyUserName() {
-        return userInfo.getUserName();
+        return "sachin";
     }
 
-    public JSONArray getMyEmails() {
-        return userInfo.getEmails();
-    }
 
     public ChatRoomFactory getChatRoomFactory() {
         return chatRoomFactory;
@@ -303,6 +299,17 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(PresenceRPC.setDefaultStatus(uniqueID, s));
     }
 
+    public void subscribeActiveUsers(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeActiveUsers(uniqueID));
+    }
+
+    public void subscribeUserData(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeUserData(uniqueID));
+    }
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
@@ -358,9 +365,6 @@ public class RocketChatAPI extends Socket {
                 coreStreamMiddleware.processSubSuccess(object);
                 break;
             case ADDED:
-//                if (object.optString("collection").equals("users")) {
-//                    userInfo = new UserObject(object.optJSONObject("fields"));
-//                }
                 collectionManager.update(object, RPC.MsgType.ADDED);
                 break;
             case CHANGED:

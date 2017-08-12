@@ -42,7 +42,15 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        api.subscribeUserData(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                if (isSubscribed) {
+                    System.out.println("Subscribed successfully");
+                }
+            }
+        });
+//        api.getSubscriptions(this);
     }
 
     @Override

@@ -12,7 +12,7 @@ import java.util.Observable;
  */
 public class CollectionManager extends Observable{
 
-    Collection <String, UserObject> usersCollection;
+    Collection <String, UserDocument> usersCollection;
 
     private static final String TYPE_USERS = "users";
     private static final String TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
@@ -27,7 +27,7 @@ public class CollectionManager extends Observable{
         return usersCollection.get(userId);
     }
 
-    public ArrayList<UserObject> getUserCollection(){
+    public ArrayList<UserDocument> getUserCollection(){
         return usersCollection.getData();
     }
 
@@ -41,15 +41,18 @@ public class CollectionManager extends Observable{
 
     private void updateUsers(JSONObject object, RPC.MsgType type){
         String id = object.optString("id");
-        UserObject user = new UserObject(object.optJSONObject("fields"));
-        user.setUserId(id);
 
         switch (type) {
             case ADDED:
-                usersCollection.add(id, user);
+                UserDocument userDocument = new UserDocument(object.optJSONObject("fields"));
+                usersCollection.add(id, userDocument);
+                setChanged();
+                notifyObservers(userDocument);
                 break;
             case CHANGED:
-                usersCollection.update(id, user);
+                usersCollection.get(id).update(object.optJSONObject("fields"));
+                setChanged();
+                notifyObservers(usersCollection.get(id));
                 break;
             case REMOVED:
                 usersCollection.remove(id);
@@ -57,8 +60,6 @@ public class CollectionManager extends Observable{
             case OTHER:
                 break;
         }
-        setChanged();
-        notifyObservers(user);
     }
 
     public enum Type {
