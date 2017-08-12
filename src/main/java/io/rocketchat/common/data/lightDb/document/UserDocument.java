@@ -1,4 +1,4 @@
-package io.rocketchat.common.data.collection;
+package io.rocketchat.common.data.lightDb.document;
 
 import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONArray;

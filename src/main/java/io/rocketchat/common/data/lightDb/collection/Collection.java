@@ -1,4 +1,4 @@
-package io.rocketchat.common.data.collection;
+package io.rocketchat.common.data.lightDb.collection;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,32 +10,32 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class Collection <T, K>{
 
-    ConcurrentHashMap <T , K> collections;
+    ConcurrentHashMap <T , K> documents;
 
     public Collection (){
-        collections=new ConcurrentHashMap<>();
+        documents =new ConcurrentHashMap<>();
     }
 
     public void add(T key, K value) {
-        collections.put(key, value);
+        documents.put(key, value);
     }
 
     public K get (T key){
-        return collections.get(key);
+        return documents.get(key);
     }
 
     public void update(T key, K value) {
-        collections.replace(key, value);
+        documents.replace(key, value);
     }
 
     public K remove (T key) {
-        return collections.remove(key);
+        return documents.remove(key);
     }
 
 
     public ArrayList <K> getData (){
         ArrayList <K> list= new ArrayList();
-        Set<Map.Entry <T, K>> set= collections.entrySet();
+        Set<Map.Entry <T, K>> set= documents.entrySet();
         for (Map.Entry entry : set){
             list.add((K) entry.getValue());
         }
@@ -43,7 +43,7 @@ public class Collection <T, K>{
     }
 
     public void removeAll(){
-        collections.clear();
+        documents.clear();
     }
 
 }

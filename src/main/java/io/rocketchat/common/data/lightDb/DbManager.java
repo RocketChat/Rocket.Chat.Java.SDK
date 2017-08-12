@@ -1,5 +1,7 @@
-package io.rocketchat.common.data.collection;
+package io.rocketchat.common.data.lightDb;
 
+import io.rocketchat.common.data.lightDb.collection.Collection;
+import io.rocketchat.common.data.lightDb.document.UserDocument;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
 import org.json.JSONObject;
@@ -10,16 +12,16 @@ import java.util.Observable;
 /**
  * Created by sachin on 11/8/17.
  */
-public class CollectionManager extends Observable{
+public class DbManager extends Observable{
 
-    Collection <String, UserDocument> usersCollection;
+    Collection<String, UserDocument> usersCollection;
 
     private static final String TYPE_USERS = "users";
     private static final String TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
     private static final String TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
-    public CollectionManager(){
+    public DbManager(){
         usersCollection= new Collection<>();
     }
 
@@ -47,19 +49,16 @@ public class CollectionManager extends Observable{
                 usersCollection.add(id, userDocument);
                 setChanged();
                 notifyObservers(userDocument);
-                System.out.println("Added got called");
                 break;
             case CHANGED:
                 usersCollection.get(id).update(object.optJSONObject("fields"));
                 setChanged();
                 notifyObservers(usersCollection.get(id));
-                System.out.println("Changed got called");
                 break;
             case REMOVED:
                 usersCollection.remove(id);
                 setChanged();
                 notifyObservers();
-                System.out.println("Removed got called");
                 break;
             case OTHER:
                 break;

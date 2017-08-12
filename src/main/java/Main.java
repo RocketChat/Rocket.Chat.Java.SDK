@@ -1,3 +1,4 @@
+import io.rocketchat.common.data.lightDb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.core.RocketChatAPI;
@@ -29,10 +30,16 @@ public class Main extends CoreAdapter {
         api.setPingInterval(3000);
         api.connect(this);
 
-        api.getCollectionManager().addObserver(new Observer() {
+        api.getDbManager().addObserver(new Observer() {
             @Override
             public void update(Observable o, Object arg) {
                 System.out.println("Got notification for collection change");
+                if (arg != null) {
+                    UserDocument document = (UserDocument) arg;
+                    System.out.println("New status is " + document.getStatus());
+                } else {
+                    System.out.println("Removed for system");
+                }
             }
         });
     }
@@ -60,8 +67,17 @@ public class Main extends CoreAdapter {
             }
         });
 
+        api.subscribeActiveUsers(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                if (isSubscribed) {
+                    System.out.println("Subscribed for active users");
+                }
+            }
+        });
 
-//        api.getSubscriptions(this);
+
+        api.getSubscriptions(this);
     }
 
     @Override
