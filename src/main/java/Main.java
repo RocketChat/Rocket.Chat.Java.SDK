@@ -77,7 +77,7 @@ public class Main extends CoreAdapter {
         });
 
 
-        api.getSubscriptions(this);
+//        api.getSubscriptions(this);
     }
 
     @Override
@@ -115,6 +115,7 @@ public class Main extends CoreAdapter {
     public void onDisconnect(boolean closedByServer) {
         System.out.println("Disconnect detected");
     }
+
 }
 
 /**

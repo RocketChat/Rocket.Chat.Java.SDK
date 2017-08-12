@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.rocketchat.common.data.rpc.RPC;
 
@@ -15,6 +17,8 @@ import io.rocketchat.common.data.rpc.RPC;
  */
 
 public class Socket {
+
+    public static final Logger LOGGER = Logger.getLogger(Socket.class.getName());
 
     private String url;
     private WebSocketFactory factory;
@@ -29,6 +33,7 @@ public class Socket {
     protected ConnectivityManager connectivityManager;
 
     protected Socket(String url) {
+        LOGGER.setLevel(Level.INFO);
         this.url = url;
         adapter = getAdapter();
         factory = new WebSocketFactory().setConnectionTimeout(5000);
@@ -207,11 +212,11 @@ public class Socket {
 
     protected void onConnected() {
         strategy.setNumberOfAttempts(0);
-        System.out.println("Connected");
+        LOGGER.info("Connected to server");
     }
 
     protected void onDisconnected(boolean closedByServer) {
-        System.out.println("Disconnected");
+        LOGGER.warning("Disconnected from server");
         if (strategy != null && !selfDisconnect) {
             if (strategy.getNumberOfAttempts() < strategy.getMaxAttempts()) {
                 timer = new Timer();
@@ -227,7 +232,7 @@ public class Socket {
 
             } else {
                 handler.cancel();
-                System.out.println("Number of attempts are complete");
+                LOGGER.info("Number of attempts are complete");
             }
         } else {
             handler.cancel();
@@ -236,12 +241,12 @@ public class Socket {
     }
 
     protected void onConnectError(Exception websocketException) {
-        System.out.println("Onconnect Error");
+        LOGGER.warning("Connect error");
         onDisconnected(true);
     }
 
     protected void onTextMessage(String text) throws Exception {
-        System.out.println("Message is " + text);
+        LOGGER.info("Message is " + text);
     }
 
     // TODO: 10/8/17 Solve problem while commonRoomTest while sending multiple PING frames at each step
@@ -251,7 +256,7 @@ public class Socket {
             @Override
             public void run() {
                 sendData(RPC.PING_MESSAGE);
-                System.out.println("SENDING PING");
+                LOGGER.info("SENDING PING");
                 handler.remove(this);
             }
         }, pingInterval);
