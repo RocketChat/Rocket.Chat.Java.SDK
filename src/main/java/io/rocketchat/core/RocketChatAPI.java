@@ -31,6 +31,7 @@ public class RocketChatAPI extends Socket {
 
     private AtomicInteger integer;
     private String sessionId;
+    private String userId;
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
@@ -49,7 +50,7 @@ public class RocketChatAPI extends Socket {
     }
 
     public String getMyUserName() {
-        return "sachin";
+        return dbManager.getUser(userId).getUserName();
     }
 
 
@@ -349,7 +350,7 @@ public class RocketChatAPI extends Socket {
                 coreStreamMiddleware.processSubSuccess(object);
                 break;
             case ADDED:
-                dbManager.update(object, RPC.MsgType.ADDED);
+                processCollectionsAdded(object);
                 break;
             case CHANGED:
                 processCollectionsChanged(object);
@@ -382,6 +383,13 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(BasicRPC.PING_MESSAGE);
     }
 
+    private void processCollectionsAdded(JSONObject object) {
+        if (userId == null) {
+            userId = object.optString("id");
+        }
+        dbManager.update(object, RPC.MsgType.ADDED);
+    }
+
     private void processCollectionsChanged(JSONObject object) {
         switch (DbManager.getCollectionType(object)) {
             case STREAM:
@@ -392,6 +400,7 @@ public class RocketChatAPI extends Socket {
                 break;
         }
     }
+
 
     @Override
     protected void onConnectError(Exception websocketException) {
