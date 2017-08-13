@@ -218,7 +218,7 @@ public class LiveChatAPI extends Socket {
         return new ChatRoom(s);
     }
 
-    // TODO: 30/7/17 Add methods for unsubscribing events
+
     public class ChatRoom {
 
         String userName;
@@ -328,12 +328,12 @@ public class LiveChatAPI extends Socket {
 
         @Override
         public String toString() {
-            return "ChatRoom{" +
-                    "userName='" + userName + '\'' +
-                    ", roomId='" + roomId + '\'' +
-                    ", userId='" + userId + '\'' +
-                    ", visitorToken='" + visitorToken + '\'' +
-                    ", authToken='" + authToken + '\'' +
+            return "{" +
+                    "\"userName\":\"" + userName + '\"' +
+                    ",\"roomId\":\"" + roomId + '\"' +
+                    ",\"userId\":\"" + userId + '\"' +
+                    ",\"visitorToken\":\"" + visitorToken + '\"' +
+                    ",\"authToken\":\"" + authToken + '\"' +
                     '}';
         }
     }
