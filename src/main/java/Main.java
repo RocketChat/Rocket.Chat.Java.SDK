@@ -1,4 +1,3 @@
-import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 
@@ -17,7 +16,7 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(new ReconnectionStrategy(30, 3000));
+        api.setReconnectionStrategy(null);
         api.setPingInterval(3000);
         api.connect(this);
     }

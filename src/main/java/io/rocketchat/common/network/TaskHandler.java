@@ -9,17 +9,25 @@ import java.util.TimerTask;
 public class TaskHandler {
     private Timer timer;
     private TimerTask task;
+    private Boolean isCancelled;
 
     public TaskHandler() {
         timer = new Timer();
+        isCancelled = false;
     }
 
     public void postDelayed(TimerTask timerTask, long delay) {
         this.task = timerTask;
+        if (isCancelled) {
+            recreate();
+        }
         timer.schedule(timerTask, delay);
     }
 
     public void scheduleAtFixedRate(TimerTask timerTask, long delay, long period) {
+        if (isCancelled) {
+            recreate();
+        }
         timer.scheduleAtFixedRate(timerTask, delay, period);
     }
 
@@ -37,5 +45,11 @@ public class TaskHandler {
         removeLast();
         timer.cancel();
         timer.purge();
+        isCancelled = true;
+    }
+
+    private void recreate () {
+        timer = new Timer();
+        isCancelled = false;
     }
 }

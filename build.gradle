@@ -16,7 +16,7 @@ allprojects {
 }
 
 group 'io.rocketchat'
-version '0.6.3'
+version '0.6.4'
 
 
 apply plugin: 'java'
@@ -52,7 +52,7 @@ publishing {
             from components.java
             groupId 'io.rocketchat'
             artifactId 'rocketchatjavasdk'
-            version '0.6.3'
+            version '0.6.4'
 
             artifact sourceJar {
                 classifier "sources"
@@ -78,10 +78,10 @@ bintray {
         publicDownloadNumbers = true
 
         version {
-            name = '0.6.3'
+            name = '0.6.4'
             released = new Date()
             desc = 'Complete LIVE-CHAT SDK Suite + Core SDK APIs'
-            vcsTag = '0.6.3'
+            vcsTag = '0.6.4'
         }
 
     }

@@ -39,8 +39,8 @@ public class Socket {
         factory = new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect = false;
         pingEnable=false;
-        handler = new TaskHandler();
         pingInterval = 2000;
+        handler = new TaskHandler();
         connectivityManager = new ConnectivityManager();
     }
 
