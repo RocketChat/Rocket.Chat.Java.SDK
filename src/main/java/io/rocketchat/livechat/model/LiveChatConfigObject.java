@@ -16,7 +16,7 @@ public class LiveChatConfigObject {
     private String popupTitle;
     private String colour;
     private Boolean displayRegistrationForm;
-    private String room;
+    private Object room;
     private JSONArray triggers;
     private ArrayList<DepartmentObject> departments;
     private Boolean allowSwitchingDepartments;
@@ -38,7 +38,7 @@ public class LiveChatConfigObject {
             popupTitle = object.getString("title");
             colour = object.getString("color");
             displayRegistrationForm = object.getBoolean("registrationForm");
-            room = object.getString("room");
+            room = object.opt("room");
 
             // Triggers need to be loaded
             triggers = object.getJSONArray("triggers");
@@ -99,7 +99,7 @@ public class LiveChatConfigObject {
         this.displayRegistrationForm = displayRegistrationForm;
     }
 
-    public String getRoom() {
+    public Object getRoom() {
         return room;
     }
 

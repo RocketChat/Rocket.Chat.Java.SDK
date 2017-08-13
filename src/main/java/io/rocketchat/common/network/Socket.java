@@ -217,6 +217,19 @@ public class Socket {
 
     protected void onDisconnected(boolean closedByServer) {
         LOGGER.warning("Disconnected from server");
+        processReconnection();
+    }
+
+    protected void onConnectError(Exception websocketException) {
+        LOGGER.warning("Connect error");
+        processReconnection();
+    }
+
+    protected void onTextMessage(String text) throws Exception {
+        LOGGER.info("Message is " + text);
+    }
+
+    private void processReconnection() {
         if (strategy != null && !selfDisconnect) {
             if (strategy.getNumberOfAttempts() < strategy.getMaxAttempts()) {
                 timer = new Timer();
@@ -238,15 +251,6 @@ public class Socket {
             handler.cancel();
             selfDisconnect = false;
         }
-    }
-
-    protected void onConnectError(Exception websocketException) {
-        LOGGER.warning("Connect error");
-        onDisconnected(true);
-    }
-
-    protected void onTextMessage(String text) throws Exception {
-        LOGGER.info("Message is " + text);
     }
 
     // TODO: 10/8/17 Solve problem while commonRoomTest while sending multiple PING frames at each step
@@ -271,7 +275,7 @@ public class Socket {
         }, 2 * pingInterval);
     }
 
-    enum State {
+    public enum State {
         CREATED,
         CONNECTING,
         CONNECTED,
