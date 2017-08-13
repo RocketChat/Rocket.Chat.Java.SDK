@@ -29,10 +29,6 @@ public class SendOfflineMessageTest extends ChatParent implements ConnectListene
     @Captor
     ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
 
-    @Before
-    public void setup() {
-        setUpBefore();
-    }
 
     @Override
     public void setUpBefore() {

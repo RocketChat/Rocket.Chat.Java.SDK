@@ -39,10 +39,6 @@ public class LoginTest extends ChatParent implements ConnectListener, InitialDat
     @Captor
     ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
 
-    @Before
-    public void setup() {
-        setUpBefore();
-    }
 
     @Override
     public void setUpBefore() {
