@@ -1,6 +1,7 @@
 import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
@@ -26,7 +27,7 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+        api.setReconnectionStrategy(new ReconnectionStrategy(3, 2000));
         api.setPingInterval(3000);
         api.connect(this);
 
@@ -115,7 +116,7 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onDisconnect(boolean closedByServer) {
-        System.out.println("Disconnect detected");
+        System.out.println("Disconnect detected here");
     }
 
 }
