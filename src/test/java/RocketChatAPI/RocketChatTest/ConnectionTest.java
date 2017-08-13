@@ -38,7 +38,7 @@ public class ConnectionTest extends RocketChatParent {
     @Test
     public void connectTest() {
         api.connect(listener);
-        Mockito.verify(listener, timeout(5000).atLeastOnce()).onConnect(connectCaptor.capture());
+        Mockito.verify(listener, timeout(10000).atLeastOnce()).onConnect(connectCaptor.capture());
         Assert.assertTrue(connectCaptor.getValue() != null);
         System.out.println("Value is " + connectCaptor.getValue());
     }
