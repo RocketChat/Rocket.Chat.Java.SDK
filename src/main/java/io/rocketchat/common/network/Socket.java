@@ -57,8 +57,17 @@ public class Socket {
 
 
     public void disablePing() {
-        handler.cancel();
-        pingEnable=false;
+        if (pingEnable) {
+            handler.cancel();
+            pingEnable = false;
+        }
+    }
+
+    public void enablePing() {
+        if (!pingEnable) {
+            pingEnable = true;
+            sendDataInBackground(RPC.PING_MESSAGE);
+        }
     }
 
     public boolean isPingEnabled() {
