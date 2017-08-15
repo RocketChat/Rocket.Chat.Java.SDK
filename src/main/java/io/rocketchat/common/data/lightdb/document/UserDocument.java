@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Created by sachin on 13/8/17.
  */
-public class UserDocument extends UserObject{
+public class UserDocument extends UserObject {
 
     Boolean active;
     private String name;
@@ -19,7 +19,7 @@ public class UserDocument extends UserObject{
     private Status statusDefault;
     private Integer utcOffset;
 
-    public UserDocument (JSONObject object) {
+    public UserDocument(JSONObject object) {
 
         super(object);
 
@@ -64,7 +64,7 @@ public class UserDocument extends UserObject{
         return utcOffset;
     }
 
-    public void update (JSONObject object) {
+    public void update(JSONObject object) {
 
         try {
             if (object.opt("username") != null) {
@@ -73,7 +73,7 @@ public class UserDocument extends UserObject{
             if (object.opt("roles") != null) {
                 if (roles != null) {
                     roles.clear();
-                }else {
+                } else {
                     roles = new ArrayList<>();
                 }
                 JSONArray array = object.optJSONArray("roles");

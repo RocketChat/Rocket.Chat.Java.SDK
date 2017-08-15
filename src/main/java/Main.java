@@ -23,10 +23,10 @@ public class Main extends CoreAdapter {
     }
 
     public void call() {
-            api = new RocketChatAPI(serverurl);
-            api.setReconnectionStrategy(null);
-            api.setPingInterval(3000);
-            api.connect(this);
+        api = new RocketChatAPI(serverurl);
+        api.setReconnectionStrategy(null);
+        api.setPingInterval(3000);
+        api.connect(this);
     }
 
     @Override
@@ -38,27 +38,27 @@ public class Main extends CoreAdapter {
             public void update(Observable o, Object arg) {
                 if (arg != null) {
                     UserDocument document = (UserDocument) arg;
-                    System.out.println("UserName is "+ document.getUserName());
-                    System.out.println("UserId is "+ document.getUserId());
-                    System.out.println("New status is "+ document.getStatus());
+                    System.out.println("UserName is " + document.getUserName());
+                    System.out.println("UserId is " + document.getUserId());
+                    System.out.println("New status is " + document.getStatus());
                 }
             }
         });
+
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         for (SubscriptionObject subscription : subscriptions) {
-            System.out.println("name is "+ subscription.getRoomName());
+            System.out.println("name is " + subscription.getRoomName());
         }
     }
-
 
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("testuserrocks","testuserrocks",this);
+        api.login("testuserrocks", "testuserrocks", this);
     }
 
     @Override
@@ -71,10 +71,13 @@ public class Main extends CoreAdapter {
         System.out.println("Disconnect detected here");
     }
 
+
 }
 
 /**
  * RocketChat server dummy user : {"userName":"guest-3829","roomId":"1hrjr4sruo9q1","userId":"9kAri3uXquAnkMeb4","visitorToken":"-57c7cb8f9c53963712368351705f4d9b","authToken":"qTcmnjIrfQB55bTd9GYhuGOOU63WY0-_afbCe8hyX_r"}
+ * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */

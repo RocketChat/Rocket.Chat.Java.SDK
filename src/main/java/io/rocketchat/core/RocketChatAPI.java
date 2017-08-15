@@ -56,6 +56,7 @@ public class RocketChatAPI extends Socket {
     public String getMyUserId() {
         return userId;
     }
+
     public ChatRoomFactory getChatRoomFactory() {
         return chatRoomFactory;
     }
@@ -297,6 +298,7 @@ public class RocketChatAPI extends Socket {
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
         sendDataInBackground(CoreSubRPC.subscribeUserData(uniqueID));
     }
+
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
@@ -372,13 +374,13 @@ public class RocketChatAPI extends Socket {
         }
     }
 
-    private void sendPingFrames(){
+    private void sendPingFrames() {
         if (isPingEnabled()) {
             sendPingFramesPeriodically();
         }
     }
 
-    private void processOnConnected(JSONObject object){
+    private void processOnConnected(JSONObject object) {
         sessionId = object.optString("session");
         connectivityManager.publishConnect(sessionId);
         sendDataInBackground(BasicRPC.PING_MESSAGE);
