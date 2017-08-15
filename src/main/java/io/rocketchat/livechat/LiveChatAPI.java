@@ -66,16 +66,19 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID, name, email, message));
     }
 
-    public void sendOfflineMessage(String name, String email, String message, MessageListener.OfflineMessageListener listener) {
+    public void sendOfflineMessage(String name, String email, String message,
+                                   MessageListener.OfflineMessageListener listener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.SEND_OFFLINE_MESSAGE);
         sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID, name, email, message));
     }
 
-    private void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp, LoadHistoryListener listener) {
+    private void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp,
+                                LoadHistoryListener listener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GET_CHAT_HISTORY);
-        sendDataInBackground(LiveChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
+        sendDataInBackground(
+                LiveChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
     private void getAgentData(String roomId, AgentListener.AgentDataListener listener) {
@@ -89,7 +92,8 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
     }
 
-    private void sendMessage(String msgId, String roomID, String message, String token, MessageListener.MessageAckListener messageAckListener) {
+    private void sendMessage(String msgId, String roomID, String message, String token,
+                             MessageListener.MessageAckListener messageAckListener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, messageAckListener, LiveChatMiddleware.ListenerType.SEND_MESSAGE);
         sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
@@ -100,31 +104,31 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatTypingRPC.streamNotifyRoom(uniqueID, roomId, username, istyping));
     }
 
-    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
+    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                               MessageListener.SubscriptionListener listener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeRoom(listener);
         sendDataInBackground(LiveChatSubRPC.streamRoomMessages(uniqueID, roomID, enable));
-
     }
 
-    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, AgentListener.AgentConnectListener agentConnectListener) {
+    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                                       AgentListener.AgentConnectListener agentConnectListener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
         sendDataInBackground(LiveChatSubRPC.streamLivechatRoom(uniqueID, roomID, enable));
-
     }
 
-    private void subscribeTyping(String roomID, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
+    private void subscribeTyping(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                                 TypingListener listener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeTyping(listener);
         sendDataInBackground(LiveChatSubRPC.subscribeTyping(uniqueID, roomID, enable));
-
     }
 
     private void closeConversation(String roomId) {
@@ -209,7 +213,6 @@ public class LiveChatAPI extends Socket {
         return new ChatRoom(s);
     }
 
-
     public class ChatRoom {
 
         String userName;
@@ -243,7 +246,8 @@ public class LiveChatAPI extends Socket {
             LiveChatAPI.this.login(authToken, listener);
         }
 
-        public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, LoadHistoryListener listener) {
+        public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp,
+                                   LoadHistoryListener listener) {
             LiveChatAPI.this.getChatHistory(roomId, limit, oldestMessageTimestamp, lasttimestamp, listener);
         }
 
@@ -266,7 +270,6 @@ public class LiveChatAPI extends Socket {
         /**
          * Used for sending messages to server with messageAcknowledgement
          *
-         * @param message
          * @param messageAckListener Returns ack to particular message
          * @return MessageID
          */
@@ -285,7 +288,8 @@ public class LiveChatAPI extends Socket {
             LiveChatAPI.this.subscribeRoom(roomId, false, subscribeListener, listener);
         }
 
-        public void subscribeLiveChatRoom(SubscribeListener subscribeListener, AgentListener.AgentConnectListener agentConnectListener) {
+        public void subscribeLiveChatRoom(SubscribeListener subscribeListener,
+                                          AgentListener.AgentConnectListener agentConnectListener) {
             LiveChatAPI.this.subscribeLiveChatRoom(roomId, false, subscribeListener, agentConnectListener);
         }
 
