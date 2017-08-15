@@ -60,7 +60,6 @@ public class Socket {
         }
     }
 
-
     public void disablePing() {
         if (pingEnable) {
             handler.cancel();
