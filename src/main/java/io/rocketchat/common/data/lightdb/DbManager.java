@@ -46,6 +46,7 @@ public class DbManager extends Observable{
         switch (type) {
             case ADDED:
                 UserDocument userDocument = new UserDocument(object.optJSONObject("fields"));
+                userDocument.setUserId(id);
                 usersCollection.add(id, userDocument);
                 setChanged();
                 notifyObservers(userDocument);

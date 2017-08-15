@@ -1,3 +1,4 @@
+import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
@@ -5,6 +6,8 @@ import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by sachin on 7/6/17.
@@ -20,21 +23,27 @@ public class Main extends CoreAdapter {
     }
 
     public void call() {
-
-        try {
             api = new RocketChatAPI(serverurl);
             api.setReconnectionStrategy(null);
             api.setPingInterval(3000);
             api.connect(this);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
+        api.subscribeActiveUsers(null);
+        api.getDbManager().addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object arg) {
+                if (arg != null) {
+                    UserDocument document = (UserDocument) arg;
+                    System.out.println("UserName is "+ document.getUserName());
+                    System.out.println("UserId is "+ document.getUserId());
+                    System.out.println("New status is "+ document.getStatus());
+                }
+            }
+        });
     }
 
     @Override
@@ -43,6 +52,8 @@ public class Main extends CoreAdapter {
             System.out.println("name is "+ subscription.getRoomName());
         }
     }
+
+
 
     @Override
     public void onConnect(String sessionID) {
