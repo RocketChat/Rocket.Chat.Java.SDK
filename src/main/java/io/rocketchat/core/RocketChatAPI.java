@@ -10,17 +10,30 @@ import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
-import io.rocketchat.core.callback.*;
+import io.rocketchat.core.callback.AccountListener;
+import io.rocketchat.core.callback.EmojiListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
+import io.rocketchat.core.callback.HistoryListener;
+import io.rocketchat.core.callback.LoginListener;
+import io.rocketchat.core.callback.MessageListener;
+import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.rpc.*;
-import org.json.JSONObject;
-
+import io.rocketchat.core.rpc.AccountRPC;
+import io.rocketchat.core.rpc.BasicRPC;
+import io.rocketchat.core.rpc.ChatHistoryRPC;
+import io.rocketchat.core.rpc.CoreSubRPC;
+import io.rocketchat.core.rpc.MessageRPC;
+import io.rocketchat.core.rpc.PresenceRPC;
+import io.rocketchat.core.rpc.RoomRPC;
+import io.rocketchat.core.rpc.TypingRPC;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.

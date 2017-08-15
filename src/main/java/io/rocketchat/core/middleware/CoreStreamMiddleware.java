@@ -5,10 +5,9 @@ import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.model.RocketChatMessage;
+import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 21/7/17.

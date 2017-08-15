@@ -1,10 +1,9 @@
 package io.rocketchat.livechat.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.sql.Timestamp;
 import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 9/6/17.

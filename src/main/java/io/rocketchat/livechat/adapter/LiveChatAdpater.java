@@ -3,12 +3,15 @@ package io.rocketchat.livechat.adapter;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.TypingListener;
-import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
-
 import java.util.List;
 
 /**

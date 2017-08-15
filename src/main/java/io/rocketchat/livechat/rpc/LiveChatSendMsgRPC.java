@@ -15,12 +15,7 @@ public class LiveChatSendMsgRPC extends RPC {
     /**
      * TESTED
      *
-     * @param integer
-     * @param msgId
-     * @param roomId
-     * @param message
-     * @param token   Token is register guest visitorToken (visitorToken), not visitorToken for authentication
-     * @return
+     * @param token Token is register guest visitorToken (visitorToken), not visitorToken for authentication
      */
     public static String sendMessage(int integer, String msgId, String roomId, String message, String token) {
         JSONObject object = new JSONObject();

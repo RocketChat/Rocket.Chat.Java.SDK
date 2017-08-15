@@ -15,10 +15,7 @@ public class LiveChatSubRPC extends SubRPC {
     /**
      * TESTED
      *
-     * @param uniqueid
-     * @param room_id
      * @param persistenceEnable Used for adding to collections, more like using sessions for maintaining subscriptions
-     * @return
      */
 
     public static String streamRoomMessages(String uniqueid, String room_id, Boolean persistenceEnable) {
@@ -31,11 +28,6 @@ public class LiveChatSubRPC extends SubRPC {
 
     /**
      * TESTED
-     *
-     * @param uniqueid
-     * @param room_id
-     * @param persistenceEnable
-     * @return
      */
     public static String subscribeTyping(String uniqueid, String room_id, Boolean persistenceEnable) {
         return getRemoteSubscriptionObject(uniqueid, NOTIFY_ROOM, room_id + "/typing", persistenceEnable).toString();

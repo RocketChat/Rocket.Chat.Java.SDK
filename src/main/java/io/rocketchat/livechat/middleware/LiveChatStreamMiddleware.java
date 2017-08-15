@@ -6,10 +6,9 @@ import io.rocketchat.livechat.callback.AgentListener;
 import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
+import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 9/6/17.

@@ -4,10 +4,9 @@ import io.rocketchat.common.data.lightdb.collection.Collection;
 import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
-import org.json.JSONObject;
-
 import java.util.List;
 import java.util.Observable;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 11/8/17.

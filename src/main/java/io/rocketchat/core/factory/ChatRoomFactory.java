@@ -2,7 +2,6 @@ package io.rocketchat.core.factory;
 
 import io.rocketchat.common.data.model.Room;
 import io.rocketchat.core.RocketChatAPI;
-
 import java.util.ArrayList;
 import java.util.List;
 

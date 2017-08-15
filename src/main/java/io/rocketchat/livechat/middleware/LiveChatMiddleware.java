@@ -2,16 +2,19 @@ package io.rocketchat.livechat.middleware;
 
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
-import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.

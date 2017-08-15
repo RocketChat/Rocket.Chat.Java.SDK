@@ -26,7 +26,8 @@ public class RoomRPC extends RPC {
      * Creates a public channel.
      *
      * @param groupName name of the channel
-     * @param users     usernames of the people to add to the channel when it is created. This can be empty and only the caller of the method will be a member of the channel.
+     * @param users     usernames of the people to add to the channel when it is created. This can be empty and only the
+     *                  caller of the method will be a member of the channel.
      * @param readOnly  whether the channel is read only or not
      */
     public static String createPublicGroup(int integer, String groupName, String[] users, Boolean readOnly) {
@@ -41,7 +42,8 @@ public class RoomRPC extends RPC {
      * Creates a private group.
      *
      * @param groupName name of the channel
-     * @param users     usernames of the people to add to the private group when it is created. This can be empty and only the caller of the method will be a member of the group.
+     * @param users     usernames of the people to add to the private group when it is created. This can be empty and
+     *                  only the caller of the method will be a member of the group.
      */
     public static String createPrivateGroup(int integer, String groupName, String[] users) {
         JSONArray array = new JSONArray();
@@ -52,7 +54,8 @@ public class RoomRPC extends RPC {
     }
 
     /**
-     * Deleting a room, either a private group or public channel, is actually completed via the method eraseRoom. The user deleting the room must have permission to do so, by either being owner or admin.
+     * Deleting a room, either a private group or public channel, is actually completed via the method eraseRoom. The
+     * user deleting the room must have permission to do so, by either being owner or admin.
      *
      * @param roomId the id of the room to delete
      */
@@ -75,7 +78,8 @@ public class RoomRPC extends RPC {
     }
 
     /**
-     * You can only join yourself to public channels, private groups are not joinable. Some public channels require you to enter a joinCode.
+     * You can only join yourself to public channels, private groups are not joinable. Some public channels require you
+     * to enter a joinCode.
      */
 
     public static String joinPublicGroup(int integer, String roomId, String joinCode) {
@@ -88,8 +92,6 @@ public class RoomRPC extends RPC {
 
     /**
      * You can leave any rooms, except for direct messages and except for rooms you are the last owner of.
-     *
-     * @param integer
      */
 
     public static String leaveGroup(int integer, String roomId) {
@@ -97,27 +99,24 @@ public class RoomRPC extends RPC {
     }
 
     /**
-     * When you hide a room, that room no longer shows up on the list of channels and marks the property open to false on the user’s subscription of the room.
-     *
-     * @param integer
+     * When you hide a room, that room no longer shows up on the list of channels and marks the property open to false
+     * on the user’s subscription of the room.
      */
     public static String hideRoom(int integer, String roomId) {
         return getRemoteMethodObject(integer, HIDE_ROOM, roomId).toString();
     }
 
     /**
-     * When you open a room, that room shows up on the list of channels and marks the property open to true on the user’s subscription of the room.
-     *
-     * @param integer
+     * When you open a room, that room shows up on the list of channels and marks the property open to true on the
+     * user’s subscription of the room.
      */
     public static String openRoom(int integer, String roomId) {
         return getRemoteMethodObject(integer, OPEN_ROOM, roomId).toString();
     }
 
     /**
-     * When a user makes a room as a favorite, the yellow star appears and it moves the room up to the “favorites” section of the list of rooms.
-     *
-     * @param integer
+     * When a user makes a room as a favorite, the yellow star appears and it moves the room up to the “favorites”
+     * section of the list of rooms.
      */
     public static String setFavouriteRoom(int integer, String roomId, Boolean isFavourite) {
         return getRemoteMethodObject(integer, SET_FAVOURITE_ROOM, roomId, isFavourite).toString();
@@ -125,8 +124,6 @@ public class RoomRPC extends RPC {
 
     /**
      * Need edit room permission
-     *
-     * @param integer
      */
     // TODO: 27/7/17 Need to be tested properly
     public static String saveRoomSettings(int integer, String roomId, String setting, String value) {

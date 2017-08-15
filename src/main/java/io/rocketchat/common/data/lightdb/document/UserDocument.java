@@ -1,10 +1,9 @@
 package io.rocketchat.common.data.lightdb.document;
 
 import io.rocketchat.common.data.model.UserObject;
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by sachin on 13/8/17.

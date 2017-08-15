@@ -57,8 +57,6 @@ public class RPC {
 
     /**
      * Tested
-     *
-     * @return
      */
 
     public static String ConnectObject() {

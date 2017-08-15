@@ -1,9 +1,8 @@
 package io.rocketchat.common.data.model;
 
+import java.util.Date;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * Created by sachin on 19/7/17.

@@ -5,7 +5,6 @@ import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.RoomRole;
-
 import java.util.List;
 
 /**

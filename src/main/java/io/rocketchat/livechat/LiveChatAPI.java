@@ -6,15 +6,22 @@ import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.common.network.Socket;
 import io.rocketchat.common.utils.Utils;
-import io.rocketchat.livechat.callback.*;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.AuthListener;
+import io.rocketchat.livechat.callback.InitialDataListener;
+import io.rocketchat.livechat.callback.LoadHistoryListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.middleware.LiveChatMiddleware;
 import io.rocketchat.livechat.middleware.LiveChatStreamMiddleware;
-import io.rocketchat.livechat.rpc.*;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.rocketchat.livechat.rpc.LiveChatBasicRPC;
+import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
+import io.rocketchat.livechat.rpc.LiveChatSendMsgRPC;
+import io.rocketchat.livechat.rpc.LiveChatSubRPC;
+import io.rocketchat.livechat.rpc.LiveChatTypingRPC;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.

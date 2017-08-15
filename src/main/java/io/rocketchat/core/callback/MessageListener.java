@@ -3,7 +3,6 @@ package io.rocketchat.core.callback;
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.RocketChatMessage;
-
 import java.util.List;
 
 /**

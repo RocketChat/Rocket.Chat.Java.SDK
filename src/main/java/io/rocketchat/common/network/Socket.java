@@ -1,8 +1,14 @@
 package io.rocketchat.common.network;
 
-import com.neovisionaries.ws.client.*;
+import com.neovisionaries.ws.client.OpeningHandshakeException;
+import com.neovisionaries.ws.client.StatusLine;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketCloseCode;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
 import io.rocketchat.common.data.rpc.RPC;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
