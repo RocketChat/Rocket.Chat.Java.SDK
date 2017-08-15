@@ -69,7 +69,7 @@ public class DbManager extends Observable {
     }
 
     public enum Type {
-        STREAM,
+        STREAM_COLLECTION,
         COLLECTION
     }
 
@@ -81,7 +81,7 @@ public class DbManager extends Observable {
                 collectionName.equals(TYPE_ROCKETCHAT_ROLES)) {
             return Type.COLLECTION;
         } else {
-            return Type.STREAM;
+            return Type.STREAM_COLLECTION;
         }
     }
 }

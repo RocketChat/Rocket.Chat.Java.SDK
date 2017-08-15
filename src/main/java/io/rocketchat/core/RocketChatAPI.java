@@ -395,7 +395,7 @@ public class RocketChatAPI extends Socket {
 
     private void processCollectionsChanged(JSONObject object) {
         switch (DbManager.getCollectionType(object)) {
-            case STREAM:
+            case STREAM_COLLECTION:
                 coreStreamMiddleware.processCallback(object);
                 break;
             case COLLECTION:

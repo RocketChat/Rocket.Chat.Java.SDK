@@ -1,6 +1,7 @@
 package io.rocketchat.common.data.lightdb.collection;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,19 +9,19 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by sachin on 11/8/17.
  */
-public class Collection <T, K>{
+public class Collection<T, K> {
 
-    ConcurrentHashMap <T , K> documents;
+    ConcurrentHashMap<T, K> documents;
 
-    public Collection (){
-        documents =new ConcurrentHashMap<>();
+    public Collection() {
+        documents = new ConcurrentHashMap<>();
     }
 
     public void add(T key, K value) {
         documents.put(key, value);
     }
 
-    public K get (T key){
+    public K get(T key) {
         return documents.get(key);
     }
 
@@ -28,21 +29,21 @@ public class Collection <T, K>{
         documents.replace(key, value);
     }
 
-    public K remove (T key) {
+    public K remove(T key) {
         return documents.remove(key);
     }
 
 
-    public ArrayList <K> getData (){
-        ArrayList <K> list= new ArrayList();
-        Set<Map.Entry <T, K>> set= documents.entrySet();
-        for (Map.Entry entry : set){
+    public List<K> getData() {
+        ArrayList<K> list = new ArrayList();
+        Set<Map.Entry<T, K>> set = documents.entrySet();
+        for (Map.Entry entry : set) {
             list.add((K) entry.getValue());
         }
         return list;
     }
 
-    public void removeAll(){
+    public void removeAll() {
         documents.clear();
     }
 
