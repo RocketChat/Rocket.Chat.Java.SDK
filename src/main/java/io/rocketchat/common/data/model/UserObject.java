@@ -30,7 +30,6 @@ public class UserObject {
                 emails = object.optJSONArray("emails");
             }
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

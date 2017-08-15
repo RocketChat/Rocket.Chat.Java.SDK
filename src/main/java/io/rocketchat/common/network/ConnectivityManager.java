@@ -10,17 +10,13 @@ public class ConnectivityManager {
 
     private ConcurrentLinkedQueue<ConnectListener> listeners;
 
+    ConnectivityManager() {
+        listeners = new ConcurrentLinkedQueue<>();
+    }
 
     public void register(ConnectListener listener) {
-        if (listener != null) {
-            if (listeners == null) {
-                listeners = new ConcurrentLinkedQueue<>();
-                listeners.add(listener);
-            } else {
-                if (!listeners.contains(listener)) {
-                    listeners.add(listener);
-                }
-            }
+        if (listener != null && !listeners.contains(listener)) {
+            listeners.add(listener);
         }
     }
 
