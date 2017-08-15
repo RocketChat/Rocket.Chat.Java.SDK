@@ -42,10 +42,12 @@ public class TaskHandler {
     }
 
     public void cancel() {
-        removeLast();
-        timer.cancel();
-        timer.purge();
-        isCancelled = true;
+        if (!isCancelled) {
+            removeLast();
+            timer.cancel();
+            timer.purge();
+            isCancelled = true;
+        }
     }
 
     private void recreate () {

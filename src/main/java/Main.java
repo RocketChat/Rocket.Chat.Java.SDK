@@ -1,5 +1,10 @@
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.model.SubscriptionObject;
+import io.rocketchat.core.model.TokenObject;
+
+import java.util.List;
 
 /**
  * Created by sachin on 7/6/17.
@@ -15,15 +20,34 @@ public class Main extends CoreAdapter {
     }
 
     public void call() {
-        api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.setPingInterval(3000);
-        api.connect(this);
+
+        try {
+            api = new RocketChatAPI(serverurl);
+            api.setReconnectionStrategy(null);
+            api.setPingInterval(3000);
+            api.connect(this);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+
+    @Override
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+        for (SubscriptionObject subscription : subscriptions) {
+            System.out.println("name is "+ subscription.getRoomName());
+        }
     }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
+        api.login("testuserrocks","testuserrocks",this);
     }
 
     @Override

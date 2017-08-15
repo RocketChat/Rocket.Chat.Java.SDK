@@ -262,24 +262,23 @@ public class Socket {
         }
     }
 
-    // TODO: 10/8/17 Solve problem while commonRoomTest while sending multiple PING frames at each step
+    // TODO: 15/8/17 solve problem of PONG RECEIVE FAILED by giving a fair chance
     protected void sendPingFramesPeriodically() {
         handler.removeLast();
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                sendData(RPC.PING_MESSAGE);
+                sendDataInBackground(RPC.PING_MESSAGE);
                 LOGGER.info("SENDING PING");
-                handler.remove(this);
             }
         }, pingInterval);
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
                 if (getState() != State.DISCONNECTING && getState() != State.DISCONNECTED) {
+                    LOGGER.warning("PONG RECEIVE FAILED");
                     ws.disconnect(WebSocketCloseCode.NONE, "PONG RECEIVE FAILED", 0);
                 }
-                handler.remove(this);
             }
         }, 2 * pingInterval);
     }

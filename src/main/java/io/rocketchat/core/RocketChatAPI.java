@@ -334,6 +334,7 @@ public class RocketChatAPI extends Socket {
 
     @Override
     protected void onTextMessage(String text) throws Exception {
+        super.onTextMessage(text);
         JSONObject object = new JSONObject(text);
         switch (RPC.parse(object.optString("msg"))) {
             case PING:
@@ -369,8 +370,6 @@ public class RocketChatAPI extends Socket {
 
                 break;
         }
-
-        super.onTextMessage(text);
     }
 
     private void sendPingFrames(){
