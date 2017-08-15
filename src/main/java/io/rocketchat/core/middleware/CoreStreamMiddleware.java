@@ -18,7 +18,7 @@ public class CoreStreamMiddleware {
 
 
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
-    private ConcurrentHashMap<String, ConcurrentHashMap <SubType, Listener>> subs;
+    private ConcurrentHashMap<String, ConcurrentHashMap<SubType, Listener>> subs;
 
     public CoreStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
@@ -27,7 +27,7 @@ public class CoreStreamMiddleware {
 
 
     public void createSub(String roomId, Listener listener, SubType type) {
-        if (listener != null){
+        if (listener != null) {
             if (subs.containsKey(roomId)) {
                 subs.get(roomId).put(type, listener);
             } else {
@@ -43,7 +43,7 @@ public class CoreStreamMiddleware {
     }
 
     public void removeSub(String roomId, SubType type) {
-        if (subs.containsKey(roomId)){
+        if (subs.containsKey(roomId)) {
             subs.get(roomId).remove(type);
         }
     }
@@ -58,7 +58,7 @@ public class CoreStreamMiddleware {
     public void processCallback(JSONObject object) {
         String s = object.optString("collection");
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
-        String roomId = object.optJSONObject("fields").optString("eventName").replace("/typing","");
+        String roomId = object.optJSONObject("fields").optString("eventName").replace("/typing", "");
         Listener listener;
 
         if (subs.containsKey(roomId)) {

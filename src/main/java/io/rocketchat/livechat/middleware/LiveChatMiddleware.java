@@ -7,7 +7,6 @@ import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

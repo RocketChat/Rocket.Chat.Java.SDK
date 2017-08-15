@@ -1,12 +1,11 @@
 package io.rocketchat.core.model;
 
+import io.rocketchat.common.data.model.UserObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import io.rocketchat.common.data.model.UserObject;
 
 /**
  * Created by sachin on 27/7/17.

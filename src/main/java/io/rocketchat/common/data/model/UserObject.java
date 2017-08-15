@@ -66,7 +66,6 @@ public class UserObject {
     }
 
 
-
     @Override
     public String toString() {
         return "UserObject{" +
@@ -94,11 +93,11 @@ public class UserObject {
     public static Status getStatus(String s) {
         if (s.equals(ONLINE)) {
             return Status.ONLINE;
-        }else if (s.equals(OFFLINE)) {
+        } else if (s.equals(OFFLINE)) {
             return Status.OFFLINE;
-        }else if (s.equals(BUSY)) {
+        } else if (s.equals(BUSY)) {
             return Status.BUSY;
-        }else if (s.equals(AWAY)){
+        } else if (s.equals(AWAY)) {
             return Status.AWAY;
         }
         return Status.OTHER;

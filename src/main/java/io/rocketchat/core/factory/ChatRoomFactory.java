@@ -1,11 +1,10 @@
 package io.rocketchat.core.factory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.rocketchat.common.data.model.Room;
 import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.model.SubscriptionObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sachin on 29/7/17.

@@ -1,9 +1,8 @@
 package io.rocketchat.core.model;
 
+import io.rocketchat.common.data.model.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import io.rocketchat.common.data.model.Message;
 
 /**
  * Created by sachin on 21/7/17.

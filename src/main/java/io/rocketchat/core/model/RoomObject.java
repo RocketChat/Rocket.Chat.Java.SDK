@@ -1,12 +1,11 @@
 package io.rocketchat.core.model;
 
+import io.rocketchat.common.data.model.Room;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-
-import io.rocketchat.common.data.model.Room;
 
 /**
  * Created by sachin on 19/7/17.

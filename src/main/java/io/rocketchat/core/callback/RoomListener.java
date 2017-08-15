@@ -25,7 +25,7 @@ public class RoomListener {
     }
 
     public interface GetMembersListener extends Listener {
-        void onGetRoomMembers(Integer total, List <UserObject> members, ErrorObject error);
+        void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error);
     }
 
 }

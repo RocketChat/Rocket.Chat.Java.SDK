@@ -1,9 +1,8 @@
 package io.rocketchat.core.rpc;
 
+import io.rocketchat.common.data.rpc.RPC;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import io.rocketchat.common.data.rpc.RPC;
 
 /**
  * Created by sachin on 21/7/17.

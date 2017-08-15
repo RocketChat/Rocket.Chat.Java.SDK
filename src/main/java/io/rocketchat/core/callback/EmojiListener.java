@@ -1,10 +1,10 @@
 package io.rocketchat.core.callback;
 
-import java.util.List;
-
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.Emoji;
+
+import java.util.List;
 
 /**
  * Created by sachin on 27/7/17.

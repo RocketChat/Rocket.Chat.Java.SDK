@@ -1,6 +1,7 @@
 package io.rocketchat.common.network;
 
 import com.neovisionaries.ws.client.*;
+import io.rocketchat.common.data.rpc.RPC;
 
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import io.rocketchat.common.data.rpc.RPC;
 
 /**
  * Created by sachin on 7/6/17.
@@ -38,7 +37,7 @@ public class Socket {
         adapter = getAdapter();
         factory = new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect = false;
-        pingEnable=false;
+        pingEnable = false;
         pingInterval = 2000;
         handler = new TaskHandler();
         connectivityManager = new ConnectivityManager();
@@ -49,8 +48,8 @@ public class Socket {
     }
 
     public void setPingInterval(long pingInterval) {
-        pingEnable=true;
-        if (pingInterval> this.pingInterval) {
+        pingEnable = true;
+        if (pingInterval > this.pingInterval) {
             this.pingInterval = pingInterval;
         }
     }
@@ -74,7 +73,7 @@ public class Socket {
         return pingEnable;
     }
 
-    public State getState(){
+    public State getState() {
         switch (ws.getState()) {
             case CREATED:
                 return State.CREATED;
@@ -190,7 +189,7 @@ public class Socket {
     }
 
     private void sendData(String message) {
-        if (getState() == State.CONNECTED ) {
+        if (getState() == State.CONNECTED) {
             ws.sendText(message);
         }
     }

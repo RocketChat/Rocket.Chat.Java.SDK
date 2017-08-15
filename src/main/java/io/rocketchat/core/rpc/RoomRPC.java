@@ -1,8 +1,7 @@
 package io.rocketchat.core.rpc;
 
-import org.json.JSONArray;
-
 import io.rocketchat.common.data.rpc.RPC;
+import org.json.JSONArray;
 
 /**
  * Created by sachin on 24/7/17.
@@ -21,7 +20,7 @@ public class RoomRPC extends RPC {
     private static final String OPEN_ROOM = "openRoom";
     private static final String SET_FAVOURITE_ROOM = "toggleFavorite";
     private static final String SAVE_ROOM_SETTINGS = "saveRoomSettings";
-    private static final String GET_ROOM_MEMBERS="getUsersOfRoom";
+    private static final String GET_ROOM_MEMBERS = "getUsersOfRoom";
 
     /**
      * Creates a public channel.

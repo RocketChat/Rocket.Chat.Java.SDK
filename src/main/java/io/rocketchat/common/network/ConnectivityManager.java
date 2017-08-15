@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ConnectivityManager {
 
-    ConcurrentLinkedQueue <ConnectListener> listeners;
+    private ConcurrentLinkedQueue<ConnectListener> listeners;
 
 
     public void register(ConnectListener listener) {
@@ -25,7 +25,7 @@ public class ConnectivityManager {
         }
     }
 
-    public void publishConnect (String sessionId) {
+    public void publishConnect(String sessionId) {
         for (ConnectListener listener : listeners) {
             listener.onConnect(sessionId);
         }

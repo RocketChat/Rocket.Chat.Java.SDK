@@ -1,31 +1,16 @@
 package io.rocketchat.core.middleware;
 
+import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
+import io.rocketchat.common.listener.Listener;
+import io.rocketchat.common.listener.SimpleListener;
+import io.rocketchat.core.callback.*;
+import io.rocketchat.core.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.data.model.UserObject;
-import io.rocketchat.common.listener.Listener;
-import io.rocketchat.common.listener.SimpleListener;
-import io.rocketchat.core.callback.AccountListener;
-import io.rocketchat.core.callback.EmojiListener;
-import io.rocketchat.core.callback.HistoryListener;
-import io.rocketchat.core.callback.LoginListener;
-import io.rocketchat.core.callback.MessageListener;
-import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.GetSubscriptionListener;
-import io.rocketchat.core.callback.UserListener;
-import io.rocketchat.core.model.Emoji;
-import io.rocketchat.core.model.Permission;
-import io.rocketchat.core.model.PublicSetting;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.RoomObject;
-import io.rocketchat.core.model.RoomRole;
-import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.model.TokenObject;
 
 /**
  * Created by sachin on 18/7/17.
@@ -176,18 +161,18 @@ public class CoreMiddleware {
                     }
                     break;
                 case GET_ROOM_MEMBERS:
-                    RoomListener.GetMembersListener membersListener= (RoomListener.GetMembersListener) listener;
-                    if (result==null){
+                    RoomListener.GetMembersListener membersListener = (RoomListener.GetMembersListener) listener;
+                    if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        membersListener.onGetRoomMembers(null,null,errorObject);
-                    }else {
-                        ArrayList <UserObject> users=new ArrayList<>();
+                        membersListener.onGetRoomMembers(null, null, errorObject);
+                    } else {
+                        ArrayList<UserObject> users = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("records");
                         for (int j = 0; j < array.length(); j++) {
                             users.add(new UserObject(array.optJSONObject(j)));
                         }
                         Integer total = ((JSONObject) result).optInt("total");
-                        membersListener.onGetRoomMembers(total,users,null);
+                        membersListener.onGetRoomMembers(total, users, null);
                     }
                     break;
                 case SEND_MESSAGE:
@@ -209,8 +194,8 @@ public class CoreMiddleware {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
                         searchMessageListener.onSearchMessage(null, errorObject);
                     } else {
-                        ArrayList <RocketChatMessage> list = new ArrayList<>();
-                        JSONArray array = ((JSONObject)result).optJSONArray("messages");
+                        ArrayList<RocketChatMessage> list = new ArrayList<>();
+                        JSONArray array = ((JSONObject) result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }

@@ -50,7 +50,7 @@ public class TaskHandler {
         }
     }
 
-    private void recreate () {
+    private void recreate() {
         timer = new Timer();
         isCancelled = false;
     }
