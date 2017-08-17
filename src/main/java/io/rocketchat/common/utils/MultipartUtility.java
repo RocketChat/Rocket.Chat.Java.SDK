@@ -44,6 +44,7 @@ public class MultipartUtility extends Observable {
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true); // indicates POST method
         httpConn.setDoInput(true);
+        httpConn.setChunkedStreamingMode(4096);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
         httpConn.setRequestProperty("User-Agent", "CodeJava Agent");
@@ -79,6 +80,7 @@ public class MultipartUtility extends Observable {
      */
     public void addFilePart(String fieldName, File uploadFile)
             throws IOException {
+
         String fileName = uploadFile.getName();
         writer.append("--" + boundary).append(LINE_FEED);
         writer.append(
@@ -156,6 +158,8 @@ public class MultipartUtility extends Observable {
             throw new IOException("Server returned non-OK status: " + status);
         }
 
+
         return response;
     }
+
 }
