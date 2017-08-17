@@ -30,10 +30,6 @@ public class GetIntitalDataTest extends ChatParent implements ConnectListener {
     @Captor
     ArgumentCaptor<ErrorObject> error;
 
-    @Before
-    public void setup() {
-        setUpBefore();
-    }
 
     @Override
     public void setUpBefore() {

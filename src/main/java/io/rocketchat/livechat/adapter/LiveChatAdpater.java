@@ -1,7 +1,5 @@
 package io.rocketchat.livechat.adapter;
 
-import java.util.List;
-
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.TypingListener;
@@ -14,11 +12,22 @@ import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.GuestObject;
 import io.rocketchat.livechat.model.LiveChatConfigObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
+import java.util.List;
 
 /**
  * Created by sachin on 21/7/17.
  */
-public class LiveChatAdpater implements ConnectListener, AgentListener.AgentConnectListener, AgentListener.AgentDataListener, AuthListener.RegisterListener, AuthListener.LoginListener, InitialDataListener, LoadHistoryListener, MessageListener.MessageAckListener, MessageListener.OfflineMessageListener, MessageListener.SubscriptionListener, TypingListener {
+public class LiveChatAdpater implements ConnectListener,
+        AgentListener.AgentConnectListener,
+        AgentListener.AgentDataListener,
+        AuthListener.RegisterListener,
+        AuthListener.LoginListener,
+        InitialDataListener,
+        LoadHistoryListener,
+        MessageListener.MessageAckListener,
+        MessageListener.OfflineMessageListener,
+        MessageListener.SubscriptionListener,
+        TypingListener {
     @Override
     public void onAgentConnect(AgentObject agentObject) {
 

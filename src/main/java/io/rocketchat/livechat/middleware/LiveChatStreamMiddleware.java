@@ -1,16 +1,14 @@
 package io.rocketchat.livechat.middleware;
 
-import io.rocketchat.livechat.callback.AgentListener;
-import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.MessageListener;
 import io.rocketchat.livechat.model.AgentObject;
 import io.rocketchat.livechat.model.LiveChatMessage;
-
+import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 9/6/17.
@@ -20,18 +18,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LiveChatStreamMiddleware {
 
-    private static LiveChatStreamMiddleware middleware = new LiveChatStreamMiddleware();
     private MessageListener.SubscriptionListener subscriptionListener;
     private AgentListener.AgentConnectListener agentConnectListener;
     private TypingListener typingListener;
+
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
 
-    LiveChatStreamMiddleware() {
+    public LiveChatStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
-    }
-
-    public static LiveChatStreamMiddleware getInstance() {
-        return middleware;
     }
 
     private static SubType parse(String s) {

@@ -51,7 +51,7 @@ public class CommonRoomTest extends RoomParent {
         } else if (testName.getMethodName().equals("E_setFavouriteRoomTest")) {
             room.setFavourite(true, listener);
         } else if (testName.getMethodName().equals("F_leaveGroup")) {
-            room = api.getFactory().getChatRoomByName("general");
+            room = api.getChatRoomFactory().getChatRoomByName("general");
             if (room == null) {
                 try {
                     throw new Exception("Room is null, can't proceed");

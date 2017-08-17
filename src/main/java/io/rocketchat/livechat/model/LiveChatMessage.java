@@ -1,8 +1,7 @@
 package io.rocketchat.livechat.model;
 
-import org.json.JSONObject;
-
 import io.rocketchat.common.data.model.Message;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 9/6/17.

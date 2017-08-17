@@ -1,10 +1,9 @@
 package io.rocketchat.core.rpc;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.utils.Utils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.
@@ -76,9 +75,7 @@ public class BasicRPC extends RPC {
     /**
      * Used to return users with room roles
      *
-     * @param integer
-     * @param roomId  List of comma separated room Id to return room specific roles
-     * @return
+     * @param roomId List of comma separated room Id to return room specific roles
      */
     public static String getRoomRoles(int integer, String... roomId) {
         return getRemoteMethodObject(integer, GET_ROOM_ROLES, (Object[]) roomId).toString();
@@ -86,9 +83,6 @@ public class BasicRPC extends RPC {
 
     /**
      * Returns a list of custom emoji registered with the server. There’s no need for parameters.
-     *
-     * @param integer
-     * @return
      */
     public static String listCustomEmoji(int integer) {
         return getRemoteMethodObject(integer, LIST_EMOJI).toString();
@@ -96,9 +90,6 @@ public class BasicRPC extends RPC {
 
     /**
      * Used to logout from server
-     *
-     * @param integer
-     * @return
      */
     public static String logout(int integer) {
         return getRemoteMethodObject(integer, LOGOUT).toString();

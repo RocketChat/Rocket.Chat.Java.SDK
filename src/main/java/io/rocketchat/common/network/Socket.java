@@ -8,20 +8,22 @@ import com.neovisionaries.ws.client.WebSocketCloseCode;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
-
+import io.rocketchat.common.data.rpc.RPC;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import io.rocketchat.common.data.rpc.RPC;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
 public class Socket {
+
+    public static final Logger LOGGER = Logger.getLogger(Socket.class.getName());
 
     private String url;
     private WebSocketFactory factory;
@@ -32,14 +34,19 @@ public class Socket {
     private ReconnectionStrategy strategy;
     private Timer timer;
     private boolean selfDisconnect;
+    private boolean pingEnable;
+    protected ConnectivityManager connectivityManager;
 
     protected Socket(String url) {
+        LOGGER.setLevel(Level.INFO);
         this.url = url;
         adapter = getAdapter();
         factory = new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect = false;
-        handler = new TaskHandler();
+        pingEnable = false;
         pingInterval = 2000;
+        handler = new TaskHandler();
+        connectivityManager = new ConnectivityManager();
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
@@ -47,7 +54,50 @@ public class Socket {
     }
 
     public void setPingInterval(long pingInterval) {
-        this.pingInterval = pingInterval;
+        pingEnable = true;
+        if (pingInterval > this.pingInterval) {
+            this.pingInterval = pingInterval;
+        }
+    }
+
+    public void disablePing() {
+        if (pingEnable) {
+            handler.cancel();
+            pingEnable = false;
+        }
+    }
+
+    public void enablePing() {
+        if (!pingEnable) {
+            pingEnable = true;
+            sendDataInBackground(RPC.PING_MESSAGE);
+        }
+    }
+
+    public boolean isPingEnabled() {
+        return pingEnable;
+    }
+
+    public State getState() {
+        switch (ws.getState()) {
+            case CREATED:
+                return State.CREATED;
+            case CONNECTING:
+                return State.CONNECTING;
+            case OPEN:
+                return State.CONNECTED;
+            case CLOSING:
+                return State.DISCONNECTING;
+            case CLOSED:
+                return State.DISCONNECTED;
+            default:
+                return State.DISCONNECTED;
+        }
+
+    }
+
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
     }
 
     private WebSocketAdapter getAdapter() {
@@ -144,19 +194,23 @@ public class Socket {
     }
 
     private void sendData(String message) {
-        ws.sendText(message);
+        if (getState() == State.CONNECTED) {
+            ws.sendText(message);
+        }
     }
 
     protected void sendDataInBackground(final String message) {
         EventThread.exec(new Runnable() {
             @Override
             public void run() {
-                ws.sendText(message);
+                if (getState() == State.CONNECTED) {
+                    ws.sendText(message);
+                }
             }
         });
     }
 
-    private void reconnect() {
+    public void reconnect() {
         try {
             ws = ws.recreate(5000).connectAsynchronously();
         } catch (IOException e) {
@@ -171,11 +225,24 @@ public class Socket {
 
     protected void onConnected() {
         strategy.setNumberOfAttempts(0);
-        System.out.println("Connected");
+        LOGGER.info("Connected to server");
     }
 
     protected void onDisconnected(boolean closedByServer) {
-        System.out.println("Disconnected");
+        LOGGER.warning("Disconnected from server");
+        processReconnection();
+    }
+
+    protected void onConnectError(Exception websocketException) {
+        LOGGER.warning("Connect error");
+        processReconnection();
+    }
+
+    protected void onTextMessage(String text) throws Exception {
+        LOGGER.info("Message is " + text);
+    }
+
+    private void processReconnection() {
         if (strategy != null && !selfDisconnect) {
             if (strategy.getNumberOfAttempts() < strategy.getMaxAttempts()) {
                 timer = new Timer();
@@ -191,7 +258,7 @@ public class Socket {
 
             } else {
                 handler.cancel();
-                System.out.println("Number of attempts are complete");
+                LOGGER.info("Number of attempts are complete");
             }
         } else {
             handler.cancel();
@@ -199,33 +266,34 @@ public class Socket {
         }
     }
 
-    protected void onConnectError(Exception websocketException) {
-        System.out.println("Onconnect Error");
-        onDisconnected(true);
-    }
-
-    protected void onTextMessage(String text) throws Exception {
-        System.out.println("Message is " + text);
-    }
-
+    // TODO: 15/8/17 solve problem of PONG RECEIVE FAILED by giving a fair chance
     protected void sendPingFramesPeriodically() {
         handler.removeLast();
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                sendData(RPC.PINGMESSAGE);
-                System.out.println("Sending PING message");
-                handler.remove(this);
+                sendDataInBackground(RPC.PING_MESSAGE);
+                LOGGER.info("SENDING PING");
             }
         }, pingInterval);
         handler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("This is a disconnection");
-                ws.disconnect(WebSocketCloseCode.NONE);
-                handler.remove(this);
+                if (getState() != State.DISCONNECTING && getState() != State.DISCONNECTED) {
+                    LOGGER.warning("PONG RECEIVE FAILED");
+                    ws.disconnect(WebSocketCloseCode.NONE, "PONG RECEIVE FAILED", 0);
+                }
             }
         }, 2 * pingInterval);
     }
+
+    public enum State {
+        CREATED,
+        CONNECTING,
+        CONNECTED,
+        DISCONNECTING,
+        DISCONNECTED,
+    }
+
 }
 

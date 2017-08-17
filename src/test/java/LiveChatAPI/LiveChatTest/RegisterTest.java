@@ -38,10 +38,6 @@ public class RegisterTest extends ChatParent implements ConnectListener, Initial
     ArgumentCaptor<ErrorObject> errorObjectArgumentCaptor;
     private LiveChatAPI.ChatRoom room;
 
-    @Before
-    public void setup() {
-        setUpBefore();
-    }
 
     @Override
     public void setUpBefore() {

@@ -1,10 +1,9 @@
 package io.rocketchat.livechat.rpc;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.utils.Utils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.
@@ -23,9 +22,6 @@ public class LiveChatBasicRPC extends RPC {
 
     /**
      * Tested
-     *
-     * @param integer
-     * @return
      */
 
     public static String getInitialData(int integer) {
@@ -34,12 +30,6 @@ public class LiveChatBasicRPC extends RPC {
 
     /**
      * Tested
-     *
-     * @param integer
-     * @param name
-     * @param email
-     * @param dept
-     * @return
      */
 
     public static String registerGuest(int integer, String name, String email, String dept) {
@@ -58,10 +48,6 @@ public class LiveChatBasicRPC extends RPC {
 
     /**
      * Tested
-     *
-     * @param integer
-     * @param token
-     * @return
      */
     public static String login(int integer, String token) {
         JSONObject object = new JSONObject();
@@ -76,10 +62,6 @@ public class LiveChatBasicRPC extends RPC {
 
     /**
      * Tested
-     *
-     * @param integer
-     * @param roomId
-     * @return
      */
     public static String getAgentData(int integer, String roomId) {
         return getRemoteMethodObject(integer, GET_AGENT_DATA, roomId).toString();
@@ -87,10 +69,6 @@ public class LiveChatBasicRPC extends RPC {
 
     /**
      * Tested
-     *
-     * @param integer
-     * @param roomId
-     * @return
      */
 
     public static String closeConversation(int integer, String roomId) {

@@ -1,8 +1,7 @@
 package io.rocketchat.core.model;
 
-import org.json.JSONObject;
-
 import java.util.Date;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 26/7/17.

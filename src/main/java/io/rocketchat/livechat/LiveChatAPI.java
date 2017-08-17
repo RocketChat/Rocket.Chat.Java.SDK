@@ -1,11 +1,5 @@
 package io.rocketchat.livechat;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import io.rocketchat.common.data.rpc.RPC;
 import io.rocketchat.common.listener.ConnectListener;
 import io.rocketchat.common.listener.SubscribeListener;
@@ -24,6 +18,10 @@ import io.rocketchat.livechat.rpc.LiveChatHistoryRPC;
 import io.rocketchat.livechat.rpc.LiveChatSendMsgRPC;
 import io.rocketchat.livechat.rpc.LiveChatSubRPC;
 import io.rocketchat.livechat.rpc.LiveChatTypingRPC;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 8/6/17.
@@ -44,8 +42,8 @@ public class LiveChatAPI extends Socket {
     public LiveChatAPI(String url) {
         super(url);
         integer = new AtomicInteger(1);
-        liveChatMiddleware = LiveChatMiddleware.getInstance();
-        liveChatStreamMiddleware = LiveChatStreamMiddleware.getInstance();
+        liveChatMiddleware = new LiveChatMiddleware();
+        liveChatStreamMiddleware = new LiveChatStreamMiddleware();
     }
 
     public void setConnectListener(ConnectListener connectListener) {
@@ -75,16 +73,19 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID, name, email, message));
     }
 
-    public void sendOfflineMessage(String name, String email, String message, MessageListener.OfflineMessageListener listener) {
+    public void sendOfflineMessage(String name, String email, String message,
+                                   MessageListener.OfflineMessageListener listener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.SEND_OFFLINE_MESSAGE);
         sendDataInBackground(LiveChatBasicRPC.sendOfflineMessage(uniqueID, name, email, message));
     }
 
-    private void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp, LoadHistoryListener listener) {
+    private void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp, Date lasttimestamp,
+                                LoadHistoryListener listener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, listener, LiveChatMiddleware.ListenerType.GET_CHAT_HISTORY);
-        sendDataInBackground(LiveChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
+        sendDataInBackground(
+                LiveChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
     private void getAgentData(String roomId, AgentListener.AgentDataListener listener) {
@@ -98,7 +99,8 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
     }
 
-    private void sendMessage(String msgId, String roomID, String message, String token, MessageListener.MessageAckListener messageAckListener) {
+    private void sendMessage(String msgId, String roomID, String message, String token,
+                             MessageListener.MessageAckListener messageAckListener) {
         int uniqueID = integer.getAndIncrement();
         liveChatMiddleware.createCallback(uniqueID, messageAckListener, LiveChatMiddleware.ListenerType.SEND_MESSAGE);
         sendDataInBackground(LiveChatSendMsgRPC.sendMessage(uniqueID, msgId, roomID, message, token));
@@ -109,31 +111,31 @@ public class LiveChatAPI extends Socket {
         sendDataInBackground(LiveChatTypingRPC.streamNotifyRoom(uniqueID, roomId, username, istyping));
     }
 
-    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
+    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                               MessageListener.SubscriptionListener listener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeRoom(listener);
         sendDataInBackground(LiveChatSubRPC.streamRoomMessages(uniqueID, roomID, enable));
-
     }
 
-    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeListener subscribeListener, AgentListener.AgentConnectListener agentConnectListener) {
+    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                                       AgentListener.AgentConnectListener agentConnectListener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
         sendDataInBackground(LiveChatSubRPC.streamLivechatRoom(uniqueID, roomID, enable));
-
     }
 
-    private void subscribeTyping(String roomID, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
+    private void subscribeTyping(String roomID, Boolean enable, SubscribeListener subscribeListener,
+                                 TypingListener listener) {
 
         String uniqueID = Utils.shortUUID();
         liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
         liveChatStreamMiddleware.subscribeTyping(listener);
         sendDataInBackground(LiveChatSubRPC.subscribeTyping(uniqueID, roomID, enable));
-
     }
 
     private void closeConversation(String roomId) {
@@ -218,7 +220,6 @@ public class LiveChatAPI extends Socket {
         return new ChatRoom(s);
     }
 
-    // TODO: 30/7/17 Add methods for unsubscribing events
     public class ChatRoom {
 
         String userName;
@@ -252,7 +253,8 @@ public class LiveChatAPI extends Socket {
             LiveChatAPI.this.login(authToken, listener);
         }
 
-        public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp, LoadHistoryListener listener) {
+        public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp,
+                                   LoadHistoryListener listener) {
             LiveChatAPI.this.getChatHistory(roomId, limit, oldestMessageTimestamp, lasttimestamp, listener);
         }
 
@@ -275,7 +277,6 @@ public class LiveChatAPI extends Socket {
         /**
          * Used for sending messages to server with messageAcknowledgement
          *
-         * @param message
          * @param messageAckListener Returns ack to particular message
          * @return MessageID
          */
@@ -294,7 +295,8 @@ public class LiveChatAPI extends Socket {
             LiveChatAPI.this.subscribeRoom(roomId, false, subscribeListener, listener);
         }
 
-        public void subscribeLiveChatRoom(SubscribeListener subscribeListener, AgentListener.AgentConnectListener agentConnectListener) {
+        public void subscribeLiveChatRoom(SubscribeListener subscribeListener,
+                                          AgentListener.AgentConnectListener agentConnectListener) {
             LiveChatAPI.this.subscribeLiveChatRoom(roomId, false, subscribeListener, agentConnectListener);
         }
 
@@ -328,12 +330,12 @@ public class LiveChatAPI extends Socket {
 
         @Override
         public String toString() {
-            return "ChatRoom{" +
-                    "userName='" + userName + '\'' +
-                    ", roomId='" + roomId + '\'' +
-                    ", userId='" + userId + '\'' +
-                    ", visitorToken='" + visitorToken + '\'' +
-                    ", authToken='" + authToken + '\'' +
+            return "{" +
+                    "\"userName\":\"" + userName + '\"' +
+                    ",\"roomId\":\"" + roomId + '\"' +
+                    ",\"userId\":\"" + userId + '\"' +
+                    ",\"visitorToken\":\"" + visitorToken + '\"' +
+                    ",\"authToken\":\"" + authToken + '\"' +
                     '}';
         }
     }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.core.callback.SubscriptionListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 
@@ -28,7 +28,7 @@ public class GetSubscriptionsTest extends RocketChatParent {
     String password = "testuserrocks";
 
     @Mock
-    SubscriptionListener.GetSubscriptionListener listener;
+    GetSubscriptionListener listener;
 
     @Captor
     ArgumentCaptor<ArrayList<SubscriptionObject>> listArgumentCaptor;

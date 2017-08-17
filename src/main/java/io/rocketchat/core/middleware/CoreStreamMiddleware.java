@@ -1,14 +1,13 @@
 package io.rocketchat.core.middleware;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.concurrent.ConcurrentHashMap;
-
+import io.rocketchat.common.listener.Listener;
 import io.rocketchat.common.listener.SubscribeListener;
 import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.model.RocketChatMessage;
+import java.util.concurrent.ConcurrentHashMap;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 21/7/17.
@@ -16,61 +15,68 @@ import io.rocketchat.core.model.RocketChatMessage;
 
 public class CoreStreamMiddleware {
 
-    private static CoreStreamMiddleware middleware = new CoreStreamMiddleware();
-    private MessageListener.SubscriptionListener subscriptionListener;
-    private TypingListener typingListener;
+
     private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
+    private ConcurrentHashMap<String, ConcurrentHashMap<SubType, Listener>> subs;
 
-    private CoreStreamMiddleware() {
+    public CoreStreamMiddleware() {
         subcallbacks = new ConcurrentHashMap<>();
+        subs = new ConcurrentHashMap<>();
     }
 
-    public static CoreStreamMiddleware getInstance() {
-        return middleware;
-    }
 
-    private static SubType parse(String s) {
-        if (s.equals("stream-room-messages")) {
-            return SubType.SUBSCRIBE_ROOM_MESSAGE;
-        } else if (s.equals("stream-notify-room")) {
-            return SubType.SUBSCRIBE_ROOM_TYPING;
+    public void createSub(String roomId, Listener listener, SubType type) {
+        if (listener != null) {
+            if (subs.containsKey(roomId)) {
+                subs.get(roomId).put(type, listener);
+            } else {
+                ConcurrentHashMap<SubType, Listener> map = new ConcurrentHashMap();
+                map.put(type, listener);
+                subs.put(roomId, map);
+            }
         }
-        return SubType.OTHER;
     }
 
-    public void subscribeRoomMessage(MessageListener.SubscriptionListener subscription) {
-        this.subscriptionListener = subscription;
+    public void removeAllSub(String roomId) {
+        subs.remove(roomId);
     }
 
-    public void subscribeRoomTyping(TypingListener callback) {
-        typingListener = callback;
+    public void removeSub(String roomId, SubType type) {
+        if (subs.containsKey(roomId)) {
+            subs.get(roomId).remove(type);
+        }
     }
 
-    public void createSubCallback(String id, SubscribeListener callback) {
+
+    public void createSubCallback(String subId, SubscribeListener callback) {
         if (callback != null) {
-            subcallbacks.put(id, callback);
+            subcallbacks.put(subId, callback);
         }
     }
 
     public void processCallback(JSONObject object) {
         String s = object.optString("collection");
         JSONArray array = object.optJSONObject("fields").optJSONArray("args");
+        String roomId = object.optJSONObject("fields").optString("eventName").replace("/typing", "");
+        Listener listener;
 
-        switch (parse(s)) {
-            case SUBSCRIBE_ROOM_MESSAGE:
-                if (subscriptionListener != null) {
+        if (subs.containsKey(roomId)) {
+
+            switch (parse(s)) {
+                case SUBSCRIBE_ROOM_MESSAGE:
+                    listener = subs.get(roomId).get(SubType.SUBSCRIBE_ROOM_MESSAGE);
+                    MessageListener.SubscriptionListener subscriptionListener = (MessageListener.SubscriptionListener) listener;
                     RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
-                    String roomId = object.optJSONObject("fields").optString("eventName");
                     subscriptionListener.onMessage(roomId, message);
-                }
-                break;
-            case SUBSCRIBE_ROOM_TYPING:
-                if (typingListener != null) {
-                    typingListener.onTyping(object.optJSONObject("fields").optString("eventName"), array.optString(0), array.optBoolean(1));
-                }
-                break;
-            case OTHER:
-                break;
+                    break;
+                case SUBSCRIBE_ROOM_TYPING:
+                    listener = subs.get(roomId).get(SubType.SUBSCRIBE_ROOM_TYPING);
+                    TypingListener typingListener = (TypingListener) listener;
+                    typingListener.onTyping(roomId, array.optString(0), array.optBoolean(1));
+                    break;
+                case OTHER:
+                    break;
+            }
         }
 
     }
@@ -79,8 +85,7 @@ public class CoreStreamMiddleware {
         if (subObj.optJSONArray("subs") != null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
-                SubscribeListener subscribeListener = subcallbacks.remove(id);
-                subscribeListener.onSubscribe(true, id);
+                subcallbacks.remove(id).onSubscribe(true, id);
             }
         }
     }
@@ -98,4 +103,14 @@ public class CoreStreamMiddleware {
         SUBSCRIBE_ROOM_TYPING,
         OTHER
     }
+
+    private static SubType parse(String s) {
+        if (s.equals("stream-room-messages")) {
+            return SubType.SUBSCRIBE_ROOM_MESSAGE;
+        } else if (s.equals("stream-notify-room")) {
+            return SubType.SUBSCRIBE_ROOM_TYPING;
+        }
+        return SubType.OTHER;
+    }
+
 }

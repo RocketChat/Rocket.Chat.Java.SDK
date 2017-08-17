@@ -31,11 +31,6 @@ public class ConnectionTest extends ChatParent {
     @Captor
     ArgumentCaptor<Exception> connectErrorCaptor;
 
-    @Before
-    public void setup() {
-        setUpBefore();
-    }
-
     @Test
     public void connectTest() {
         api.connect(listener);

@@ -1,11 +1,10 @@
 package io.rocketchat.core.callback;
 
-import java.util.List;
-
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.Permission;
 import io.rocketchat.core.model.PublicSetting;
+import java.util.List;
 
 /**
  * Created by sachin on 26/7/17.

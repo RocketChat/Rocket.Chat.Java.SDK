@@ -35,8 +35,6 @@ public class CloseConversationTest extends RoomParent {
         setUpBefore();
     }
 
-    ;
-
     @Override
     public void onLogin(GuestObject object, ErrorObject error) {
         super.onLogin(object, error);

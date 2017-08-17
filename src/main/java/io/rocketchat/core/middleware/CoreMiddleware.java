@@ -1,22 +1,16 @@
 package io.rocketchat.core.middleware;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
-
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.common.listener.SimpleListener;
 import io.rocketchat.core.callback.AccountListener;
 import io.rocketchat.core.callback.EmojiListener;
+import io.rocketchat.core.callback.GetSubscriptionListener;
 import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.SubscriptionListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.Emoji;
 import io.rocketchat.core.model.Permission;
@@ -26,6 +20,10 @@ import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.RoomRole;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 18/7/17.
@@ -33,15 +31,10 @@ import io.rocketchat.core.model.TokenObject;
 
 public class CoreMiddleware {
 
-    private static CoreMiddleware middleware = new CoreMiddleware();
     private ConcurrentHashMap<Long, Object[]> callbacks;
 
-    private CoreMiddleware() {
+    public CoreMiddleware() {
         callbacks = new ConcurrentHashMap<>();
-    }
-
-    public static CoreMiddleware getInstance() {
-        return middleware;
     }
 
     public void createCallback(long i, Listener listener, CoreMiddleware.ListenerType type) {
@@ -110,7 +103,7 @@ public class CoreMiddleware {
                     }
                     break;
                 case GET_SUBSCRIPTIONS:
-                    SubscriptionListener.GetSubscriptionListener subscriptionListener = (SubscriptionListener.GetSubscriptionListener) listener;
+                    GetSubscriptionListener subscriptionListener = (GetSubscriptionListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
                         subscriptionListener.onGetSubscriptions(null, errorObject);
@@ -178,8 +171,23 @@ public class CoreMiddleware {
                         }
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
                         historyListener.onLoadHistory(list, unreadNotLoaded, null);
-                        break;
                     }
+                    break;
+                case GET_ROOM_MEMBERS:
+                    RoomListener.GetMembersListener membersListener = (RoomListener.GetMembersListener) listener;
+                    if (result == null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        membersListener.onGetRoomMembers(null, null, errorObject);
+                    } else {
+                        ArrayList<UserObject> users = new ArrayList<>();
+                        JSONArray array = ((JSONObject) result).optJSONArray("records");
+                        for (int j = 0; j < array.length(); j++) {
+                            users.add(new UserObject(array.optJSONObject(j)));
+                        }
+                        Integer total = ((JSONObject) result).optInt("total");
+                        membersListener.onGetRoomMembers(total, users, null);
+                    }
+                    break;
                 case SEND_MESSAGE:
                     MessageListener.MessageAckListener ackListener = (MessageListener.MessageAckListener) listener;
                     if (result == null) {
@@ -192,6 +200,20 @@ public class CoreMiddleware {
                     break;
                 case MESSAGE_OP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
+                    break;
+                case SEARCH_MESSAGE:
+                    MessageListener.SearchMessageListener searchMessageListener = (MessageListener.SearchMessageListener) listener;
+                    if (result == null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        searchMessageListener.onSearchMessage(null, errorObject);
+                    } else {
+                        ArrayList<RocketChatMessage> list = new ArrayList<>();
+                        JSONArray array = ((JSONObject) result).optJSONArray("messages");
+                        for (int j = 0; j < array.length(); j++) {
+                            list.add(new RocketChatMessage(array.optJSONObject(j)));
+                        }
+                        searchMessageListener.onSearchMessage(list, null);
+                    }
                     break;
                 case CREATE_GROUP:
                     RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
@@ -206,10 +228,10 @@ public class CoreMiddleware {
                 case DELETE_GROUP:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case ARCHIEVE:
+                case ARCHIVE:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
-                case UNARCHIEVE:
+                case UNARCHIVE:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case JOIN_PUBLIC_GROUP:
@@ -225,6 +247,9 @@ public class CoreMiddleware {
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case SET_FAVOURITE_ROOM:
+                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
+                    break;
+                case SET_STATUS:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case LOGOUT:
@@ -253,17 +278,20 @@ public class CoreMiddleware {
         GET_ROOM_ROLES,
         LIST_CUSTOM_EMOJI,
         LOAD_HISTORY,
+        GET_ROOM_MEMBERS,
         SEND_MESSAGE,
         MESSAGE_OP,
+        SEARCH_MESSAGE,
         CREATE_GROUP,
         DELETE_GROUP,
-        ARCHIEVE,
-        UNARCHIEVE,
+        ARCHIVE,
+        UNARCHIVE,
         JOIN_PUBLIC_GROUP,
         LEAVE_GROUP,
         OPEN_ROOM,
         HIDE_ROOM,
         SET_FAVOURITE_ROOM,
+        SET_STATUS,
         LOGOUT
     }
 }

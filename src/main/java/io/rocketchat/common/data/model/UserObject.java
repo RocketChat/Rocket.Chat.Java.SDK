@@ -1,19 +1,19 @@
 package io.rocketchat.common.data.model;
 
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 /**
  * Created by sachin on 12/6/17.
  */
 public class UserObject {
     private String userId;
-    private String userName;
-    private ArrayList<String> roles;
-    private JSONArray emails;
+    protected String userName;
+    protected ArrayList<String> roles;
+    protected JSONArray emails;
+
 
     public UserObject(JSONObject object) {
         try {
@@ -29,6 +29,7 @@ public class UserObject {
             if (object.opt("emails") != null) {
                 emails = object.optJSONArray("emails");
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -62,6 +63,7 @@ public class UserObject {
         return emails;
     }
 
+
     @Override
     public String toString() {
         return "UserObject{" +
@@ -70,5 +72,32 @@ public class UserObject {
                 ", roles=" + roles +
                 ", emails=" + emails +
                 '}';
+    }
+
+
+    public enum Status {
+        ONLINE,
+        BUSY,
+        AWAY,
+        OFFLINE,
+        OTHER
+    }
+
+    public static final String ONLINE = "online";
+    public static final String OFFLINE = "offline";
+    public static final String BUSY = "busy";
+    public static final String AWAY = "away";
+
+    public static Status getStatus(String s) {
+        if (s.equals(ONLINE)) {
+            return Status.ONLINE;
+        } else if (s.equals(OFFLINE)) {
+            return Status.OFFLINE;
+        } else if (s.equals(BUSY)) {
+            return Status.BUSY;
+        } else if (s.equals(AWAY)) {
+            return Status.AWAY;
+        }
+        return Status.OTHER;
     }
 }
