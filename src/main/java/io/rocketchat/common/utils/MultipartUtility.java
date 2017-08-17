@@ -103,12 +103,11 @@ public class MultipartUtility extends Observable {
             int progress = 0;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
+                outputStream.flush();
                 progress += bytesRead;
                 setChanged();
                 notifyObservers((int) ((progress * 100) / totalSize));
             }
-            outputStream.flush();
-            inputStream.close();
             writer.append(LINE_FEED);
             writer.flush();
         } finally {
