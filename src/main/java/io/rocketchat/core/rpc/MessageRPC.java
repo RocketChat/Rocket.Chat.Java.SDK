@@ -18,6 +18,7 @@ public class MessageRPC extends RPC {
     private static final String STAR_MESSAGE = "starMessage";
     private static final String SET_REACTION = "setReaction";
     private static final String SEARCH_MESSAGE = "messageSearch";
+    private static final String SEND_FILE_MESSAGE = "sendFileMessage";
 
     public static String sendMessage(int integer, String msgId, String roomId, String message) {
         JSONObject object = new JSONObject();
@@ -81,5 +82,9 @@ public class MessageRPC extends RPC {
 
     public static String searchMessage(int integer, String message, String roomId, int limit) {
         return getRemoteMethodObject(integer, SEARCH_MESSAGE, message, roomId, limit).toString();
+    }
+
+    public static String sendFileMessage (int integer, String roomId, String store, JSONObject file) {
+        return getRemoteMethodObject(integer, SEND_FILE_MESSAGE, roomId, store, file).toString();
     }
 }
