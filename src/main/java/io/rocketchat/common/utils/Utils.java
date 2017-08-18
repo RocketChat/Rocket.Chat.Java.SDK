@@ -1,6 +1,10 @@
 package io.rocketchat.common.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URLConnection;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -59,4 +63,11 @@ public class Utils {
         return Long.toString(l, Character.MAX_RADIX);
     }
 
+    public static String getFileTypeUsingName(String fileName) {
+        return URLConnection.guessContentTypeFromName(fileName);
+    }
+
+    public static String getFileTypeUsingStream(File file) throws IOException {
+        return URLConnection.guessContentTypeFromStream(new FileInputStream(file));
+    }
 }

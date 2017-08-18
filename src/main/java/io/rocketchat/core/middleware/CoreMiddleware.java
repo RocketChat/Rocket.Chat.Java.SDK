@@ -252,6 +252,12 @@ public class CoreMiddleware {
                 case SET_STATUS:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
+                case UFS_CREATE:
+                    System.out.println("Got at UFS create");
+                    break;
+                case UFS_COMPLETE:
+                    System.out.println("Got at UFS complete");
+                    break;
                 case LOGOUT:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
@@ -292,6 +298,8 @@ public class CoreMiddleware {
         HIDE_ROOM,
         SET_FAVOURITE_ROOM,
         SET_STATUS,
+        UFS_CREATE,
+        UFS_COMPLETE,
         LOGOUT
     }
 }

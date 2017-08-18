@@ -12,7 +12,7 @@ public class FileUploadRPC extends RPC {
     private static final String UFS_CREATE = "ufsCreate";
     private static final String UFS_COMPLETE = "ufsComplete";
 
-    public static String ufsCreate(int integer, String fileName, Double fileSize, String fileType, String roomId, String description, String store) {
+    public static String ufsCreate(int integer, String fileName, int fileSize, String fileType, String roomId, String description, String store) {
         JSONObject object = new JSONObject();
         try {
             object.put("name", fileName);

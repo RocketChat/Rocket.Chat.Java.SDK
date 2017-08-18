@@ -27,10 +27,12 @@ import io.rocketchat.core.rpc.AccountRPC;
 import io.rocketchat.core.rpc.BasicRPC;
 import io.rocketchat.core.rpc.ChatHistoryRPC;
 import io.rocketchat.core.rpc.CoreSubRPC;
+import io.rocketchat.core.rpc.FileUploadRPC;
 import io.rocketchat.core.rpc.MessageRPC;
 import io.rocketchat.core.rpc.PresenceRPC;
 import io.rocketchat.core.rpc.RoomRPC;
 import io.rocketchat.core.rpc.TypingRPC;
+import io.rocketchat.core.uploader.IFileUpload;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONObject;
@@ -580,5 +582,18 @@ public class RocketChatAPI extends Socket {
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room
+    }
+
+
+    public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateListener listener) {
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_CREATE);
+        sendDataInBackground(FileUploadRPC.ufsCreate(uniqueID, fileName, fileSize, fileType, roomId, description, store));
+    }
+
+    public void completeUFS(String fileId, String store, String token, IFileUpload.UfsCompleteListener listener) {
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_COMPLETE);
+        sendDataInBackground(FileUploadRPC.ufsComplete(uniqueID, fileId, store, token));
     }
 }

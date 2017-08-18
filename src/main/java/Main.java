@@ -46,7 +46,7 @@ public class Main extends CoreAdapter {
 
             multipart.addHeaderField("header", "big file");
             multipart.addFormField("Name", "demo_request");
-            multipart.addFilePart("file", new File(file_path));
+            multipart.addFilePart("file", new File(file_path), null);
             List<String> response = multipart.finish(); // response from server.
             for (String line : response) {
                 System.out.println(line);

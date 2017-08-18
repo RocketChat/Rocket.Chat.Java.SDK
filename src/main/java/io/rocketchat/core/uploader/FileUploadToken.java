@@ -7,9 +7,9 @@ import org.json.JSONObject;
  * Created by sachin on 18/8/17.
  */
 public class FileUploadToken {
-    String fileId;
-    String token;
-    String url;
+    private String fileId;
+    private String token;
+    private String url;
 
     public FileUploadToken(JSONObject object) {
         try {
