@@ -1,6 +1,6 @@
 import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.utils.MultipartUtility;
+import io.rocketchat.common.utils.MultipartUploader;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.SubscriptionObject;
@@ -29,10 +29,10 @@ public class Main extends CoreAdapter {
         String requestURL = "http://posttestserver.com/post.php";
         String file_path = "/home/sachin/Pictures/itachi.png";
 
-        MultipartUtility multipart = null;
+        MultipartUploader multipart = null;
 
         try {
-            multipart = new MultipartUtility(requestURL, charset);
+            multipart = new MultipartUploader(requestURL, charset);
 
             multipart.addObserver(new Observer() {
                 @Override

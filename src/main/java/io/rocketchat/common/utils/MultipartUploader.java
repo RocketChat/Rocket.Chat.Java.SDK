@@ -18,7 +18,7 @@ import java.util.Observable;
 /**
  * Created by sachin on 18/8/17.
  */
-public class MultipartUtility extends Observable {
+public class MultipartUploader extends Observable {
     private final String boundary;
     private static final String LINE_FEED = "\r\n";
     private HttpURLConnection httpConn;
@@ -32,7 +32,7 @@ public class MultipartUtility extends Observable {
      *
      * @throws IOException
      */
-    public MultipartUtility(String requestURL, String charset)
+    public MultipartUploader(String requestURL, String charset)
             throws IOException {
         this.charset = charset;
 
@@ -78,10 +78,11 @@ public class MultipartUtility extends Observable {
      * @param uploadFile a File to be uploaded
      * @throws IOException
      */
-    public void addFilePart(String fieldName, File uploadFile)
+    public void addFilePart(String fieldName, File uploadFile, String fileName)
             throws IOException {
-
-        String fileName = uploadFile.getName();
+        if (fileName == null || fileName.equals("")) {
+            fileName = uploadFile.getName();
+        }
         writer.append("--" + boundary).append(LINE_FEED);
         writer.append(
                 "Content-Disposition: form-data; name=\"" + fieldName
