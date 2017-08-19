@@ -19,7 +19,7 @@ public class Main extends CoreAdapter {
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
-    String file_path = "/home/sachin/Videos/keep_silence.jpg";
+    String file_path = "/home/sachin/Pictures/itachi.png";
 
     public static void main(String[] args) {
         new Main().call();
@@ -41,7 +41,7 @@ public class Main extends CoreAdapter {
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
         File file = new File(file_path);
-        room.uploadFile(file, file.getName(), "This is my file", new UploadListener() {
+        room.uploadFile(file, file.getName(), "My favourite character", new UploadListener() {
             @Override
             public void onUploadStarted(String roomId, String fileName, String description) {
                 System.out.println("Upload now started");

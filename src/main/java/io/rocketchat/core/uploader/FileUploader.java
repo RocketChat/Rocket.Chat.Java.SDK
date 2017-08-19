@@ -15,6 +15,7 @@ import java.util.Observer;
  * Created by sachin on 18/8/17.
  */
 
+// TODO: 20/8/17 remove new thread after creating running on UIThread and backgroundThread
 public class FileUploader implements IFileUpload.UfsCreateListener,
         IFileUpload.UfsCompleteListener {
 
@@ -44,27 +45,34 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     }
 
     @Override
-    public void onUfsCreate(FileUploadToken token, ErrorObject error) {
+    public void onUfsCreate(final FileUploadToken token, ErrorObject error) {
         if (error == null) {
             uploadListener.onUploadStarted(roomId, newFileName, description);
-            try {
-                multipart = new MultipartUploader(token.getUrl(), charset);
-                multipart.addObserver(new Observer() {
-                    @Override
-                    public void update(Observable o, Object arg) {
-                        if (arg != null) {
-                            uploadListener.onUploadProgress((Integer) arg, roomId, newFileName, description);
-                        }
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        multipart = new MultipartUploader(token.getUrl(), charset);
+                        multipart.addObserver(new Observer() {
+                            @Override
+                            public void update(Observable o, Object arg) {
+                                if (arg != null) {
+                                    uploadListener.onUploadProgress((Integer) arg, roomId, newFileName, description);
+                                }
+                            }
+                        });
+
+                        multipart.addFilePart("file", file);
+                        statusCode = multipart.finish();
+                        api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), FileUploader.this);
+
+                    } catch (IOException e) {
+                        uploadListener.onUploadError(null, e);
                     }
-                });
+                }
+            }).start();
 
-                multipart.addFilePart("file", file);
-                statusCode = multipart.finish();
-                api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), this);
-
-            } catch (IOException e) {
-                uploadListener.onUploadError(null, e);
-            }
         } else {
             uploadListener.onUploadError(error, null);
         }

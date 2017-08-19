@@ -32,6 +32,7 @@ import org.json.JSONObject;
  * Created by sachin on 18/7/17.
  */
 
+// TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
 public class CoreMiddleware {
 
     private ConcurrentHashMap<Long, Object[]> callbacks;
