@@ -10,6 +10,6 @@ import java.io.IOException;
 public interface UploadListener {
     void onUploadStarted (String roomId, String fileName, String description);
     void onUploadProgress (int progress, String roomId, String fileName, String description);
-    void onUploadComplete (FileObject file, String roomId, String fileName, String description);
+    void onUploadComplete (int statusCode, FileObject file, String roomId, String fileName, String description);
     void onUploadError(ErrorObject error, IOException e);
 }

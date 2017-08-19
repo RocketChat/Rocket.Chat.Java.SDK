@@ -256,7 +256,6 @@ public class CoreMiddleware {
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
                 case UFS_CREATE:
-                    System.out.println("Got at UFS create");
                     IFileUpload.UfsCreateListener ufsCreateListener = (IFileUpload.UfsCreateListener) listener;
                     if (object.opt("error") != null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
@@ -267,7 +266,6 @@ public class CoreMiddleware {
                     }
                     break;
                 case UFS_COMPLETE:
-                    System.out.println("Got at UFS complete");
                     IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) listener;
                     if (object.opt("error") != null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));

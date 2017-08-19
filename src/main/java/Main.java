@@ -1,9 +1,12 @@
 import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.callback.UploadListener;
+import io.rocketchat.core.model.FileObject;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,8 +39,30 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        room=api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
-        room.uploadFile(new File(file_path),"keep_silence.jpg","This is a keep silence");
+        room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
+        File file = new File(file_path);
+        room.uploadFile(file, file.getName(), "This is my file", new UploadListener() {
+            @Override
+            public void onUploadStarted(String roomId, String fileName, String description) {
+                System.out.println("Upload now started");
+            }
+
+            @Override
+            public void onUploadProgress(int progress, String roomId, String fileName, String description) {
+                System.out.println("Upload progress is " + progress);
+            }
+
+            @Override
+            public void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description) {
+                System.out.println("Upload is now complete with status code "+ statusCode);
+                room.sendFileMessage(file);
+            }
+
+            @Override
+            public void onUploadError(ErrorObject error, IOException e) {
+                System.out.println("This is upload error " + e + " " + error.getMessage());
+            }
+        });
     }
 
 
@@ -65,6 +90,8 @@ public class Main extends CoreAdapter {
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}

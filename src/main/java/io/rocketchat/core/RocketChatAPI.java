@@ -17,6 +17,7 @@ import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
+import io.rocketchat.core.callback.UploadListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
@@ -549,8 +550,8 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.openRoom(room.getRoomId(), listener);
         }
 
-        public void uploadFile(File file, String newName, String description) {
-            FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description, room.getRoomId());
+        public void uploadFile(File file, String newName, String description, UploadListener uploadListener) {
+            FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description, room.getRoomId(), uploadListener);
             uploader.startUpload();
         }
 
