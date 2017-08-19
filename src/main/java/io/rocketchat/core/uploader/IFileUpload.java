@@ -1,5 +1,6 @@
 package io.rocketchat.core.uploader;
 
+import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.common.listener.Listener;
 import io.rocketchat.core.model.FileObject;
 
@@ -9,10 +10,10 @@ import io.rocketchat.core.model.FileObject;
 public class IFileUpload {
 
     public interface UfsCreateListener extends Listener {
-        void onUfsCreate(FileUploadToken token);
+        void onUfsCreate(FileUploadToken token, ErrorObject error);
     }
 
     public interface UfsCompleteListener extends Listener {
-        void onUfsComplete(FileObject file);
+        void onUfsComplete(FileObject file, ErrorObject error);
     }
 }

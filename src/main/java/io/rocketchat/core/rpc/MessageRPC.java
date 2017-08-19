@@ -84,7 +84,19 @@ public class MessageRPC extends RPC {
         return getRemoteMethodObject(integer, SEARCH_MESSAGE, message, roomId, limit).toString();
     }
 
-    public static String sendFileMessage (int integer, String roomId, String store, JSONObject file) {
+    public static String sendFileMessage(int integer, String roomId, String store, String fileId, String fileType, int size, String fileName, String desc, String url) {
+
+        JSONObject file = new JSONObject();
+        try {
+            file.put("_id", fileId);
+            file.put("type", fileType);
+            file.put("size", size);
+            file.put("name", fileName);
+            file.put("description", desc);
+            file.put("url", url);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return getRemoteMethodObject(integer, SEND_FILE_MESSAGE, roomId, store, file).toString();
     }
 }

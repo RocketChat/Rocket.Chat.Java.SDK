@@ -21,6 +21,7 @@ import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
 import io.rocketchat.core.middleware.CoreStreamMiddleware;
+import io.rocketchat.core.model.FileObject;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.rpc.AccountRPC;
@@ -32,7 +33,9 @@ import io.rocketchat.core.rpc.MessageRPC;
 import io.rocketchat.core.rpc.PresenceRPC;
 import io.rocketchat.core.rpc.RoomRPC;
 import io.rocketchat.core.rpc.TypingRPC;
+import io.rocketchat.core.uploader.FileUploader;
 import io.rocketchat.core.uploader.IFileUpload;
+import java.io.File;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.json.JSONObject;
@@ -295,6 +298,11 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(RoomRPC.setFavouriteRoom(uniqueID, roomId, isFavouriteRoom));
     }
 
+    private void sendFileMessage(String roomId, String store, String fileId, String fileType, int size, String fileName, String desc, String url) {
+        int uniqueID = integer.getAndIncrement();
+        sendDataInBackground(MessageRPC.sendFileMessage(uniqueID, roomId, store, fileId, fileType, size, fileName, desc, url));
+    }
+
     //Tested
     public void setStatus(UserObject.Status s, SimpleListener listener) {
         int uniqueID = integer.getAndIncrement();
@@ -539,6 +547,15 @@ public class RocketChatAPI extends Socket {
 
         public void open(SimpleListener listener) {
             RocketChatAPI.this.openRoom(room.getRoomId(), listener);
+        }
+
+        public void uploadFile(File file, String newName, String description) {
+            FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description, room.getRoomId());
+            uploader.startUpload();
+        }
+
+        public void sendFileMessage(FileObject file) {
+            RocketChatAPI.this.sendFileMessage(room.getRoomId(), file.getStore(), file.getFileId(), file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(), file.getUrl());
         }
 
         public void setFavourite(Boolean isFavoutite, SimpleListener listener) {

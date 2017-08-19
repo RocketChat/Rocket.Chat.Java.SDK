@@ -1,18 +1,13 @@
 package io.rocketchat.common.utils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 
 /**
@@ -47,8 +42,7 @@ public class MultipartUploader extends Observable {
         httpConn.setChunkedStreamingMode(4096);
         httpConn.setRequestProperty("Content-Type",
                 "multipart/form-data; boundary=" + boundary);
-        httpConn.setRequestProperty("User-Agent", "CodeJava Agent");
-        httpConn.setRequestProperty("Test", "Bonjour");
+        httpConn.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36");
         outputStream = httpConn.getOutputStream();
         writer = new PrintWriter(new OutputStreamWriter(outputStream, charset),
                 true);
@@ -68,7 +62,7 @@ public class MultipartUploader extends Observable {
                 LINE_FEED);
         writer.append(LINE_FEED);
         writer.append(value).append(LINE_FEED);
-        writer.flush();
+//        writer.flush();
     }
 
     /**
@@ -78,23 +72,18 @@ public class MultipartUploader extends Observable {
      * @param uploadFile a File to be uploaded
      * @throws IOException
      */
-    public void addFilePart(String fieldName, File uploadFile, String fileName)
+    public void addFilePart(String fieldName, File uploadFile)
             throws IOException {
-        if (fileName == null || fileName.equals("")) {
-            fileName = uploadFile.getName();
-        }
         writer.append("--" + boundary).append(LINE_FEED);
         writer.append(
                 "Content-Disposition: form-data; name=\"" + fieldName
-                        + "\"; filename=\"" + fileName + "\"")
+                        + "\"")
                 .append(LINE_FEED);
         writer.append(
                 "Content-Type: "
-                        + URLConnection.guessContentTypeFromName(fileName))
+                        + "application/octet-stream")
                 .append(LINE_FEED);
         writer.append("Content-Transfer-Encoding: binary").append(LINE_FEED);
-        writer.append(LINE_FEED);
-        writer.flush();
 
         int totalSize = (int) uploadFile.length();
 
@@ -111,7 +100,6 @@ public class MultipartUploader extends Observable {
                 setChanged();
                 notifyObservers((int) ((progress * 100) / totalSize));
             }
-            writer.append(LINE_FEED);
             writer.flush();
         } finally {
             inputStream.close();
@@ -137,30 +125,32 @@ public class MultipartUploader extends Observable {
      * status OK, otherwise an exception is thrown.
      * @throws IOException
      */
-    public List<String> finish() throws IOException {
-        List<String> response = new ArrayList<String>();
+    public int finish() throws IOException {
 
         writer.append(LINE_FEED).flush();
         writer.append("--" + boundary + "--").append(LINE_FEED);
-        writer.close();
-
-        // checks server's status code first
+        writer.flush();
         int status = httpConn.getResponseCode();
-        if (status == HttpURLConnection.HTTP_OK) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    httpConn.getInputStream()));
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                response.add(line);
-            }
-            reader.close();
-            httpConn.disconnect();
-        } else {
-            throw new IOException("Server returned non-OK status: " + status);
-        }
+        writer.close();
+        httpConn.disconnect();
+
+//        List<String> response = new ArrayList<String>();
+        // checks server's status code first
+//        if (status == HttpURLConnection.HTTP_OK) {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                    httpConn.getInputStream()));
+//            String line = null;
+//            while ((line = reader.readLine()) != null) {
+//                response.add(line);
+//            }
+//            reader.close();
+//            httpConn.disconnect();
+//        } else {
+//            throw new IOException("Server returned non-OK status: " + status);
+//        }
 
 
-        return response;
+        return status;
     }
 
 }

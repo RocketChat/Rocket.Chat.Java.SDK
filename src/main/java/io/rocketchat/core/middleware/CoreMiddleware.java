@@ -13,6 +13,7 @@ import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.model.Emoji;
+import io.rocketchat.core.model.FileObject;
 import io.rocketchat.core.model.Permission;
 import io.rocketchat.core.model.PublicSetting;
 import io.rocketchat.core.model.RocketChatMessage;
@@ -20,6 +21,8 @@ import io.rocketchat.core.model.RoomObject;
 import io.rocketchat.core.model.RoomRole;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.uploader.FileUploadToken;
+import io.rocketchat.core.uploader.IFileUpload;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
@@ -254,9 +257,25 @@ public class CoreMiddleware {
                     break;
                 case UFS_CREATE:
                     System.out.println("Got at UFS create");
+                    IFileUpload.UfsCreateListener ufsCreateListener = (IFileUpload.UfsCreateListener) listener;
+                    if (object.opt("error") != null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        ufsCreateListener.onUfsCreate(null, errorObject);
+                    } else {
+                        FileUploadToken token = new FileUploadToken((JSONObject) result);
+                        ufsCreateListener.onUfsCreate(token, null);
+                    }
                     break;
                 case UFS_COMPLETE:
                     System.out.println("Got at UFS complete");
+                    IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) listener;
+                    if (object.opt("error") != null) {
+                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+                        completeListener.onUfsComplete(null, errorObject);
+                    } else {
+                        FileObject file = new FileObject((JSONObject) result);
+                        completeListener.onUfsComplete(file, null);
+                    }
                     break;
                 case LOGOUT:
                     handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));

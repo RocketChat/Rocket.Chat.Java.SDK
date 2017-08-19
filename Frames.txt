@@ -267,6 +267,9 @@ a["{\"msg\":\"updated\",\"methods\":[\"20\"]}"]
 
 a["{\"msg\":\"result\",\"id\":\"20\",\"result\":{\"fileId\":\"qr6e6dKpv7E5jT8Qo\",\"token\":\"5BaBaa9B3a\",\"url\":\"https://demo.rocket.chat/ufs/GoogleCloudStorage:Uploads/qr6e6dKpv7E5jT8Qo?token=5BaBaa9B3a\"}}"]
 
+Cookie
+rc_uid=YWrngQDYfc4icg8cu; rc_token=7yGk1AYwx3o7JT9s-02R17U5a4pHDsPcNY07NdP0k5L
+
 ["{\"msg\":\"method\",\"method\":\"ufsComplete\",\"params\":[\"qr6e6dKpv7E5jT8Qo\",\"Uploads\",\"5BaBaa9B3a\"],\"id\":\"21\"}"]
 
 a["{\"msg\":\"updated\",\"methods\":[\"21\"]}"]
@@ -288,3 +291,31 @@ a["{\"msg\":\"result\",\"id\":\"22\",\"result\":{\"_id\":\"XwJfbtNRaEDbmtpQF\",\
 ["{\"msg\":\"method\",\"method\":\"spotlight\",\"params\":[\"demosac\",[{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"emails\":[{\"address\":\"sachinshinde7676@gmail.com\",\"verified\":true}],\"username\":\"sachin.shinde\",\"active\":true,\"avatarOrigin\":\"upload\",\"name\":\"sachin shinde\",\"roles\":[\"user\"],\"services\":{\"github\":{\"id\":16723785,\"accessToken\":\"afcedb9358784e3779bf27c1ffd420bd20099a6c\",\"email\":\"sachinshinde7676@gmail.com\",\"username\":\"sacOO7\",\"emails\":[{\"email\":\"sachinshinde7676@gmail.com\",\"primary\":true,\"verified\":true,\"visibility\":\"public\"}]},\"password\":{\"bcrypt\":\"$2a$10$3heaa00o1xhNmuTsK6hQxu9emRIy1DOwzD7IFumLO2Cg/oBkElcES\"}},\"settings\":{\"profile\":{}},\"status\":\"online\",\"statusConnection\":\"online\",\"statusDefault\":\"online\",\"utcOffset\":5.5}],{\"users\":true,\"rooms\":true}],\"id\":\"27\"}"]
 
 a["{\"msg\":\"result\",\"id\":\"27\",\"result\":{\"users\":[],\"rooms\":[]}}"]
+
+
+//local
+
+["{\"msg\":\"method\",\"method\":\"ufsCreate\",\"params\":[{\"name\":\"GOT.jpg\",\"size\":54984,\"type\":\"image/jpeg\",\"rid\":\"GENERAL\",\"description\":\"This is a got message\",\"store\":\"Uploads\"}],\"id\":\"16\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"16\",\"result\":{\"fileId\":\"xJkTgP4o5sqB5Bdk9\",\"token\":\"aB095aD87A\",\"url\":\"http://localhost:3000/ufs/GridFS:Uploads/xJkTgP4o5sqB5Bdk9?token=aB095aD87A\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"ufsComplete\",\"params\":[\"xJkTgP4o5sqB5Bdk9\",\"Uploads\",\"aB095aD87A\"],\"id\":\"17\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"17\",\"result\":{\"_id\":\"xJkTgP4o5sqB5Bdk9\",\"name\":\"GOT.jpg\",\"size\":54984,\"type\":\"image/jpeg\",\"rid\":\"GENERAL\",\"description\":\"This is a got message\",\"store\":\"GridFS:Uploads\",\"complete\":true,\"uploading\":false,\"extension\":\"jpg\",\"progress\":1,\"userId\":\"YWrngQDYfc4icg8cu\",\"_updatedAt\":{\"$date\":1503151185357},\"instanceId\":\"oezAt8mGJNA6xQduS\",\"etag\":\"cPqtfgGCw8aNEWep7\",\"path\":\"/ufs/GridFS:Uploads/xJkTgP4o5sqB5Bdk9/GOT.jpg\",\"token\":\"391ba95909\",\"uploadedAt\":{\"$date\":1503151186733},\"url\":\"http://localhost:3000/ufs/GridFS:Uploads/xJkTgP4o5sqB5Bdk9/GOT.jpg\"}}"]
+
+
+["{\"msg\":\"method\",\"method\":\"sendFileMessage\",\"params\":[\"GENERAL\",\"Uploads\",{\"_id\":\"xJkTgP4o5sqB5Bdk9\",\"type\":\"image/jpeg\",\"size\":54984,\"name\":\"GOT.jpg\",\"description\":\"This is a got message\",\"url\":\"/ufs/GridFS:Uploads/xJkTgP4o5sqB5Bdk9/GOT.jpg\"}],\"id\":\"18\"}"]
+
+
+["{\"msg\":\"method\",\"method\":\"ufsCreate\",\"params\":[{\"name\":\"brochure-outer.jpg\",\"size\":53385,\"type\":\"image/jpeg\",\"rid\":\"GENERAL\",\"description\":\"This is a brochure\",\"store\":\"Uploads\"}],\"id\":\"16\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"16\",\"result\":{\"fileId\":\"Z4rX5XeCf8Zmd87Nf\",\"token\":\"78F9c8D888\",\"url\":\"https://demo.rocket.chat/ufs/GoogleCloudStorage:Uploads/Z4rX5XeCf8Zmd87Nf?token=78F9c8D888\"}}"]
+
+["{\"msg\":\"method\",\"method\":\"ufsComplete\",\"params\":[\"Z4rX5XeCf8Zmd87Nf\",\"Uploads\",\"78F9c8D888\"],\"id\":\"17\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"17\",\"result\":{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\"name\":\"brochure-outer.jpg\",\"size\":53385,\"type\":\"image/jpeg\",\"rid\":\"GENERAL\",\"description\":\"This is a brochure\",\"store\":\"GoogleCloudStorage:Uploads\",\"complete\":true,\"uploading\":false,\"extension\":\"jpg\",\"progress\":1,\"userId\":\"g9vNPgp6C4nDpSp8W\",\"GoogleStorage\":{\"path\":\"eoRXMCHBbQCdDnrke/uploads/GENERAL/g9vNPgp6C4nDpSp8W/Z4rX5XeCf8Zmd87Nf\"},\"_updatedAt\":{\"$date\":1503167852947},\"instanceId\":\"3bBS2ohney7dd9dZf\",\"etag\":\"rY8c9LnfRLzLfHynx\",\"path\":\"/ufs/GoogleCloudStorage:Uploads/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\",\"token\":\"c96b2809cB\",\"uploadedAt\":{\"$date\":1503167856221},\"url\":\"https://demo.rocket.chat/ufs/GoogleCloudStorage:Uploads/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\"}}"]
+
+
+["{\"msg\":\"method\",\"method\":\"sendFileMessage\",\"params\":[\"GENERAL\",\"Uploads\",{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\"type\":\"image/jpeg\",\"size\":53385,\"name\":\"brochure-outer.jpg\",\"description\":\"This is a brochure\",\"url\":\"/ufs/GoogleCloudStorage:Uploads/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\"}],\"id\":\"18\"}"]
+
+a["{\"msg\":\"result\",\"id\":\"18\",\"result\":{\"_id\":\"dmKWxzbMJ22XYZS8N\",\"rid\":\"GENERAL\",\"ts\":{\"$date\":1503167858882},\"msg\":\"\",\"file\":{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\"name\":\"brochure-outer.jpg\",\"type\":\"image/jpeg\"},\"groupable\":false,\"attachments\":[{\"title\":\"brochure-outer.jpg\",\"type\":\"file\",\"description\":\"This is a brochure\",\"title_link\":\"/file-upload/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\",\"title_link_download\":true,\"image_url\":\"/file-upload/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\",\"image_type\":\"image/jpeg\",\"image_size\":53385}],\"u\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\",\"name\":\"sachin shinde\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1503167860409}}}"]
