@@ -20,6 +20,7 @@ import org.json.JSONObject;
  * Created by sachin on 8/6/17.
  */
 
+// TODO: 20/8/17 process callbacks in background or UI threads
 public class LiveChatMiddleware {
 
 
