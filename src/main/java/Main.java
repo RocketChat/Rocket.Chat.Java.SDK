@@ -20,7 +20,7 @@ public class Main extends CoreAdapter {
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
-    String file_path = "/home/sachin/Pictures/myloginscreen.jpg";
+    String file_path = "/home/sachin/Pictures/pain.jpg";
 
     public static void main(String[] args) {
         new Main().call();

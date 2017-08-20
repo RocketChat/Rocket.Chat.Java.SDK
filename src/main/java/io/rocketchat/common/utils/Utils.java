@@ -78,7 +78,9 @@ public class Utils {
     }
 
     public static String getEndPointFromDomainName(String domainName) {
-        DOMAIN_NAME = domainName.replace("ws","http");
+        if (domainName.substring(0,2).equals("ws")) {
+            DOMAIN_NAME = domainName.replaceFirst("ws", "http");
+        }
         return DOMAIN_NAME + URL_SEPARATOR + WEBSOCKET;
     }
 
