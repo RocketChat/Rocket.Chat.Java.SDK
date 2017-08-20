@@ -31,11 +31,7 @@ public class Collection<T, K> {
         return documents.get(key);
     }
 
-    public void update(T key, K value) {
-        documents.replace(key, value);
-    }
-
-    public void updated(T key, K newValue) {
+    public void update(T key, K newValue) {
         publish(Type.CHANGED, key, newValue);
     }
 
@@ -78,7 +74,7 @@ public class Collection<T, K> {
     }
 
     public void unRegister(T key, Observer<K> o) {
-        if (observers.contains(key)) {
+        if (observers.containsKey(key)) {
             ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
             queue.remove(o);
         }
@@ -89,7 +85,7 @@ public class Collection<T, K> {
     }
 
     private void publish(Type type, T key, K document) {
-        if (observers.contains(key)) {
+        if (observers.containsKey(key)) {
             ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
             for (Observer<K> observer : queue) {
                 observer.onUpdate(type, document);

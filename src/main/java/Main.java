@@ -1,13 +1,11 @@
+import io.rocketchat.common.data.lightdb.collection.Collection;
+import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.callback.FileListener;
-import io.rocketchat.core.model.FileObject;
-import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -36,41 +34,41 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
+        api.subscribeActiveUsers(null);
+
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
-        File file = new File(file_path);
-        room.uploadFile(file, file.getName(), "My login screen", new FileListener() {
-            @Override
-            public void onUploadStarted(String roomId, String fileName, String description) {
-                System.out.println("Upload now started");
-            }
-
-            @Override
-            public void onUploadProgress(int progress, String roomId, String fileName, String description) {
-                System.out.println("Upload progress is " + progress);
-            }
-
-            @Override
-            public void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description) {
-                System.out.println("Upload is now complete with status code "+ statusCode);
-            }
-
-            @Override
-            public void onUploadError(ErrorObject error, IOException e) {
-                System.out.println("This is upload error " + e + " " + error.getMessage());
-            }
-
-            @Override
-            public void onSendFile(RocketChatMessage message, ErrorObject error) {
-                System.out.println("File send successfully, message is "+ message);
-                System.out.println("Sender url is "+ message.getSender().getAvatarUrl());
-            }
-        });
+        room.getMembers(this);
     }
 
+    @Override
+    public void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error) {
+        for (UserObject user: members) {
+            System.out.println("User is "+ user);
+            System.out.println("Avatar is "+ user.getAvatarUrl());
+            api.getDbManager().getUserCollection().register(user.getUserId(), new Collection.Observer<UserDocument>() {
+                @Override
+                public void onUpdate(Collection.Type type, UserDocument document) {
+                    switch (type) {
+                        case ADDED:
+                            System.out.println("Status of added user "+ document.getName()+ " is "+ document.getStatus());
+                            break;
+                        case CHANGED:
+                            System.out.println("Status of changed user "+ document.getName()+ " is "+ document.getStatus());
+                            break;
+                        case REMOVED:
+                            System.out.println("Status of removed user "+ document.getName()+ " is "+ document.getStatus());
+                            break;
+                    }
+                }
+            });
+
+            api.getDbManager().getUserCollection().unRegister(user.getUserId());
+        }
+    }
 
     @Override
     public void onConnect(String sessionID) {
