@@ -17,7 +17,7 @@ import io.rocketchat.core.callback.HistoryListener;
 import io.rocketchat.core.callback.LoginListener;
 import io.rocketchat.core.callback.MessageListener;
 import io.rocketchat.core.callback.RoomListener;
-import io.rocketchat.core.callback.UploadListener;
+import io.rocketchat.core.callback.FileListener;
 import io.rocketchat.core.callback.UserListener;
 import io.rocketchat.core.factory.ChatRoomFactory;
 import io.rocketchat.core.middleware.CoreMiddleware;
@@ -299,8 +299,9 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(RoomRPC.setFavouriteRoom(uniqueID, roomId, isFavouriteRoom));
     }
 
-    private void sendFileMessage(String roomId, String store, String fileId, String fileType, int size, String fileName, String desc, String url) {
+    private void sendFileMessage(String roomId, String store, String fileId, String fileType, int size, String fileName, String desc, String url, MessageListener.MessageAckListener listener) {
         int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SEND_MESSAGE);
         sendDataInBackground(MessageRPC.sendFileMessage(uniqueID, roomId, store, fileId, fileType, size, fileName, desc, url));
     }
 
@@ -550,13 +551,13 @@ public class RocketChatAPI extends Socket {
             RocketChatAPI.this.openRoom(room.getRoomId(), listener);
         }
 
-        public void uploadFile(File file, String newName, String description, UploadListener uploadListener) {
-            FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description, room.getRoomId(), uploadListener);
+        public void uploadFile(File file, String newName, String description, FileListener fileListener) {
+            FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description, this, fileListener);
             uploader.startUpload();
         }
 
-        public void sendFileMessage(FileObject file) {
-            RocketChatAPI.this.sendFileMessage(room.getRoomId(), file.getStore(), file.getFileId(), file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(), file.getUrl());
+        public void sendFileMessage(FileObject file, MessageListener.MessageAckListener listener) {
+            RocketChatAPI.this.sendFileMessage(room.getRoomId(), file.getStore(), file.getFileId(), file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(), file.getUrl(), listener);
         }
 
         public void setFavourite(Boolean isFavoutite, SimpleListener listener) {

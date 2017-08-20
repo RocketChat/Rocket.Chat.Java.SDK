@@ -1,6 +1,8 @@
 package io.rocketchat.core.model;
 
 import io.rocketchat.common.data.model.Message;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,7 +20,7 @@ public class RocketChatMessage extends Message {
     private JSONArray channels;
     private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
     private JSONArray urls; //A collection of URLs metadata. Available when the message contains at least one URL
-    private JSONArray attachments; //A collection of attachment objects, available only when the message has at least one attachment
+    private List<Attachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
     private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
     private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
     private JSONObject translations;
@@ -26,6 +28,8 @@ public class RocketChatMessage extends Message {
     //This is required for message pin and unpin
     private JSONObject rawMessage;
 
+    //File
+    FileObject file;
 
     private static final String TYPE_MESSAGE_REMOVED = "rm";
     private static final String TYPE_ROOM_NAME_CHANGED = "r";
@@ -48,10 +52,21 @@ public class RocketChatMessage extends Message {
         channels = object.optJSONArray("channels");
         groupable = object.optBoolean("groupable");
         urls = object.optJSONArray("urls");
-        attachments = object.optJSONArray("attachments");
+
+        if (object.opt("attachments") != null) {
+            attachments = new ArrayList<>();
+            JSONArray array = object.optJSONArray("attachments");
+            for (int i = 0; i < array.length(); i++) {
+                attachments.add(new Attachment(array.optJSONObject(i)));
+            }
+        }
+
         avatar = object.optString("avatar");
         parseUrls = object.optBoolean("parseUrls");
         translations = object.optJSONObject("translations");
+        if (object.opt("file") != null) {
+            file = new FileObject(object.optJSONObject("file"));
+        }
 
         rawMessage = object;
     }
@@ -72,7 +87,7 @@ public class RocketChatMessage extends Message {
         return urls;
     }
 
-    public JSONArray getAttachments() {
+    public List<Attachment> getAttachments() {
         return attachments;
     }
 
