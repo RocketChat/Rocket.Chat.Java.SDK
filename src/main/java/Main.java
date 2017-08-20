@@ -65,8 +65,6 @@ public class Main extends CoreAdapter {
                     }
                 }
             });
-
-            api.getDbManager().getUserCollection().unRegister(user.getUserId());
         }
     }
 
