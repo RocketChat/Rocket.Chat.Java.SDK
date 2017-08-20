@@ -24,6 +24,7 @@ public class Collection<T, K> {
 
     public void add(T key, K value) {
         documents.put(key, value);
+        publish(Type.ADDED, key, value);
     }
 
     public K get(T key) {
@@ -34,8 +35,14 @@ public class Collection<T, K> {
         documents.replace(key, value);
     }
 
+    public void updated(T key, K newValue) {
+        publish(Type.CHANGED, key, newValue);
+    }
+
     public K remove(T key) {
-        return documents.remove(key);
+        K value = documents.remove(key);
+        publish(Type.REMOVED, key, value);
+        return value;
     }
 
 
@@ -50,7 +57,6 @@ public class Collection<T, K> {
 
     public void removeAll() {
         documents.clear();
-        observers.clear();
     }
 
     public enum Type {
@@ -72,14 +78,14 @@ public class Collection<T, K> {
         }
     }
 
-    public void unregister(T key, Observer<K> o) {
+    public void unRegister(T key, Observer<K> o) {
         if (observers.contains(key)) {
             ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
             queue.remove(o);
         }
     }
 
-    public void unegister(T key) {
+    public void unRegister(T key) {
         observers.remove(key);
     }
 
@@ -92,11 +98,8 @@ public class Collection<T, K> {
         }
     }
 
-    public void unregisterAll() {
-        Set<Map.Entry<T, K>> set = documents.entrySet();
-        for (Map.Entry<T, K> entry : set) {
-            observers.remove(entry.getKey());
-        }
+    public void unRegisterAll() {
+        observers.clear();
     }
 
     public interface Observer<K> {

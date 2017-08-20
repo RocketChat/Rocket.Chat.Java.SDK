@@ -46,8 +46,10 @@ public class DbManager extends Observable {
                 break;
             case CHANGED:
                 usersCollection.get(id).update(object.optJSONObject("fields"));
+                UserDocument document = usersCollection.get(id);
+                usersCollection.updated(id, document);
                 setChanged();
-                notifyObservers(usersCollection.get(id));
+                notifyObservers(document);
                 break;
             case REMOVED:
                 usersCollection.remove(id);
