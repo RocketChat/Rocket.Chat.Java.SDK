@@ -1,5 +1,6 @@
 package io.rocketchat.common.data.model;
 
+import io.rocketchat.common.utils.Utils;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,7 +14,6 @@ public class UserObject {
     protected String userName;
     protected ArrayList<String> roles;
     protected JSONArray emails;
-
 
     public UserObject(JSONObject object) {
         try {
@@ -63,6 +63,9 @@ public class UserObject {
         return emails;
     }
 
+    public String getAvatarUrl() {
+        return Utils.getAvatar(userName);
+    }
 
     @Override
     public String toString() {

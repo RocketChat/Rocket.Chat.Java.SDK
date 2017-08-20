@@ -16,6 +16,11 @@ import java.util.UUID;
 
 public class Utils {
 
+    public static String DOMAIN_NAME;
+
+    public static final String URL_SEPARATOR = "/";
+    public static final String WEBSOCKET = "websocket";
+
     public static String getDigest(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -70,4 +75,15 @@ public class Utils {
     public static String getFileTypeUsingStream(File file) throws IOException {
         return URLConnection.guessContentTypeFromStream(new FileInputStream(file));
     }
+
+    public static String getEndPointFromDomainName(String domainName) {
+        DOMAIN_NAME = domainName;
+        return DOMAIN_NAME + URL_SEPARATOR + WEBSOCKET;
+    }
+
+    public static String getAvatar(String username) {
+        return DOMAIN_NAME + URL_SEPARATOR + username;
+    }
+
+
 }

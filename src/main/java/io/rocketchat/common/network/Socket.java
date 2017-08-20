@@ -9,6 +9,7 @@ import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import io.rocketchat.common.data.rpc.RPC;
+import io.rocketchat.common.utils.Utils;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class Socket {
 
     protected Socket(String url) {
         LOGGER.setLevel(Level.INFO);
-        this.url = url;
+        this.url = Utils.getEndPointFromDomainName(url);
         adapter = getAdapter();
         factory = new WebSocketFactory().setConnectionTimeout(5000);
         selfDisconnect = false;
