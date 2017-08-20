@@ -355,6 +355,7 @@ public class RocketChatAPI extends Socket {
     @Override
     protected void onConnected() {
         integer.set(1);
+        dbManager.getUserCollection().removeAll();
         sendDataInBackground(BasicRPC.ConnectObject());
         super.onConnected();
     }
