@@ -25,14 +25,14 @@ public class FileObject {
     public FileObject(JSONObject object) {
 
         try {
-            fileId = object.getString("_id");
-            fileName = object.getString("name");
-            description = object.getString("description");
-            size = object.getInt("size");
-            fileType = object.getString("type");
-            roomId = object.getString("rid");
-            extension = object.getString("extension");
-            store = object.getString("store");
+            fileId = object.optString("_id");
+            fileName = object.optString("name");
+            description = object.optString("description");
+            size = object.optInt("size");
+            fileType = object.optString("type");
+            roomId = object.optString("rid");
+            extension = object.optString("extension");
+            store = object.optString("store");
 
             if (object.opt("_updatedAt") != null) {
                 updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
@@ -40,7 +40,7 @@ public class FileObject {
             if (object.opt("uploadedAt") != null) {
                 uploadedAt = new Date(object.getJSONObject("uploadedAt").getLong("$date"));
             }
-            url=object.getString("url");
+            url=object.optString("url");
 
         } catch (JSONException e) {
             e.printStackTrace();

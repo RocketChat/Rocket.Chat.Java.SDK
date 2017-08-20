@@ -2,6 +2,7 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.callback.FileListener;
+import io.rocketchat.core.model.Attachment;
 import io.rocketchat.core.model.FileObject;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
@@ -20,7 +21,7 @@ public class Main extends CoreAdapter {
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
-    String file_path = "/home/sachin/Pictures/itachi.png";
+    String file_path = "/home/sachin/Pictures/myloginscreen.jpg";
 
     public static void main(String[] args) {
         new Main().call();
@@ -42,7 +43,7 @@ public class Main extends CoreAdapter {
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
         File file = new File(file_path);
-        room.uploadFile(file, file.getName(), "My favourite character", new FileListener() {
+        room.uploadFile(file, file.getName(), "My login screen", new FileListener() {
             @Override
             public void onUploadStarted(String roomId, String fileName, String description) {
                 System.out.println("Upload now started");
@@ -66,6 +67,8 @@ public class Main extends CoreAdapter {
             @Override
             public void onSendFile(RocketChatMessage message, ErrorObject error) {
                 System.out.println("File send successfully, message is "+ message);
+                for (Attachment attachment: message.getAttachments())
+                System.out.println("attachment is" + attachment);
             }
         });
     }

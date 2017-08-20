@@ -1,6 +1,5 @@
 package io.rocketchat.core.model;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -16,20 +15,16 @@ public class Attachment {
     String image_type;
     int image_size;
 
-    Attachment (JSONObject object) {
-        try {
-            title = object.getString("title");
-            type = object.getString("type");
-            description = object.getString("description");
-            title_link = object.getString("title_link");
-            title_link_download = object.getBoolean("title_link_download");
-            image_url = object.getString("image_url");
-            image_type = object.getString("image_type");
-            image_size = object.getInt("image_size");
+    Attachment(JSONObject object) {
+        title = object.optString("title");
+        type = object.optString("type");
+        description = object.optString("description");
+        title_link = object.optString("title_link");
+        title_link_download = object.optBoolean("title_link_download");
+        image_url = object.optString("image_url");
+        image_type = object.optString("image_type");
+        image_size = object.optInt("image_size");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getTitle() {
@@ -63,4 +58,5 @@ public class Attachment {
     public int getImage_size() {
         return image_size;
     }
+
 }
