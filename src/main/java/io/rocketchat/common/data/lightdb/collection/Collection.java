@@ -45,7 +45,6 @@ public class Collection<T, K> {
         return value;
     }
 
-
     public List<K> getData() {
         ArrayList<K> list = new ArrayList();
         Set<Map.Entry<T, K>> set = documents.entrySet();
