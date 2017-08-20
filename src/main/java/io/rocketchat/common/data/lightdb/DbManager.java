@@ -2,9 +2,7 @@ package io.rocketchat.common.data.lightdb;
 
 import io.rocketchat.common.data.lightdb.collection.Collection;
 import io.rocketchat.common.data.lightdb.document.UserDocument;
-import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.common.data.rpc.RPC;
-import java.util.List;
 import java.util.Observable;
 import org.json.JSONObject;
 
@@ -24,12 +22,8 @@ public class DbManager extends Observable {
         usersCollection = new Collection<>();
     }
 
-    public UserObject getUser(String userId) {
-        return usersCollection.get(userId);
-    }
-
-    public List<UserDocument> getUserCollection() {
-        return usersCollection.getData();
+    public Collection<String, UserDocument> getUserCollection() {
+        return usersCollection;
     }
 
     public void update(JSONObject object, RPC.MsgType type) {

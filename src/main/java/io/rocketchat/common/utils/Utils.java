@@ -18,9 +18,9 @@ public class Utils {
 
     public static String DOMAIN_NAME;
 
-    public static final String URL_SEPARATOR = "/";
-    public static final String WEBSOCKET = "websocket";
-    public static final String AVATAR = "avatar";
+    private static final String URL_SEPARATOR = "/";
+    private static final String WEBSOCKET = "websocket";
+    private static final String AVATAR = "avatar";
 
     public static String getDigest(String password) {
         try {
@@ -80,6 +80,8 @@ public class Utils {
     public static String getEndPointFromDomainName(String domainName) {
         if (domainName.substring(0,2).equals("ws")) {
             DOMAIN_NAME = domainName.replaceFirst("ws", "http");
+        } else {
+            DOMAIN_NAME = domainName;
         }
         return DOMAIN_NAME + URL_SEPARATOR + WEBSOCKET;
     }

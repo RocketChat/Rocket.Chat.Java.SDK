@@ -69,7 +69,7 @@ public class RocketChatAPI extends Socket {
     }
 
     public String getMyUserName() {
-        return dbManager.getUser(userId).getUserName();
+        return dbManager.getUserCollection().get(userId).getUserName();
     }
 
     public String getMyUserId() {
