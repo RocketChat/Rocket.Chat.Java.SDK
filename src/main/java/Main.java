@@ -2,7 +2,6 @@ import io.rocketchat.common.data.model.ErrorObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.callback.FileListener;
-import io.rocketchat.core.model.Attachment;
 import io.rocketchat.core.model.FileObject;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
-    private static String serverurl = "wss://demo.rocket.chat/websocket";
+    private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
@@ -67,8 +66,7 @@ public class Main extends CoreAdapter {
             @Override
             public void onSendFile(RocketChatMessage message, ErrorObject error) {
                 System.out.println("File send successfully, message is "+ message);
-                for (Attachment attachment: message.getAttachments())
-                System.out.println("attachment is" + attachment);
+                System.out.println("Sender url is "+ message.getSender().getAvatarUrl());
             }
         });
     }

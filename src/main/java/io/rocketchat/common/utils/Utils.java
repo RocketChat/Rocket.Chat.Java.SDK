@@ -20,6 +20,7 @@ public class Utils {
 
     public static final String URL_SEPARATOR = "/";
     public static final String WEBSOCKET = "websocket";
+    public static final String AVATAR = "avatar";
 
     public static String getDigest(String password) {
         try {
@@ -77,13 +78,12 @@ public class Utils {
     }
 
     public static String getEndPointFromDomainName(String domainName) {
-        DOMAIN_NAME = domainName;
+        DOMAIN_NAME = domainName.replace("ws","http");
         return DOMAIN_NAME + URL_SEPARATOR + WEBSOCKET;
     }
 
     public static String getAvatar(String username) {
-        return DOMAIN_NAME + URL_SEPARATOR + username;
+        return DOMAIN_NAME + URL_SEPARATOR + AVATAR + URL_SEPARATOR + username;
     }
-
 
 }
