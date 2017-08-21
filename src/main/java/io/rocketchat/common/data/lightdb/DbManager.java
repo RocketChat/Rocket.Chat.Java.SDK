@@ -13,10 +13,10 @@ public class DbManager extends Observable {
 
     private Collection<String, UserDocument> usersCollection;
 
-    private static final String TYPE_USERS = "users";
-    private static final String TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
-    private static final String TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
-    private static final String TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
+    private static final String COLLECTION_TYPE_USERS = "users";
+    private static final String COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
+    private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
+    private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
     public DbManager() {
         usersCollection = new Collection<>();
@@ -28,7 +28,7 @@ public class DbManager extends Observable {
 
     public void update(JSONObject object, RPC.MsgType type) {
         String collectionName = object.optString("collection");
-        if (collectionName.equals(TYPE_USERS)) {
+        if (collectionName.equals(COLLECTION_TYPE_USERS)) {
             updateUsers(object, type);
         }
     }
@@ -70,10 +70,10 @@ public class DbManager extends Observable {
 
     public static Type getCollectionType(JSONObject object) {
         String collectionName = object.optString("collection");
-        if (collectionName.equals(TYPE_USERS) ||
-                collectionName.equals(TYPE_METEOR_ACCOUNTS_LOGIN_CONF) ||
-                collectionName.equals(TYPE_METEOR_CLIENT_VERSIONS) ||
-                collectionName.equals(TYPE_ROCKETCHAT_ROLES)) {
+        if (collectionName.equals(COLLECTION_TYPE_USERS) ||
+                collectionName.equals(COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF) ||
+                collectionName.equals(COLLECTION_TYPE_METEOR_CLIENT_VERSIONS) ||
+                collectionName.equals(COLLECTION_TYPE_ROCKETCHAT_ROLES)) {
             return Type.COLLECTION;
         } else {
             return Type.STREAM_COLLECTION;

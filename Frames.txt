@@ -319,3 +319,50 @@ a["{\"msg\":\"result\",\"id\":\"17\",\"result\":{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\
 ["{\"msg\":\"method\",\"method\":\"sendFileMessage\",\"params\":[\"GENERAL\",\"Uploads\",{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\"type\":\"image/jpeg\",\"size\":53385,\"name\":\"brochure-outer.jpg\",\"description\":\"This is a brochure\",\"url\":\"/ufs/GoogleCloudStorage:Uploads/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\"}],\"id\":\"18\"}"]
 
 a["{\"msg\":\"result\",\"id\":\"18\",\"result\":{\"_id\":\"dmKWxzbMJ22XYZS8N\",\"rid\":\"GENERAL\",\"ts\":{\"$date\":1503167858882},\"msg\":\"\",\"file\":{\"_id\":\"Z4rX5XeCf8Zmd87Nf\",\"name\":\"brochure-outer.jpg\",\"type\":\"image/jpeg\"},\"groupable\":false,\"attachments\":[{\"title\":\"brochure-outer.jpg\",\"type\":\"file\",\"description\":\"This is a brochure\",\"title_link\":\"/file-upload/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\",\"title_link_download\":true,\"image_url\":\"/file-upload/Z4rX5XeCf8Zmd87Nf/brochure-outer.jpg\",\"image_type\":\"image/jpeg\",\"image_size\":53385}],\"u\":{\"_id\":\"g9vNPgp6C4nDpSp8W\",\"username\":\"sachin.shinde\",\"name\":\"sachin shinde\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1503167860409}}}"]
+
+
+//Simple text message
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"KQTMecyPjL3FmJWLM","rid":"GENERAL","msg":"Hi","ts":{"$date":1503317843621},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503317843626}}]}}
+
+//Edited earlier message
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"Sfn8swZ3CEHu8piRy","rid":"GENERAL","msg":"Hey there new","ts":{"$date":1503317891104},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503317949960},"editedAt":{"$date":1503317949959},"editedBy":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin"}}]}}
+
+//Image message
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"o5indz5wPRkZr4fzq","rid":"GENERAL","ts":{"$date":1503318019529},"msg":"","file":{"_id":"jPgBb2DKhHv7HKvzj","name":"a8f7d4e31fb904c33dca364358c9965b.jpg","type":"image/jpeg"},"groupable":false,"attachments":[{"title":"a8f7d4e31fb904c33dca364358c9965b.jpg","type":"file","description":"My receipt","title_link":"/file-upload/jPgBb2DKhHv7HKvzj/a8f7d4e31fb904c33dca364358c9965b.jpg","title_link_download":true,"image_url":"/file-upload/jPgBb2DKhHv7HKvzj/a8f7d4e31fb904c33dca364358c9965b.jpg","image_type":"image/jpeg","image_size":30253}],"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503318019531}}]}}
+
+
+//gif file
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"A8kXof3TzeaiGPAJF","rid":"GENERAL","ts":{"$date":1503318312333},"msg":"","file":{"_id":"5CTZRYp2M7eRA5ajk","name":"androidchat.gif","type":"image/gif"},"groupable":false,"attachments":[{"title":"androidchat.gif","type":"file","description":"This is a gif","title_link":"/file-upload/5CTZRYp2M7eRA5ajk/androidchat.gif","title_link_download":true,"image_url":"/file-upload/5CTZRYp2M7eRA5ajk/androidchat.gif","image_type":"image/gif","image_size":152149}],"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503318312335}}]}}
+
+
+//Audio file
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"Kvc34nyFAbmg9u7sX","rid":"GENERAL","ts":{"$date":1503318145671},"msg":"","file":{"_id":"9fojCEvw9KuqckLaE","name":"balu-abcdefg.mp3","type":"audio/mpeg"},"groupable":false,"attachments":[{"title":"balu-abcdefg.mp3","type":"file","description":"Balu file","title_link":"/file-upload/9fojCEvw9KuqckLaE/balu-abcdefg.mp3","title_link_download":true,"audio_url":"/file-upload/9fojCEvw9KuqckLaE/balu-abcdefg.mp3","audio_type":"audio/mpeg","audio_size":401657}],"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503318145674}}]}}
+
+
+//Video file
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"R3AeZsHQs2tgfkpvr","rid":"GENERAL","ts":{"$date":1503318513073},"msg":"","file":{"_id":"3cTP7GgCx9W7ombMX","name":"device-2016-12-10-162608.mp4","type":"video/mp4"},"groupable":false,"attachments":[{"title":"device-2016-12-10-162608.mp4","type":"file","description":"This is a video file","title_link":"/file-upload/3cTP7GgCx9W7ombMX/device-2016-12-10-162608.mp4","title_link_download":true,"video_url":"/file-upload/3cTP7GgCx9W7ombMX/device-2016-12-10-162608.mp4","video_type":"video/mp4","video_size":763900}],"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503318513075}}]}}
+
+//Sending message using quote
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"9gJhduQXfHDwGyvqi","rid":"GENERAL","msg":"[ ](http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE)  haha","ts":{"$date":1503318599149},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"urls":[{"url":"http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE","ignoreParse":true}],"mentions":[],"channels":[],"attachments":[{"text":"Hey there","translations":null,"author_name":"demosachin","author_icon":"/avatar/demosachin?_dc=0","message_link":"http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE","attachments":[],"ts":{"$date":1503318562324}}],"_updatedAt":{"$date":1503318599153}}]}}
+
+//Sending reply to a message
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"Ny367DiZjTPzhzbup","rid":"GENERAL","msg":"[ ](http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE) Yo","ts":{"$date":1503318607847},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"urls":[{"url":"http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE","ignoreParse":true}],"mentions":[],"channels":[],"attachments":[{"text":"Hey there","translations":null,"author_name":"demosachin","author_icon":"/avatar/demosachin?_dc=0","message_link":"http://localhost:3000/channel/general?msg=AszaDjW2zF5GsTRiE","attachments":[],"ts":{"$date":1503318562324}}],"_updatedAt":{"$date":1503318607856}}]}}
+
+//Star message
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"43vtatTbcdWE8CdEg","rid":"GENERAL","msg":"Haha","ts":{"$date":1503318844396},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503318872441},"starred":[{"_id":"N7fssgjkWmjiP7tv9"}]}]}} ( UserId who starred a message)
+
+//Setting reaction to a message
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"RZFoajQPKdFyC4SZ9","rid":"GENERAL","msg":"Lol","ts":{"$date":1503319030253},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503319030255},"reactions":{":relaxed:":{"usernames":["demosachin"]}}}]}}
+
+Aug 21, 2017 6:07:20 PM io.rocketchat.common.network.Socket onTextMessage
+
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"RZFoajQPKdFyC4SZ9","rid":"GENERAL","msg":"Lol","ts":{"$date":1503319030253},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503319040931},"reactions":{":relaxed:":{"usernames":["demosachin"]}}}]}}
+
+
+//Sending link in a message (Metadata generated and sent automatically)
+INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"mGMsyFwDr6DSneuta","rid":"GENERAL","msg":"https://github.com/sacOO7 New link","ts":{"$date":1503319232152},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"urls":[{"url":"https://github.com/sacOO7","meta":{"pageTitle":"sacOO7 (sachin shinde) · GitHub","fbAppId":"1401488693436528","description":"sacOO7 has 63 repositories available. Follow their code on GitHub.","ogImage":"https://avatars0.githubusercontent.com/u/16723785?v=4&s=400","ogSiteName":"GitHub","ogType":"profile","ogTitle":"sacOO7 (sachin shinde)","ogUrl":"https://github.com/sacOO7","ogDescription":"sacOO7 has 63 repositories available. Follow their code on GitHub."},"headers":{"contentType":"text/html; charset=utf-8"},"parsedUrl":{"host":"github.com","hash":null,"pathname":"/sacOO7","protocol":"https:","port":null,"query":null,"search":null,"hostname":"github.com"}}],"mentions":[],"channels":[],"_updatedAt":{"$date":1503319234269}}]}}

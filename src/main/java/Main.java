@@ -1,9 +1,7 @@
-import io.rocketchat.common.data.lightdb.collection.Collection;
-import io.rocketchat.common.data.lightdb.document.UserDocument;
 import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.data.model.UserObject;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
+import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
-    private static String serverurl = "wss://demo.rocket.chat";
+    private static String serverurl = "ws://localhost:3000";
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
@@ -34,44 +32,24 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
-        api.subscribeActiveUsers(null);
-
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
-        room.getMembers(this);
+        room.subscribeRoomMessageEvent(null, this);
     }
 
     @Override
-    public void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error) {
-        for (UserObject user: members) {
-            System.out.println("User is "+ user);
-            System.out.println("Avatar is "+ user.getAvatarUrl());
-            api.getDbManager().getUserCollection().register(user.getUserId(), new Collection.Observer<UserDocument>() {
-                @Override
-                public void onUpdate(Collection.Type type, UserDocument document) {
-                    switch (type) {
-                        case ADDED:
-                            System.out.println("Status of added user "+ document.getName()+ " is "+ document.getStatus());
-                            break;
-                        case CHANGED:
-                            System.out.println("Status of changed user "+ document.getName()+ " is "+ document.getStatus());
-                            break;
-                        case REMOVED:
-                            System.out.println("Status of removed user "+ document.getName()+ " is "+ document.getStatus());
-                            break;
-                    }
-                }
-            });
-        }
+    public void onMessage(String roomId, RocketChatMessage message) {
+        System.out.println("Got message " + message.getMessage());
+        System.out.println("Got message type "+ message.getMessagetype());
     }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("testuserrocks", "testuserrocks", this);
+        api.login("sachin", "sachin9922", this);
     }
 
     @Override
