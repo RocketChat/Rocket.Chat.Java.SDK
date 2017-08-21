@@ -1,9 +1,16 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.listener.SubscribeListener;
+import io.rocketchat.common.listener.TypingListener;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.livechat.LiveChatAPI;
+import io.rocketchat.livechat.callback.AgentListener;
+import io.rocketchat.livechat.callback.MessageListener;
+import io.rocketchat.livechat.model.AgentObject;
+import io.rocketchat.livechat.model.LiveChatMessage;
 import java.util.List;
 
 /**
@@ -28,6 +35,8 @@ public class Main extends CoreAdapter {
         api.setPingInterval(3000);
         api.connect(this);
     }
+
+
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {

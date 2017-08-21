@@ -292,7 +292,7 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
 2. Getting subscriptions
 
 ```
-public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener {
+public class Main implements ConnectListener, LoginListener, GetSubscriptionListener {
 
     RocketChatAPI api;
     private static String serverurl="wss://demo.rocket.chat/websocket";
@@ -325,7 +325,7 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     }
 
     @Override
-    public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
 
         if (error==null){
             for (SubscriptionObject room : subscriptions){

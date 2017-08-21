@@ -87,55 +87,57 @@ Following methods are provided by LiveChatAPI.ChatRoom API
 **6. subscribeLiveChatRoom**
 
 ```java
-    room.subscribeLiveChatRoom(new SubscribeListener() {
-                    @Override
-                    public void onSubscribe(LiveChatStreamMiddleware.SubType type, String subId) {
-    
-                    }
-                }, new AgentListener.AgentConnectListener() {
-                    @Override
-                    public void onAgentConnect(AgentObject agentObject) {
-                        
-                    }
+   room.subscribeLiveChatRoom(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+
+            }
+        }, new AgentListener.AgentConnectListener() {
+            @Override
+            public void onAgentConnect(AgentObject agentObject) {
+                
+            }
     });
 ```
 
 **7. subscribeRoom**
 
 ```java
+
     room.subscribeRoom(new SubscribeListener() {
-                    @Override
-                    public void onSubscribe(LiveChatStreamMiddleware.SubType type, String subId) {
-    
-                    }
-                }, new MessageListener.SubscriptionListener() {
-                    @Override
-                    public void onMessage(String roomId, MessageObject object) {
-                        
-                    }
-    
-                    @Override
-                    public void onAgentDisconnect(String roomId, MessageObject object) {
-    
-                    }
-                });
+        @Override
+        public void onSubscribe(Boolean isSubscribed, String subId) {
+
+        }
+    }, new MessageListener.SubscriptionListener() {
+        @Override
+        public void onMessage(String roomId, LiveChatMessage object) {
+            
+        }
+
+        @Override
+        public void onAgentDisconnect(String roomId, LiveChatMessage object) {
+
+        }
+    });
 
 ```
 
 **8. subscribeTyping**
 
 ```java
-    room.subscribeTyping(new SubscribeListener() {
-                    @Override
-                    public void onSubscribe(LiveChatStreamMiddleware.SubType type, String subId) {
-                        
-                    }
-                }, new TypingListener() {
-                    @Override
-                    public void onTyping(String roomId, String user, Boolean istyping) {
-                        
-                    }
-                });
+
+        room.subscribeTyping(new SubscribeListener() {
+            @Override
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+
+            }
+        }, new TypingListener() {
+            @Override
+            public void onTyping(String roomId, String user, Boolean istyping) {
+                
+            }
+        });
 ```
 
 **9. closeConversation**
