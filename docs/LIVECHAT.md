@@ -10,14 +10,14 @@
 
 #### 1. Connecting to server
 
-- Rocket.Chat **Test LiveChat server (Configuration READY)** is hosted under "wss://livechattest.rocket.chat/websocket".</br> 
+- Rocket.Chat **Test LiveChat server (Configuration READY)** is hosted under "wss://livechattest.rocket.chat".</br> 
 - Connection to the server can be made as below.
 
 ```java
     public class Main implements ConnectListener {
     
         private LiveChatAPI liveChat;
-        private static String serverurl="wss://livechattest.rocket.chat/websocket";
+        private static String serverurl="wss://livechattest.rocket.chat";
     
         public void call(){
             liveChat=new LiveChatAPI(serverurl);
@@ -57,7 +57,7 @@
     
         private LiveChatAPI liveChat;
         private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
-        private static String serverurl="wss://livechattest.rocket.chat/websocket";
+        private static String serverurl="wss://livechattest.rocket.chat";
     
     
         public void call(){
@@ -112,7 +112,7 @@
     public class Main implements ConnectListener ,AuthListener.RegisterListener ,InitialDataListener{
     
         private LiveChatAPI liveChat;
-        private static String serverurl="wss://livechattest.rocket.chat/websocket";
+        private static String serverurl="wss://livechattest.rocket.chat";
     
         public void call(){
             liveChat=new LiveChatAPI(serverurl);
@@ -189,7 +189,7 @@
     
         private LiveChatAPI liveChat;
         private LiveChatAPI.ChatRoom room; //This is required to provide abstraction over further communication
-        private static String serverurl="wss://livechattest.rocket.chat/websocket";
+        private static String serverurl="wss://livechattest.rocket.chat";
     
     
         public void call(){

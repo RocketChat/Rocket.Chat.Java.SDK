@@ -12,7 +12,7 @@ public class Main{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -49,7 +49,7 @@ public class Main{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -87,7 +87,7 @@ public class Main implements ConnectListener{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
         api=new RocketChatAPI(serverurl);
@@ -129,7 +129,7 @@ public class Main implements ConnectListener, LoginListener {
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String username="";
     private static String password="";
 
@@ -180,7 +180,7 @@ public class Main implements ConnectListener, LoginListener {
 public class Main implements ConnectListener, LoginListener {
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String token="xxx"; //Your token after first login goes here
 
     public void call(){
@@ -232,7 +232,7 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
@@ -295,7 +295,7 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
 public class Main implements ConnectListener, LoginListener, GetSubscriptionListener {
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
@@ -362,7 +362,7 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
@@ -484,7 +484,7 @@ public class Main implements ConnectListener, LoginListener{
 
 
     RocketChatAPI api;
-    private static String serverurl="wss://demo.rocket.chat/websocket";
+    private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
