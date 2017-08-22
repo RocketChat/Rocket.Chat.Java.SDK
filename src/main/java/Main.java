@@ -4,6 +4,8 @@ import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
 import io.rocketchat.core.model.SubscriptionObject;
 import io.rocketchat.core.model.TokenObject;
+import io.rocketchat.core.model.attachment.Attachment;
+import io.rocketchat.core.model.attachment.TAttachment;
 import java.util.List;
 
 /**
@@ -45,6 +47,20 @@ public class Main extends CoreAdapter {
     public void onMessage(String roomId, RocketChatMessage message) {
         System.out.println("Got message " + message.getMessage());
         System.out.println("Got message type "+ message.getMessagetype());
+        List <TAttachment> attachments= message.getAttachments();
+        for (TAttachment attachment : attachments) {
+            switch (attachment.getAttachmentType()) {
+                case TEXT_ATTACHMENT:
+                    break;
+                case IMAGE:
+                    break;
+                case AUDIO:
+                    break;
+                case VIDEO:
+                    break;
+            }
+        }
+
     }
 
     @Override

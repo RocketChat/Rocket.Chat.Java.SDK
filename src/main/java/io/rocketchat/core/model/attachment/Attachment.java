@@ -1,4 +1,4 @@
-package io.rocketchat.core.model;
+package io.rocketchat.core.model.attachment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +10,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 20/8/17.
  */
+
 public class Attachment {
     protected String title;
     protected String type;
@@ -23,7 +24,6 @@ public class Attachment {
         description = object.optString("description");
         title_link = object.optString("title_link");
         title_link_download = object.optBoolean("title_link_download");
-
     }
 
     public String getTitle() {
@@ -47,7 +47,7 @@ public class Attachment {
     }
 
 
-    public class TextAttachment {
+    public static class TextAttachment implements TAttachment {
         private String text;
         private JSONObject translations;
         private String author_name;
@@ -107,15 +107,20 @@ public class Attachment {
         public Date getMsgTimestamp() {
             return msgTimestamp;
         }
+
+        @Override
+        public Type getAttachmentType() {
+            return Type.TEXT_ATTACHMENT;
+        }
     }
 
-    public class ImageAttachment extends Attachment {
+    public static class ImageAttachment extends Attachment implements TAttachment{
         // Exclusively for image
         String image_url;
         String image_type;
         int image_size;
 
-        ImageAttachment(JSONObject object) {
+        public ImageAttachment(JSONObject object) {
             super(object);
             // Exclusively for image
             image_url = object.optString("image_url");
@@ -134,16 +139,21 @@ public class Attachment {
         public int getImage_size() {
             return image_size;
         }
+
+        @Override
+        public Type getAttachmentType() {
+            return Type.IMAGE;
+        }
     }
 
-    public class AudioAttachment extends Attachment {
+    public static class AudioAttachment extends Attachment implements TAttachment{
 
         // Exclusively For audio
         String audio_url;
         String audio_type;
         int audio_size;
 
-        AudioAttachment(JSONObject object) {
+        public AudioAttachment(JSONObject object) {
             super(object);
             // Exclusively For audio
             audio_url = object.optString("audio_url");
@@ -163,16 +173,21 @@ public class Attachment {
         public int getAudio_size() {
             return audio_size;
         }
+
+        @Override
+        public Type getAttachmentType() {
+            return Type.AUDIO;
+        }
     }
 
-    public class VideoAttachment extends Attachment {
+    public static class VideoAttachment extends Attachment implements TAttachment{
 
         // Exclusively For video
         String video_url;
         String video_type;
         int video_size;
 
-        VideoAttachment(JSONObject object) {
+        public VideoAttachment(JSONObject object) {
             super(object);
             // Exclusively For video
             video_url = object.optString("video_url");
@@ -191,13 +206,19 @@ public class Attachment {
         public int getVideo_size() {
             return video_size;
         }
+
+        @Override
+        public Type getAttachmentType() {
+            return Type.VIDEO;
+        }
     }
 
     public enum Type {
         TEXT_ATTACHMENT,
         IMAGE,
         AUDIO,
-        VIDEO
+        VIDEO,
+        OTHER
     }
-
 }
+

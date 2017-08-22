@@ -1,6 +1,8 @@
 package io.rocketchat.core.model;
 
 import io.rocketchat.common.data.model.Message;
+import io.rocketchat.core.model.attachment.Attachment;
+import io.rocketchat.core.model.attachment.TAttachment;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -19,12 +21,11 @@ public class RocketChatMessage extends Message {
     private JSONArray mentions;
     private JSONArray channels;
     private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
-    private JSONArray urls; //A collection of URLs metadata. Available when the message contains at least one URL
-    private List<Attachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
+    private List <MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
+    private List<TAttachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
     private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
     private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
     private JSONObject translations;
-    private Attachment.TextAttachment attachment;
     private List<String> starred_by;
     private JSONObject reactions; // Need to dump to get data
 
@@ -54,22 +55,39 @@ public class RocketChatMessage extends Message {
         mentions = object.optJSONArray("mentions");
         channels = object.optJSONArray("channels");
         groupable = object.optBoolean("groupable");
-        urls = object.optJSONArray("urls");
+        if (object.opt("file") != null) {
+            file = new FileObject(object.optJSONObject("file"));
+        }
 
+        if (object.opt("urls") != null) {
+            urls = new ArrayList<>();
+            JSONArray array = object.optJSONArray("urls");
+            for (int i=0; i< array.length(); i++) {
+                urls.add(new MessageUrl(array.optJSONObject(i)));
+            }
+        }
         if (object.opt("attachments") != null) {
             attachments = new ArrayList<>();
             JSONArray array = object.optJSONArray("attachments");
             for (int i = 0; i < array.length(); i++) {
-                attachments.add(new Attachment(array.optJSONObject(i)));
+                if (file == null) {
+                    attachments.add(new Attachment.TextAttachment(array.optJSONObject(i)));
+                }else {
+                    String type = file.getFileType();
+                    if (type.contains("image")) {
+                        attachments.add(new Attachment.ImageAttachment(array.optJSONObject(i)));
+                    }else if (type.contains("video")) {
+                        attachments.add(new Attachment.VideoAttachment(array.optJSONObject(i)));
+                    }else if (type.contains("audio")) {
+                        attachments.add(new Attachment.AudioAttachment(array.optJSONObject(i)));
+                    }
+                }
             }
         }
 
         avatar = object.optString("avatar");
         parseUrls = object.optBoolean("parseUrls");
         translations = object.optJSONObject("translations");
-        if (object.opt("file") != null) {
-            file = new FileObject(object.optJSONObject("file"));
-        }
 
         if (object.opt("starred") != null) {
             starred_by = new ArrayList<>();
@@ -96,11 +114,11 @@ public class RocketChatMessage extends Message {
         return groupable;
     }
 
-    public JSONArray getUrls() {
+    public List<MessageUrl> getUrls() {
         return urls;
     }
 
-    public List<Attachment> getAttachments() {
+    public List<TAttachment> getAttachments() {
         return attachments;
     }
 
