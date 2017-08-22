@@ -1,4 +1,5 @@
 import io.rocketchat.common.data.model.ErrorObject;
+import io.rocketchat.common.network.ReconnectionStrategy;
 import io.rocketchat.core.RocketChatAPI;
 import io.rocketchat.core.adapter.CoreAdapter;
 import io.rocketchat.core.model.RocketChatMessage;
@@ -25,7 +26,7 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+        api.setReconnectionStrategy(new ReconnectionStrategy(4,2000));
         api.setPingInterval(3000);
         api.connect(this);
     }
