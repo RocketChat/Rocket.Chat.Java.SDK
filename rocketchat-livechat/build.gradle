@@ -87,11 +87,6 @@ bintray {
     }
 }
 
-repositories {
-    maven {
-        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
-    }
-}
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
