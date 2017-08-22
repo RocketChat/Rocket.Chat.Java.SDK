@@ -16,6 +16,12 @@ repositories {
     mavenCentral()
 }
 
+repositories {
+    maven {
+        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
+    }
+}
+
 dependencies {
 //    compile project (':rocketchat-core')
 //    compile project (':rocketchat-livechat')

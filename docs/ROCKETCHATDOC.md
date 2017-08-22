@@ -15,6 +15,7 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 - set favorite room ( it will set room to be )
 - subscribe room for new messages (Room will receive messages in real-time)
 - subscribe room for typing events (Room will receive messages regarding typing events in real-time)
+- uploading file to the server (Update AUDIO, VIDEO, IMAGE file to the server)
  
 **1. getChatHistory**
 
@@ -418,3 +419,39 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 ```
 
+**16. upload file**
+
+- Make file object from the file path, pass it along with filename and description.
+- In callback, user will receive upload progress and callback when file is actually sent.
+
+```java
+        String file_path = "/home/sachin/Pictures/pain.jpg";
+        File file = new File(file_path);
+        room.uploadFile(file, file.getName()," This is a file attachment", new FileAdapter(){
+            @Override
+            public void onUploadStarted(String roomId, String fileName, String description) {
+                super.onUploadStarted(roomId, fileName, description);
+            }
+
+            @Override
+            public void onUploadProgress(int progress, String roomId, String fileName, String description) {
+                super.onUploadProgress(progress, roomId, fileName, description);
+            }
+
+            @Override
+            public void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description) {
+                super.onUploadComplete(statusCode, file, roomId, fileName, description);
+            }
+
+            @Override
+            public void onUploadError(ErrorObject error, IOException e) {
+                super.onUploadError(error, e);
+            }
+
+            @Override
+            public void onSendFile(RocketChatMessage message, ErrorObject error) {
+                super.onSendFile(message, error);
+            }
+        });
+
+```
