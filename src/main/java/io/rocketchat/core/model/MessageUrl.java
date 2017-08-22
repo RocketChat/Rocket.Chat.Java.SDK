@@ -9,11 +9,13 @@ import org.json.JSONObject;
 
 public class MessageUrl {
     private String url;
+    private Boolean ignoreParse;
     private Meta meta;
     private ParsedUrl parsedUrl;
 
     public MessageUrl (JSONObject object) {
         url = object.optString("url");
+        ignoreParse = object.optBoolean("ignoreParse");
         try {
             if (object.opt("meta") != null) {
                 meta = new Meta(object.getJSONObject("meta"));
@@ -36,6 +38,10 @@ public class MessageUrl {
 
     public ParsedUrl getParsedUrl() {
         return parsedUrl;
+    }
+
+    public Boolean getIgnoreParse() {
+        return ignoreParse;
     }
 
     public class Meta {
