@@ -1,6 +1,3 @@
-// This is a original collection file with multiple observers supports for single UserID
-// Will add multiple listeners based on demand
-
 package com.rocketchat.common.data.lightdb.collection;
 
 import java.util.ArrayList;
@@ -8,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by sachin on 11/8/17.
@@ -18,7 +14,7 @@ public class Collection<T, K> {
     ConcurrentHashMap<T, K> documents;
 
     //List of observers
-    ConcurrentHashMap<T, ConcurrentLinkedQueue<Observer<K>>> observers;
+    ConcurrentHashMap<T, Observer<K>> observers;
 
     public Collection() {
         documents = new ConcurrentHashMap<>();
@@ -64,24 +60,9 @@ public class Collection<T, K> {
     }
 
     public void register(T key, Observer<K> o) {
-        if (observers.containsKey(key)) {
-            ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
-            if (!queue.contains(o)) {
-                queue.add(o);
-            }
-        } else {
-            ConcurrentLinkedQueue<Observer<K>> queue = new ConcurrentLinkedQueue<>();
-            queue.add(o);
-            observers.put(key, queue);
-        }
+        observers.put(key, o);
     }
 
-    public void unRegister(T key, Observer<K> o) {
-        if (observers.containsKey(key)) {
-            ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
-            queue.remove(o);
-        }
-    }
 
     public void unRegister(T key) {
         observers.remove(key);
@@ -89,10 +70,7 @@ public class Collection<T, K> {
 
     private void publish(Type type, T key, K document) {
         if (observers.containsKey(key)) {
-            ConcurrentLinkedQueue<Observer<K>> queue = observers.get(key);
-            for (Observer<K> observer : queue) {
-                observer.onUpdate(type, document);
-            }
+            observers.get(key).onUpdate(type, document);
         }
     }
 

@@ -359,7 +359,7 @@ INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id",
 
 INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"RZFoajQPKdFyC4SZ9","rid":"GENERAL","msg":"Lol","ts":{"$date":1503319030253},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503319030255},"reactions":{":relaxed:":{"usernames":["demosachin"]}}}]}}
 
-Aug 21, 2017 6:07:20 PM io.rocketchat.common.network.Socket onTextMessage
+Aug 21, 2017 6:07:20 PM com.rocketchat.common.network.Socket onTextMessage
 
 INFO: Message is {"msg":"changed","collection":"stream-room-messages","id":"id","fields":{"eventName":"GENERAL","args":[{"_id":"RZFoajQPKdFyC4SZ9","rid":"GENERAL","msg":"Lol","ts":{"$date":1503319030253},"u":{"_id":"N7fssgjkWmjiP7tv9","username":"demosachin","name":"demosachin"},"mentions":[],"channels":[],"_updatedAt":{"$date":1503319040931},"reactions":{":relaxed:":{"usernames":["demosachin"]}}}]}}
 

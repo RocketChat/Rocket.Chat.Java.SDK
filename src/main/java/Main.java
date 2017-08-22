@@ -1,11 +1,11 @@
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.common.network.ReconnectionStrategy;
-import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.model.RocketChatMessage;
-import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.model.TokenObject;
-import io.rocketchat.core.model.attachment.TAttachment;
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.network.ReconnectionStrategy;
+import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.adapter.CoreAdapter;
+import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.core.model.SubscriptionObject;
+import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.attachment.TAttachment;
 import java.util.List;
 
 /**
