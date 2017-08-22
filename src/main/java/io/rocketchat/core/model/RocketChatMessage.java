@@ -24,6 +24,9 @@ public class RocketChatMessage extends Message {
     private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
     private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
     private JSONObject translations;
+    private Attachment.TextAttachment attachment;
+    private List<String> starred_by;
+    private JSONObject reactions; // Need to dump to get data
 
     //This is required for message pin and unpin
     private JSONObject rawMessage;
@@ -68,6 +71,16 @@ public class RocketChatMessage extends Message {
             file = new FileObject(object.optJSONObject("file"));
         }
 
+        if (object.opt("starred") != null) {
+            starred_by = new ArrayList<>();
+            JSONArray array = object.optJSONArray("starred");
+            for (int i = 0; i < array.length(); i++) {
+                starred_by.add(array.optJSONObject(i).optString("_id"));
+            }
+        }
+
+        reactions = object.optJSONObject("reactions");
+
         rawMessage = object;
     }
 
@@ -107,13 +120,20 @@ public class RocketChatMessage extends Message {
         return rawMessage;
     }
 
-    enum Type {
+
+    public enum MsgType {
         TEXT,
         TEXT_ATTACHMENT,
         IMAGE,
         AUDIO,
         VIDEO,
-        URL,
+        URL
+    }
+
+    public enum Type {
+        MESSAGE_EDITED,
+        MESSAGE_STARRED,
+        MESSAGE_REACTION,
         MESSAGE_REMOVED,
         ROOM_NAME_CHANGED,
         ROOM_ARCHIVED,
@@ -128,6 +148,10 @@ public class RocketChatMessage extends Message {
         SUBSCRIPTION_ROLE_ADDED,
         SUBSCRIPTION_ROLE_REMOVED,
         OTHER
+    }
+
+    public static Type getMsgType(String s) {
+        return Type.MESSAGE_EDITED;
     }
 
     public static Type getType(String s) {
