@@ -46,7 +46,6 @@ public class Main extends CoreAdapter {
     @Override
     public void onMessage(String roomId, RocketChatMessage message) {
         System.out.println("Got message " + message.getMessage());
-        System.out.println("Got message type "+ message.getMessagetype());
         List <TAttachment> attachments= message.getAttachments();
         for (TAttachment attachment : attachments) {
             switch (attachment.getAttachmentType()) {

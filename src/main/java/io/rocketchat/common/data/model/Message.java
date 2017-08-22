@@ -76,7 +76,7 @@ public class Message {
         return editedBy;
     }
 
-    public String getMessagetype() {
+    protected String getMessagetype() {
         return messagetype;
     }
 

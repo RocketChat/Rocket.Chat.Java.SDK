@@ -21,7 +21,7 @@ public class RocketChatMessage extends Message {
     private JSONArray mentions;
     private JSONArray channels;
     private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
-    private List <MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
+    private List<MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
     private List<TAttachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
     private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
     private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
@@ -55,6 +55,7 @@ public class RocketChatMessage extends Message {
         mentions = object.optJSONArray("mentions");
         channels = object.optJSONArray("channels");
         groupable = object.optBoolean("groupable");
+
         if (object.opt("file") != null) {
             file = new FileObject(object.optJSONObject("file"));
         }
@@ -62,23 +63,24 @@ public class RocketChatMessage extends Message {
         if (object.opt("urls") != null) {
             urls = new ArrayList<>();
             JSONArray array = object.optJSONArray("urls");
-            for (int i=0; i< array.length(); i++) {
+            for (int i = 0; i < array.length(); i++) {
                 urls.add(new MessageUrl(array.optJSONObject(i)));
             }
         }
+
         if (object.opt("attachments") != null) {
             attachments = new ArrayList<>();
             JSONArray array = object.optJSONArray("attachments");
             for (int i = 0; i < array.length(); i++) {
                 if (file == null) {
                     attachments.add(new Attachment.TextAttachment(array.optJSONObject(i)));
-                }else {
+                } else {
                     String type = file.getFileType();
                     if (type.contains("image")) {
                         attachments.add(new Attachment.ImageAttachment(array.optJSONObject(i)));
-                    }else if (type.contains("video")) {
+                    } else if (type.contains("video")) {
                         attachments.add(new Attachment.VideoAttachment(array.optJSONObject(i)));
-                    }else if (type.contains("audio")) {
+                    } else if (type.contains("audio")) {
                         attachments.add(new Attachment.AudioAttachment(array.optJSONObject(i)));
                     }
                 }
@@ -139,16 +141,11 @@ public class RocketChatMessage extends Message {
     }
 
 
-    public enum MsgType {
-        TEXT,
-        TEXT_ATTACHMENT,
-        IMAGE,
-        AUDIO,
-        VIDEO,
-        URL
-    }
+    // URLS can be present in any type of message
 
     public enum Type {
+        TEXT,
+        ATTACHMENT,
         MESSAGE_EDITED,
         MESSAGE_STARRED,
         MESSAGE_REACTION,
@@ -168,11 +165,26 @@ public class RocketChatMessage extends Message {
         OTHER
     }
 
-    public static Type getMsgType(String s) {
-        return Type.MESSAGE_EDITED;
+    // TODO: 22/8/17 Try sending each type of message and test it accordingly
+    public Type getMsgType() {
+        if (getMessagetype() != null && !getMessagetype().equals("")) {
+            return getType(getMessagetype());
+        } else {
+            if (getEditedBy() != null) {
+                return Type.MESSAGE_EDITED;
+            } else if (starred_by != null) {
+                return Type.MESSAGE_STARRED;
+            } else if (reactions != null) {
+                return Type.MESSAGE_REACTION;
+            } else if (attachments != null) {
+                return Type.ATTACHMENT;
+            } else {
+                return Type.TEXT;
+            }
+        }
     }
 
-    public static Type getType(String s) {
+    private static Type getType(String s) {
         if (s.equals(TYPE_MESSAGE_REMOVED)) {
             return Type.MESSAGE_REMOVED;
         } else if (s.equals(TYPE_ROOM_NAME_CHANGED)) {
