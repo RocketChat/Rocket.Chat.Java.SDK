@@ -1,17 +1,15 @@
 package RocketChatAPI.RocketChatRoomTest.ChatRoomParent;
 
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.MockitoAnnotations;
-
-import java.util.List;
-
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
+import java.util.List;
+import org.junit.After;
+import org.junit.Before;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Created by sachin on 2/8/17.

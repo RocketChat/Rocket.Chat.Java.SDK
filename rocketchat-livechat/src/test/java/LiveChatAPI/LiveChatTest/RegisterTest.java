@@ -1,15 +1,5 @@
 package LiveChatAPI.LiveChatTest;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-
-import java.util.ArrayList;
-
 import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.listener.ConnectListener;
@@ -19,6 +9,14 @@ import com.rocketchat.livechat.callback.InitialDataListener;
 import com.rocketchat.livechat.model.DepartmentObject;
 import com.rocketchat.livechat.model.GuestObject;
 import com.rocketchat.livechat.model.LiveChatConfigObject;
+import java.util.ArrayList;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import static org.mockito.Mockito.timeout;
 

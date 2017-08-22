@@ -1,9 +1,8 @@
 package RocketChatAPI.RocketChatTest.ChatParent;
 
-import org.mockito.MockitoAnnotations;
-
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Created by sachin on 2/8/17.

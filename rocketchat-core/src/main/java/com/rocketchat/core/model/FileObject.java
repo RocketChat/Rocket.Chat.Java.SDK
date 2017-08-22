@@ -40,7 +40,7 @@ public class FileObject {
             if (object.opt("uploadedAt") != null) {
                 uploadedAt = new Date(object.getJSONObject("uploadedAt").getLong("$date"));
             }
-            url=object.optString("url");
+            url = object.optString("url");
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -68,7 +68,7 @@ public class MultipartUploader extends Observable {
     /**
      * Adds a upload file section to the request
      *
-     * @param fieldName  name attribute in <input type="file" name="..." />
+     * @param fieldName  name attribute in input type "name=" tag
      * @param uploadFile a File to be uploaded
      * @throws IOException
      */

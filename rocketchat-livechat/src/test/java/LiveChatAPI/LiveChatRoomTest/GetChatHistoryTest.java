@@ -1,5 +1,11 @@
 package LiveChatAPI.LiveChatRoomTest;
 
+import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.livechat.callback.LoadHistoryListener;
+import com.rocketchat.livechat.model.GuestObject;
+import com.rocketchat.livechat.model.LiveChatMessage;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,14 +14,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
-
-import LiveChatAPI.LiveChatRoomTest.ChatRoomParent.RoomParent;
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.livechat.callback.LoadHistoryListener;
-import com.rocketchat.livechat.model.GuestObject;
-import com.rocketchat.livechat.model.LiveChatMessage;
 
 import static org.mockito.Mockito.timeout;
 

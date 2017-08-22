@@ -1,5 +1,11 @@
 package RocketChatAPI.RocketChatTest;
 
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.core.callback.AccountListener;
+import com.rocketchat.core.model.Permission;
+import com.rocketchat.core.model.TokenObject;
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,14 +14,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
-
-import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.core.callback.AccountListener;
-import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.TokenObject;
 
 import static org.mockito.Mockito.timeout;
 

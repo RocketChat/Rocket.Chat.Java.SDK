@@ -26,7 +26,7 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(new ReconnectionStrategy(4,2000));
+        api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);
         api.connect(this);
     }
@@ -51,7 +51,7 @@ public class Main extends CoreAdapter {
                 System.out.println("This is a text message");
                 break;
             case ATTACHMENT:
-                List <TAttachment> attachments= message.getAttachments();
+                List<TAttachment> attachments = message.getAttachments();
                 for (TAttachment attachment : attachments) {
                     switch (attachment.getAttachmentType()) {
                         case TEXT_ATTACHMENT:
@@ -147,6 +147,8 @@ public class Main extends CoreAdapter {
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}

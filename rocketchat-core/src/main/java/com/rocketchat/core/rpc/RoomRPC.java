@@ -26,7 +26,8 @@ public class RoomRPC extends RPC {
      * Creates a public channel.
      *
      * @param groupName name of the channel
-     * @param users     usernames of the people to add to the channel when it is created. This can be empty and only the
+     * @param users     usernames of the people to add to the channel when it is created. This can be empty and only
+     *                  the
      *                  caller of the method will be a member of the channel.
      * @param readOnly  whether the channel is read only or not
      */

@@ -1,16 +1,15 @@
 package LiveChatAPI.LiveChatTest;
 
+import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.livechat.callback.MessageListener;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import LiveChatAPI.LiveChatTest.LiveChatParent.ChatParent;
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.livechat.callback.MessageListener;
 
 import static org.mockito.Mockito.timeout;
 

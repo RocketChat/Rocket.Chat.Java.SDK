@@ -15,7 +15,7 @@ public class FileUploadToken {
         try {
             fileId = object.getString("fileId");
             token = object.getString("token");
-            url= object.getString("url");
+            url = object.getString("url");
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,7 @@
 package RocketChatAPI.RocketChatTest;
 
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
+import com.rocketchat.common.listener.ConnectListener;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,9 +9,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
-import com.rocketchat.common.listener.ConnectListener;
 
 import static org.mockito.Mockito.timeout;
 

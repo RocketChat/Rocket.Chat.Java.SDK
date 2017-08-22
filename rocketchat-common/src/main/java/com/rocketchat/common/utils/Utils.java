@@ -78,7 +78,7 @@ public class Utils {
     }
 
     public static String getEndPointFromDomainName(String domainName) {
-        if (domainName.substring(0,2).equals("ws")) {
+        if (domainName.substring(0, 2).equals("ws")) {
             DOMAIN_NAME = domainName.replaceFirst("ws", "http");
         } else {
             DOMAIN_NAME = domainName;

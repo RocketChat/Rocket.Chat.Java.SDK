@@ -1,5 +1,9 @@
 package RocketChatAPI.RocketChatTest;
 
+import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.core.callback.LoginListener;
+import com.rocketchat.core.model.TokenObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -8,11 +12,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import RocketChatAPI.RocketChatTest.ChatParent.RocketChatParent;
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.core.callback.LoginListener;
-import com.rocketchat.core.model.TokenObject;
 
 import static org.mockito.Mockito.timeout;
 

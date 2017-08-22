@@ -13,7 +13,7 @@ public class MessageUrl {
     private Meta meta;
     private ParsedUrl parsedUrl;
 
-    public MessageUrl (JSONObject object) {
+    public MessageUrl(JSONObject object) {
         url = object.optString("url");
         ignoreParse = object.optBoolean("ignoreParse");
         try {
@@ -55,7 +55,7 @@ public class MessageUrl {
         private String ogUrl;
         private String ogDescription;
 
-        public Meta (JSONObject object) {
+        public Meta(JSONObject object) {
             try {
                 pageTitle = object.getString("pageTitle");
                 fbAppId = object.getString("fbAppId");
@@ -118,7 +118,7 @@ public class MessageUrl {
         private Object search;
         private String hostname;
 
-        public ParsedUrl (JSONObject object) {
+        public ParsedUrl(JSONObject object) {
             try {
                 host = object.getString("host");
                 hash = object.getString("hash");

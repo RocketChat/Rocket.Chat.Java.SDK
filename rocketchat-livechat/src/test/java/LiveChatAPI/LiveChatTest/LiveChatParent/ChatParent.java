@@ -1,9 +1,8 @@
 package LiveChatAPI.LiveChatTest.LiveChatParent;
 
+import com.rocketchat.livechat.LiveChatAPI;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
-
-import com.rocketchat.livechat.LiveChatAPI;
 
 /**
  * Created by sachin on 17/7/17.

@@ -114,7 +114,7 @@ public class Attachment {
         }
     }
 
-    public static class ImageAttachment extends Attachment implements TAttachment{
+    public static class ImageAttachment extends Attachment implements TAttachment {
         // Exclusively for image
         String image_url;
         String image_type;
@@ -146,7 +146,7 @@ public class Attachment {
         }
     }
 
-    public static class AudioAttachment extends Attachment implements TAttachment{
+    public static class AudioAttachment extends Attachment implements TAttachment {
 
         // Exclusively For audio
         String audio_url;
@@ -180,7 +180,7 @@ public class Attachment {
         }
     }
 
-    public static class VideoAttachment extends Attachment implements TAttachment{
+    public static class VideoAttachment extends Attachment implements TAttachment {
 
         // Exclusively For video
         String video_url;

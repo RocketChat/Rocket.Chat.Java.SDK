@@ -4,8 +4,8 @@ import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.utils.MultipartUploader;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
-import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.callback.FileListener;
+import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.model.FileObject;
 import com.rocketchat.core.model.RocketChatMessage;
 import java.io.File;
@@ -20,7 +20,7 @@ import java.util.Observer;
 // TODO: 20/8/17 remove new thread after creating running on UIThread and backgroundThread
 public class FileUploader implements IFileUpload.UfsCreateListener,
         IFileUpload.UfsCompleteListener,
-        MessageListener.MessageAckListener{
+        MessageListener.MessageAckListener {
 
     public static final String DEFAULT_STORE = "Uploads";
 

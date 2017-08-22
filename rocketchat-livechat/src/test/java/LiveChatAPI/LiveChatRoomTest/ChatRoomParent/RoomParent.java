@@ -1,9 +1,5 @@
 package LiveChatAPI.LiveChatRoomTest.ChatRoomParent;
 
-import org.mockito.MockitoAnnotations;
-
-import java.util.ArrayList;
-
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.livechat.LiveChatAPI;
@@ -12,6 +8,8 @@ import com.rocketchat.livechat.callback.InitialDataListener;
 import com.rocketchat.livechat.model.DepartmentObject;
 import com.rocketchat.livechat.model.GuestObject;
 import com.rocketchat.livechat.model.LiveChatConfigObject;
+import java.util.ArrayList;
+import org.mockito.MockitoAnnotations;
 
 /**
  * Created by sachin on 17/7/17.
