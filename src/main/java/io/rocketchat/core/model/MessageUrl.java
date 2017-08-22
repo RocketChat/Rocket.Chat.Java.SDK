@@ -15,8 +15,12 @@ public class MessageUrl {
     public MessageUrl (JSONObject object) {
         url = object.optString("url");
         try {
-            meta = new Meta(object.getJSONObject("meta"));
-            parsedUrl = new ParsedUrl(object.getJSONObject("parsedUrl"));
+            if (object.opt("meta") != null) {
+                meta = new Meta(object.getJSONObject("meta"));
+            }
+            if (object.opt("parsedUrl") != null) {
+                parsedUrl = new ParsedUrl(object.getJSONObject("parsedUrl"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
