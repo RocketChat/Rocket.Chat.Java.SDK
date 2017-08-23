@@ -1,13 +1,12 @@
-import io.rocketchat.common.data.lightdb.document.UserDocument;
-import io.rocketchat.common.data.model.ErrorObject;
-import io.rocketchat.core.RocketChatAPI;
-import io.rocketchat.core.adapter.CoreAdapter;
-import io.rocketchat.core.model.SubscriptionObject;
-import io.rocketchat.core.model.TokenObject;
-
+import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.network.ReconnectionStrategy;
+import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.adapter.CoreAdapter;
+import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.core.model.SubscriptionObject;
+import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.attachment.TAttachment;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by sachin on 7/6/17.
@@ -15,8 +14,11 @@ import java.util.Observer;
 
 public class Main extends CoreAdapter {
 
-    private static String serverurl = "wss://demo.rocket.chat/websocket";
+    private static String serverurl = "ws://localhost:3000";
     RocketChatAPI api;
+    RocketChatAPI.ChatRoom room;
+
+    String file_path = "/home/sachin/Pictures/pain.jpg";
 
     public static void main(String[] args) {
         new Main().call();
@@ -24,41 +26,108 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+        api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);
         api.connect(this);
+
     }
+
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
-        api.subscribeActiveUsers(null);
-        api.getDbManager().addObserver(new Observer() {
-            @Override
-            public void update(Observable o, Object arg) {
-                if (arg != null) {
-                    UserDocument document = (UserDocument) arg;
-                    System.out.println("UserName is " + document.getUserName());
-                    System.out.println("UserId is " + document.getUserId());
-                    System.out.println("New status is " + document.getStatus());
-                }
-            }
-        });
-
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        for (SubscriptionObject subscription : subscriptions) {
-            System.out.println("name is " + subscription.getRoomName());
-        }
+        room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
+        room.subscribeRoomMessageEvent(null, this);
     }
 
+    @Override
+    public void onMessage(String roomId, RocketChatMessage message) {
+        System.out.println("Got message " + message.getMessage());
+        switch (message.getMsgType()) {
+            case TEXT:
+                System.out.println("This is a text message");
+                break;
+            case ATTACHMENT:
+                List<TAttachment> attachments = message.getAttachments();
+                for (TAttachment attachment : attachments) {
+                    switch (attachment.getAttachmentType()) {
+                        case TEXT_ATTACHMENT:
+                            System.out.println("This is a reply or quote to a message");
+                            break;
+                        case IMAGE:
+                            System.out.println("There is a image attachment");
+                            break;
+                        case AUDIO:
+                            System.out.println("There is a audio attachment");
+                            break;
+                        case VIDEO:
+                            System.out.println("There is a video attachment");
+                            break;
+                    }
+                }
+                break;
+            case MESSAGE_EDITED:
+                System.out.println("Message has been edited");
+                break;
+            case MESSAGE_STARRED:
+                System.out.println("Message is starred now");
+                break;
+            case MESSAGE_REACTION:
+                System.out.println("Got message reaction");
+                break;
+            case MESSAGE_REMOVED:
+                System.out.println("Message is deleted");
+                break;
+            case ROOM_NAME_CHANGED:
+                System.out.println("Room name changed");
+                break;
+            case ROOM_ARCHIVED:
+                System.out.println("Room is archived");
+                break;
+            case ROOM_UNARCHIVED:
+                System.out.println("Room is unarchieved");
+                break;
+            case USER_ADDED:
+                System.out.println("User added to the room");
+                break;
+            case USER_REMOVED:
+                System.out.println("User removed from the room");
+                break;
+            case USER_JOINED:
+                System.out.println("User joined the room");
+                break;
+            case USER_LEFT:
+                System.out.println("User left the room");
+                break;
+            case USER_MUTED:
+                System.out.println("User muted now");
+                break;
+            case USER_UNMUTED:
+                System.out.println("User un-muted now");
+                break;
+            case WELCOME:
+                System.out.println("User welcomed");
+                break;
+            case SUBSCRIPTION_ROLE_ADDED:
+                System.out.println("Subscription role added");
+                break;
+            case SUBSCRIPTION_ROLE_REMOVED:
+                System.out.println("Subscription role removed");
+                break;
+            case OTHER:
+                break;
+        }
+
+    }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("testuserrocks", "testuserrocks", this);
+        api.login("sachin", "sachin9922", this);
     }
 
     @Override
@@ -71,7 +140,6 @@ public class Main extends CoreAdapter {
         System.out.println("Disconnect detected here");
     }
 
-
 }
 
 /**
@@ -79,6 +147,14 @@ public class Main extends CoreAdapter {
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
