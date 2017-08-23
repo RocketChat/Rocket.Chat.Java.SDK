@@ -4,6 +4,7 @@ Following methods are provided by RocketChatAPI class
 - getMyUserName ( Use this method after login, it is used to get username of logged in user)
 - getChatRoomFactory (It's a logical factory that holds all rooms and used to create, receive room (by name or id), or remove rooms from local memory)
 - getDbManager (It is used to get dbManager which consists of storage of collections, eg. UserCollection : It stores all user presence automatically))
+- login (It is used for login using username and password)
 - loginUsingToken (It is used to login using token, or resuming previous login)
 - getPermissions (Getting permissions available on the server)
 - getPublicSettings (Getting public settings available on the server)
@@ -18,3 +19,22 @@ Following methods are provided by RocketChatAPI class
 - subscribeActiveUsers (subscribe for getting user presence of all associated users, this method should be called after login)
 - subscribeUserData (subscribing to the user data, getting user data in more detail, should be called in more detail)
 - logout (Logging out from the server)
+
+**1. getMyUserId**
+**2. getMyUserName**
+**3. getChatRoomFactory**
+**4. login**
+**5. loginUsingToken**
+**6. getPermissions**
+**7. getPublicSettings**
+**8. getUserRoles**
+**9. listCustomEmoji**
+**10. getSubscriptions**
+**11. getRooms**
+**12. createPublicGroup**
+**13. createPrivateGroup**
+**14. joinPublicGroup**
+**15. setStatus**
+**16. subscribeActiveUsers**
+**17. subscribeUserData**
+**18. logout**

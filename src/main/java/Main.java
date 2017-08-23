@@ -29,7 +29,6 @@ public class Main extends CoreAdapter {
         api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);
         api.connect(this);
-
     }
 
 
