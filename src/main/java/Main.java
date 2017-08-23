@@ -29,6 +29,7 @@ public class Main extends CoreAdapter {
         api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);
         api.connect(this);
+
     }
 
 
@@ -138,7 +139,6 @@ public class Main extends CoreAdapter {
     public void onDisconnect(boolean closedByServer) {
         System.out.println("Disconnect detected here");
     }
-
 
 }
 
