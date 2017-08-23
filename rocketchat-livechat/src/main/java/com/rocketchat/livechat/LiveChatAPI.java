@@ -157,8 +157,13 @@ public class LiveChatAPI extends Socket {
     }
 
     @Override
-    protected void onTextMessage(String text) throws Exception {
-        JSONObject object = new JSONObject(text);
+    protected void onTextMessage(String text) {
+        JSONObject object = null;
+        try {
+            object = new JSONObject(text);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         switch (RPC.parse(object.optString("msg"))) {
             case PING:
                 sendDataInBackground("{\"msg\":\"pong\"}");
@@ -191,7 +196,7 @@ public class LiveChatAPI extends Socket {
     }
 
     @Override
-    protected void onConnectError(Exception websocketException) {
+    protected void onConnectError(Throwable websocketException) {
         if (connectListener != null) {
             connectListener.onConnectError(websocketException);
         }

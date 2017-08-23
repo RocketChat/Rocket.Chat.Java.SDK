@@ -31,7 +31,7 @@ public class RPC {
     public static final String TYPE_SUB = "sub";
 
 
-    public static MsgType parse(String s) {
+    public static MsgType getMessageType(String s) {
         if (s.equals(TYPE_PING)) {
             return MsgType.PING;
         } else if (s.equals(TYPE_CONNECTED)) {

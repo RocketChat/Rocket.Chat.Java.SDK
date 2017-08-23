@@ -17,7 +17,7 @@ public class RocketChatParent extends CoreAdapter {
         MockitoAnnotations.initMocks(this);
         System.out.println("before got called");
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
+        //api.setReconnectionStrategy(null);
         if (connect) {
             api.connect(this);
         }

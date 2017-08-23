@@ -20,7 +20,7 @@ version '0.7.1'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.7
 
 repositories {
     mavenCentral()
@@ -90,6 +90,6 @@ bintray {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile "org.mockito:mockito-core:1.+"
-//    compile project (':rocketchat-common')
-    compile 'com.rocketchat.common:rocketchat-common:0.7.1'
+    compile project (':rocketchat-common')
+//    compile 'com.rocketchat.common:rocketchat-common:0.7.1'
 }

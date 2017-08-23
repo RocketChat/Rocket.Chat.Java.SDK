@@ -13,5 +13,5 @@ public interface ConnectListener extends Listener {
 
     void onDisconnect(boolean closedByServer);
 
-    void onConnectError(Exception websocketException);
+    void onConnectError(Throwable websocketException);
 }

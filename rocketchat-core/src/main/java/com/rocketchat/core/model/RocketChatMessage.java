@@ -185,32 +185,33 @@ public class RocketChatMessage extends Message {
     }
 
     private static Type getType(String s) {
-        if (s.equals(TYPE_MESSAGE_REMOVED)) {
-            return Type.MESSAGE_REMOVED;
-        } else if (s.equals(TYPE_ROOM_NAME_CHANGED)) {
-            return Type.ROOM_NAME_CHANGED;
-        } else if (s.equals(TYPE_ROOM_ARCHIVED)) {
-            return Type.ROOM_ARCHIVED;
-        } else if (s.equals(TYPE_ROOM_UNARCHIVED)) {
-            return Type.ROOM_UNARCHIVED;
-        } else if (s.equals(TYPE_USER_ADDED)) {
-            return Type.USER_ADDED;
-        } else if (s.equals(TYPE_USER_REMOVED)) {
-            return Type.USER_REMOVED;
-        } else if (s.equals(TYPE_USER_JOINED)) {
-            return Type.USER_JOINED;
-        } else if (s.equals(TYPE_USER_LEFT)) {
-            return Type.USER_LEFT;
-        } else if (s.equals(TYPE_USER_MUTED)) {
-            return Type.USER_MUTED;
-        } else if (s.equals(TYPE_USER_UNMUTED)) {
-            return Type.USER_UNMUTED;
-        } else if (s.equals(TYPE_WELCOME)) {
-            return Type.WELCOME;
-        } else if (s.equals(TYPE_SUBSCRIPTION_ROLE_ADDED)) {
-            return Type.SUBSCRIPTION_ROLE_ADDED;
-        } else if (s.equals(TYPE_SUBSCRIPTION_ROLE_REMOVED)) {
-            return Type.SUBSCRIPTION_ROLE_REMOVED;
+        switch (s) {
+            case TYPE_MESSAGE_REMOVED:
+                return Type.MESSAGE_REMOVED;
+            case TYPE_ROOM_NAME_CHANGED:
+                return Type.ROOM_NAME_CHANGED;
+            case TYPE_ROOM_ARCHIVED:
+                return Type.ROOM_ARCHIVED;
+            case TYPE_ROOM_UNARCHIVED:
+                return Type.ROOM_UNARCHIVED;
+            case TYPE_USER_ADDED:
+                return Type.USER_ADDED;
+            case TYPE_USER_REMOVED:
+                return Type.USER_REMOVED;
+            case TYPE_USER_JOINED:
+                return Type.USER_JOINED;
+            case TYPE_USER_LEFT:
+                return Type.USER_LEFT;
+            case TYPE_USER_MUTED:
+                return Type.USER_MUTED;
+            case TYPE_USER_UNMUTED:
+                return Type.USER_UNMUTED;
+            case TYPE_WELCOME:
+                return Type.WELCOME;
+            case TYPE_SUBSCRIPTION_ROLE_ADDED:
+                return Type.SUBSCRIPTION_ROLE_ADDED;
+            case TYPE_SUBSCRIPTION_ROLE_REMOVED:
+                return Type.SUBSCRIPTION_ROLE_REMOVED;
         }
         return Type.OTHER;
     }

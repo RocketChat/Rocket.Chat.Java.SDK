@@ -94,7 +94,7 @@ public class LiveChatAdpater implements ConnectListener,
     }
 
     @Override
-    public void onConnectError(Exception websocketException) {
+    public void onConnectError(Throwable websocketException) {
 
     }
 }

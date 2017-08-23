@@ -1,53 +1,70 @@
 package com.rocketchat.common.network;
 
-import com.neovisionaries.ws.client.OpeningHandshakeException;
-import com.neovisionaries.ws.client.StatusLine;
-import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketAdapter;
-import com.neovisionaries.ws.client.WebSocketCloseCode;
-import com.neovisionaries.ws.client.WebSocketException;
-import com.neovisionaries.ws.client.WebSocketFactory;
-import com.neovisionaries.ws.client.WebSocketFrame;
+import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.rpc.RPC;
-import com.rocketchat.common.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okio.ByteString;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Socket {
+public class Socket extends WebSocketListener {
 
     public static final Logger LOGGER = Logger.getLogger(Socket.class.getName());
 
+    private final SocketListener listener;
+    private Request request;
+    private OkHttpClient client;
     private String url;
-    private WebSocketFactory factory;
-    private TaskHandler handler;
+    private TaskHandler pingHandler;
+    private TaskHandler timeoutHandler;
     private long pingInterval;
     private WebSocket ws;
-    private WebSocketAdapter adapter;
+    private State currentState = State.DISCONNECTED;
+
     private ReconnectionStrategy strategy;
     private Timer timer;
     private boolean selfDisconnect;
     private boolean pingEnable;
     protected ConnectivityManager connectivityManager;
 
-    protected Socket(String url) {
+    public Socket(String url, SocketListener socketListener) {
         LOGGER.setLevel(Level.INFO);
-        this.url = Utils.getEndPointFromDomainName(url);
-        adapter = getAdapter();
-        factory = new WebSocketFactory().setConnectionTimeout(5000);
+        this.url = url;
+        this.listener = socketListener;
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client = new OkHttpClient.Builder()
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .pingInterval(10, TimeUnit.SECONDS)
+                .addNetworkInterceptor(interceptor)
+                .build();
+        setState(State.DISCONNECTED);
         selfDisconnect = false;
         pingEnable = false;
         pingInterval = 2000;
-        handler = new TaskHandler();
+        pingHandler = new TaskHandler();
+        timeoutHandler = new TaskHandler();
         connectivityManager = new ConnectivityManager();
+        createSocket();
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
@@ -56,14 +73,14 @@ public class Socket {
 
     public void setPingInterval(long pingInterval) {
         pingEnable = true;
-        if (pingInterval > this.pingInterval) {
+        if (pingInterval != this.pingInterval) {
             this.pingInterval = pingInterval;
         }
     }
 
     public void disablePing() {
         if (pingEnable) {
-            handler.cancel();
+            pingHandler.cancel();
             pingEnable = false;
         }
     }
@@ -71,7 +88,7 @@ public class Socket {
     public void enablePing() {
         if (!pingEnable) {
             pingEnable = true;
-            sendDataInBackground(RPC.PING_MESSAGE);
+            sendData(RPC.PING_MESSAGE);
         }
     }
 
@@ -79,54 +96,87 @@ public class Socket {
         return pingEnable;
     }
 
-    public State getState() {
-        switch (ws.getState()) {
-            case CREATED:
-                return State.CREATED;
-            case CONNECTING:
-                return State.CONNECTING;
-            case OPEN:
-                return State.CONNECTED;
-            case CLOSING:
-                return State.DISCONNECTING;
-            case CLOSED:
-                return State.DISCONNECTED;
-            default:
-                return State.DISCONNECTED;
-        }
+    private void setState(State state) {
+        LOGGER.info(String.format("setState: old %s, new %s", currentState.name(), state.name()));
+        currentState = state;
+    }
 
+    public State getState() {
+        return currentState;
     }
 
     public ConnectivityManager getConnectivityManager() {
         return connectivityManager;
     }
 
-    private WebSocketAdapter getAdapter() {
-        return new WebSocketAdapter() {
-            @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                Socket.this.onConnected();
-                super.onConnected(websocket, headers);
-            }
+    // OkHttp WebSocket callbacks
+    @Override
+    public void onOpen(WebSocket webSocket, Response response) {
+        setState(State.CONNECTED);
+        if (strategy != null) {
+            strategy.setNumberOfAttempts(0);
+        }
+        LOGGER.info("Connected to server");
+        listener.onConnected();
+    }
 
-            @Override
-            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                Socket.this.onDisconnected(closedByServer);
-                super.onDisconnected(websocket, serverCloseFrame, clientCloseFrame, closedByServer);
-            }
+    @Override
+    public void onMessage(WebSocket webSocket, String text) {
+        onTextMessage(text);
+    }
 
-            @Override
-            public void onConnectError(WebSocket websocket, WebSocketException exception) throws Exception {
-                Socket.this.onConnectError(exception);
-                super.onConnectError(websocket, exception);
-            }
+    @Override
+    public void onMessage(WebSocket webSocket, ByteString bytes) {
+        onTextMessage(bytes.toString());
+    }
 
-            @Override
-            public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                Socket.this.onTextMessage(text);
-                super.onTextMessage(websocket, text);
-            }
-        };
+    @Override
+    public void onClosing(WebSocket webSocket, int code, String reason) {
+        LOGGER.info("WebSocket closing: " + code + " - " + reason);
+        setState(State.DISCONNECTING);
+        listener.onClosing();
+    }
+
+    @Override
+    public void onClosed(WebSocket webSocket, int code, String reason) {
+        setState(State.DISCONNECTED);
+        LOGGER.warning("Disconnected from server");
+        pingHandler.removeLast();
+        timeoutHandler.removeLast();
+        processReconnection();
+        listener.onClosed();
+    }
+
+    @Override
+    public void onFailure(WebSocket webSocket, Throwable throwable, Response response) {
+        LOGGER.warning("Connect error: " + throwable);
+        setState(State.DISCONNECTED);
+        pingHandler.removeLast();
+        timeoutHandler.removeLast();
+        processReconnection();
+        listener.onFailure(throwable);
+    }
+
+    private void onTextMessage(String text) {
+        LOGGER.info("Message is " + text);
+        JSONObject message = null;
+        try {
+            message = new JSONObject(text);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return; // ignore non-json messages
+        }
+
+        // Valid message - reschedule next ping
+        reschedulePing();
+
+        // Proccess PING messages or send the message downstream
+        RPC.MsgType messageType = RPC.getMessageType(message.optString("msg"));
+        if (messageType == RPC.MsgType.PING) {
+            sendData(RPC.PONG_MESSAGE);
+        } else {
+            listener.onMessageReceived(message);
+        }
     }
 
     /**
@@ -135,115 +185,59 @@ public class Socket {
 
     protected void createSocket() {
         // Create a WebSocket with a socket connection timeout value.
-        try {
-            ws = factory.createSocket(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ws.addExtension("permessage-deflate; client_max_window_bits");
-        ws.addHeader("Accept-Encoding", "gzip, deflate, sdch");
-        ws.addHeader("Accept-Language", "en-US,en;q=0.8");
-        ws.addHeader("Pragma", "no-cache");
-        ws.addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36");
+        request = new Request.Builder()
+                //.url("wss://demo.rocket.chat/websocket")
+                .url(url)
+                .addHeader("Accept-Encoding", "gzip, deflate, sdch")
+                .addHeader("Accept-Language", "en-US,en;q=0.8")
+                .addHeader("Pragma", "no-cache")
+                .addHeader("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36")
+                .build();
 
-        ws.addListener(adapter);
+        setState(State.CREATED);
     }
 
-    protected void connect() {
-        try {
-            // Connect to the server and perform an opening handshake.
-            // This method blocks until the opening handshake is finished.
-            ws.connect();
-        } catch (OpeningHandshakeException e) {
-            // A violation against the WebSocket protocol was detected
-            // during the opening handshake.
-            StatusLine sl = e.getStatusLine();
-            System.out.println("=== Status Line ===");
-            System.out.format("HTTP Version  = %s\n", sl.getHttpVersion());
-            System.out.format("Status Code   = %d\n", sl.getStatusCode());
-            System.out.format("Reason Phrase = %s\n", sl.getReasonPhrase());
-
-            // HTTP headers.
-            Map<String, List<String>> headers = e.getHeaders();
-            System.out.println("=== HTTP Headers ===");
-            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                // Header name.
-                String name = entry.getKey();
-
-                // Values of the header.
-                List<String> values = entry.getValue();
-
-                if (values == null || values.size() == 0) {
-                    // Print the name only.
-                    System.out.println(name);
-                    continue;
-                }
-
-                for (String value : values) {
-                    // Print the name and the value.
-                    System.out.format("%s: %s\n", name, value);
-                }
-            }
-        } catch (WebSocketException e) {
-            System.out.println("Got websocket exception " + e.getMessage());
-            // Failed to establish a WebSocket connection.
-        }
+    public void connect() {
+        setState(State.CONNECTING);
+        ws = client.newWebSocket(request, this);
     }
 
     protected void connectAsync() {
-        ws.connectAsynchronously();
+        connect();
     }
 
-    private void sendData(String message) {
+    protected void sendDataInBackground(String message) {
+        sendData(message);
+    }
+
+    public void sendData(String message) {
         if (getState() == State.CONNECTED) {
-            ws.sendText(message);
+            LOGGER.info("Sending: " + message);
+            ws.send(message);
         }
-    }
-
-    protected void sendDataInBackground(final String message) {
-        EventThread.exec(new Runnable() {
-            @Override
-            public void run() {
-                if (getState() == State.CONNECTED) {
-                    ws.sendText(message);
-                }
-            }
-        });
     }
 
     public void reconnect() {
-        try {
-            ws = ws.recreate(5000).connectAsynchronously();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        LOGGER.info("reconnecting");
+        connect();
     }
 
     public void disconnect() {
-        ws.disconnect();
+        LOGGER.info("Calling disconnect");
+        if (currentState == State.DISCONNECTED) {
+            return;
+        } else if (currentState == State.CONNECTED) {
+            ws.close(1001, "Close");
+            setState(State.DISCONNECTING);
+        } else {
+            setState(State.DISCONNECTED);
+        }
+
         selfDisconnect = true;
     }
 
-    protected void onConnected() {
-        strategy.setNumberOfAttempts(0);
-        LOGGER.info("Connected to server");
-    }
-
-    protected void onDisconnected(boolean closedByServer) {
-        LOGGER.warning("Disconnected from server");
-        processReconnection();
-    }
-
-    protected void onConnectError(Exception websocketException) {
-        LOGGER.warning("Connect error");
-        processReconnection();
-    }
-
-    protected void onTextMessage(String text) throws Exception {
-        LOGGER.info("Message is " + text);
-    }
-
-    private void processReconnection() {
+    /* visible for testing */
+    void processReconnection() {
         if (strategy != null && !selfDisconnect) {
             if (strategy.getNumberOfAttempts() < strategy.getMaxAttempts()) {
                 timer = new Timer();
@@ -258,32 +252,36 @@ public class Socket {
                 }, strategy.getReconnectInterval());
 
             } else {
-                handler.cancel();
+                pingHandler.cancel();
                 LOGGER.info("Number of attempts are complete");
             }
         } else {
-            handler.cancel();
+            pingHandler.cancel();
             selfDisconnect = false;
         }
     }
 
     // TODO: 15/8/17 solve problem of PONG RECEIVE FAILED by giving a fair chance
-    protected void sendPingFramesPeriodically() {
-        handler.removeLast();
-        handler.postDelayed(new TimerTask() {
+    protected void reschedulePing() {
+        LOGGER.info("Scheduling ping in: " + pingInterval + " ms");
+        pingHandler.removeLast();
+        timeoutHandler.removeLast();
+        pingHandler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                sendDataInBackground(RPC.PING_MESSAGE);
                 LOGGER.info("SENDING PING");
+                sendData(RPC.PING_MESSAGE);
             }
         }, pingInterval);
-        handler.postDelayed(new TimerTask() {
+        timeoutHandler.postDelayed(new TimerTask() {
             @Override
             public void run() {
                 if (getState() != State.DISCONNECTING && getState() != State.DISCONNECTED) {
                     LOGGER.warning("PONG RECEIVE FAILED");
-                    ws.disconnect(WebSocketCloseCode.NONE, "PONG RECEIVE FAILED", 0);
+                    ws.cancel();
+                    //onFailure(ws, new IOException("PING Timeout"), null);
                 }
+                timeoutHandler.removeLast();
             }
         }, 2 * pingInterval);
     }
@@ -295,6 +293,5 @@ public class Socket {
         DISCONNECTING,
         DISCONNECTED,
     }
-
 }
 

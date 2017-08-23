@@ -27,8 +27,8 @@ public class Main extends CoreAdapter {
 
     public void call() {
         api = new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
-        api.setPingInterval(3000);
+        /*api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
+        api.setPingInterval(3000);*/
         api.connect(this);
 
     }
@@ -134,7 +134,7 @@ public class Main extends CoreAdapter {
     }
 
     @Override
-    public void onConnectError(Exception websocketException) {
+    public void onConnectError(Throwable websocketException) {
         System.out.println("Got connect error here");
     }
 
