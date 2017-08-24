@@ -1,3 +1,4 @@
+import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
@@ -43,6 +44,8 @@ public class Main extends CoreAdapter {
         ChatRoomFactory factory = api.getChatRoomFactory();
         room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
         room.subscribeRoomMessageEvent(null, this);
+
+
     }
 
     @Override

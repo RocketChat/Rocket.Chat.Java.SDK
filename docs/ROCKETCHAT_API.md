@@ -103,22 +103,47 @@ Following methods are provided by RocketChatAPI class
 ```    
 
 - There are various factory API's available to manipulate rooms, once they are created.
-- Those API's can be given as follow
+- Those API's can be given as follow (Once chatrooms are created by passing subscriptions)
+
+- Getting all chat rooms from the server
+
+```
+List <RocketChatAPI.ChatRoom> rooms = factory.getChatRooms();
+```
+
+
+- Getting chat room by name
+
+```
+RocketChatAPI.ChatRoom room = factory.getChatRoomByName("general");
+```
+
+- Getting chat room by id
+
+```
+RocketChatAPI.ChatRoom room = factory.getChatRoomById("abcd123");
+```
+
+- Add chat room 
 
 ```
 
-```
+factory.addChatRoom(subscriptions.get(0));
 
+//or
 
-```
-
-```
-
-```
+factory.addChatRoom(rooms.get(0));
 
 ```
 
+- Remove chat room
+
 ```
+factory.removeChatRoomById("room_id");
+
+//or 
+
+factory.removeChatRoomByName(room);
 
 ```
 
@@ -129,16 +154,52 @@ Following methods are provided by RocketChatAPI class
 - Those users automatically gets added in lightweight memory database.
 - This method provides a way to access those users by their id or registering a observer when status of a user changes from ONLINE TO OFFLINE.
 
-- Getting user status from id
+- Getting user status from id (method returns doc which also contains other information of a given user)
 
+```
+   UserDocument user = api.getDbManager().getUserCollection().get("userid");
+   System.out.println("UserName is " + user.getName());
+   System.out.println("User status is "+ user.getStatus());
+   System.out.println("User avatar url is "+ user.getAvatarUrl());
+```
 
 
 - Observe for status change of a particular user by providing his/her user-id
 
+```
+        api.getDbManager().getUserCollection().register("user_id", new 
+            Collection.Observer<UserDocument>() {
+            public void onUpdate(Collection.Type type, UserDocument user) {
+                switch (type) {
+                    case ADDED:
+                        System.out.println("user has been added, status is "+ user.getStatus());
+                        break;
+                    case CHANGED:
+                        System.out.println("user has been changed, status is "+ user.getStatus());
+                        break;
+                    case REMOVED:
+                        System.out.println("user has been removed, status is "+ user.getStatus());
+                        break;
+                }
+            }
+        });
 
+```
 
 - Observe all users for status changes.
 
+```
+        api.getDbManager().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                if (arg !=null) {
+                    UserDocument document = (UserDocument) arg;
+                    System.out.println("Username is "+ document.getName());
+                    System.out.println("Status of a user is " + document.getStatus());
+                }
+            }
+        });
+
+```
 
 **7. getPermissions**
 
