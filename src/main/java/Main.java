@@ -1,11 +1,7 @@
 import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.data.model.UserObject;
-import com.rocketchat.common.listener.SimpleListener;
-import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
-import com.rocketchat.core.callback.RoomListener;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
@@ -34,6 +30,7 @@ public class Main extends CoreAdapter {
         api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);
         api.connect(this);
+
     }
 
     @Override

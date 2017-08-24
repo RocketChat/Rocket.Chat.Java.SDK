@@ -11,11 +11,28 @@ Following methods are provided by LiveChatAPI class
 
 **1. getInitialData**
 
+- Already described in LiveChat overview. 
+
 **2. registerGuest**
+
+- Registration is already given in overview.
 
 **3. sendOfflineMessage**
 
+- 
+
 **4. setConnectListener**
 
+- If a given class doesn't contain connect method, then it is essential to have connect related callbacks to get information about internal socket state.
+- Make sure given class has implemented _ConnectListener_ interface.
+
+```
+
+api.setConnectListener(this);
+
+```
+
 **5. createRoom**
+
+- Already given in overview.
 

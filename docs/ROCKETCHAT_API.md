@@ -1,11 +1,11 @@
 Following methods are provided by RocketChatAPI class
 
+- login (It is used for login using username and password)
+- loginUsingToken (It is used to login using token, or resuming previous login)
 - getMyUserId  (Use this method after login, it is used to get user id of logged in user)
 - getMyUserName ( Use this method after login, it is used to get username of logged in user)
 - getChatRoomFactory (It's a logical factory that holds all rooms and used to create, receive room (by name or id), or remove rooms from local memory)
 - getDbManager (It is used to get dbManager which consists of storage of collections, eg. UserCollection : It stores all user presence automatically))
-- login (It is used for login using username and password)
-- loginUsingToken (It is used to login using token, or resuming previous login)
 - getPermissions (Getting permissions available on the server)
 - getPublicSettings (Getting public settings available on the server)
 - getUserRoles (Getting user roles from the server)
@@ -23,51 +23,8 @@ Following methods are provided by RocketChatAPI class
 **Note (Get rid of callback hell):** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. 
 **No Callback:** Pass null in case callback receive is not important.
 
-**1. getMyUserId**
 
-- In this class, make sure you have implemented _LoginListener_ interface, which returns callback when login is invoked.
-- Same interface implementation should be followed for remaining methods, as login listener interface is used everywhere.
-
-```
-@Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-
-        System.out.println("My userid is "+ api.getMyUserId());
-    }
-```  
-    
-**2. getMyUserName**
-
-```
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-
-        System.out.println("My username is "+ api.getMyUserName());
-    }
-```    
-
-**3. getChatRoomFactory**
-
-- Make sure you have implemented _LoginListener_ interface.
-
-```
-@Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-    }
-
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
-        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
-        room.subscribeRoomMessageEvent(null, this);
-    }
-    
-```    
-
-**4. login**
+**1. login**
 
 - Make sure you have implemented _LoginListener_ interface.
 
@@ -85,7 +42,7 @@ Following methods are provided by RocketChatAPI class
     
 ```
 
-**5. loginUsingToken**
+**2. loginUsingToken**
 
 - Make sure you have implemented _LoginListener_ interface.
 
@@ -102,7 +59,56 @@ Following methods are provided by RocketChatAPI class
     }
 ```
 
-**6. getPermissions**
+**3. getMyUserId**
+
+- In this class, make sure you have implemented _LoginListener_ interface, which returns callback when login is invoked.
+- Same interface implementation should be followed for remaining methods, as login listener interface is used everywhere.
+
+```
+@Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+
+        System.out.println("My userid is "+ api.getMyUserId());
+    }
+```  
+    
+**4. getMyUserName**
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+
+        System.out.println("My username is "+ api.getMyUserName());
+    }
+```    
+
+**5. getChatRoomFactory**
+
+- Make sure you have implemented _LoginListener_ interface.
+
+```
+@Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+
+    @Override
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
+    }
+    
+```    
+
+- There are various factory API's available to manipulate rooms, once they are created.
+- Those API's can be given as follow
+
+**6. getDbManager**
+
+
+**7. getPermissions**
 
 - Make sure you have implemented _GetSubscriptionListener_ interface.
 
@@ -118,7 +124,7 @@ Following methods are provided by RocketChatAPI class
     }
 ```
 
-**7. getPublicSettings**
+**8. getPublicSettings**
 
 - Make sure you have implemented _AccountListener.getPublicSettingsListener_ interface.
 
@@ -135,7 +141,7 @@ Following methods are provided by RocketChatAPI class
     
 ```
 
-**8. getUserRoles**
+**9. getUserRoles**
 
 - Make sure you have implemented _UserListener.getUserRoleListener_ interface.
 
@@ -153,7 +159,7 @@ Following methods are provided by RocketChatAPI class
 ```
 
 
-**9. listCustomEmoji**
+**10. listCustomEmoji**
 
 - Make sure you have implemented _EmojiListener_ interface.
 
@@ -165,7 +171,7 @@ Following methods are provided by RocketChatAPI class
     
 ```
 
-**10. getSubscriptions**
+**11. getSubscriptions**
 
 - Make sure you have implemented _GetSubscriptionListener_ interface.
 
@@ -177,7 +183,7 @@ Following methods are provided by RocketChatAPI class
     
 ```
 
-**11. getRooms**
+**12. getRooms**
 
 - Make sure you have implemented _RoomListener.GetRoomListener_ interface.
 
@@ -188,7 +194,7 @@ Following methods are provided by RocketChatAPI class
     }
 ```
 
-**12. createPublicGroup**
+**13. createPublicGroup**
 
 - Do not implement interface, try to create callback corresponding to method directly. 
 
@@ -201,7 +207,7 @@ Following methods are provided by RocketChatAPI class
     });
 ```
 
-**13. createPrivateGroup**
+**14. createPrivateGroup**
 
 - Do not implement interface, try to create callback corresponding to method directly. 
 
@@ -214,7 +220,7 @@ Following methods are provided by RocketChatAPI class
         });
 ```
 
-**14. joinPublicGroup**
+**15. joinPublicGroup**
 
 - Create SimpleListener Callback directly.
 
@@ -229,7 +235,7 @@ Following methods are provided by RocketChatAPI class
 
 ```
 
-**15. setStatus**
+**16. setStatus**
 
 - Create SimpleListener Callback directly.
 
@@ -245,7 +251,7 @@ Following methods are provided by RocketChatAPI class
         
 ```
 
-**16. subscribeActiveUsers**
+**17. subscribeActiveUsers**
 
 - Directly pass subscribeListener interface for success callback.
 
@@ -258,7 +264,7 @@ Following methods are provided by RocketChatAPI class
         
 ```
 
-**17. subscribeUserData**
+**18. subscribeUserData**
 
 - Directly pass subscribeListener interface for success callback.
 
@@ -270,7 +276,7 @@ Following methods are provided by RocketChatAPI class
         });
 ```
 
-**18. logout**
+**19. logout**
 
 - Used for logging out from the server.
 
