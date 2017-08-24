@@ -105,12 +105,40 @@ Following methods are provided by RocketChatAPI class
 - There are various factory API's available to manipulate rooms, once they are created.
 - Those API's can be given as follow
 
+```
+
+```
+
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
 **6. getDbManager**
 
 - Whenever subscribed to ActiveUsers and UserData (see method number 17 and 18), server will keep sending data to a user about other users presence.
 - Other users can be thought as _Users in the vicinity_.
 - Those users automatically gets added in lightweight memory database.
 - This method provides a way to access those users by their id or registering a observer when status of a user changes from ONLINE TO OFFLINE.
+
+- Getting user status from id
+
+
+
+- Observe for status change of a particular user by providing his/her user-id
+
+
+
+- Observe all users for status changes.
+
 
 **7. getPermissions**
 
