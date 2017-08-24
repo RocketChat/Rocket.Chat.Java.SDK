@@ -16,7 +16,7 @@ allprojects {
 }
 
 group 'com.rocketchat.common'
-version '0.7.0'
+version '0.7.1'
 
 apply plugin: 'java'
 
@@ -51,7 +51,7 @@ publishing {
             from components.java
             groupId 'com.rocketchat.common'
             artifactId 'rocketchat-common'
-            version '0.7.0'
+            version '0.7.1'
 
             artifact sourceJar {
                 classifier "sources"
@@ -78,10 +78,10 @@ bintray {
         publicDownloadNumbers = true
 
         version {
-            name = '0.7.0'
+            name = '0.7.1'
             released = new Date()
             desc = 'Rocket.Chat java SDK : commons'
-            vcsTag = '0.7.0'
+            vcsTag = '0.7.1'
         }
 
     }
