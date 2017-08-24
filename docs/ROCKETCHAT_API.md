@@ -107,6 +107,10 @@ Following methods are provided by RocketChatAPI class
 
 **6. getDbManager**
 
+- Whenever subscribed to ActiveUsers and UserData, server will keep sending data to a user about other users presence.
+- Other users can be thought as _Users in the vicinity_.
+- Those users automatially gets added in lightweight memory database.
+- This method provides a way to access those users by their id or registering a observer when status of a user changes from ONLINE TO OFFLINE.
 
 **7. getPermissions**
 
