@@ -2,7 +2,7 @@ Following methods are provided by LiveChatAPI class
 
 - getInitialData (getting initial configuration data from the server)
 - register Guest (registering guest using name, email and department)
-- send offline message (sending offline messages to the server)
+- send offline message (sending offline messages to the server, mail will be sent to agent in case not online)
 - set connect listener (register connection listener for the callback)
 - create room (using userId and authToken)
 
@@ -13,13 +13,24 @@ Following methods are provided by LiveChatAPI class
 
 - Already described in LiveChat overview. 
 
-**2. registerGuest**
+**2. registerGuest or login**
 
-- Registration is already given in overview.
+- Registration and login is already given in overview.
 
 **3. sendOfflineMessage**
 
-- 
+```
+        //Name, Email and Message is given, listener will give appropriate callback.
+        //Mail will be sent to Agent's official email Id on the server.
+        api.sendOfflineMessage("aditya", "aditya123@gmail.com", "This is a test message", new MessageListener.OfflineMessageListener() {
+            @Override
+            public void onOfflineMesssageSuccess(Boolean success, ErrorObject error) {
+                if (success) {
+                    System.out.println("Offline message sent to the server");
+                }
+            }
+        });
+```
 
 **4. setConnectListener**
 
