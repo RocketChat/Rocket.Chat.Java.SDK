@@ -20,21 +20,265 @@ Following methods are provided by RocketChatAPI class
 - subscribeUserData (subscribing to the user data, getting user data in more detail, should be called in more detail)
 - logout (Logging out from the server)
 
+**Note (Get rid of callback hell):** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. 
+**No Callback:** Pass null in case callback receive is not important.
+
 **1. getMyUserId**
+
+- In this class, make sure you have implemented _LoginListener_ interface, which returns callback when login is invoked.
+- Same interface implementation should be followed for remaining methods, as login listener interface is used everywhere.
+
+```
+@Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+
+        System.out.println("My userid is "+ api.getMyUserId());
+    }
+```  
+    
 **2. getMyUserName**
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+
+        System.out.println("My username is "+ api.getMyUserName());
+    }
+```    
+
 **3. getChatRoomFactory**
+
+- Make sure you have implemented _LoginListener_ interface.
+
+```
+@Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+
+    @Override
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
+        room.subscribeRoomMessageEvent(null, this);
+    }
+    
+```    
+
 **4. login**
+
+- Make sure you have implemented _LoginListener_ interface.
+
+```
+    @Override
+    public void onConnect(String sessionID) {
+        System.out.println("Connected to server");
+        api.login("username", "password", this);
+    }
+    
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+    
+```
+
 **5. loginUsingToken**
+
+- Make sure you have implemented _LoginListener_ interface.
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+
+    @Override
+    public void onConnect(String sessionID) {
+        System.out.println("Connected to server");
+        api.loginUsingToken("token",this);
+    }
+```
+
 **6. getPermissions**
+
+- Make sure you have implemented _GetSubscriptionListener_ interface.
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getSubscriptions(this);
+    }
+    
+    @Override
+    public void onGetPermissions(List<Permission> permissions, ErrorObject error) {
+        System.out.println("Got here list of permissions");
+    }
+```
+
 **7. getPublicSettings**
+
+- Make sure you have implemented _AccountListener.getPublicSettingsListener_ interface.
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getPublicSettings(this);
+    }
+    
+    @Override
+    public void onGetPublicSettings(List<PublicSetting> settings, ErrorObject error) {
+        super.onGetPublicSettings(settings, error);
+    }
+    
+```
+
 **8. getUserRoles**
+
+- Make sure you have implemented _UserListener.getUserRoleListener_ interface.
+
+```
+    @Override
+    public void onLogin(TokenObject token, ErrorObject error) {
+        api.getUserRoles(this);
+    }
+    
+    @Override
+    public void onUserRoles(List<UserObject> users, ErrorObject error) {
+        
+    }
+    
+```
+
+
 **9. listCustomEmoji**
+
+- Make sure you have implemented _EmojiListener_ interface.
+
+```
+    @Override
+    public void onListCustomEmoji(List<Emoji> emojis, ErrorObject error) {
+
+    }
+    
+```
+
 **10. getSubscriptions**
+
+- Make sure you have implemented _GetSubscriptionListener_ interface.
+
+```
+    @Override
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+    
+    }
+    
+```
+
 **11. getRooms**
+
+- Make sure you have implemented _RoomListener.GetRoomListener_ interface.
+
+```
+    @Override
+    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
+
+    }
+```
+
 **12. createPublicGroup**
+
+- Do not implement interface, try to create callback corresponding to method directly. 
+
+```
+   // Params : Group name, array of usernames to join directly, read only or now , listener 
+   api.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
+            public void onCreateGroup(String roomId, ErrorObject error) {
+                System.out.println("Created public Group with roomId "+ roomId);
+            }
+    });
+```
+
 **13. createPrivateGroup**
+
+- Do not implement interface, try to create callback corresponding to method directly. 
+
+```
+   // Params : Group name, array of usernames to join directly, listener 
+        api.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
+            public void onCreateGroup(String roomId, ErrorObject error) {
+                
+            }
+        });
+```
+
 **14. joinPublicGroup**
+
+- Create SimpleListener Callback directly.
+
+```
+        api.joinPublicGroup("roomId", null, new SimpleListener() {
+            public void callback(Boolean success, ErrorObject error) {
+                if (success) {
+                    System.out.println("room joined successfully");
+                }
+            }
+        });
+
+```
+
 **15. setStatus**
+
+- Create SimpleListener Callback directly.
+
+```
+//Status can be ONLINE, OFFLINE, BUSY, AWAY
+        api.setStatus(UserObject.Status.ONLINE, new SimpleListener() {
+            public void callback(Boolean success, ErrorObject error) {
+                if (success) {
+                    System.out.println("Status set to online");
+                }
+            }
+        });
+        
+```
+
 **16. subscribeActiveUsers**
+
+- Directly pass subscribeListener interface for success callback.
+
+```
+        api.subscribeActiveUsers(new SubscribeListener() {
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                System.out.println("Subscribed to active users successfully");
+            }
+        });
+        
+```
+
 **17. subscribeUserData**
+
+- Directly pass subscribeListener interface for success callback.
+
+```
+        api.subscribeUserData(new SubscribeListener() {
+            public void onSubscribe(Boolean isSubscribed, String subId) {
+                System.out.println("Subscribed to user data");
+            }
+        });
+```
+
 **18. logout**
+
+- Used for logging out from the server.
+
+```
+        api.logout(new SimpleListener() {
+            public void callback(Boolean success, ErrorObject error) {
+                System.out.println("Logged out from the server");
+            }
+        });```
+
+```

@@ -1,7 +1,12 @@
 import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.UserObject;
+import com.rocketchat.common.listener.SimpleListener;
+import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
+import com.rocketchat.core.callback.RoomListener;
+import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
@@ -31,7 +36,6 @@ public class Main extends CoreAdapter {
         api.connect(this);
     }
 
-
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
@@ -39,7 +43,8 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
+        ChatRoomFactory factory = api.getChatRoomFactory();
+        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
         room.subscribeRoomMessageEvent(null, this);
     }
 
@@ -126,7 +131,7 @@ public class Main extends CoreAdapter {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("sachin", "sachin9922", this);
+        api.loginUsingToken("token",this);
     }
 
     @Override
