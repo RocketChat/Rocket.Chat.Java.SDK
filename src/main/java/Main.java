@@ -2,6 +2,7 @@ import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
+import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
@@ -32,7 +33,6 @@ public class Main extends CoreAdapter {
 
     }
 
-
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         api.getSubscriptions(this);
@@ -40,8 +40,11 @@ public class Main extends CoreAdapter {
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        room = api.getChatRoomFactory().createChatRooms(subscriptions).getChatRoomByName("general");
+        ChatRoomFactory factory = api.getChatRoomFactory();
+        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
         room.subscribeRoomMessageEvent(null, this);
+
+
     }
 
     @Override
@@ -127,7 +130,7 @@ public class Main extends CoreAdapter {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("sachin", "sachin9922", this);
+        api.loginUsingToken("token", this);
     }
 
     @Override
@@ -147,6 +150,8 @@ public class Main extends CoreAdapter {
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  *
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}

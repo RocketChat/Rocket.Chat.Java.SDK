@@ -20,60 +20,39 @@ Gradle
 ------
 For java 
 
-1. Core SDK
+**1. Core SDK**
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
-    }
-}
-
 dependencies {
-    compile 'com.rocketchat.core:rocketchat-core:0.7.0'
+    compile 'com.rocketchat.core:rocketchat-core:0.7.1'
 }
 ```
 
-2. LiveChat SDK
+**2. LiveChat SDK**
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
-    }
-}
 dependencies {
-    compile 'com.rocketchat.livechat:rocketchat-livechat:0.7.0'
+    compile 'com.rocketchat.livechat:rocketchat-livechat:0.7.1'
 }
 ```
 
 For android 
 
-1. Core SDK
+**1. Core SDK**
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
-    }
-}
 dependencies {
-    compile ('com.rocketchat.core:rocketchat-core:0.7.0'){
+    compile ('com.rocketchat.core:rocketchat-core:0.7.1'){
         exclude group :'org.json', module: 'json'
     }
 }
 ```
 
-2. LiveChat SDK
+**2. LiveChat SDK**
 
 ```Gradle
-repositories {
-    maven {
-        url  "http://dl.bintray.com/rocketchat/RocketChat-SDK"
-    }
-}
 dependencies {
-    compile ('com.rocketchat.livechat:rocketchat-livechat:0.7.0'){
+    compile ('com.rocketchat.livechat:rocketchat-livechat:0.7.1'){
             exclude group :'org.json', module: 'json'
     }
 }
