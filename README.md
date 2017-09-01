@@ -90,10 +90,11 @@ Documentation
 21. Set favourite room
 22. Set status (ONLINE, OFFLINE, BUSY, AWAY)
 23. Getting room roles
-24. Logout
+24. Upload files
+25. Getting status of other users in realtime (Register for user status by userId)
+26. Logout
 
 - **User documentation can be found here** => [Core SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT_INTRO.md)
-- Core SDK is under development ....
 
 ### 2. LiveChat SDK
 - This SDK refers to providing helpDesk feature (LiveChat )in any JVM platform.
@@ -109,3 +110,7 @@ Documentation
 8. Close conversation
 
 - **User documentation can be found here** => [LiveChat SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT_INTRO.md)
+
+
+### Important Note
+All docs are available under **doc/** directory on the repo.
