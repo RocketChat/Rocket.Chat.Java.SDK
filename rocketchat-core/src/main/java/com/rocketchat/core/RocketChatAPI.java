@@ -10,8 +10,8 @@ import com.rocketchat.common.listener.SimpleListener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
-import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
+import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.callback.AccountListener;
 import com.rocketchat.core.callback.EmojiListener;
@@ -39,12 +39,26 @@ import com.rocketchat.core.rpc.RoomRPC;
 import com.rocketchat.core.rpc.TypingRPC;
 import com.rocketchat.core.uploader.FileUploader;
 import com.rocketchat.core.uploader.IFileUpload;
+
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-import org.json.JSONObject;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.rocketchat.common.utils.Utils.checkNotNull;
 
 /**
  * Created by sachin on 8/6/17.
@@ -54,6 +68,9 @@ import org.json.JSONObject;
 public class RocketChatAPI implements SocketListener {
 
     public static final Logger LOGGER = Logger.getLogger(RocketChatAPI.class.getName());
+
+    private final HttpUrl baseUrl;
+    private final OkHttpClient client;
 
     private AtomicInteger integer;
     private String sessionId;
@@ -69,9 +86,10 @@ public class RocketChatAPI implements SocketListener {
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
 
-    public RocketChatAPI(String url) {
-        //super(url);
-        socket = new Socket(url, this);
+    public RocketChatAPI(HttpUrl baseUrl, String webSocketUrl, OkHttpClient client) {
+        this.baseUrl = baseUrl;
+        this.client = client;
+        socket = new Socket(client, webSocketUrl, this);
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
@@ -80,7 +98,40 @@ public class RocketChatAPI implements SocketListener {
 
         connectivityManager = new ConnectivityManager();
 
-        socket.setPingInterval(10000);
+    }
+
+    private RocketChatAPI(final Builder builder) {
+        if (builder.baseUrl == null || builder.websocketUrl == null) {
+            throw new IllegalStateException("You must provide both restBaseUrl and websocketUrl");
+        }
+        this.baseUrl = builder.baseUrl;
+
+        if (builder.client == null) {
+            client = new OkHttpClient();
+        } else {
+            client = builder.client;
+        }
+
+        if (builder.factory != null) {
+            this.socket = builder.factory.create(client, builder.websocketUrl, this);
+        } else {
+            this.socket = new SocketFactory() {
+                @Override
+                public Socket create(OkHttpClient client, String url, SocketListener socketListener) {
+                    return new Socket(client, url, socketListener);
+                }
+            }.create(client, builder.websocketUrl, this);
+        }
+
+        integer = new AtomicInteger(1);
+        coreMiddleware = new CoreMiddleware();
+        coreStreamMiddleware = new CoreStreamMiddleware();
+        dbManager = new DbManager();
+        chatRoomFactory = new ChatRoomFactory(this);
+
+        connectivityManager = new ConnectivityManager();
+
+        /*socket.setPingInterval(10000);
         socket.setReconnectionStrategy(new ReconnectionStrategy(30, 2000) {
             @Override
             public int getReconnectInterval() {
@@ -94,7 +145,7 @@ public class RocketChatAPI implements SocketListener {
                 LOGGER.info("Reconnecting in " + (interval * attempts));
                 return interval * attempts;
             }
-        });
+        });*/
     }
 
     public String getMyUserName() {
@@ -114,6 +165,34 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
+    public void signin(String username, String password, LoginListener loginListener) {
+        /*int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, loginListener, CoreMiddleware.ListenerType.LOGIN);
+        socket.sendData(BasicRPC.login(uniqueID, username, password));*/
+        RequestBody body = new FormBody.Builder()
+                .add("username", username)
+                .add("password", password)
+                .build();
+        Request request = new Request.Builder()
+                .url(baseUrl.newBuilder().addPathSegment("login").build())
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                System.out.println(response.body().string());
+            }
+        });
+    }
+
     public void login(String username, String password, LoginListener loginListener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, loginListener, CoreMiddleware.ListenerType.LOGIN);
@@ -375,6 +454,10 @@ public class RocketChatAPI implements SocketListener {
         coreStreamMiddleware.createSubCallback(subId, subscribeListener);
     }
 
+    void connectForTesting() {
+        socket.connectForTesting();
+    }
+
     public void connect(ConnectListener connectListener) {
         connectivityManager.register(connectListener);
         socket.connect();
@@ -446,6 +529,18 @@ public class RocketChatAPI implements SocketListener {
         }*/
     }
 
+    public void setPingInterval(long interval) {
+        socket.setPingInterval(interval);
+    }
+
+    public void disablePing() {
+        socket.disablePing();
+    }
+
+    public void enablePing() {
+        socket.enablePing();
+    }
+
     private void processOnConnected(JSONObject object) {
         sessionId = object.optString("session");
         connectivityManager.publishConnect(sessionId);
@@ -482,6 +577,113 @@ public class RocketChatAPI implements SocketListener {
         connectivityManager.publishDisconnect(closedByServer);
         super.onDisconnected(closedByServer);
     }*/
+
+    public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateListener listener) {
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_CREATE);
+        socket.sendData(FileUploadRPC.ufsCreate(uniqueID, fileName, fileSize, fileType, roomId, description, store));
+    }
+
+    public void completeUFS(String fileId, String store, String token, IFileUpload.UfsCompleteListener listener) {
+        int uniqueID = integer.getAndIncrement();
+        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_COMPLETE);
+        socket.sendData(FileUploadRPC.ufsComplete(uniqueID, fileId, store, token));
+    }
+
+    public static final class Builder {
+        private String websocketUrl;
+        private HttpUrl baseUrl;
+        private OkHttpClient client;
+        private SocketFactory factory;
+
+        public Builder websocketUrl(String url) {
+            this.websocketUrl = checkNotNull(url, "url == null");
+            return this;
+        }
+
+        public Builder client(OkHttpClient client) {
+            this.client = checkNotNull(client, "client must be non null");
+            return this;
+        }
+
+        public Builder socketFactory(SocketFactory factory) {
+            this.factory = checkNotNull(factory, "factory == null");
+            return this;
+        }
+
+        public Builder restBaseUrl(String url) {
+            checkNotNull(url, "url == null");
+            HttpUrl httpUrl = HttpUrl.parse(url);
+            if (httpUrl == null) {
+                throw new IllegalArgumentException("Illegal URL: " + url);
+            }
+            return restBaseUrl(httpUrl);
+        }
+
+        /**
+         * Set the API base URL.
+         * <p>
+         * The specified endpoint values (such as with {@link GET @GET}) are resolved against this
+         * value using {@link HttpUrl#resolve(String)}. The behavior of this matches that of an
+         * {@code <a href="">} link on a website resolving on the current URL.
+         * <p>
+         * <b>Base URLs should always end in {@code /}.</b>
+         * <p>
+         * A trailing {@code /} ensures that endpoints values which are relative paths will correctly
+         * append themselves to a base which has path components.
+         * <p>
+         * <b>Correct:</b><br>
+         * Base URL: http://example.com/api/<br>
+         * Endpoint: foo/bar/<br>
+         * Result: http://example.com/api/foo/bar/
+         * <p>
+         * <b>Incorrect:</b><br>
+         * Base URL: http://example.com/api<br>
+         * Endpoint: foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * This method enforces that {@code baseUrl} has a trailing {@code /}.
+         * <p>
+         * <b>Endpoint values which contain a leading {@code /} are absolute.</b>
+         * <p>
+         * Absolute values retain only the host from {@code baseUrl} and ignore any specified path
+         * components.
+         * <p>
+         * Base URL: http://example.com/api/<br>
+         * Endpoint: /foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * Base URL: http://example.com/<br>
+         * Endpoint: /foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * <b>Endpoint values may be a full URL.</b>
+         * <p>
+         * Values which have a host replace the host of {@code baseUrl} and values also with a scheme
+         * replace the scheme of {@code baseUrl}.
+         * <p>
+         * Base URL: http://example.com/<br>
+         * Endpoint: https://github.com/square/retrofit/<br>
+         * Result: https://github.com/square/retrofit/
+         * <p>
+         * Base URL: http://example.com<br>
+         * Endpoint: //github.com/square/retrofit/<br>
+         * Result: http://github.com/square/retrofit/ (note the scheme stays 'http')
+         */
+        private Builder restBaseUrl(HttpUrl baseUrl) {
+            checkNotNull(baseUrl, "baseUrl == null");
+            List<String> pathSegments = baseUrl.pathSegments();
+            if (!"".equals(pathSegments.get(pathSegments.size() - 1))) {
+                throw new IllegalArgumentException("baseUrl must end in /: " + baseUrl);
+            }
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
+        public RocketChatAPI build() {
+            return new RocketChatAPI(this);
+        }
+    }
 
     /**
      * ChatRoom class to access private methods
@@ -642,22 +844,5 @@ public class RocketChatAPI implements SocketListener {
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room
-    }
-
-
-    public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateListener listener) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_CREATE);
-        socket.sendData(FileUploadRPC.ufsCreate(uniqueID, fileName, fileSize, fileType, roomId, description, store));
-    }
-
-    public void completeUFS(String fileId, String store, String token, IFileUpload.UfsCompleteListener listener) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UFS_COMPLETE);
-        socket.sendData(FileUploadRPC.ufsComplete(uniqueID, fileId, store, token));
-    }
-
-    public static final class Builder {
-
     }
 }

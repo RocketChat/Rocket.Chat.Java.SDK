@@ -58,10 +58,10 @@ public class CoreMiddleware {
                     LoginListener loginListener = (LoginListener) listener;
                     if (result == null) {
                         ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        loginListener.onLogin(null, errorObject);
+                        loginListener.onLoginError(errorObject);
                     } else {
                         TokenObject tokenObject = new TokenObject((JSONObject) result);
-                        loginListener.onLogin(tokenObject, null);
+                        loginListener.onLoginSuccess(tokenObject);
                     }
                     break;
                 case GET_PERMISSIONS:

@@ -8,5 +8,6 @@ import com.rocketchat.core.model.TokenObject;
  * Created by sachin on 18/7/17.
  */
 public interface LoginListener extends Listener {
-    void onLogin(TokenObject token, ErrorObject error);
+    void onLoginSuccess(TokenObject token);
+    void onLoginError(ErrorObject error);
 }

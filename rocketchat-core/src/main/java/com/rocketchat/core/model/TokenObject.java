@@ -10,20 +10,24 @@ import org.json.JSONObject;
 public class TokenObject {
 
     private String userId;
-    private String AuthToken;
-    private Date Expiry;
+    private String authToken;
+    private Date expiry;
 
     public TokenObject(String userId, String authToken, Date expiry) {
         this.userId = userId;
-        AuthToken = authToken;
-        Expiry = expiry;
+        this.authToken = authToken;
+        this.expiry = expiry;
     }
 
     public TokenObject(JSONObject object) {
         try {
-            userId = object.optString("id");
-            AuthToken = object.optString("token");
-            Expiry = new Date(object.optJSONObject("tokenExpires").getLong("$date"));
+            userId = object.getString("id");
+            authToken = object.getString("token");
+            JSONObject expires = object.optJSONObject("tokenExpires");
+            if (expires != null) {
+                long date = expires.optLong("$date");
+                expiry = new Date(date);
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -34,19 +38,19 @@ public class TokenObject {
     }
 
     public String getAuthToken() {
-        return AuthToken;
+        return authToken;
     }
 
     public Date getExpiry() {
-        return Expiry;
+        return expiry;
     }
 
     @Override
     public String toString() {
         return "TokenObject{" +
                 "userId='" + userId + '\'' +
-                ", AuthToken='" + AuthToken + '\'' +
-                ", Expiry=" + Expiry +
+                ", authToken='" + authToken + '\'' +
+                ", expiry=" + expiry +
                 '}';
     }
 }

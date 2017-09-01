@@ -90,4 +90,11 @@ public class Utils {
         return DOMAIN_NAME + URL_SEPARATOR + AVATAR + URL_SEPARATOR + username;
     }
 
+    public static <T> T checkNotNull(T object, String message) {
+        if (object == null) {
+            throw new NullPointerException(message);
+        }
+        return object;
+    }
+
 }

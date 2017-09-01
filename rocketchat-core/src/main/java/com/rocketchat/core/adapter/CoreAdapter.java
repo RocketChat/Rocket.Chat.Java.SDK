@@ -45,7 +45,12 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
+    public void onLoginSuccess(TokenObject token) {
+
+    }
+
+    @Override
+    public void onLoginError(ErrorObject error) {
 
     }
 

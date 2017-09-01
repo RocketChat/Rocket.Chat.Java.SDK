@@ -1,5 +1,4 @@
 import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.factory.ChatRoomFactory;
@@ -16,6 +15,7 @@ import java.util.List;
 public class Main extends CoreAdapter {
 
     private static String serverurl = "ws://localhost:3000";
+    private static String baseUrl = "htttps://localhost:3000/";
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
@@ -26,7 +26,7 @@ public class Main extends CoreAdapter {
     }
 
     public void call() {
-        api = new RocketChatAPI(serverurl);
+        api = new RocketChatAPI.Builder().websocketUrl(serverurl).restBaseUrl(baseUrl).build();
         /*api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         api.setPingInterval(3000);*/
         api.connect(this);
@@ -34,7 +34,7 @@ public class Main extends CoreAdapter {
     }
 
     @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
+    public void onLoginSuccess(TokenObject token) {
         api.getSubscriptions(this);
     }
 

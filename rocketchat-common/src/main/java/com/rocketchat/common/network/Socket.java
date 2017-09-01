@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,18 +46,16 @@ public class Socket extends WebSocketListener {
     private boolean pingEnable;
     protected ConnectivityManager connectivityManager;
 
-    public Socket(String url, SocketListener socketListener) {
+    private boolean isTesting;
+
+    public Socket(OkHttpClient client, String url, SocketListener socketListener) {
         LOGGER.setLevel(Level.INFO);
         this.url = url;
+        this.client = client;
         this.listener = socketListener;
+
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client = new OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .pingInterval(10, TimeUnit.SECONDS)
-                .addNetworkInterceptor(interceptor)
-                .build();
         setState(State.DISCONNECTED);
         selfDisconnect = false;
         pingEnable = false;
@@ -65,6 +64,10 @@ public class Socket extends WebSocketListener {
         timeoutHandler = new TaskHandler();
         connectivityManager = new ConnectivityManager();
         createSocket();
+    }
+
+    public Socket(String url, SocketListener listener) {
+        this(new OkHttpClient(), url, listener);
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
@@ -112,11 +115,16 @@ public class Socket extends WebSocketListener {
     // OkHttp WebSocket callbacks
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
+        LOGGER.info("Connected to server");
         setState(State.CONNECTED);
+
+        if (isTesting) {
+            return;
+        }
+
         if (strategy != null) {
             strategy.setNumberOfAttempts(0);
         }
-        LOGGER.info("Connected to server");
         listener.onConnected();
     }
 
@@ -202,6 +210,11 @@ public class Socket extends WebSocketListener {
         ws = client.newWebSocket(request, this);
     }
 
+    public void connectForTesting() {
+        isTesting = true;
+        connect();
+    }
+
     protected void connectAsync() {
         connect();
     }
@@ -233,6 +246,8 @@ public class Socket extends WebSocketListener {
             setState(State.DISCONNECTED);
         }
 
+        pingHandler.removeLast();
+        timeoutHandler.removeLast();
         selfDisconnect = true;
     }
 
@@ -263,6 +278,9 @@ public class Socket extends WebSocketListener {
 
     // TODO: 15/8/17 solve problem of PONG RECEIVE FAILED by giving a fair chance
     protected void reschedulePing() {
+        if (!pingEnable)
+            return;
+
         LOGGER.info("Scheduling ping in: " + pingInterval + " ms");
         pingHandler.removeLast();
         timeoutHandler.removeLast();
