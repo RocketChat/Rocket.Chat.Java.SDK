@@ -11,6 +11,7 @@ import io.fabric8.mockwebserver.dsl.EventDoneable;
 import io.fabric8.mockwebserver.dsl.TimesOnceableOrHttpHeaderable;
 
 public class TestUtils {
+    @SafeVarargs
     public static void setupMockServer(RocketChatAPI api, DefaultMockServer server,
                                        Pair<Object, String>... expectEmit) throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);

@@ -10,7 +10,7 @@ public class TestMessages {
     public static final String LOGIN_RESPONSE_FAIL = "{\"msg\":\"result\",\"id\":\"1\",\"error\":{\"isClientSafe\":true,\"error\":403,\"reason\":\"User not found\",\"message\":\"User not found [403]\",\"errorType\":\"Meteor.Error\"}}";
 
     public static final String LOGIN_RESUME_REQUEST = "{\"msg\":\"method\",\"method\":\"login\",\"id\":\"1\",\"params\":[{\"resume\":\"tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD\"}]}";
-    public static final String LOGIN_RESUME_REQUEST_FAIL = "{\"msg\":\"method\",\"method\":\"login\",\"id\":\"1\",\"params\":[{\"resume\":\"tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdR\"}]}";
+    public static final String LOGIN_RESUME_REQUEST_FAIL = "{\"msg\":\"method\",\"method\":\"login\",\"id\":\"1\",\"params\":[{\"resume\":\"INVALID_TOKEN\"}]}";
     public static final String LOGIN_RESUME_RESPONSE_OK = "{\"msg\":\"result\",\"id\":\"1\",\"result\":{\"id\":\"yG6FQYRsuTWRK8KP6\",\"token\":\"tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD\",\"tokenExpires\":{\"$date\":null}}}";
     public static final String LOGIN_RESUME_RESPONSE_FAIL = "{\"msg\":\"result\",\"id\":\"1\",\"error\":{\"isClientSafe\":true,\"error\":403,\"reason\":\"You've been logged out by the server. Please log in again.\",\"message\":\"You've been logged out by the server. Please log in again. [403]\",\"errorType\":\"Meteor.Error\"}}";
 }

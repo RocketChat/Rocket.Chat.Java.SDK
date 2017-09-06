@@ -109,7 +109,7 @@ public class RocketChatApiTest {
                 TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST_FAIL,
                         TestMessages.LOGIN_RESUME_RESPONSE_FAIL));
 
-        api.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdR", loginListener);
+        api.loginUsingToken("INVALID_TOKEN", loginListener);
         verify(loginListener, never()).onLoginSuccess(any(TokenObject.class));
         verify(loginListener).onLoginError(errorArgumentCaptor.capture());
 

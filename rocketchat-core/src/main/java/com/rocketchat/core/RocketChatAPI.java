@@ -164,11 +164,7 @@ public class RocketChatAPI implements SocketListener {
         return dbManager;
     }
 
-    //Tested
     public void signin(String username, String password, LoginListener loginListener) {
-        /*int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, loginListener, CoreMiddleware.ListenerType.LOGIN);
-        socket.sendData(BasicRPC.login(uniqueID, username, password));*/
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -181,6 +177,7 @@ public class RocketChatAPI implements SocketListener {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                LOGGER.info("CALL FAILURE");
                 e.printStackTrace();
             }
 
@@ -193,6 +190,7 @@ public class RocketChatAPI implements SocketListener {
         });
     }
 
+    //Tested
     public void login(String username, String password, LoginListener loginListener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, loginListener, CoreMiddleware.ListenerType.LOGIN);
