@@ -125,3 +125,6 @@ Features
 
 ### Important Note
 All docs are available under **docs/** directory on the repo.
+
+#### Demo Android App
+- **Android app based on Java SDK can be found here** => [Demo Android App based on SDK](https://github.com/RocketChat/RocketChat-Android-Demo)
