@@ -2,7 +2,10 @@ package com.rocketchat.core.factory;
 
 import com.rocketchat.common.data.model.Room;
 import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.model.SubscriptionObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,6 +45,55 @@ public class ChatRoomFactory {
     }
 
     public ArrayList<RocketChatAPI.ChatRoom> getChatRooms() {
+        return rooms;
+    }
+
+
+    public ArrayList<RocketChatAPI.ChatRoom> getPrivateGroups() {
+        ArrayList<RocketChatAPI.ChatRoom> groups = new ArrayList<>();
+        for (RocketChatAPI.ChatRoom room : rooms) {
+            if (room.getRoomData().getRoomType() == Room.Type.PRIVATE) {
+                groups.add(room);
+            }
+        }
+        return groups;
+    }
+
+    public ArrayList<RocketChatAPI.ChatRoom> getPublicGroups() {
+        ArrayList<RocketChatAPI.ChatRoom> groups = new ArrayList<>();
+        for (RocketChatAPI.ChatRoom room : rooms) {
+            if (room.getRoomData().getRoomType() == Room.Type.PUBLIC) {
+                groups.add(room);
+            }
+        }
+        return groups;
+    }
+
+    public ArrayList<RocketChatAPI.ChatRoom> getDirectRooms() {
+        ArrayList<RocketChatAPI.ChatRoom> directRooms = new ArrayList<>();
+        for (RocketChatAPI.ChatRoom room : rooms) {
+            if (room.getRoomData().getRoomType() == Room.Type.ONE_TO_ONE) {
+                directRooms.add(room);
+            }
+        }
+        return directRooms;
+    }
+
+    public ArrayList<RocketChatAPI.ChatRoom> getFavoriteRooms() {
+        ArrayList<RocketChatAPI.ChatRoom> favorites = new ArrayList<>();
+        for (RocketChatAPI.ChatRoom room : rooms) {
+            Room roomObject = room.getRoomData();
+            if (roomObject instanceof SubscriptionObject) {
+                if (((SubscriptionObject) roomObject).isFavourite()) {
+                    favorites.add(room);
+                }
+            }
+        }
+        return favorites;
+    }
+
+    public HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> getSortedRooms() {
+        HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> rooms = new HashMap<>();
         return rooms;
     }
 

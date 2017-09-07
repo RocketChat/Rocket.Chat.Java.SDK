@@ -1,7 +1,9 @@
 package com.rocketchat.core.model;
 
 import com.rocketchat.common.data.model.Room;
+
 import java.util.Date;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +20,10 @@ public class SubscriptionObject extends Room {
     private Integer unread;
     private Date updatedAt;
     private String subscriptionId;
+    private String fullname;
+    private Boolean favourite = false;
+    private boolean blocked = false;
+    private Date lastActivity;
 
     private String desktopNotifications;
     private String mobilePushNotifications;
@@ -42,6 +48,19 @@ public class SubscriptionObject extends Room {
             desktopNotifications = object.optString("desktopNotifications");
             mobilePushNotifications = object.optString("mobilePushNotifications");
             emailNotifications = object.optString("emailNotifications");
+
+            if (object.opt("f") != null) {
+                favourite = object.getBoolean("f");
+            }
+            if (object.opt("blocked") != null) {
+                blocked = object.optBoolean("blocked");
+            }
+
+            fullname = object.optString("fname");
+
+            if (object.opt("lastActivity") != null) {
+                lastActivity = new Date(object.getJSONObject("lastActivity").getLong("$date"));
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -75,6 +94,22 @@ public class SubscriptionObject extends Room {
 
     public String getSubscriptionId() {
         return subscriptionId;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public Boolean isFavourite() {
+        return favourite;
+    }
+
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public Date getLastActivity() {
+        return lastActivity;
     }
 
     //    public String getDesktopNotifications() {

@@ -7,6 +7,8 @@ import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
 import com.rocketchat.core.model.attachment.TAttachment;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
-    private static String serverurl = "ws://localhost:3000";
+    private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
@@ -41,10 +43,12 @@ public class Main extends CoreAdapter {
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         ChatRoomFactory factory = api.getChatRoomFactory();
-        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
-        room.subscribeRoomMessageEvent(null, this);
-
-
+        factory.createChatRooms(subscriptions);
+        ArrayList <RocketChatAPI.ChatRoom> rooms = factory.getPublicGroups();
+        System.out.println("Size of fav rooms is "+ rooms.size());
+        for (RocketChatAPI.ChatRoom room : rooms) {
+            System.out.println("Name "+ room.getRoomData().getRoomName());
+        }
     }
 
     @Override
@@ -130,7 +134,7 @@ public class Main extends CoreAdapter {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken("token", this);
+        api.login("sachin.shinde","sachin123",this);
     }
 
     @Override
