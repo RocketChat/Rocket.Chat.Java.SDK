@@ -50,7 +50,7 @@ public class Room {
         return userInfo;
     }
 
-    enum Type {
+    public enum Type {
         PUBLIC,
         PRIVATE,
         ONE_TO_ONE
