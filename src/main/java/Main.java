@@ -3,12 +3,9 @@ import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.factory.ChatRoomFactory;
-import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
-import com.rocketchat.core.model.attachment.TAttachment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +14,11 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
+    String username = "";
+    String password = "";
+
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
-    RocketChatAPI.ChatRoom room;
-
-    String file_path = "/home/sachin/Pictures/pain.jpg";
 
     public static void main(String[] args) {
         new Main().call();
@@ -43,98 +40,13 @@ public class Main extends CoreAdapter {
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         ChatRoomFactory factory = api.getChatRoomFactory();
-        factory.createChatRooms(subscriptions);
-        ArrayList <RocketChatAPI.ChatRoom> rooms = factory.getPublicGroups();
-        System.out.println("Size of fav rooms is "+ rooms.size());
-        for (RocketChatAPI.ChatRoom room : rooms) {
-            System.out.println("Name "+ room.getRoomData().getRoomName());
-        }
     }
 
-    @Override
-    public void onMessage(String roomId, RocketChatMessage message) {
-        System.out.println("Got message " + message.getMessage());
-        switch (message.getMsgType()) {
-            case TEXT:
-                System.out.println("This is a text message");
-                break;
-            case ATTACHMENT:
-                List<TAttachment> attachments = message.getAttachments();
-                for (TAttachment attachment : attachments) {
-                    switch (attachment.getAttachmentType()) {
-                        case TEXT_ATTACHMENT:
-                            System.out.println("This is a reply or quote to a message");
-                            break;
-                        case IMAGE:
-                            System.out.println("There is a image attachment");
-                            break;
-                        case AUDIO:
-                            System.out.println("There is a audio attachment");
-                            break;
-                        case VIDEO:
-                            System.out.println("There is a video attachment");
-                            break;
-                    }
-                }
-                break;
-            case MESSAGE_EDITED:
-                System.out.println("Message has been edited");
-                break;
-            case MESSAGE_STARRED:
-                System.out.println("Message is starred now");
-                break;
-            case MESSAGE_REACTION:
-                System.out.println("Got message reaction");
-                break;
-            case MESSAGE_REMOVED:
-                System.out.println("Message is deleted");
-                break;
-            case ROOM_NAME_CHANGED:
-                System.out.println("Room name changed");
-                break;
-            case ROOM_ARCHIVED:
-                System.out.println("Room is archived");
-                break;
-            case ROOM_UNARCHIVED:
-                System.out.println("Room is unarchieved");
-                break;
-            case USER_ADDED:
-                System.out.println("User added to the room");
-                break;
-            case USER_REMOVED:
-                System.out.println("User removed from the room");
-                break;
-            case USER_JOINED:
-                System.out.println("User joined the room");
-                break;
-            case USER_LEFT:
-                System.out.println("User left the room");
-                break;
-            case USER_MUTED:
-                System.out.println("User muted now");
-                break;
-            case USER_UNMUTED:
-                System.out.println("User un-muted now");
-                break;
-            case WELCOME:
-                System.out.println("User welcomed");
-                break;
-            case SUBSCRIPTION_ROLE_ADDED:
-                System.out.println("Subscription role added");
-                break;
-            case SUBSCRIPTION_ROLE_REMOVED:
-                System.out.println("Subscription role removed");
-                break;
-            case OTHER:
-                break;
-        }
-
-    }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("sachin.shinde","sachin123",this);
+        api.login(username,password,this);
     }
 
     @Override
