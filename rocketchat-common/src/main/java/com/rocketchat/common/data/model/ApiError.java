@@ -6,14 +6,14 @@ import org.json.JSONObject;
  * Created by sachin on 12/6/17.
  */
 
-public class ErrorObject {
+public class ApiError extends Error {
 
     private String reason;
     private String errorType;
     private long error;
     private String message;
 
-    public ErrorObject(JSONObject object) {
+    public ApiError(JSONObject object) {
         reason = object.optString("reason");
         errorType = object.optString("errorType");
         error = object.optLong("error");

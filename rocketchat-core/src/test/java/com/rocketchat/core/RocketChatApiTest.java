@@ -1,6 +1,6 @@
 package com.rocketchat.core;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.core.callback.LoginListener;
 import com.rocketchat.core.model.TokenObject;
 
@@ -30,7 +30,7 @@ public class RocketChatApiTest {
     @Captor
     ArgumentCaptor<TokenObject> tokenArgumentCaptor;
     @Captor
-    ArgumentCaptor<ErrorObject> errorArgumentCaptor;
+    ArgumentCaptor<ApiError> errorArgumentCaptor;
     private DefaultMockServer server;
     private RocketChatAPI api;
 
@@ -55,7 +55,7 @@ public class RocketChatApiTest {
         api.login("testuserrocks", "testuserrocks", loginListener);
 
         verify(loginListener, timeout(500)).onLoginSuccess(tokenArgumentCaptor.capture());
-        verify(loginListener, never()).onLoginError(any(ErrorObject.class));
+        verify(loginListener, never()).onLoginError(any(ApiError.class));
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
         assertTrue(token.getAuthToken().contentEquals("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg"));
@@ -75,7 +75,7 @@ public class RocketChatApiTest {
 
         verify(loginListener, timeout(500)).onLoginError(errorArgumentCaptor.capture());
         verify(loginListener, never()).onLoginSuccess(any(TokenObject.class));
-        ErrorObject error = errorArgumentCaptor.getValue();
+        ApiError error = errorArgumentCaptor.getValue();
         assertTrue(error != null);
         assertTrue(error.getError() == 403);
         assertTrue(error.getReason().contentEquals("User not found"));
@@ -92,7 +92,7 @@ public class RocketChatApiTest {
                         TestMessages.LOGIN_RESUME_RESPONSE_OK));
 
         api.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD", loginListener);
-        verify(loginListener, never()).onLoginError(any(ErrorObject.class));
+        verify(loginListener, never()).onLoginError(any(ApiError.class));
         verify(loginListener).onLoginSuccess(tokenArgumentCaptor.capture());
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
@@ -113,7 +113,7 @@ public class RocketChatApiTest {
         verify(loginListener, never()).onLoginSuccess(any(TokenObject.class));
         verify(loginListener).onLoginError(errorArgumentCaptor.capture());
 
-        ErrorObject error = errorArgumentCaptor.getValue();
+        ApiError error = errorArgumentCaptor.getValue();
         assertTrue(error != null);
         assertTrue(error.getError() == 403);
         assertTrue(error.getReason().contentEquals("You've been logged out by the server. Please log in again."));

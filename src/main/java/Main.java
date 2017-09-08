@@ -1,4 +1,4 @@
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.factory.ChatRoomFactory;
@@ -39,7 +39,7 @@ public class Main extends CoreAdapter {
     }
 
     @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ApiError error) {
         ChatRoomFactory factory = api.getChatRoomFactory();
         room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
         room.subscribeRoomMessageEvent(null, this);

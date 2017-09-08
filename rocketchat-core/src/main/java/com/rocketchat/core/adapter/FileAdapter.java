@@ -1,6 +1,6 @@
 package com.rocketchat.core.adapter;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.model.FileObject;
 import com.rocketchat.core.model.RocketChatMessage;
@@ -26,12 +26,12 @@ public class FileAdapter implements FileListener {
     }
 
     @Override
-    public void onUploadError(ErrorObject error, IOException e) {
+    public void onUploadError(ApiError error, IOException e) {
 
     }
 
     @Override
-    public void onSendFile(RocketChatMessage message, ErrorObject error) {
+    public void onSendFile(RocketChatMessage message, ApiError error) {
 
     }
 }

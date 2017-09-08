@@ -1,6 +1,6 @@
 package com.rocketchat.core.callback;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.RocketChatMessage;
 import java.util.List;
@@ -15,10 +15,10 @@ public class MessageListener {
     }
 
     public interface MessageAckListener extends Listener {
-        void onMessageAck(RocketChatMessage message, ErrorObject error);
+        void onMessageAck(RocketChatMessage message, ApiError error);
     }
 
     public interface SearchMessageListener extends Listener {
-        void onSearchMessage(List<RocketChatMessage> messageList, ErrorObject error);
+        void onSearchMessage(List<RocketChatMessage> messageList, ApiError error);
     }
 }

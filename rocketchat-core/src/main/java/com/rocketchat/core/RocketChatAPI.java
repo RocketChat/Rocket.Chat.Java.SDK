@@ -6,22 +6,15 @@ import com.rocketchat.common.data.model.Room;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.common.listener.SimpleListener;
+import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Utils;
-import com.rocketchat.core.callback.AccountListener;
-import com.rocketchat.core.callback.EmojiListener;
-import com.rocketchat.core.callback.FileListener;
-import com.rocketchat.core.callback.GetSubscriptionListener;
-import com.rocketchat.core.callback.HistoryListener;
-import com.rocketchat.core.callback.LoginListener;
-import com.rocketchat.core.callback.MessageListener;
-import com.rocketchat.core.callback.RoomListener;
-import com.rocketchat.core.callback.UserListener;
+import com.rocketchat.core.callback.*;
+import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.middleware.CoreMiddleware;
 import com.rocketchat.core.middleware.CoreStreamMiddleware;
@@ -233,7 +226,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void logout(SimpleListener listener) {
+    public void logout(SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.LOGOUT);
         socket.sendData(BasicRPC.logout(uniqueID));
@@ -247,14 +240,14 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void getRooms(RoomListener.GetRoomListener getRoomListener) {
+    public void getRooms(RoomCallback.GetRoomCallback getRoomListener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, getRoomListener, CoreMiddleware.ListenerType.GET_ROOMS);
         socket.sendData(BasicRPC.getRooms(uniqueID));
     }
 
     //Tested
-    private void getRoomRoles(String roomId, RoomListener.RoomRolesListener listener) {
+    private void getRoomRoles(String roomId, RoomCallback.RoomRolesCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.GET_ROOM_ROLES);
         socket.sendData(BasicRPC.getRoomRoles(uniqueID, roomId));
@@ -267,7 +260,7 @@ public class RocketChatAPI implements SocketListener {
         socket.sendData(ChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
-    private void getRoomMembers(String roomID, Boolean allUsers, RoomListener.GetMembersListener listener) {
+    private void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersListener listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.GET_ROOM_MEMBERS);
         socket.sendData(RoomRPC.getRoomMembers(uniqueID, roomID, allUsers));
@@ -287,42 +280,42 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    private void deleteMessage(String msgId, SimpleListener listener) {
+    private void deleteMessage(String msgId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.deleteMessage(uniqueID, msgId));
     }
 
     //Tested
-    private void updateMessage(String msgId, String roomId, String message, SimpleListener listener) {
+    private void updateMessage(String msgId, String roomId, String message, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.updateMessage(uniqueID, msgId, roomId, message));
     }
 
     //Tested
-    private void pinMessage(JSONObject message, SimpleListener listener) {
+    private void pinMessage(JSONObject message, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.pinMessage(uniqueID, message));
     }
 
     //Tested
-    private void unpinMessage(JSONObject message, SimpleListener listener) {
+    private void unpinMessage(JSONObject message, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.unpinMessage(uniqueID, message));
     }
 
     //Tested
-    private void starMessage(String msgId, String roomId, Boolean starred, SimpleListener listener) {
+    private void starMessage(String msgId, String roomId, Boolean starred, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.starMessage(uniqueID, msgId, roomId, starred));
     }
 
     //Tested
-    private void setReaction(String emojiId, String msgId, SimpleListener listener) {
+    private void setReaction(String emojiId, String msgId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.MESSAGE_OP);
         socket.sendData(MessageRPC.setReaction(uniqueID, emojiId, msgId));
@@ -335,21 +328,21 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void createPublicGroup(String groupName, String[] users, Boolean readOnly, RoomListener.GroupListener listener) {
+    public void createPublicGroup(String groupName, String[] users, Boolean readOnly, RoomCallback.GroupListener listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.CREATE_GROUP);
         socket.sendData(RoomRPC.createPublicGroup(uniqueID, groupName, users, readOnly));
     }
 
     //Tested
-    public void createPrivateGroup(String groupName, String[] users, RoomListener.GroupListener listener) {
+    public void createPrivateGroup(String groupName, String[] users, RoomCallback.GroupListener listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.CREATE_GROUP);
         socket.sendData(RoomRPC.createPrivateGroup(uniqueID, groupName, users));
     }
 
     //Tested
-    private void deleteGroup(String roomId, SimpleListener listener) {
+    private void deleteGroup(String roomId, SimpleCallback listener) {
         //Apply simpleListener
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.DELETE_GROUP);
@@ -357,49 +350,49 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    private void archiveRoom(String roomId, SimpleListener listener) {
+    private void archiveRoom(String roomId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.ARCHIVE);
         socket.sendData(RoomRPC.archieveRoom(uniqueID, roomId));
     }
 
     //Tested
-    private void unarchiveRoom(String roomId, SimpleListener listener) {
+    private void unarchiveRoom(String roomId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.UNARCHIVE);
         socket.sendData(RoomRPC.unarchiveRoom(uniqueID, roomId));
     }
 
     //Tested
-    public void joinPublicGroup(String roomId, String joinCode, SimpleListener listener) {
+    public void joinPublicGroup(String roomId, String joinCode, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.JOIN_PUBLIC_GROUP);
         socket.sendData(RoomRPC.joinPublicGroup(uniqueID, roomId, joinCode));
     }
 
     //Tested
-    private void leaveGroup(String roomId, SimpleListener listener) {
+    private void leaveGroup(String roomId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.LEAVE_GROUP);
         socket.sendData(RoomRPC.leaveGroup(uniqueID, roomId));
     }
 
     //Tested
-    private void hideRoom(String roomId, SimpleListener listener) {
+    private void hideRoom(String roomId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.HIDE_ROOM);
         socket.sendData(RoomRPC.hideRoom(uniqueID, roomId));
     }
 
     //Tested
-    private void openRoom(String roomId, SimpleListener listener) {
+    private void openRoom(String roomId, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.OPEN_ROOM);
         socket.sendData(RoomRPC.openRoom(uniqueID, roomId));
     }
 
     //Tested
-    private void setFavouriteRoom(String roomId, Boolean isFavouriteRoom, SimpleListener listener) {
+    private void setFavouriteRoom(String roomId, Boolean isFavouriteRoom, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SET_FAVOURITE_ROOM);
         socket.sendData(RoomRPC.setFavouriteRoom(uniqueID, roomId, isFavouriteRoom));
@@ -412,7 +405,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void setStatus(UserObject.Status s, SimpleListener listener) {
+    public void setStatus(UserObject.Status s, SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.ListenerType.SET_STATUS);
         socket.sendData(PresenceRPC.setDefaultStatus(uniqueID, s));
@@ -420,36 +413,36 @@ public class RocketChatAPI implements SocketListener {
 
     public void subscribeActiveUsers(SubscribeListener subscribeListener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
         socket.sendData(CoreSubRPC.subscribeActiveUsers(uniqueID));
     }
 
     public void subscribeUserData(SubscribeListener subscribeListener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
         socket.sendData(CoreSubRPC.subscribeUserData(uniqueID));
     }
 
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
-        coreStreamMiddleware.createSub(roomId, listener, CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_MESSAGE);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
         socket.sendData(CoreSubRPC.subscribeRoomMessageEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
     private String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
-        coreStreamMiddleware.createSub(roomId, listener, CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_TYPING);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
         socket.sendData(CoreSubRPC.subscribeRoomTypingEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
     private void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
         socket.sendData(CoreSubRPC.unsubscribeRoom(subId));
-        coreStreamMiddleware.createSubCallback(subId, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(subId, subscribeListener);
     }
 
     void connectForTesting() {
@@ -482,7 +475,7 @@ public class RocketChatAPI implements SocketListener {
                 coreMiddleware.processCallback(Long.valueOf(message.optString("id")), message);
                 break;
             case READY:
-                coreStreamMiddleware.processSubSuccess(message);
+                coreStreamMiddleware.processSubscriptionSuccess(message);
                 break;
             case ADDED:
                 processCollectionsAdded(message);
@@ -494,7 +487,7 @@ public class RocketChatAPI implements SocketListener {
                 dbManager.update(message, RPC.MsgType.REMOVED);
                 break;
             case NOSUB:
-                coreStreamMiddleware.processUnsubSuccess(message);
+                coreStreamMiddleware.processUnsubscriptionSuccess(message);
                 break;
             case OTHER:
                 break;
@@ -555,7 +548,7 @@ public class RocketChatAPI implements SocketListener {
     private void processCollectionsChanged(JSONObject object) {
         switch (DbManager.getCollectionType(object)) {
             case STREAM_COLLECTION:
-                coreStreamMiddleware.processCallback(object);
+                coreStreamMiddleware.processListeners(object);
                 break;
             case COLLECTION:
                 dbManager.update(object, RPC.MsgType.CHANGED);
@@ -710,7 +703,7 @@ public class RocketChatAPI implements SocketListener {
 
         //RPC methods
 
-        public void getRoomRoles(RoomListener.RoomRolesListener listener) {
+        public void getRoomRoles(RoomCallback.RoomRolesCallback listener) {
             RocketChatAPI.this.getRoomRoles(room.getRoomId(), listener);
         }
 
@@ -718,7 +711,7 @@ public class RocketChatAPI implements SocketListener {
             RocketChatAPI.this.getChatHistory(room.getRoomId(), limit, oldestMessageTimestamp, lasttimestamp, listener);
         }
 
-        public void getMembers(RoomListener.GetMembersListener membersListener) {
+        public void getMembers(RoomCallback.GetMembersListener membersListener) {
             RocketChatAPI.this.getRoomMembers(room.getRoomId(), false, membersListener);
         }
 
@@ -740,27 +733,27 @@ public class RocketChatAPI implements SocketListener {
             RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.getRoomId(), message, listener);
         }
 
-        public void deleteMessage(String msgId, SimpleListener listener) {
+        public void deleteMessage(String msgId, SimpleCallback listener) {
             RocketChatAPI.this.deleteMessage(msgId, listener);
         }
 
-        public void updateMessage(String msgId, String message, SimpleListener listener) {
+        public void updateMessage(String msgId, String message, SimpleCallback listener) {
             RocketChatAPI.this.updateMessage(msgId, room.getRoomId(), message, listener);
         }
 
-        public void pinMessage(JSONObject message, SimpleListener listener) {
+        public void pinMessage(JSONObject message, SimpleCallback listener) {
             RocketChatAPI.this.pinMessage(message, listener);
         }
 
-        public void unpinMessage(JSONObject message, SimpleListener listener) {
+        public void unpinMessage(JSONObject message, SimpleCallback listener) {
             RocketChatAPI.this.unpinMessage(message, listener);
         }
 
-        public void starMessage(String msgId, Boolean starred, SimpleListener listener) {
+        public void starMessage(String msgId, Boolean starred, SimpleCallback listener) {
             RocketChatAPI.this.starMessage(msgId, room.getRoomId(), starred, listener);
         }
 
-        public void setReaction(String emojiId, String msgId, SimpleListener listener) {
+        public void setReaction(String emojiId, String msgId, SimpleCallback listener) {
             RocketChatAPI.this.setReaction(emojiId, msgId, listener);
         }
 
@@ -768,27 +761,27 @@ public class RocketChatAPI implements SocketListener {
             RocketChatAPI.this.searchMessage(message, room.getRoomId(), limit, listener);
         }
 
-        public void deleteGroup(SimpleListener listener) {
+        public void deleteGroup(SimpleCallback listener) {
             RocketChatAPI.this.deleteGroup(room.getRoomId(), listener);
         }
 
-        public void archive(SimpleListener listener) {
+        public void archive(SimpleCallback listener) {
             RocketChatAPI.this.archiveRoom(room.getRoomId(), listener);
         }
 
-        public void unarchive(SimpleListener listener) {
+        public void unarchive(SimpleCallback listener) {
             RocketChatAPI.this.unarchiveRoom(room.getRoomId(), listener);
         }
 
-        public void leave(SimpleListener listener) {
+        public void leave(SimpleCallback listener) {
             RocketChatAPI.this.leaveGroup(room.getRoomId(), listener);
         }
 
-        public void hide(SimpleListener listener) {
+        public void hide(SimpleCallback listener) {
             RocketChatAPI.this.hideRoom(room.getRoomId(), listener);
         }
 
-        public void open(SimpleListener listener) {
+        public void open(SimpleCallback listener) {
             RocketChatAPI.this.openRoom(room.getRoomId(), listener);
         }
 
@@ -801,7 +794,7 @@ public class RocketChatAPI implements SocketListener {
             RocketChatAPI.this.sendFileMessage(room.getRoomId(), file.getStore(), file.getFileId(), file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(), file.getUrl(), listener);
         }
 
-        public void setFavourite(Boolean isFavoutite, SimpleListener listener) {
+        public void setFavourite(Boolean isFavoutite, SimpleCallback listener) {
             RocketChatAPI.this.setFavouriteRoom(room.getRoomId(), isFavoutite, listener);
         }
 
@@ -821,7 +814,7 @@ public class RocketChatAPI implements SocketListener {
 
         public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
             if (roomSubId != null) {
-                coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_MESSAGE);
+                coreStreamMiddleware.removeSubscription(room.getRoomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
                 RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
                 roomSubId = null;
             }
@@ -829,14 +822,14 @@ public class RocketChatAPI implements SocketListener {
 
         public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
             if (typingSubId != null) {
-                coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_TYPING);
+                coreStreamMiddleware.removeSubscription(room.getRoomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
                 RocketChatAPI.this.unsubscribeRoom(typingSubId, subscribeListener);
                 typingSubId = null;
             }
         }
 
         public void unSubscribeAllEvents() {
-            coreStreamMiddleware.removeAllSub(room.getRoomId());
+            coreStreamMiddleware.removeAllSubscriptions(room.getRoomId());
             unSubscribeRoomMessageEvent(null);
             unSubscribeRoomTypingEvent(null);
         }

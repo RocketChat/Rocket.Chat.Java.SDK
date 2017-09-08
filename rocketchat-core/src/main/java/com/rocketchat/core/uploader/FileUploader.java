@@ -1,6 +1,6 @@
 package com.rocketchat.core.uploader;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.common.utils.MultipartUploader;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
@@ -48,7 +48,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     }
 
     @Override
-    public void onUfsCreate(final FileUploadToken token, ErrorObject error) {
+    public void onUfsCreate(final FileUploadToken token, ApiError error) {
         if (error == null) {
             fileListener.onUploadStarted(room.getRoomData().getRoomId(), newFileName, description);
 
@@ -83,7 +83,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     }
 
     @Override
-    public void onUfsComplete(FileObject file, ErrorObject error) {
+    public void onUfsComplete(FileObject file, ApiError error) {
         if (error == null) {
             fileListener.onUploadComplete(statusCode, file, room.getRoomData().getRoomId(), newFileName, description);
             room.sendFileMessage(file, this);
@@ -93,7 +93,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     }
 
     @Override
-    public void onMessageAck(RocketChatMessage message, ErrorObject error) {
+    public void onMessageAck(RocketChatMessage message, ApiError error) {
         fileListener.onSendFile(message, error);
     }
 }

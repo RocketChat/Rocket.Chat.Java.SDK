@@ -1,17 +1,12 @@
 package com.rocketchat.core.adapter;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.data.model.ApiError;
+import com.rocketchat.common.data.model.Error;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.TypingListener;
-import com.rocketchat.core.callback.AccountListener;
-import com.rocketchat.core.callback.EmojiListener;
-import com.rocketchat.core.callback.GetSubscriptionListener;
-import com.rocketchat.core.callback.HistoryListener;
-import com.rocketchat.core.callback.LoginListener;
-import com.rocketchat.core.callback.MessageListener;
-import com.rocketchat.core.callback.RoomListener;
-import com.rocketchat.core.callback.UserListener;
+import com.rocketchat.core.callback.*;
+import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.model.Emoji;
 import com.rocketchat.core.model.Permission;
 import com.rocketchat.core.model.PublicSetting;
@@ -30,9 +25,9 @@ public class CoreAdapter implements ConnectListener,
         LoginListener,
         AccountListener.getPermissionsListener,
         AccountListener.getPublicSettingsListener,
-        RoomListener.GetRoomListener,
-        RoomListener.RoomRolesListener,
-        RoomListener.GetMembersListener,
+        RoomCallback.GetRoomCallback,
+        RoomCallback.RoomRolesCallback,
+        RoomCallback.GetMembersListener,
         EmojiListener,
         GetSubscriptionListener,
         UserListener.getUserRoleListener,
@@ -40,7 +35,7 @@ public class CoreAdapter implements ConnectListener,
         MessageListener.SubscriptionListener,
         TypingListener {
     @Override
-    public void onLoadHistory(List<RocketChatMessage> list, int unreadNotLoaded, ErrorObject error) {
+    public void onLoadHistory(List<RocketChatMessage> list, int unreadNotLoaded, ApiError error) {
 
     }
 
@@ -50,22 +45,22 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onLoginError(ErrorObject error) {
+    public void onLoginError(Error error) {
 
     }
 
     @Override
-    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
+    public void onGetRooms(List<RoomObject> rooms, ApiError error) {
 
     }
 
     @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
+    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ApiError error) {
 
     }
 
     @Override
-    public void onUserRoles(List<UserObject> users, ErrorObject error) {
+    public void onUserRoles(List<UserObject> users, ApiError error) {
 
     }
 
@@ -85,7 +80,7 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onMessageAck(RocketChatMessage message, ErrorObject error) {
+    public void onMessageAck(RocketChatMessage message, ApiError error) {
 
     }
 
@@ -95,22 +90,22 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onGetPermissions(List<Permission> permissions, ErrorObject error) {
+    public void onGetPermissions(List<Permission> permissions, ApiError error) {
 
     }
 
     @Override
-    public void onGetPublicSettings(List<PublicSetting> settings, ErrorObject error) {
+    public void onGetPublicSettings(List<PublicSetting> settings, ApiError error) {
 
     }
 
     @Override
-    public void onGetRoomRoles(List<RoomRole> roles, ErrorObject error) {
+    public void onGetRoomRoles(List<RoomRole> roles, ApiError error) {
 
     }
 
     @Override
-    public void onListCustomEmoji(List<Emoji> emojis, ErrorObject error) {
+    public void onListCustomEmoji(List<Emoji> emojis, ApiError error) {
 
     }
 
@@ -120,7 +115,7 @@ public class CoreAdapter implements ConnectListener,
     }
 
     @Override
-    public void onGetRoomMembers(Integer total, List<UserObject> members, ErrorObject error) {
+    public void onGetRoomMembers(Integer total, List<UserObject> members, ApiError error) {
 
     }
 }
