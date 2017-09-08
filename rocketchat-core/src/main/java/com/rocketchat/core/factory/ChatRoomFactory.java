@@ -7,6 +7,7 @@ import com.rocketchat.core.model.SubscriptionObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by sachin on 29/7/17.
@@ -18,6 +19,11 @@ public class ChatRoomFactory {
 
     private RocketChatAPI api;
     private ArrayList<RocketChatAPI.ChatRoom> rooms;
+
+    public static final String FAVORITE = "f";
+    public static final String DIRECT= "d";
+    public static final String PUBLIC = "c";
+    public static final String PRIVATE = "p";
 
     public ChatRoomFactory(RocketChatAPI api) {
         this.api = api;
@@ -92,8 +98,36 @@ public class ChatRoomFactory {
         return favorites;
     }
 
+    private ArrayList <RocketChatAPI.ChatRoom> removeFavorite (ArrayList <RocketChatAPI.ChatRoom> rooms) {
+
+        ListIterator<RocketChatAPI.ChatRoom> roomListIterator = rooms.listIterator();
+        while (roomListIterator.hasNext()) {
+            Room roomObject = roomListIterator.next().getRoomData();
+            if (roomObject instanceof SubscriptionObject) {
+                if (((SubscriptionObject) roomObject).isFavourite()) {
+                    roomListIterator.remove();
+                }
+            }
+        }
+        return rooms;
+    }
+
+    /**
+     * This has four types of rooms
+     * Favorite room can have all types of rooms, other rooms do not contains favorites
+     * @return returns sorted rooms in the form of hashmap with keys
+     * 1. ChatRoomFactory.FAVORITE
+     * 2. ChatRoomFactory.DIRECT
+     * 3. ChatRoomFactory.PUBLIC
+     * 4. ChatRoomFactory.PRIVATE
+     */
+
     public HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> getSortedRooms() {
         HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> rooms = new HashMap<>();
+        rooms.put(FAVORITE, getFavoriteRooms());
+        rooms.put(DIRECT, removeFavorite(getDirectRooms()));
+        rooms.put(PUBLIC, removeFavorite(getPublicGroups()));
+        rooms.put(PRIVATE, removeFavorite(getPrivateGroups()));
         return rooms;
     }
 
