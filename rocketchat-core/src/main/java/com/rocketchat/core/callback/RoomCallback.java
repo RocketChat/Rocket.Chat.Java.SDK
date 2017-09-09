@@ -12,19 +12,11 @@ import java.util.List;
  * Created by sachin on 20/7/17.
  */
 public class RoomCallback {
-    public interface GetRoomCallback extends Callback {
-        void onGetRooms(List<RoomObject> rooms);
-    }
-
-    public interface RoomRolesCallback extends Callback {
-        void onGetRoomRoles(List<RoomRole> roles);
-    }
-
-    public interface GroupListener extends Callback {
+    public interface GroupCreateCallback extends Callback {
         void onCreateGroup(String roomId);
     }
 
-    public interface GetMembersListener extends Callback {
+    public interface GetMembersCallback extends Callback {
         void onGetRoomMembers(Integer total, List<UserObject> members);
     }
 

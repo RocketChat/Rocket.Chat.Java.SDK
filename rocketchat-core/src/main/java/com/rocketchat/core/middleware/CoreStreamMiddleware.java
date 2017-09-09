@@ -3,7 +3,7 @@ package com.rocketchat.core.middleware;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
-import com.rocketchat.core.callback.MessageListener;
+import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.model.RocketChatMessage;
 import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
@@ -65,7 +65,7 @@ public class CoreStreamMiddleware {
             switch (parse(s)) {
                 case SUBSCRIBE_ROOM_MESSAGE:
                     listener = subs.get(roomId).get(SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
-                    MessageListener.SubscriptionListener subscriptionListener = (MessageListener.SubscriptionListener) listener;
+                    MessageCallback.SubscriptionCallback subscriptionListener = (MessageCallback.SubscriptionCallback) listener;
                     RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
                     subscriptionListener.onMessage(roomId, message);
                     break;

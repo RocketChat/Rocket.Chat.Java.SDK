@@ -21,18 +21,18 @@ import java.util.List;
  * Created by sachin on 21/7/17.
  */
 public class CoreAdapter implements ConnectListener,
-        HistoryListener,
-        LoginListener,
+        HistoryCallback,
+        LoginCallback,
         AccountListener.getPermissionsListener,
         AccountListener.getPublicSettingsListener,
         RoomCallback.GetRoomCallback,
         RoomCallback.RoomRolesCallback,
-        RoomCallback.GetMembersListener,
+        RoomCallback.GetMembersCallback,
         EmojiListener,
         GetSubscriptionListener,
         UserListener.getUserRoleListener,
-        MessageListener.MessageAckListener,
-        MessageListener.SubscriptionListener,
+        MessageCallback.MessageAckCallback,
+        MessageCallback.SubscriptionCallback,
         TypingListener {
     @Override
     public void onLoadHistory(List<RocketChatMessage> list, int unreadNotLoaded, ApiError error) {

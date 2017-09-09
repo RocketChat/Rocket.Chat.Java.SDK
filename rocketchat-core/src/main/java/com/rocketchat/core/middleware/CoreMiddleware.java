@@ -3,10 +3,13 @@ package com.rocketchat.core.middleware;
 import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.common.data.model.Error;
 import com.rocketchat.common.data.model.UserObject;
-import com.rocketchat.common.listener.Listener;
+import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.Pair;
-import com.rocketchat.core.callback.*;
+import com.rocketchat.core.callback.HistoryCallback;
+import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.model.Emoji;
 import com.rocketchat.core.model.FileObject;
@@ -19,10 +22,13 @@ import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
 import com.rocketchat.core.uploader.FileUploadToken;
 import com.rocketchat.core.uploader.IFileUpload;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 18/7/17.
@@ -31,13 +37,13 @@ import org.json.JSONObject;
 // TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
 public class CoreMiddleware {
 
-    private ConcurrentHashMap<Long, Pair<Listener, ListenerType>> callbacks;
+    private ConcurrentHashMap<Long, Pair<? extends Callback, ListenerType>> callbacks;
 
     public CoreMiddleware() {
         callbacks = new ConcurrentHashMap<>();
     }
 
-    public void createCallback(long i, Listener listener, CoreMiddleware.ListenerType type) {
+    public void createCallback(long i, Callback listener, CoreMiddleware.ListenerType type) {
         if (listener != null) {
             callbacks.put(i, Pair.create(listener, type));
         }
@@ -45,124 +51,124 @@ public class CoreMiddleware {
 
     public void processCallback(long i, JSONObject object) {
         if (callbacks.containsKey(i)) {
-            Pair<Listener, ListenerType> listenerPair = callbacks.remove(i);
-            Listener listener = listenerPair.first;
+            Pair<? extends Callback, ListenerType> listenerPair = callbacks.remove(i);
+            Callback callback = listenerPair.first;
             CoreMiddleware.ListenerType type = listenerPair.second;
             Object result = object.opt("result");
             switch (type) {
                 case LOGIN:
-                    LoginListener loginListener = (LoginListener) listener;
+                    LoginCallback loginListener = (LoginCallback) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        loginListener.onLoginError(errorObject);
+                        loginListener.onError(errorObject);
                     } else {
                         TokenObject tokenObject = new TokenObject((JSONObject) result);
                         loginListener.onLoginSuccess(tokenObject);
                     }
                     break;
                 case GET_PERMISSIONS:
-                    AccountListener.getPermissionsListener getPermissionsListener = (AccountListener.getPermissionsListener) listener;
+                    SimpleListCallback<Permission> permissionCallback = (SimpleListCallback<Permission>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        getPermissionsListener.onGetPermissions(null, errorObject);
+                        permissionCallback.onError(errorObject);
                     } else {
-                        ArrayList<Permission> permissions = new ArrayList<>();
+                        List<Permission> permissions = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             permissions.add(new Permission(array.optJSONObject(j)));
                         }
-                        getPermissionsListener.onGetPermissions(permissions, null);
+                        permissionCallback.onSuccess(permissions);
                     }
                     break;
                 case GET_PUBLIC_SETTINGS:
-                    AccountListener.getPublicSettingsListener getPublicSettingsListener = (AccountListener.getPublicSettingsListener) listener;
+                    SimpleListCallback<PublicSetting> settingsCallback = (SimpleListCallback<PublicSetting>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        getPublicSettingsListener.onGetPublicSettings(null, errorObject);
+                        settingsCallback.onError(errorObject);
                     } else {
                         ArrayList<PublicSetting> settings = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             settings.add(new PublicSetting(array.optJSONObject(j)));
                         }
-                        getPublicSettingsListener.onGetPublicSettings(settings, null);
+                        settingsCallback.onSuccess(settings);
                     }
                     break;
                 case GET_USER_ROLES:
-                    UserListener.getUserRoleListener userRoleListener = (UserListener.getUserRoleListener) listener;
+                    SimpleListCallback<UserObject> rolesCallback = (SimpleListCallback<UserObject>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        userRoleListener.onUserRoles(null, errorObject);
+                        rolesCallback.onError(errorObject);
                     } else {
                         ArrayList<UserObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new UserObject(array.optJSONObject(j)));
                         }
-                        userRoleListener.onUserRoles(list, null);
+                        rolesCallback.onSuccess(list);
                     }
                     break;
                 case GET_SUBSCRIPTIONS:
-                    GetSubscriptionListener subscriptionListener = (GetSubscriptionListener) listener;
+                    SimpleListCallback<SubscriptionObject> subscriptionCallback = (SimpleListCallback<SubscriptionObject>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        subscriptionListener.onGetSubscriptions(null, errorObject);
+                        subscriptionCallback.onError(errorObject);
                     } else {
                         ArrayList<SubscriptionObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new SubscriptionObject(array.optJSONObject(j)));
                         }
-                        subscriptionListener.onGetSubscriptions(list, null);
+                        subscriptionCallback.onSuccess(list);
                     }
                     break;
                 case GET_ROOMS:
-                    RoomCallback.GetRoomCallback getRoomListener = (RoomCallback.GetRoomCallback) listener;
+                    SimpleListCallback<RoomObject> roomCallback = (SimpleListCallback<RoomObject>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        getRoomListener.onError(errorObject);
+                        roomCallback.onError(errorObject);
                     } else {
                         ArrayList<RoomObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RoomObject(array.optJSONObject(j)));
                         }
-                        getRoomListener.onGetRooms(list);
+                        roomCallback.onSuccess(list);
                     }
                     break;
                 case GET_ROOM_ROLES:
-                    RoomCallback.RoomRolesCallback roomRolesListener = (RoomCallback.RoomRolesCallback) listener;
+                    SimpleListCallback<RoomRole> roomRolesCallback = (SimpleListCallback<RoomRole>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        roomRolesListener.onError(errorObject);
+                        roomRolesCallback.onError(errorObject);
                     } else {
                         ArrayList<RoomRole> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RoomRole(array.optJSONObject(j)));
                         }
-                        roomRolesListener.onGetRoomRoles(list);
+                        roomRolesCallback.onSuccess(list);
                     }
                     break;
                 case LIST_CUSTOM_EMOJI:
-                    EmojiListener emojiListener = (EmojiListener) listener;
+                    SimpleListCallback<Emoji> emojiCallback = (SimpleListCallback<Emoji>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        emojiListener.onListCustomEmoji(null, errorObject);
+                        emojiCallback.onError(errorObject);
                     } else {
                         ArrayList<Emoji> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new Emoji(array.optJSONObject(j)));
                         }
-                        emojiListener.onListCustomEmoji(list, null);
+                        emojiCallback.onSuccess(list);
                     }
                     break;
                 case LOAD_HISTORY:
-                    HistoryListener historyListener = (HistoryListener) listener;
+                    HistoryCallback historyListener = (HistoryCallback) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        historyListener.onLoadHistory(null, 0, errorObject);
+                        historyListener.onError(errorObject);
                     } else {
                         ArrayList<RocketChatMessage> list = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("messages");
@@ -170,11 +176,11 @@ public class CoreMiddleware {
                             list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
-                        historyListener.onLoadHistory(list, unreadNotLoaded, null);
+                        historyListener.onLoadHistory(list, unreadNotLoaded);
                     }
                     break;
                 case GET_ROOM_MEMBERS:
-                    RoomCallback.GetMembersListener membersListener = (RoomCallback.GetMembersListener) listener;
+                    RoomCallback.GetMembersCallback membersListener = (RoomCallback.GetMembersCallback) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
                         membersListener.onError(errorObject);
@@ -189,34 +195,34 @@ public class CoreMiddleware {
                     }
                     break;
                 case SEND_MESSAGE:
-                    MessageListener.MessageAckListener ackListener = (MessageListener.MessageAckListener) listener;
+                    MessageCallback.MessageAckCallback ackCallback = (MessageCallback.MessageAckCallback) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        ackListener.onMessageAck(null, errorObject);
+                        ackCallback.onError(errorObject);
                     } else {
                         RocketChatMessage message = new RocketChatMessage((JSONObject) result);
-                        ackListener.onMessageAck(message, null);
+                        ackCallback.onMessageAck(message);
                     }
                     break;
                 case MESSAGE_OP:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case SEARCH_MESSAGE:
-                    MessageListener.SearchMessageListener searchMessageListener = (MessageListener.SearchMessageListener) listener;
+                    SimpleListCallback<RocketChatMessage> searchMessageCallback = (SimpleListCallback<RocketChatMessage>) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        searchMessageListener.onSearchMessage(null, errorObject);
+                        searchMessageCallback.onError(errorObject);
                     } else {
                         ArrayList<RocketChatMessage> list = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
-                        searchMessageListener.onSearchMessage(list, null);
+                        searchMessageCallback.onSuccess(list);
                     }
                     break;
                 case CREATE_GROUP:
-                    RoomCallback.GroupListener groupListener = (RoomCallback.GroupListener) listener;
+                    RoomCallback.GroupCreateCallback groupListener = (RoomCallback.GroupCreateCallback) callback;
                     if (object.opt("error") != null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
                         groupListener.onError(errorObject);
@@ -226,54 +232,54 @@ public class CoreMiddleware {
                     }
                     break;
                 case DELETE_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case ARCHIVE:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case UNARCHIVE:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case JOIN_PUBLIC_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case LEAVE_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case OPEN_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case HIDE_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case SET_FAVOURITE_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case SET_STATUS:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case UFS_CREATE:
-                    IFileUpload.UfsCreateListener ufsCreateListener = (IFileUpload.UfsCreateListener) listener;
+                    IFileUpload.UfsCreateCallback ufsCreateListener = (IFileUpload.UfsCreateCallback) callback;
                     if (object.opt("error") != null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        ufsCreateListener.onUfsCreate(null, errorObject);
+                        ufsCreateListener.onError(errorObject);
                     } else {
                         FileUploadToken token = new FileUploadToken((JSONObject) result);
-                        ufsCreateListener.onUfsCreate(token, null);
+                        ufsCreateListener.onUfsCreate(token);
                     }
                     break;
                 case UFS_COMPLETE:
-                    IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) listener;
+                    IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) callback;
                     if (object.opt("error") != null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        completeListener.onUfsComplete(null, errorObject);
+                        completeListener.onError(errorObject);
                     } else {
                         FileObject file = new FileObject((JSONObject) result);
-                        completeListener.onUfsComplete(file, null);
+                        completeListener.onUfsComplete(file);
                     }
                     break;
                 case LOGOUT:
-                    handleCallbackBySimpleListener((SimpleCallback) listener, object.opt("error"));
+                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
             }
         }
@@ -283,13 +289,17 @@ public class CoreMiddleware {
 
     }
 
-    private void handleCallbackBySimpleListener(SimpleCallback listener, Object error) {
+    private void handleCallbackBySimpleListener(SimpleCallback callback, Object error) {
         if (error != null) {
             Error errorObject = new ApiError((JSONObject) error);
-            listener.onError(errorObject);
+            callback.onError(errorObject);
         } else {
-            listener.onSuccess();
+            callback.onSuccess();
         }
+    }
+
+    private <T> void handleSimpleListCallback(SimpleListCallback<T> callback, List<T> result) {
+        callback.onSuccess(result);
     }
 
     public enum ListenerType {

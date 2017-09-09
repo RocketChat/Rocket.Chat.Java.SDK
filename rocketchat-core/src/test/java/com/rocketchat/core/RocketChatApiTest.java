@@ -1,7 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.ApiError;
-import com.rocketchat.core.callback.LoginListener;
+import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.TokenObject;
 
 import org.junit.After;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class RocketChatApiTest {
 
     @Mock
-    LoginListener loginListener;
+    LoginCallback loginListener;
     @Captor
     ArgumentCaptor<TokenObject> tokenArgumentCaptor;
     @Captor
