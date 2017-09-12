@@ -5,18 +5,24 @@ import org.json.JSONObject;
 import java.util.Date;
 
 public class RocketChatRolesDocument {
+    String name;
     String scope;
     String description;
     Boolean _protected;
     Date updatedAt;
 
     RocketChatRolesDocument (JSONObject roles){
+        name = roles.optString("name");
         scope = roles.optString("scope");
         description = roles.optString("description");
         _protected = roles.optBoolean("protected");
         if (roles.opt("_updatedAt") != null) {
             updatedAt = new Date(roles.optJSONObject("_updatedAt").optLong("$date"));
         }
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getScope() {

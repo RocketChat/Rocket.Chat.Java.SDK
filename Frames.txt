@@ -199,6 +199,7 @@ a["{\"msg\":\"added\",\"collection\":\"rocketchat_roles\",\"id\":\"anonymous\",\
 
 a["{\"msg\":\"added\",\"collection\":\"meteor_autoupdate_clientVersions\",\"id\":\"version\",\"fields\":{\"version\":\"662d6600ebb9cd04529d002fd057848ff6d152e1\"}}"]
 
+a["{\"msg\":\"added\",\"collection\":\"meteor_autoupdate_clientVersions\",\"id\":\"version-refreshable\",\"fields\":{\"version\":\"8d9c9b7438ef70574a38b895e5d678d602c5813f\",\"assets\":{\"allCss\":[{\"url\":\"https://demo.rocket.chat/17fa655593bfd075be9a561c78d0dea7a7a38801.css?meteor_css_resource=true\"},{\"url\":\"https://demo.rocket.chat/eccb8e2c805286c5603670618c91f33da4987dea.css?meteor_css_resource=true\"},{\"url\":\"https://demo.rocket.chat/theme.css?a399642ab0b8108bd46072044c54a68f4e38677d\"}]}}}"]
 
 
 // All subscriptions

@@ -30,6 +30,10 @@ public class DbManager extends Observable {
         String collectionName = object.optString("collection");
         if (collectionName.equals(COLLECTION_TYPE_USERS)) {
             updateUsers(object, type);
+        } else if (collectionName.equals(COLLECTION_TYPE_ROCKETCHAT_ROLES)) {
+            updateRoles(object, type);
+        } else if (collectionName.equals(COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF)) {
+            updateLoginConfiguration(object, type);
         }
     }
 
@@ -61,6 +65,14 @@ public class DbManager extends Observable {
             default:
                 break;
         }
+    }
+
+    private void updateRoles(JSONObject object, RPC.MsgType type) {
+
+    }
+
+    private void updateLoginConfiguration(JSONObject object, RPC.MsgType type) {
+
     }
 
     public enum Type {
