@@ -158,6 +158,9 @@ factory.removeChatRoomByName(room);
 - Getting user status from id (method returns doc which also contains other information of a given user)
 
 ```
+   api.subscribeUserData(null);
+   api.subscribeActiveUsers(null);
+   //Make sure you are subscribed by using above code
    UserDocument user = api.getDbManager().getUserCollection().get("userid");
    System.out.println("UserName is " + user.getName());
    System.out.println("User status is "+ user.getStatus());
@@ -168,6 +171,8 @@ factory.removeChatRoomByName(room);
 - Observe for status change of a particular user by providing his/her user-id
 
 ```
+        api.subscribeUserData(null);
+        api.subscribeActiveUsers(null);
         api.getDbManager().getUserCollection().register("user_id", new 
             Collection.Observer<UserDocument>() {
             public void onUpdate(Collection.Type type, UserDocument user) {
@@ -187,9 +192,14 @@ factory.removeChatRoomByName(room);
 
 ```
 
-- Observe all users for status changes.
+- Observe all collections for document changes.
 
 ```
+        api.subscribeUserData(null);
+        api.subscribeActiveUsers(null);
+        api.subscribeClientVersions(null);
+        api.subscribeLoginConf(null);
+        api.subscribeUserRoles(null);
         api.getDbManager().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
                 if (arg !=null) {
@@ -200,6 +210,49 @@ factory.removeChatRoomByName(room);
             }
         });
 
+```
+
+- Observe particular collection for change
+1. This is a loginConfiguration collection change.
+
+```
+        api.subscribeLoginConf(null);
+        api.getDbManager().getLoginConfDocumentCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                LoginConfDocument document = (LoginConfDocument) arg;
+                System.out.println("New document name is "+ document.getService());
+                System.out.println("Client Id is " + document.getClientId());
+                System.out.println("App id is " + document.getAppId());
+                System.out.println("Consumer key is " + document.getConsumerKey());
+            }
+        });
+```
+
+2. This is a client version change
+```
+        api.subscribeClientVersions(null);
+        api.getDbManager().getVersionsDocumentCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                ClientVersionsDocument document = (ClientVersionsDocument) arg;
+                System.out.println("id is " + document.getId());
+                System.out.println("version is " + document.getVersion());
+            }
+        });
+```
+
+3. This is change to the user roles
+
+```
+        api.subscribeUserRoles(null);
+        api.getDbManager().getRolesDocumentCollection().addObserver(new Observer() {
+          public void update(Observable o, Object arg) {
+              RocketChatRolesDocument document = (RocketChatRolesDocument) arg;
+              System.out.println("Role name is " + document.getName());
+              System.out.println("Description is " + document.getDescription());
+              System.out.println("Scope is " + document.getScope());
+              System.out.println("Updated at " + document.getUpdatedAt());
+          }
+        });
 ```
 
 **7. getPermissions**
@@ -368,6 +421,26 @@ factory.removeChatRoomByName(room);
                 System.out.println("Subscribed to user data");
             }
         });
+```
+
+19. subscribeUserRoles
+- Used to get different user roles 
+```java
+
+```
+
+20. subscribeLoginConf
+- Used to get different login configurations used for facebook, twitter, github etc
+
+```java
+
+```
+21. subscribeClientVersions
+- Used to get different client versions
+
+```java
+
+
 ```
 
 **19. logout**

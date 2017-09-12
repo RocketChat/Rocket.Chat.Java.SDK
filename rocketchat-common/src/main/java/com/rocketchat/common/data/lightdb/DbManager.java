@@ -149,6 +149,7 @@ public class DbManager extends Observable {
         switch (type) {
             case ADDED:
                 ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
+                clientVersionsDocument.setId(id);
                 versionsDocumentCollection.add(id, clientVersionsDocument);
                 setChanged();
                 notifyObservers(clientVersionsDocument);

@@ -1,8 +1,14 @@
+import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
+import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
+import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.model.TokenObject;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by sachin on 7/6/17.
@@ -11,8 +17,8 @@ import com.rocketchat.core.model.TokenObject;
 
 public class Main extends CoreAdapter {
 
-    String username = "sachin.shinde";
-    String password = "sachin123";
+    String username = "";
+    String password = "";
 
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
@@ -31,11 +37,6 @@ public class Main extends CoreAdapter {
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         System.out.println("Logged in successfully");
-        api.subscribeClientVersions(null);
-        api.subscribeLoginConf(null);
-        api.subscribeUserRoles(null);
-
-
     }
 
     @Override

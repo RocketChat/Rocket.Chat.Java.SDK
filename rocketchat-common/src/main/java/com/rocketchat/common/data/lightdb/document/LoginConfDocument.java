@@ -25,6 +25,14 @@ public class LoginConfDocument {
         return clientId;
     }
 
+    public String getAppId() {
+        return appId;
+    }
+
+    public String getConsumerKey() {
+        return consumerKey;
+    }
+
     public void update(JSONObject object) {
         if (object.opt("service") != null) {
             service = object.optString("service");
