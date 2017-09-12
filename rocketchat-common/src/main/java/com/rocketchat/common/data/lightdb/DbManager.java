@@ -38,6 +38,18 @@ public class DbManager extends Observable {
         return usersCollection;
     }
 
+    public Collection<String, LoginConfDocument> getLoginConfDocumentCollection() {
+        return loginConfDocumentCollection;
+    }
+
+    public Collection<String, RocketChatRolesDocument> getRolesDocumentCollection() {
+        return rolesDocumentCollection;
+    }
+
+    public Collection<String, ClientVersionsDocument> getVersionsDocumentCollection() {
+        return versionsDocumentCollection;
+    }
+
     public void update(JSONObject object, RPC.MsgType type) {
         String collectionName = object.optString("collection");
         if (collectionName.equals(COLLECTION_TYPE_USERS)) {
@@ -88,14 +100,20 @@ public class DbManager extends Observable {
             case ADDED:
                 RocketChatRolesDocument rolesDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
                 rolesDocumentCollection.add(id, rolesDocument);
+                setChanged();
+                notifyObservers(rolesDocument);
                 break;
             case CHANGED:
                 rolesDocumentCollection.get(id).update(object.optJSONObject("fields"));
                 RocketChatRolesDocument document = rolesDocumentCollection.get(id);
                 rolesDocumentCollection.update(id, document);
+                setChanged();
+                notifyObservers(document);
                 break;
             case REMOVED:
                 rolesDocumentCollection.remove(id);
+                setChanged();
+                notifyObservers();
                 break;
         }
     }
@@ -107,14 +125,20 @@ public class DbManager extends Observable {
             case ADDED:
                 LoginConfDocument loginConfDocument = new LoginConfDocument(object.optJSONObject("fields"));
                 loginConfDocumentCollection.add(id, loginConfDocument);
+                setChanged();
+                notifyObservers(loginConfDocument);
                 break;
             case CHANGED:
                 loginConfDocumentCollection.get(id).update(object.optJSONObject("fields"));
                 LoginConfDocument document = loginConfDocumentCollection.get(id);
                 loginConfDocumentCollection.update(id, document);
+                setChanged();
+                notifyObservers(document);
                 break;
             case REMOVED:
                 loginConfDocumentCollection.remove(id);
+                setChanged();
+                notifyObservers();
                 break;
         }
     }
@@ -126,14 +150,20 @@ public class DbManager extends Observable {
             case ADDED:
                 ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
                 versionsDocumentCollection.add(id, clientVersionsDocument);
+                setChanged();
+                notifyObservers(clientVersionsDocument);
                 break;
             case CHANGED:
                 versionsDocumentCollection.get(id).update(object.optJSONObject("fields"));
                 ClientVersionsDocument document = versionsDocumentCollection.get(id);
                 versionsDocumentCollection.update(id, document);
+                setChanged();
+                notifyObservers(document);
                 break;
             case REMOVED:
                 versionsDocumentCollection.remove(id);
+                setChanged();
+                notifyObservers();
                 break;
         }
     }

@@ -2,11 +2,7 @@ import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
-import com.rocketchat.core.factory.ChatRoomFactory;
-import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
-
-import java.util.List;
 
 /**
  * Created by sachin on 7/6/17.
@@ -15,8 +11,8 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
-    String username = "";
-    String password = "";
+    String username = "sachin.shinde";
+    String password = "sachin123";
 
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
@@ -28,21 +24,19 @@ public class Main extends CoreAdapter {
     public void call() {
         api = new RocketChatAPI(serverurl);
         api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
-        api.setPingInterval(3000);
         api.connect(this);
 
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-    }
+        System.out.println("Logged in successfully");
+        api.subscribeClientVersions(null);
+        api.subscribeLoginConf(null);
+        api.subscribeUserRoles(null);
 
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = api.getChatRoomFactory();
-    }
 
+    }
 
     @Override
     public void onConnect(String sessionID) {
