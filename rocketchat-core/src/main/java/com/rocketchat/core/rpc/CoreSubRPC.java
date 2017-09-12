@@ -11,13 +11,14 @@ public class CoreSubRPC extends SubRPC {
     private static final String STREAM_NOTIFY_ROOM = "stream-notify-room";
     private static final String USER_DATA = "userData";
     private static final String ACTIVE_USERS = "activeUsers";
-    // might be used in future
-    private static final String STREAM_NOTIFY_USER = "stream-notify-user";
-    private static final String STREAM_NOTIFY_LOGGED = "stream-notify-logged";
-    private static final String STREAM_NOTIFY_ALL = "stream-notify-all";
     private static final String ROLES = "roles";
     private static final String LOGIN_SERVICE_CONFIGURATION = "meteor.loginServiceConfiguration";
     private static final String AUTO_UPDATE_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
+
+    // might be used in future (comes under collections)
+    private static final String STREAM_NOTIFY_USER = "stream-notify-user";
+    private static final String STREAM_NOTIFY_LOGGED = "stream-notify-logged";
+    private static final String STREAM_NOTIFY_ALL = "stream-notify-all";
 
     // Events (comes under params)
     private static final String TYPING_EVENT = "/typing";
@@ -53,6 +54,18 @@ public class CoreSubRPC extends SubRPC {
 
     public static String subscribeActiveUsers(String uniqueid) {
         return getRemoteSubscriptionObject(uniqueid, ACTIVE_USERS).toString();
+    }
+
+    public static String subscribeLoginServiceConfiguration(String uniqueid) {
+        return getRemoteSubscriptionObject(uniqueid, LOGIN_SERVICE_CONFIGURATION).toString();
+    }
+
+    public static String subscribeClientVersions(String uniqueid) {
+        return getRemoteSubscriptionObject(uniqueid, AUTO_UPDATE_CLIENT_VERSIONS).toString();
+    }
+
+    public static String subscribeUserRoles(String uniqueId) {
+        return getRemoteSubscriptionObject(uniqueId, ROLES).toString();
     }
 
     public static String subscribeRoomMessageDeleteEvent(String uniqueid, String room_id, Boolean persistenceEnable) {
