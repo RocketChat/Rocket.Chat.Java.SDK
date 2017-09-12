@@ -8,12 +8,14 @@ public class LoginConfDocument {
     String appId;
     String consumerKey;
 
-    LoginConfDocument(JSONObject conf) {
+    public LoginConfDocument(JSONObject conf) {
         service = conf.optString("service");
         clientId = conf.optString("clientId");
         appId = conf.optString("appId");
         consumerKey = conf.optString("consumerKey");
     }
+
+
 
     public String getService() {
         return service;
@@ -21,5 +23,20 @@ public class LoginConfDocument {
 
     public String getClientId() {
         return clientId;
+    }
+
+    public void update(JSONObject object) {
+        if (object.opt("service") != null) {
+            service = object.optString("service");
+        }
+        if (object.opt("clientId") != null) {
+            clientId = object.optString("clientId");
+        }
+        if (object.opt("appId") != null) {
+            appId = object.optString("appId");
+        }
+        if (object.opt("consumerKey") != null) {
+            consumerKey = object.optString("consumerKey");
+        }
     }
 }

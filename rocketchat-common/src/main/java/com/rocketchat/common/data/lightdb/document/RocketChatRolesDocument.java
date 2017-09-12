@@ -11,7 +11,7 @@ public class RocketChatRolesDocument {
     Boolean _protected;
     Date updatedAt;
 
-    RocketChatRolesDocument (JSONObject roles){
+    public RocketChatRolesDocument(JSONObject roles){
         name = roles.optString("name");
         scope = roles.optString("scope");
         description = roles.optString("description");
@@ -20,6 +20,8 @@ public class RocketChatRolesDocument {
             updatedAt = new Date(roles.optJSONObject("_updatedAt").optLong("$date"));
         }
     }
+
+
 
     public String getName() {
         return name;
@@ -55,5 +57,23 @@ public class RocketChatRolesDocument {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void update (JSONObject object) {
+        if (object.opt("name") != null) {
+            name = object.optString("name");
+        }
+        if (object.opt("scope") != null) {
+            scope = object.optString("scope");
+        }
+        if (object.opt("description") != null) {
+            description = object.optString("description");
+        }
+        if (object.opt("protected") != null) {
+            _protected = object.optBoolean("protected");
+        }
+        if (object.opt("_updatedAt") != null) {
+            updatedAt = new Date(object.optJSONObject("_updatedAt").optLong("$date"));
+        }
     }
 }

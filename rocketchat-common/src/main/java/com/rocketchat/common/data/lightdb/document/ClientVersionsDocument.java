@@ -8,7 +8,7 @@ public class ClientVersionsDocument {
     String version;
     Boolean current = false;
 
-    ClientVersionsDocument (JSONObject object) {
+    public ClientVersionsDocument(JSONObject object) {
         version = object.optString("version");
         current = object.optBoolean("current");
     }
@@ -27,5 +27,15 @@ public class ClientVersionsDocument {
 
     public Boolean isCurrent() {
         return current;
+    }
+
+    public void update (JSONObject object) {
+        if (object.opt("version") != null) {
+            version = object.optString("version");
+        }
+
+        if (object.opt("current") != null) {
+            current = object.optBoolean("current");
+        }
     }
 }
