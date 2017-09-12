@@ -5,9 +5,11 @@ import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.core.callback.HistoryListener;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

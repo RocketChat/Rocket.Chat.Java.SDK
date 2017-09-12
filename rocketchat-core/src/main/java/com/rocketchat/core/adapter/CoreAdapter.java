@@ -20,6 +20,7 @@ import com.rocketchat.core.model.RoomObject;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
+
 import java.util.List;
 
 /**

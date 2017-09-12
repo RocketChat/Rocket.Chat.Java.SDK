@@ -5,7 +5,9 @@ import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.core.callback.AccountListener;
 import com.rocketchat.core.model.Permission;
 import com.rocketchat.core.model.TokenObject;
+
 import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

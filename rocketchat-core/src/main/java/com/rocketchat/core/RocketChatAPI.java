@@ -36,9 +36,11 @@ import com.rocketchat.core.rpc.RoomRPC;
 import com.rocketchat.core.rpc.TypingRPC;
 import com.rocketchat.core.uploader.FileUploader;
 import com.rocketchat.core.uploader.IFileUpload;
+
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.JSONObject;
 
 /**
@@ -360,6 +362,13 @@ public class RocketChatAPI extends Socket {
         return uniqueID;
     }
 
+    private String subscribeRoomDeleteEvent(String roomId, Boolean enable, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeRoomMessageDeleteEvent(uniqueID, roomId, enable));
+        return uniqueID;
+    }
+
     private void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
         sendDataInBackground(CoreSubRPC.unsubscribeRoom(subId));
         coreStreamMiddleware.createSubCallback(subId, subscribeListener);
@@ -473,6 +482,7 @@ public class RocketChatAPI extends Socket {
         //Subscription Ids for new subscriptions
         private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
         private String typingSubId;
+        private String deleteSubId;
 
         public ChatRoom(Room room) {
             this.room = room;
@@ -588,6 +598,7 @@ public class RocketChatAPI extends Socket {
         public void subscribeRoomMessageEvent(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
             if (roomSubId == null) {
                 roomSubId = RocketChatAPI.this.subscribeRoomMessageEvent(room.getRoomId(), true, subscribeListener, listener);
+                deleteSubId = RocketChatAPI.this.subscribeRoomDeleteEvent(room.getRoomId(), true, null);
             }
         }
 
@@ -597,11 +608,15 @@ public class RocketChatAPI extends Socket {
             }
         }
 
+
+
         public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
             if (roomSubId != null) {
                 coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_MESSAGE);
                 RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
+                RocketChatAPI.this.unsubscribeRoom(deleteSubId, null);
                 roomSubId = null;
+                deleteSubId = null;
             }
         }
 

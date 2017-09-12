@@ -6,7 +6,9 @@ import com.rocketchat.common.listener.SimpleListener;
 import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
+
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;

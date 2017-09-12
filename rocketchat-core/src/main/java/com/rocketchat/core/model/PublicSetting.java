@@ -1,6 +1,7 @@
 package com.rocketchat.core.model;
 
 import java.util.Date;
+
 import org.json.JSONObject;
 
 /**

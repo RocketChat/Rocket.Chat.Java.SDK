@@ -1,6 +1,7 @@
 package com.rocketchat.common.network;
 
 import com.rocketchat.common.listener.ConnectListener;
+
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**

@@ -6,7 +6,9 @@ import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
+
 import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;

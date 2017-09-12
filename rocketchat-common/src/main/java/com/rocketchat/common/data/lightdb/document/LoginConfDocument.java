@@ -16,7 +16,6 @@ public class LoginConfDocument {
     }
 
 
-
     public String getService() {
         return service;
     }

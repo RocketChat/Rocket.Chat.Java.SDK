@@ -10,6 +10,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.utils.Utils;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;

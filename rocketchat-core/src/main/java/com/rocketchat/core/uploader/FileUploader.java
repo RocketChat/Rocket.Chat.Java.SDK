@@ -8,6 +8,7 @@ import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.model.FileObject;
 import com.rocketchat.core.model.RocketChatMessage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Observable;

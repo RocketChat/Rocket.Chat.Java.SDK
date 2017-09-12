@@ -3,8 +3,10 @@ package com.rocketchat.core.model;
 import com.rocketchat.common.data.model.Message;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.model.attachment.TAttachment;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 

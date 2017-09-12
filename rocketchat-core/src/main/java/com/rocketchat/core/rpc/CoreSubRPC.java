@@ -68,8 +68,8 @@ public class CoreSubRPC extends SubRPC {
         return getRemoteSubscriptionObject(uniqueId, ROLES).toString();
     }
 
-    public static String subscribeRoomMessageDeleteEvent(String uniqueid, String room_id, Boolean persistenceEnable) {
-        return getRemoteSubscriptionObject(uniqueid, STREAM_NOTIFY_ROOM, room_id + DELETE_EVENT, persistenceEnable).toString();
+    public static String subscribeRoomMessageDeleteEvent(String uniqueid, String roomId, Boolean persistenceEnable) {
+        return getRemoteSubscriptionObject(uniqueid, STREAM_NOTIFY_ROOM, roomId + DELETE_EVENT, persistenceEnable).toString();
     }
 
 

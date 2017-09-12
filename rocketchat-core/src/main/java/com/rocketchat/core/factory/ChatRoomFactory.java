@@ -21,7 +21,7 @@ public class ChatRoomFactory {
     private ArrayList<RocketChatAPI.ChatRoom> rooms;
 
     public static final String FAVORITE = "f";
-    public static final String DIRECT= "d";
+    public static final String DIRECT = "d";
     public static final String PUBLIC = "c";
     public static final String PRIVATE = "p";
 
@@ -98,7 +98,7 @@ public class ChatRoomFactory {
         return favorites;
     }
 
-    private ArrayList <RocketChatAPI.ChatRoom> removeFavorite (ArrayList <RocketChatAPI.ChatRoom> rooms) {
+    private ArrayList<RocketChatAPI.ChatRoom> removeFavorite(ArrayList<RocketChatAPI.ChatRoom> rooms) {
 
         ListIterator<RocketChatAPI.ChatRoom> roomListIterator = rooms.listIterator();
         while (roomListIterator.hasNext()) {
@@ -115,6 +115,7 @@ public class ChatRoomFactory {
     /**
      * This has four types of rooms
      * Favorite room can have all types of rooms, other rooms do not contains favorites
+     *
      * @return returns sorted rooms in the form of hashmap with keys
      * 1. ChatRoomFactory.FAVORITE
      * 2. ChatRoomFactory.DIRECT
@@ -122,8 +123,8 @@ public class ChatRoomFactory {
      * 4. ChatRoomFactory.PRIVATE
      */
 
-    public HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> getSortedRooms() {
-        HashMap <String, ArrayList<RocketChatAPI.ChatRoom>> rooms = new HashMap<>();
+    public HashMap<String, ArrayList<RocketChatAPI.ChatRoom>> getSortedRooms() {
+        HashMap<String, ArrayList<RocketChatAPI.ChatRoom>> rooms = new HashMap<>();
         rooms.put(FAVORITE, getFavoriteRooms());
         rooms.put(DIRECT, removeFavorite(getDirectRooms()));
         rooms.put(PUBLIC, removeFavorite(getPublicGroups()));
