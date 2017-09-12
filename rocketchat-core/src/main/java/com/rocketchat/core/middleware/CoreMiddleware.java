@@ -2,11 +2,13 @@ package com.rocketchat.core.middleware;
 
 import com.rocketchat.common.data.model.ApiError;
 import com.rocketchat.common.data.model.Error;
+import com.rocketchat.common.data.model.NetworkError;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.Pair;
+import com.rocketchat.common.utils.Types;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -26,8 +28,10 @@ import com.rocketchat.core.uploader.IFileUpload;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -37,33 +41,32 @@ import java.util.concurrent.ConcurrentHashMap;
 // TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
 public class CoreMiddleware {
 
-    private ConcurrentHashMap<Long, Pair<? extends Callback, ListenerType>> callbacks;
+    private ConcurrentHashMap<Long, Pair<? extends Callback, CallbackType>> callbacks;
 
     public CoreMiddleware() {
         callbacks = new ConcurrentHashMap<>();
     }
 
-    public void createCallback(long i, Callback listener, CoreMiddleware.ListenerType type) {
-        if (listener != null) {
-            callbacks.put(i, Pair.create(listener, type));
-        }
+    public void createCallback(long i, Callback callback, CallbackType type) {
+        type.assertCallbackType(callback);
+        callbacks.put(i, Pair.create(callback, type));
     }
 
     public void processCallback(long i, JSONObject object) {
         if (callbacks.containsKey(i)) {
-            Pair<? extends Callback, ListenerType> listenerPair = callbacks.remove(i);
-            Callback callback = listenerPair.first;
-            CoreMiddleware.ListenerType type = listenerPair.second;
+            Pair<? extends Callback, CallbackType> callbackPair = callbacks.remove(i);
+            Callback callback = callbackPair.first;
+            CallbackType type = callbackPair.second;
             Object result = object.opt("result");
             switch (type) {
                 case LOGIN:
-                    LoginCallback loginListener = (LoginCallback) callback;
+                    LoginCallback loginCallback = (LoginCallback) callback;
                     if (result == null) {
                         ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        loginListener.onError(errorObject);
+                        loginCallback.onError(errorObject);
                     } else {
                         TokenObject tokenObject = new TokenObject((JSONObject) result);
-                        loginListener.onLoginSuccess(tokenObject);
+                        loginCallback.onLoginSuccess(tokenObject);
                     }
                     break;
                 case GET_PERMISSIONS:
@@ -204,9 +207,6 @@ public class CoreMiddleware {
                         ackCallback.onMessageAck(message);
                     }
                     break;
-                case MESSAGE_OP:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case SEARCH_MESSAGE:
                     SimpleListCallback<RocketChatMessage> searchMessageCallback = (SimpleListCallback<RocketChatMessage>) callback;
                     if (result == null) {
@@ -231,31 +231,17 @@ public class CoreMiddleware {
                         groupListener.onCreateGroup(roomId);
                     }
                     break;
+                case MESSAGE_OP:
                 case DELETE_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case ARCHIVE:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case UNARCHIVE:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case JOIN_PUBLIC_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case LEAVE_GROUP:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case OPEN_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case HIDE_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case SET_FAVOURITE_ROOM:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
                 case SET_STATUS:
+                case LOGOUT:
                     handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
                     break;
                 case UFS_CREATE:
@@ -278,15 +264,8 @@ public class CoreMiddleware {
                         completeListener.onUfsComplete(file);
                     }
                     break;
-                case LOGOUT:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
             }
         }
-    }
-
-    public void notifyDisconnection(String message) {
-
     }
 
     private void handleCallbackBySimpleListener(SimpleCallback callback, Object error) {
@@ -298,36 +277,60 @@ public class CoreMiddleware {
         }
     }
 
-    private <T> void handleSimpleListCallback(SimpleListCallback<T> callback, List<T> result) {
-        callback.onSuccess(result);
+    public void notifyDisconnection(String message) {
+        Error error = new NetworkError(message);
+        for (Map.Entry<Long, Pair<? extends Callback, CallbackType>> entry : callbacks.entrySet()) {
+            entry.getValue().first.onError(error);
+        }
+        cleanup();
     }
 
-    public enum ListenerType {
-        LOGIN,
-        GET_PERMISSIONS,
-        GET_PUBLIC_SETTINGS,
-        GET_USER_ROLES,
-        GET_SUBSCRIPTIONS,
-        GET_ROOMS,
-        GET_ROOM_ROLES,
-        LIST_CUSTOM_EMOJI,
-        LOAD_HISTORY,
-        GET_ROOM_MEMBERS,
-        SEND_MESSAGE,
-        MESSAGE_OP,
-        SEARCH_MESSAGE,
-        CREATE_GROUP,
-        DELETE_GROUP,
-        ARCHIVE,
-        UNARCHIVE,
-        JOIN_PUBLIC_GROUP,
-        LEAVE_GROUP,
-        OPEN_ROOM,
-        HIDE_ROOM,
-        SET_FAVOURITE_ROOM,
-        SET_STATUS,
-        UFS_CREATE,
-        UFS_COMPLETE,
-        LOGOUT
+    public void cleanup() {
+        callbacks.clear();
+    }
+
+    public enum CallbackType {
+        LOGIN(LoginCallback.class),
+        GET_PERMISSIONS(SimpleListCallback.class, Permission.class),
+        GET_PUBLIC_SETTINGS(SimpleListCallback.class, PublicSetting.class),
+        GET_USER_ROLES(SimpleListCallback.class, UserObject.class),
+        GET_SUBSCRIPTIONS(SimpleListCallback.class, SubscriptionObject.class),
+        GET_ROOMS(SimpleListCallback.class, RoomObject.class),
+        GET_ROOM_ROLES(SimpleListCallback.class, RoomRole.class),
+        LIST_CUSTOM_EMOJI(SimpleListCallback.class, Emoji.class),
+        LOAD_HISTORY(HistoryCallback.class),
+        GET_ROOM_MEMBERS(RoomCallback.GetMembersCallback.class),
+        SEND_MESSAGE(MessageCallback.MessageAckCallback.class),
+        MESSAGE_OP(SimpleCallback.class),
+        SEARCH_MESSAGE(SimpleListCallback.class, RocketChatMessage.class),
+        CREATE_GROUP(RoomCallback.GroupCreateCallback.class),
+        DELETE_GROUP(SimpleCallback.class),
+        ARCHIVE(SimpleCallback.class),
+        UNARCHIVE(SimpleCallback.class),
+        JOIN_PUBLIC_GROUP(SimpleCallback.class),
+        LEAVE_GROUP(SimpleCallback.class),
+        OPEN_ROOM(SimpleCallback.class),
+        HIDE_ROOM(SimpleCallback.class),
+        SET_FAVOURITE_ROOM(SimpleCallback.class),
+        SET_STATUS(SimpleCallback.class),
+        UFS_CREATE(IFileUpload.UfsCreateCallback.class),
+        UFS_COMPLETE(IFileUpload.UfsCompleteListener.class),
+        LOGOUT(SimpleCallback.class);
+
+        private Type type;
+
+        CallbackType(Class<? extends Callback> type) {
+            this.type = type;
+        }
+
+        CallbackType(Class<? extends Callback> callbackClass, Class<?>... parameter) {
+            type = Types.newParameterizedType(callbackClass, parameter);
+        }
+
+        public void assertCallbackType(Callback otherType) {
+            if (!Types.equals(otherType.getClassType(), type)) {
+                throw new ClassCastException("Invalid callback type: " + Types.getRawType(otherType.getClass()) + ", expected callback type: " + type);
+            }
+        }
     }
 }

@@ -1,18 +1,26 @@
-import com.rocketchat.common.data.model.ApiError;
+import com.rocketchat.common.data.model.Error;
+import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.core.RocketChatAPI;
-import com.rocketchat.core.adapter.CoreAdapter;
+import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
 import com.rocketchat.core.model.attachment.TAttachment;
+
 import java.util.List;
 
 /**
  * Created by sachin on 7/6/17.
  */
 
-public class Main extends CoreAdapter {
+public class Main implements
+        ConnectListener,
+        LoginCallback,
+        SimpleListCallback<SubscriptionObject>,
+        MessageCallback.SubscriptionCallback {
 
     private static String serverurl = "ws://localhost:3000";
     private static String baseUrl = "htttps://localhost:3000/";
@@ -33,21 +41,10 @@ public class Main extends CoreAdapter {
 
     }
 
-    @Override
     public void onLoginSuccess(TokenObject token) {
         api.getSubscriptions(this);
     }
 
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ApiError error) {
-        ChatRoomFactory factory = api.getChatRoomFactory();
-        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
-        room.subscribeRoomMessageEvent(null, this);
-
-
-    }
-
-    @Override
     public void onMessage(String roomId, RocketChatMessage message) {
         System.out.println("Got message " + message.getMessage());
         switch (message.getMsgType()) {
@@ -127,22 +124,28 @@ public class Main extends CoreAdapter {
 
     }
 
-    @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
         api.loginUsingToken("token", this);
     }
 
-    @Override
     public void onConnectError(Throwable websocketException) {
         System.out.println("Got connect error here");
     }
 
-    @Override
     public void onDisconnect(boolean closedByServer) {
         System.out.println("Disconnect detected here");
     }
 
+    public void onError(Error error) {
+        System.out.println("Error: " + error);
+    }
+
+    public void onSuccess(List<SubscriptionObject> subscriptions) {
+        ChatRoomFactory factory = api.getChatRoomFactory();
+        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
+        room.subscribeRoomMessageEvent(null, this);
+    }
 }
 
 /**

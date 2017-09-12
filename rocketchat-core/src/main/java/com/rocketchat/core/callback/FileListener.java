@@ -15,7 +15,7 @@ public interface FileListener {
 
     void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description);
 
-    void onUploadError(ApiError error, IOException e);
+    void onUploadError(Error error, IOException e);
 
-    void onSendFile(RocketChatMessage message, ApiError error);
+    void onSendFile(RocketChatMessage message, Error error);
 }

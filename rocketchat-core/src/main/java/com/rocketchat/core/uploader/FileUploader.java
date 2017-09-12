@@ -1,6 +1,6 @@
 package com.rocketchat.core.uploader;
 
-import com.rocketchat.common.data.model.ApiError;
+import com.rocketchat.common.data.model.Error;
 import com.rocketchat.common.utils.MultipartUploader;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
@@ -18,9 +18,7 @@ import java.util.Observer;
  */
 
 // TODO: 20/8/17 remove new thread after creating running on UIThread and backgroundThread
-public class FileUploader implements IFileUpload.UfsCreateCallback,
-        IFileUpload.UfsCompleteListener,
-        MessageCallback.MessageAckCallback {
+public class FileUploader {
 
     public static final String DEFAULT_STORE = "Uploads";
 
@@ -44,12 +42,42 @@ public class FileUploader implements IFileUpload.UfsCreateCallback,
     }
 
     public void startUpload() {
-        api.createUFS(newFileName, (int) file.length(), Utils.getFileTypeUsingName(newFileName), room.getRoomData().getRoomId(), description, DEFAULT_STORE, this);
+        api.createUFS(newFileName, (int) file.length(), Utils.getFileTypeUsingName(newFileName),
+                room.getRoomData().getRoomId(), description, DEFAULT_STORE, createCallback);
     }
 
-    @Override
-    public void onUfsCreate(final FileUploadToken token, ApiError error) {
-        if (error == null) {
+    IFileUpload.UfsCompleteListener completeListener = new IFileUpload.UfsCompleteListener() {
+        @Override
+        public void onUfsComplete(FileObject file) {
+            fileListener.onUploadComplete(statusCode, file, room.getRoomData().getRoomId(), newFileName, description);
+            room.sendFileMessage(file, new MessageCallback.MessageAckCallback() {
+                @Override
+                public void onMessageAck(RocketChatMessage message) {
+                    fileListener.onSendFile(message, null);
+                }
+
+                @Override
+                public void onError(Error error) {
+                    fileListener.onSendFile(null, error);
+                }
+            });
+        }
+
+        @Override
+        public void onError(Error error) {
+            fileListener.onUploadError(error, null);
+        }
+    };
+
+    IFileUpload.UfsCreateCallback createCallback = new IFileUpload.UfsCreateCallback() {
+
+        @Override
+        public void onError(Error error) {
+            fileListener.onUploadError(error, null);
+        }
+
+        @Override
+        public void onUfsCreate(final FileUploadToken token) {
             fileListener.onUploadStarted(room.getRoomData().getRoomId(), newFileName, description);
 
             new Thread(new Runnable() {
@@ -68,32 +96,13 @@ public class FileUploader implements IFileUpload.UfsCreateCallback,
 
                         multipart.addFilePart("file", file);
                         statusCode = multipart.finish();
-                        api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), FileUploader.this);
+                        api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), completeListener);
 
                     } catch (IOException e) {
                         fileListener.onUploadError(null, e);
                     }
                 }
             }).start();
-
-        } else {
-            fileListener.onUploadError(error, null);
         }
-
-    }
-
-    @Override
-    public void onUfsComplete(FileObject file, ApiError error) {
-        if (error == null) {
-            fileListener.onUploadComplete(statusCode, file, room.getRoomData().getRoomId(), newFileName, description);
-            room.sendFileMessage(file, this);
-        } else {
-            fileListener.onUploadError(error, null);
-        }
-    }
-
-    @Override
-    public void onMessageAck(RocketChatMessage message, ApiError error) {
-        fileListener.onSendFile(message, error);
-    }
+    };
 }

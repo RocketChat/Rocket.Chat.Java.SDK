@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class RocketChatApiTest {
 
     @Mock
-    LoginCallback loginListener;
+    LoginCallback loginCallback;
     @Captor
     ArgumentCaptor<TokenObject> tokenArgumentCaptor;
     @Captor
@@ -52,10 +52,10 @@ public class RocketChatApiTest {
                 TestUtils.pair(TestMessages.LOGIN_REQUEST,
                         TestMessages.LOGIN_RESPONSE_OK));
 
-        api.login("testuserrocks", "testuserrocks", loginListener);
+        api.login("testuserrocks", "testuserrocks", loginCallback);
 
-        verify(loginListener, timeout(500)).onLoginSuccess(tokenArgumentCaptor.capture());
-        verify(loginListener, never()).onLoginError(any(ApiError.class));
+        verify(loginCallback, timeout(500)).onLoginSuccess(tokenArgumentCaptor.capture());
+        verify(loginCallback, never()).onError(any(ApiError.class));
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
         assertTrue(token.getAuthToken().contentEquals("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg"));
@@ -71,10 +71,10 @@ public class RocketChatApiTest {
                 TestUtils.pair(TestMessages.LOGIN_REQUEST_FAIL,
                         TestMessages.LOGIN_RESPONSE_FAIL));
 
-        api.login("testuserrocks", "wrongpassword", loginListener);
+        api.login("testuserrocks", "wrongpassword", loginCallback);
 
-        verify(loginListener, timeout(500)).onLoginError(errorArgumentCaptor.capture());
-        verify(loginListener, never()).onLoginSuccess(any(TokenObject.class));
+        verify(loginCallback, timeout(500)).onError(errorArgumentCaptor.capture());
+        verify(loginCallback, never()).onLoginSuccess(any(TokenObject.class));
         ApiError error = errorArgumentCaptor.getValue();
         assertTrue(error != null);
         assertTrue(error.getError() == 403);
@@ -91,9 +91,9 @@ public class RocketChatApiTest {
                 TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST,
                         TestMessages.LOGIN_RESUME_RESPONSE_OK));
 
-        api.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD", loginListener);
-        verify(loginListener, never()).onLoginError(any(ApiError.class));
-        verify(loginListener).onLoginSuccess(tokenArgumentCaptor.capture());
+        api.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD", loginCallback);
+        verify(loginCallback, timeout(1500)).onLoginSuccess(tokenArgumentCaptor.capture());
+        verify(loginCallback, never()).onError(any(ApiError.class));
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
         assertTrue(token.getAuthToken().contentEquals("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD"));
@@ -109,9 +109,9 @@ public class RocketChatApiTest {
                 TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST_FAIL,
                         TestMessages.LOGIN_RESUME_RESPONSE_FAIL));
 
-        api.loginUsingToken("INVALID_TOKEN", loginListener);
-        verify(loginListener, never()).onLoginSuccess(any(TokenObject.class));
-        verify(loginListener).onLoginError(errorArgumentCaptor.capture());
+        api.loginUsingToken("INVALID_TOKEN", loginCallback);
+        verify(loginCallback, timeout(1500)).onError(errorArgumentCaptor.capture());
+        verify(loginCallback, never()).onLoginSuccess(any(TokenObject.class));
 
         ApiError error = errorArgumentCaptor.getValue();
         assertTrue(error != null);
@@ -125,7 +125,7 @@ public class RocketChatApiTest {
 
     @After
     public void shutdown() {
-        verifyNoMoreInteractions(loginListener);
+        verifyNoMoreInteractions(loginCallback);
         System.out.println("shutdown");
         server.shutdown();
     }
