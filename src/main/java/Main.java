@@ -1,4 +1,4 @@
-import com.rocketchat.common.data.model.Error;
+import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.core.RocketChatAPI;
@@ -137,7 +137,7 @@ public class Main implements
         System.out.println("Disconnect detected here");
     }
 
-    public void onError(Error error) {
+    public void onError(RocketChatException error) {
         System.out.println("Error: " + error);
     }
 

@@ -19,17 +19,13 @@ public class TokenObject {
         this.expiry = expiry;
     }
 
-    public TokenObject(JSONObject object) {
-        try {
-            userId = object.getString("id");
-            authToken = object.getString("token");
-            JSONObject expires = object.optJSONObject("tokenExpires");
-            if (expires != null) {
-                long date = expires.optLong("$date");
-                expiry = new Date(date);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+    public TokenObject(JSONObject object) throws JSONException {
+        userId = object.getString("id");
+        authToken = object.getString("token");
+        JSONObject expires = object.optJSONObject("tokenExpires");
+        if (expires != null) {
+            long date = expires.optLong("$date");
+            expiry = new Date(date);
         }
     }
 

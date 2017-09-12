@@ -1,8 +1,8 @@
 package com.rocketchat.core.middleware;
 
-import com.rocketchat.common.data.model.ApiError;
-import com.rocketchat.common.data.model.Error;
-import com.rocketchat.common.data.model.NetworkError;
+import com.rocketchat.common.RocketChatApiException;
+import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.core.TestMessages;
@@ -41,7 +41,7 @@ public class CoreMiddlewareTest {
     SimpleListCallback<RoomRole> roomRolesCallback;
 
     @Captor
-    ArgumentCaptor<Error> errorArgumentCaptor;
+    ArgumentCaptor<RocketChatException> errorArgumentCaptor;
 
     @Captor
     ArgumentCaptor<TokenObject> tokenCaptor;
@@ -81,7 +81,7 @@ public class CoreMiddlewareTest {
         middleware.processCallback(1, new JSONObject(TestMessages.LOGIN_RESPONSE_FAIL));
 
         verify(loginCallback).onError(errorArgumentCaptor.capture());
-        ApiError error = (ApiError) errorArgumentCaptor.getValue();
+        RocketChatApiException error = (RocketChatApiException) errorArgumentCaptor.getValue();
         assertTrue(error.getError() == 403);
         assertThat(error.getReason(), is(equalTo("User not found")));
     }
@@ -110,14 +110,14 @@ public class CoreMiddlewareTest {
 
         verify(loginCallback).getClassType();
         verify(loginCallback).onError(errorArgumentCaptor.capture());
-        assertThat(errorArgumentCaptor.getValue(), instanceOf(NetworkError.class));
-        NetworkError networkError = (NetworkError) errorArgumentCaptor.getValue();
+        assertThat(errorArgumentCaptor.getValue(), instanceOf(RocketChatNetworkErrorException.class));
+        RocketChatNetworkErrorException networkError = (RocketChatNetworkErrorException) errorArgumentCaptor.getValue();
         assertThat(networkError.getMessage(), is(equalTo("Testing disconnection")));
 
         verify(simpleCallback).getClassType();
         verify(simpleCallback).onError(errorArgumentCaptor.capture());
-        assertThat(errorArgumentCaptor.getValue(), instanceOf(NetworkError.class));
-        networkError = (NetworkError) errorArgumentCaptor.getValue();
+        assertThat(errorArgumentCaptor.getValue(), instanceOf(RocketChatNetworkErrorException.class));
+        networkError = (RocketChatNetworkErrorException) errorArgumentCaptor.getValue();
         assertThat(networkError.getMessage(), is(equalTo("Testing disconnection")));
 
         verifyNoMoreInteractions(loginCallback);

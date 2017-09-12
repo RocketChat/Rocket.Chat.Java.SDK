@@ -1,8 +1,9 @@
 package com.rocketchat.core.callback;
 
-import com.rocketchat.common.data.model.ApiError;
+import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.SubscriptionObject;
+
 import java.util.List;
 
 /**
@@ -10,5 +11,5 @@ import java.util.List;
  */
 
 public interface GetSubscriptionListener extends Listener {
-    void onGetSubscriptions(List<SubscriptionObject> subscriptions, ApiError error);
+    void onGetSubscriptions(List<SubscriptionObject> subscriptions, RocketChatApiException error);
 }

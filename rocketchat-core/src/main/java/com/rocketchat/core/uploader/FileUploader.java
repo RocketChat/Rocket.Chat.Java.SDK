@@ -1,6 +1,6 @@
 package com.rocketchat.core.uploader;
 
-import com.rocketchat.common.data.model.Error;
+import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.utils.MultipartUploader;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
@@ -57,14 +57,14 @@ public class FileUploader {
                 }
 
                 @Override
-                public void onError(Error error) {
+                public void onError(RocketChatException error) {
                     fileListener.onSendFile(null, error);
                 }
             });
         }
 
         @Override
-        public void onError(Error error) {
+        public void onError(RocketChatException error) {
             fileListener.onUploadError(error, null);
         }
     };
@@ -72,7 +72,7 @@ public class FileUploader {
     IFileUpload.UfsCreateCallback createCallback = new IFileUpload.UfsCreateCallback() {
 
         @Override
-        public void onError(Error error) {
+        public void onError(RocketChatException error) {
             fileListener.onUploadError(error, null);
         }
 

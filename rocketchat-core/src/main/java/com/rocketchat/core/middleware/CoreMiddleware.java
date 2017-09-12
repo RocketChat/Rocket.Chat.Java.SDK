@@ -1,8 +1,9 @@
 package com.rocketchat.core.middleware;
 
-import com.rocketchat.common.data.model.ApiError;
-import com.rocketchat.common.data.model.Error;
-import com.rocketchat.common.data.model.NetworkError;
+import com.rocketchat.common.RocketChatApiException;
+import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.RocketChatInvalidResponseException;
+import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -26,6 +27,7 @@ import com.rocketchat.core.uploader.FileUploadToken;
 import com.rocketchat.core.uploader.IFileUpload;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
@@ -52,233 +54,165 @@ public class CoreMiddleware {
         callbacks.put(i, Pair.create(callback, type));
     }
 
+    @SuppressWarnings("unchecked")
     public void processCallback(long i, JSONObject object) {
+        JSONArray array;
         if (callbacks.containsKey(i)) {
             Pair<? extends Callback, CallbackType> callbackPair = callbacks.remove(i);
             Callback callback = callbackPair.first;
             CallbackType type = callbackPair.second;
             Object result = object.opt("result");
-            switch (type) {
-                case LOGIN:
-                    LoginCallback loginCallback = (LoginCallback) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        loginCallback.onError(errorObject);
-                    } else {
+
+            /*
+             * Possibly add a validateResponse(result, type) here or return some
+             * RocketChatInvalidResponseException...
+             */
+            if (result == null) {
+                callback.onError(new RocketChatApiException(object.optJSONObject("error")));
+                return;
+            }
+
+            try {
+                switch (type) {
+                    case LOGIN:
+                        LoginCallback loginCallback = (LoginCallback) callback;
                         TokenObject tokenObject = new TokenObject((JSONObject) result);
                         loginCallback.onLoginSuccess(tokenObject);
-                    }
-                    break;
-                case GET_PERMISSIONS:
-                    SimpleListCallback<Permission> permissionCallback = (SimpleListCallback<Permission>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        permissionCallback.onError(errorObject);
-                    } else {
-                        List<Permission> permissions = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        break;
+                    case GET_PERMISSIONS:
+                        SimpleListCallback<Permission> permissionCallback = (SimpleListCallback<Permission>) callback;
+                        array = (JSONArray) result;
+                        List<Permission> permissions = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
                             permissions.add(new Permission(array.optJSONObject(j)));
                         }
                         permissionCallback.onSuccess(permissions);
-                    }
-                    break;
-                case GET_PUBLIC_SETTINGS:
-                    SimpleListCallback<PublicSetting> settingsCallback = (SimpleListCallback<PublicSetting>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        settingsCallback.onError(errorObject);
-                    } else {
-                        ArrayList<PublicSetting> settings = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        break;
+                    case GET_PUBLIC_SETTINGS:
+                        SimpleListCallback<PublicSetting> settingsCallback = (SimpleListCallback<PublicSetting>) callback;
+                        array = (JSONArray) result;
+                        List<PublicSetting> settings = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
                             settings.add(new PublicSetting(array.optJSONObject(j)));
                         }
                         settingsCallback.onSuccess(settings);
-                    }
-                    break;
-                case GET_USER_ROLES:
-                    SimpleListCallback<UserObject> rolesCallback = (SimpleListCallback<UserObject>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        rolesCallback.onError(errorObject);
-                    } else {
-                        ArrayList<UserObject> list = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        break;
+                    case GET_USER_ROLES:
+                        SimpleListCallback<UserObject> rolesCallback = (SimpleListCallback<UserObject>) callback;
+                        array = (JSONArray) result;
+                        List<UserObject> userObjects = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new UserObject(array.optJSONObject(j)));
+                            userObjects.add(new UserObject(array.optJSONObject(j)));
                         }
-                        rolesCallback.onSuccess(list);
-                    }
-                    break;
-                case GET_SUBSCRIPTIONS:
-                    SimpleListCallback<SubscriptionObject> subscriptionCallback = (SimpleListCallback<SubscriptionObject>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        subscriptionCallback.onError(errorObject);
-                    } else {
-                        ArrayList<SubscriptionObject> list = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        rolesCallback.onSuccess(userObjects);
+                        break;
+                    case GET_SUBSCRIPTIONS:
+                        SimpleListCallback<SubscriptionObject> subscriptionCallback = (SimpleListCallback<SubscriptionObject>) callback;
+                        array = (JSONArray) result;
+                        List<SubscriptionObject> subscriptions = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new SubscriptionObject(array.optJSONObject(j)));
+                            subscriptions.add(new SubscriptionObject(array.optJSONObject(j)));
                         }
-                        subscriptionCallback.onSuccess(list);
-                    }
-                    break;
-                case GET_ROOMS:
-                    SimpleListCallback<RoomObject> roomCallback = (SimpleListCallback<RoomObject>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        roomCallback.onError(errorObject);
-                    } else {
-                        ArrayList<RoomObject> list = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        subscriptionCallback.onSuccess(subscriptions);
+                        break;
+                    case GET_ROOMS:
+                        SimpleListCallback<RoomObject> roomCallback = (SimpleListCallback<RoomObject>) callback;
+                        array = (JSONArray) result;
+                        List<RoomObject> rooms = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new RoomObject(array.optJSONObject(j)));
+                            rooms.add(new RoomObject(array.optJSONObject(j)));
                         }
-                        roomCallback.onSuccess(list);
-                    }
-                    break;
-                case GET_ROOM_ROLES:
-                    SimpleListCallback<RoomRole> roomRolesCallback = (SimpleListCallback<RoomRole>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        roomRolesCallback.onError(errorObject);
-                    } else {
-                        ArrayList<RoomRole> list = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        roomCallback.onSuccess(rooms);
+                        break;
+                    case GET_ROOM_ROLES:
+                        SimpleListCallback<RoomRole> roomRolesCallback = (SimpleListCallback<RoomRole>) callback;
+                        array = (JSONArray) result;
+                        List<RoomRole> roomRoles = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new RoomRole(array.optJSONObject(j)));
+                            roomRoles.add(new RoomRole(array.optJSONObject(j)));
                         }
-                        roomRolesCallback.onSuccess(list);
-                    }
-                    break;
-                case LIST_CUSTOM_EMOJI:
-                    SimpleListCallback<Emoji> emojiCallback = (SimpleListCallback<Emoji>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        emojiCallback.onError(errorObject);
-                    } else {
-                        ArrayList<Emoji> list = new ArrayList<>();
-                        JSONArray array = (JSONArray) result;
+                        roomRolesCallback.onSuccess(roomRoles);
+                        break;
+                    case LIST_CUSTOM_EMOJI:
+                        SimpleListCallback<Emoji> emojiCallback = (SimpleListCallback<Emoji>) callback;
+                        array = (JSONArray) result;
+                        List<Emoji> emojis = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new Emoji(array.optJSONObject(j)));
+                            emojis.add(new Emoji(array.optJSONObject(j)));
                         }
-                        emojiCallback.onSuccess(list);
-                    }
-                    break;
-                case LOAD_HISTORY:
-                    HistoryCallback historyListener = (HistoryCallback) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        historyListener.onError(errorObject);
-                    } else {
-                        ArrayList<RocketChatMessage> list = new ArrayList<>();
-                        JSONArray array = ((JSONObject) result).optJSONArray("messages");
+                        emojiCallback.onSuccess(emojis);
+                        break;
+                    case LOAD_HISTORY:
+                        HistoryCallback historyCallback = (HistoryCallback) callback;
+                        array = ((JSONObject) result).optJSONArray("messages");
+                        List<RocketChatMessage> messages = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new RocketChatMessage(array.optJSONObject(j)));
+                            messages.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
-                        historyListener.onLoadHistory(list, unreadNotLoaded);
-                    }
-                    break;
-                case GET_ROOM_MEMBERS:
-                    RoomCallback.GetMembersCallback membersListener = (RoomCallback.GetMembersCallback) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        membersListener.onError(errorObject);
-                    } else {
-                        ArrayList<UserObject> users = new ArrayList<>();
-                        JSONArray array = ((JSONObject) result).optJSONArray("records");
+                        historyCallback.onLoadHistory(messages, unreadNotLoaded);
+                        break;
+                    case GET_ROOM_MEMBERS:
+                        RoomCallback.GetMembersCallback membersCallback = (RoomCallback.GetMembersCallback) callback;
+                        array = ((JSONObject) result).optJSONArray("records");
+                        List<UserObject> users = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
                             users.add(new UserObject(array.optJSONObject(j)));
                         }
                         Integer total = ((JSONObject) result).optInt("total");
-                        membersListener.onGetRoomMembers(total, users);
-                    }
-                    break;
-                case SEND_MESSAGE:
-                    MessageCallback.MessageAckCallback ackCallback = (MessageCallback.MessageAckCallback) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        ackCallback.onError(errorObject);
-                    } else {
+                        membersCallback.onGetRoomMembers(total, users);
+                        break;
+                    case SEND_MESSAGE:
+                        MessageCallback.MessageAckCallback ackCallback = (MessageCallback.MessageAckCallback) callback;
                         RocketChatMessage message = new RocketChatMessage((JSONObject) result);
                         ackCallback.onMessageAck(message);
-                    }
-                    break;
-                case SEARCH_MESSAGE:
-                    SimpleListCallback<RocketChatMessage> searchMessageCallback = (SimpleListCallback<RocketChatMessage>) callback;
-                    if (result == null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        searchMessageCallback.onError(errorObject);
-                    } else {
-                        ArrayList<RocketChatMessage> list = new ArrayList<>();
-                        JSONArray array = ((JSONObject) result).optJSONArray("messages");
+                        break;
+                    case SEARCH_MESSAGE:
+                        SimpleListCallback<RocketChatMessage> searchMessageCallback = (SimpleListCallback<RocketChatMessage>) callback;
+                        array = ((JSONObject) result).optJSONArray("messages");
+                        List<RocketChatMessage> searchMessages = new ArrayList<>(array.length());
                         for (int j = 0; j < array.length(); j++) {
-                            list.add(new RocketChatMessage(array.optJSONObject(j)));
+                            searchMessages.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
-                        searchMessageCallback.onSuccess(list);
-                    }
-                    break;
-                case CREATE_GROUP:
-                    RoomCallback.GroupCreateCallback groupListener = (RoomCallback.GroupCreateCallback) callback;
-                    if (object.opt("error") != null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        groupListener.onError(errorObject);
-                    } else {
+                        searchMessageCallback.onSuccess(searchMessages);
+                        break;
+                    case CREATE_GROUP:
+                        RoomCallback.GroupCreateCallback createCallback = (RoomCallback.GroupCreateCallback) callback;
                         String roomId = ((JSONObject) result).optString("rid");
-                        groupListener.onCreateGroup(roomId);
-                    }
-                    break;
-                case MESSAGE_OP:
-                case DELETE_GROUP:
-                case ARCHIVE:
-                case UNARCHIVE:
-                case JOIN_PUBLIC_GROUP:
-                case LEAVE_GROUP:
-                case OPEN_ROOM:
-                case HIDE_ROOM:
-                case SET_FAVOURITE_ROOM:
-                case SET_STATUS:
-                case LOGOUT:
-                    handleCallbackBySimpleListener((SimpleCallback) callback, object.opt("error"));
-                    break;
-                case UFS_CREATE:
-                    IFileUpload.UfsCreateCallback ufsCreateListener = (IFileUpload.UfsCreateCallback) callback;
-                    if (object.opt("error") != null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        ufsCreateListener.onError(errorObject);
-                    } else {
+                        createCallback.onCreateGroup(roomId);
+                        break;
+                    case UFS_CREATE:
+                        IFileUpload.UfsCreateCallback ufsCreateCallback = (IFileUpload.UfsCreateCallback) callback;
                         FileUploadToken token = new FileUploadToken((JSONObject) result);
-                        ufsCreateListener.onUfsCreate(token);
-                    }
-                    break;
-                case UFS_COMPLETE:
-                    IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) callback;
-                    if (object.opt("error") != null) {
-                        ApiError errorObject = new ApiError(object.optJSONObject("error"));
-                        completeListener.onError(errorObject);
-                    } else {
+                        ufsCreateCallback.onUfsCreate(token);
+                        break;
+                    case UFS_COMPLETE:
+                        IFileUpload.UfsCompleteListener completeCallback = (IFileUpload.UfsCompleteListener) callback;
                         FileObject file = new FileObject((JSONObject) result);
-                        completeListener.onUfsComplete(file);
-                    }
-                    break;
+                        completeCallback.onUfsComplete(file);
+                        break;
+                    case MESSAGE_OP:
+                    case DELETE_GROUP:
+                    case ARCHIVE:
+                    case UNARCHIVE:
+                    case JOIN_PUBLIC_GROUP:
+                    case LEAVE_GROUP:
+                    case OPEN_ROOM:
+                    case HIDE_ROOM:
+                    case SET_FAVOURITE_ROOM:
+                    case SET_STATUS:
+                    case LOGOUT:
+                        ((SimpleCallback) callback).onSuccess();
+                        break;
+                }
+            } catch (JSONException exception) {
+                callback.onError(new RocketChatInvalidResponseException(exception.getMessage(), exception));
             }
         }
     }
 
-    private void handleCallbackBySimpleListener(SimpleCallback callback, Object error) {
-        if (error != null) {
-            Error errorObject = new ApiError((JSONObject) error);
-            callback.onError(errorObject);
-        } else {
-            callback.onSuccess();
-        }
-    }
-
     public void notifyDisconnection(String message) {
-        Error error = new NetworkError(message);
+        RocketChatException error = new RocketChatNetworkErrorException(message);
         for (Map.Entry<Long, Pair<? extends Callback, CallbackType>> entry : callbacks.entrySet()) {
             entry.getValue().first.onError(error);
         }
@@ -319,17 +253,17 @@ public class CoreMiddleware {
 
         private Type type;
 
-        CallbackType(Class<? extends Callback> type) {
-            this.type = type;
-        }
-
-        CallbackType(Class<? extends Callback> callbackClass, Class<?>... parameter) {
-            type = Types.newParameterizedType(callbackClass, parameter);
+        CallbackType(Class<? extends Callback> callbackClass, Class<?>... parameters) {
+            if (parameters == null || parameters.length == 0) {
+                type = callbackClass;
+            } else {
+                type = Types.newParameterizedType(callbackClass, parameters);
+            }
         }
 
         public void assertCallbackType(Callback otherType) {
             if (!Types.equals(otherType.getClassType(), type)) {
-                throw new ClassCastException("Invalid callback type: " + Types.getRawType(otherType.getClass()) + ", expected callback type: " + type);
+                throw new ClassCastException("Invalid callback type: " + otherType.getClass() + ", expected callback type: " + type);
             }
         }
     }
