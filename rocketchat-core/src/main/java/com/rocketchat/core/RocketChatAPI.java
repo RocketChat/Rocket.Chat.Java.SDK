@@ -324,6 +324,25 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(CoreSubRPC.subscribeUserData(uniqueID));
     }
 
+    public void subscribeUserRoles(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeUserRoles(uniqueID));
+    }
+
+    public void subscribeLoginConf(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeLoginServiceConfiguration(uniqueID));
+    }
+
+    public void subscribeClientVersions(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeClientVersions(uniqueID));
+    }
+
+
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
