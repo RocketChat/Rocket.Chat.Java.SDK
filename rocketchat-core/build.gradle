@@ -16,7 +16,7 @@ allprojects {
 }
 
 group 'com.rocketchat.core'
-version '0.7.1'
+version '0.7.2'
 
 apply plugin: 'java'
 
@@ -52,7 +52,7 @@ publishing {
             from components.java
             groupId 'com.rocketchat.core'
             artifactId 'rocketchat-core'
-            version '0.7.1'
+            version '0.7.2'
 
             artifact sourceJar {
                 classifier "sources"
@@ -79,10 +79,10 @@ bintray {
         publicDownloadNumbers = true
 
         version {
-            name = '0.7.1'
+            name = '0.7.2'
             released = new Date()
             desc = 'Rocket.Chat java SDK : Core'
-            vcsTag = '0.7.1'
+            vcsTag = '0.7.2'
         }
 
     }
@@ -95,5 +95,5 @@ dependencies {
     testCompile 'com.github.luciofm:mockwebserver:852ce0b657'
 
     compile project (':rocketchat-common')
-//    compile 'com.rocketchat.common:rocketchat-common:0.7.1'
+//    compile 'com.rocketchat.common:rocketchat-common:0.7.2'
 }

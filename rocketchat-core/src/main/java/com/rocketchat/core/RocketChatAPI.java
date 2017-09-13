@@ -1,16 +1,22 @@
 package com.rocketchat.core;
 
+import com.rocketchat.common.RocketChatApiException;
+import com.rocketchat.common.RocketChatAuthException;
+import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.lightdb.DbManager;
 import com.rocketchat.common.data.model.Room;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
+import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Utils;
@@ -30,6 +36,8 @@ import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.RoomObject;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.SubscriptionObject;
+import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.rpc.AccountRPC;
 import com.rocketchat.core.rpc.BasicRPC;
 import com.rocketchat.core.rpc.ChatHistoryRPC;
@@ -52,7 +60,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -82,25 +89,13 @@ public class RocketChatAPI implements SocketListener {
     private CoreStreamMiddleware coreStreamMiddleware;
     private DbManager dbManager;
     private Socket socket;
+    private TokenProvider tokenProvider;
+    private RestHelper restHelper;
 
     private ConnectivityManager connectivityManager;
 
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
-
-    public RocketChatAPI(HttpUrl baseUrl, String webSocketUrl, OkHttpClient client) {
-        this.baseUrl = baseUrl;
-        this.client = client;
-        socket = new Socket(client, webSocketUrl, this);
-        integer = new AtomicInteger(1);
-        coreMiddleware = new CoreMiddleware();
-        coreStreamMiddleware = new CoreStreamMiddleware();
-        dbManager = new DbManager();
-        chatRoomFactory = new ChatRoomFactory(this);
-
-        connectivityManager = new ConnectivityManager();
-
-    }
 
     private RocketChatAPI(final Builder builder) {
         if (builder.baseUrl == null || builder.websocketUrl == null) {
@@ -125,6 +120,8 @@ public class RocketChatAPI implements SocketListener {
             }.create(client, builder.websocketUrl, this);
         }
 
+        tokenProvider = builder.provider;
+
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
@@ -133,21 +130,7 @@ public class RocketChatAPI implements SocketListener {
 
         connectivityManager = new ConnectivityManager();
 
-        /*socket.setPingInterval(10000);
-        socket.setReconnectionStrategy(new ReconnectionStrategy(30, 2000) {
-            @Override
-            public int getReconnectInterval() {
-                int attempts = (getNumberOfAttempts() + 1) * 2;
-                int interval = super.getReconnectInterval();
-                // Exponential backoff until 30 seconds, then every 30 seconds.
-                if (attempts * interval > 30000) {
-                    LOGGER.info("Reconnecting in 30000");
-                    return 30000;
-                }
-                LOGGER.info("Reconnecting in " + (interval * attempts));
-                return interval * attempts;
-            }
-        });*/
+        restHelper = new RestHelper(client, baseUrl, tokenProvider);
     }
 
     public String getMyUserName() {
@@ -166,30 +149,18 @@ public class RocketChatAPI implements SocketListener {
         return dbManager;
     }
 
-    public void signin(String username, String password, LoginCallback loginListener) {
-        RequestBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
-                .build();
-        Request request = new Request.Builder()
-                .url(baseUrl.newBuilder().addPathSegment("login").build())
-                .post(body)
-                .build();
+    public void signin(String username, String password, final LoginCallback loginCallback) {
+        restHelper.signin(username, password, loginCallback);
+    }
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                LOGGER.info("CALL FAILURE");
-                e.printStackTrace();
-            }
+    public void login(String userId, LoginCallback loginCallback) {
+        TokenObject token = tokenProvider != null ? tokenProvider.getToken(userId) : null;
+        if (token == null) {
+            loginCallback.onError(new RocketChatAuthException("Missing token for userId: " + userId));
+            return;
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-                System.out.println(response.body().string());
-            }
-        });
+        loginUsingToken(token.getAuthToken(), loginCallback);
     }
 
     //Tested
@@ -533,6 +504,10 @@ public class RocketChatAPI implements SocketListener {
         }*/
     }
 
+    public void setReconnectionStrategy(ReconnectionStrategy strategy) {
+        socket.setReconnectionStrategy(strategy);
+    }
+
     public void setPingInterval(long interval) {
         socket.setPingInterval(interval);
     }
@@ -569,19 +544,6 @@ public class RocketChatAPI implements SocketListener {
         }
     }
 
-
-    /*@Override
-    protected void onConnectError(Throwable websocketException) {
-        connectivityManager.publishConnectError(websocketException);
-        super.onConnectError(websocketException);
-    }
-
-    @Override
-    protected void onDisconnected(boolean closedByServer) {
-        connectivityManager.publishDisconnect(closedByServer);
-        super.onDisconnected(closedByServer);
-    }*/
-
     public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.CallbackType.UFS_CREATE);
@@ -592,101 +554,6 @@ public class RocketChatAPI implements SocketListener {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.CallbackType.UFS_COMPLETE);
         socket.sendData(FileUploadRPC.ufsComplete(uniqueID, fileId, store, token));
-    }
-
-    public static final class Builder {
-        private String websocketUrl;
-        private HttpUrl baseUrl;
-        private OkHttpClient client;
-        private SocketFactory factory;
-
-        public Builder websocketUrl(String url) {
-            this.websocketUrl = checkNotNull(url, "url == null");
-            return this;
-        }
-
-        public Builder client(OkHttpClient client) {
-            this.client = checkNotNull(client, "client must be non null");
-            return this;
-        }
-
-        public Builder socketFactory(SocketFactory factory) {
-            this.factory = checkNotNull(factory, "factory == null");
-            return this;
-        }
-
-        public Builder restBaseUrl(String url) {
-            checkNotNull(url, "url == null");
-            HttpUrl httpUrl = HttpUrl.parse(url);
-            if (httpUrl == null) {
-                throw new IllegalArgumentException("Illegal URL: " + url);
-            }
-            return restBaseUrl(httpUrl);
-        }
-
-        /**
-         * Set the API base URL.
-         * <p>
-         * The specified endpoint values (such as with {@link GET @GET}) are resolved against this
-         * value using {@link HttpUrl#resolve(String)}. The behavior of this matches that of an
-         * {@code <a href="">} link on a website resolving on the current URL.
-         * <p>
-         * <b>Base URLs should always end in {@code /}.</b>
-         * <p>
-         * A trailing {@code /} ensures that endpoints values which are relative paths will correctly
-         * append themselves to a base which has path components.
-         * <p>
-         * <b>Correct:</b><br>
-         * Base URL: http://example.com/api/<br>
-         * Endpoint: foo/bar/<br>
-         * Result: http://example.com/api/foo/bar/
-         * <p>
-         * <b>Incorrect:</b><br>
-         * Base URL: http://example.com/api<br>
-         * Endpoint: foo/bar/<br>
-         * Result: http://example.com/foo/bar/
-         * <p>
-         * This method enforces that {@code baseUrl} has a trailing {@code /}.
-         * <p>
-         * <b>Endpoint values which contain a leading {@code /} are absolute.</b>
-         * <p>
-         * Absolute values retain only the host from {@code baseUrl} and ignore any specified path
-         * components.
-         * <p>
-         * Base URL: http://example.com/api/<br>
-         * Endpoint: /foo/bar/<br>
-         * Result: http://example.com/foo/bar/
-         * <p>
-         * Base URL: http://example.com/<br>
-         * Endpoint: /foo/bar/<br>
-         * Result: http://example.com/foo/bar/
-         * <p>
-         * <b>Endpoint values may be a full URL.</b>
-         * <p>
-         * Values which have a host replace the host of {@code baseUrl} and values also with a scheme
-         * replace the scheme of {@code baseUrl}.
-         * <p>
-         * Base URL: http://example.com/<br>
-         * Endpoint: https://github.com/square/retrofit/<br>
-         * Result: https://github.com/square/retrofit/
-         * <p>
-         * Base URL: http://example.com<br>
-         * Endpoint: //github.com/square/retrofit/<br>
-         * Result: http://github.com/square/retrofit/ (note the scheme stays 'http')
-         */
-        private Builder restBaseUrl(HttpUrl baseUrl) {
-            checkNotNull(baseUrl, "baseUrl == null");
-            List<String> pathSegments = baseUrl.pathSegments();
-            if (!"".equals(pathSegments.get(pathSegments.size() - 1))) {
-                throw new IllegalArgumentException("baseUrl must end in /: " + baseUrl);
-            }
-            this.baseUrl = baseUrl;
-            return this;
-        }
-
-        public RocketChatAPI build() {
-            return new RocketChatAPI(this);
-        }
     }
 
     /**
@@ -856,5 +723,106 @@ public class RocketChatAPI implements SocketListener {
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room
+    }
+
+    public static final class Builder {
+        private String websocketUrl;
+        private HttpUrl baseUrl;
+        private OkHttpClient client;
+        private SocketFactory factory;
+        private TokenProvider provider;
+
+        public Builder websocketUrl(String url) {
+            this.websocketUrl = checkNotNull(url, "url == null");
+            return this;
+        }
+
+        public Builder client(OkHttpClient client) {
+            this.client = checkNotNull(client, "client must be non null");
+            return this;
+        }
+
+        public Builder socketFactory(SocketFactory factory) {
+            this.factory = checkNotNull(factory, "factory == null");
+            return this;
+        }
+
+        public Builder restBaseUrl(String url) {
+            checkNotNull(url, "url == null");
+            HttpUrl httpUrl = HttpUrl.parse(url);
+            if (httpUrl == null) {
+                throw new IllegalArgumentException("Illegal URL: " + url);
+            }
+            return restBaseUrl(httpUrl);
+        }
+
+        /**
+         * Set the API base URL.
+         * <p>
+         * The specified endpoint values (such as with {@link GET @GET}) are resolved against this
+         * value using {@link HttpUrl#resolve(String)}. The behavior of this matches that of an
+         * {@code <a href="">} link on a website resolving on the current URL.
+         * <p>
+         * <b>Base URLs should always end in {@code /}.</b>
+         * <p>
+         * A trailing {@code /} ensures that endpoints values which are relative paths will correctly
+         * append themselves to a base which has path components.
+         * <p>
+         * <b>Correct:</b><br>
+         * Base URL: http://example.com/api/<br>
+         * Endpoint: foo/bar/<br>
+         * Result: http://example.com/api/foo/bar/
+         * <p>
+         * <b>Incorrect:</b><br>
+         * Base URL: http://example.com/api<br>
+         * Endpoint: foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * This method enforces that {@code baseUrl} has a trailing {@code /}.
+         * <p>
+         * <b>Endpoint values which contain a leading {@code /} are absolute.</b>
+         * <p>
+         * Absolute values retain only the host from {@code baseUrl} and ignore any specified path
+         * components.
+         * <p>
+         * Base URL: http://example.com/api/<br>
+         * Endpoint: /foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * Base URL: http://example.com/<br>
+         * Endpoint: /foo/bar/<br>
+         * Result: http://example.com/foo/bar/
+         * <p>
+         * <b>Endpoint values may be a full URL.</b>
+         * <p>
+         * Values which have a host replace the host of {@code baseUrl} and values also with a scheme
+         * replace the scheme of {@code baseUrl}.
+         * <p>
+         * Base URL: http://example.com/<br>
+         * Endpoint: https://github.com/square/retrofit/<br>
+         * Result: https://github.com/square/retrofit/
+         * <p>
+         * Base URL: http://example.com<br>
+         * Endpoint: //github.com/square/retrofit/<br>
+         * Result: http://github.com/square/retrofit/ (note the scheme stays 'http')
+         */
+        private Builder restBaseUrl(HttpUrl baseUrl) {
+            checkNotNull(baseUrl, "baseUrl == null");
+            List<String> pathSegments = baseUrl.pathSegments();
+            if (!"".equals(pathSegments.get(pathSegments.size() - 1))) {
+                throw new IllegalArgumentException("baseUrl must end in /: " + baseUrl);
+            }
+            this.baseUrl = baseUrl;
+            return this;
+        }
+
+        public Builder tokenProvider(TokenProvider provider) {
+            this.provider = checkNotNull(provider, "provider == null");
+            return this;
+        }
+
+        public RocketChatAPI build() {
+            return new RocketChatAPI(this);
+        }
     }
 }

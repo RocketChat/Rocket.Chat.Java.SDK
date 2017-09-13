@@ -13,6 +13,13 @@ public class RocketChatApiException extends RocketChatException {
     private long error;
     private String message;
 
+    public RocketChatApiException(long error, String message) {
+        super((message));
+        this.error = error;
+        this.message = message;
+        this.reason = String.valueOf(error) + ": " + message;
+    }
+
     public RocketChatApiException(JSONObject object) {
         super(object.optString("message"));
         reason = object.optString("reason");

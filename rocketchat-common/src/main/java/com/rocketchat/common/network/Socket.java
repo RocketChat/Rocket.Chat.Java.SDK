@@ -166,7 +166,7 @@ public class Socket extends WebSocketListener {
     }
 
     private void onTextMessage(String text) {
-        LOGGER.info("Message is " + text);
+        LOGGER.info("Receiving: " + text);
         JSONObject message = null;
         try {
             message = new JSONObject(text);

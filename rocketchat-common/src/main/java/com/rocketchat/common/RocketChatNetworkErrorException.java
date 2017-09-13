@@ -6,6 +6,10 @@ public class RocketChatNetworkErrorException extends RocketChatException {
         super(message);
     }
 
+    public RocketChatNetworkErrorException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     @Override
     public String toString() {
         return "Error{" +
