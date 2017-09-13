@@ -3,30 +3,19 @@ package com.rocketchat.core.middleware;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.listener.Listener;
-import com.rocketchat.common.listener.SimpleListener;
-import com.rocketchat.core.callback.AccountListener;
-import com.rocketchat.core.callback.EmojiListener;
-import com.rocketchat.core.callback.GetSubscriptionListener;
-import com.rocketchat.core.callback.HistoryListener;
-import com.rocketchat.core.callback.LoginListener;
-import com.rocketchat.core.callback.MessageListener;
-import com.rocketchat.core.callback.RoomListener;
-import com.rocketchat.core.callback.UserListener;
-import com.rocketchat.core.model.Emoji;
-import com.rocketchat.core.model.FileObject;
-import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.PublicSetting;
-import com.rocketchat.core.model.RocketChatMessage;
-import com.rocketchat.core.model.RoomObject;
-import com.rocketchat.core.model.RoomRole;
-import com.rocketchat.core.model.SubscriptionObject;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.*;
+import com.rocketchat.core.model.result.GetRoomMembersResult;
+import com.rocketchat.core.model.result.LoadHistoryResult;
 import com.rocketchat.core.uploader.FileUploadToken;
-import com.rocketchat.core.uploader.IFileUpload;
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 18/7/17.
@@ -35,260 +24,199 @@ import org.json.JSONObject;
 // TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
 public class CoreMiddleware {
 
-    private ConcurrentHashMap<Long, Object[]> callbacks;
+    private final Map<Long, Map.Entry<ListenerType, CompletableFuture<?>>> futures = new ConcurrentHashMap<>();
 
     public CoreMiddleware() {
-        callbacks = new ConcurrentHashMap<>();
     }
 
-    public void createCallback(long i, Listener listener, CoreMiddleware.ListenerType type) {
-        if (listener != null) {
-            callbacks.put(i, new Object[]{listener, type});
-        }
+    public <A> CompletableFuture<A> createCallback(long i, ListenerType type) {
+        CompletableFuture<A> futureResult = new CompletableFuture<>();
+        futures.put(i, new AbstractMap.SimpleEntry<>(type, futureResult));
+        return futureResult;
     }
 
+    @SuppressWarnings("unchecked")
     public void processCallback(long i, JSONObject object) {
-        if (callbacks.containsKey(i)) {
-            Object[] objects = callbacks.remove(i);
-            Listener listener = (Listener) objects[0];
-            CoreMiddleware.ListenerType type = (CoreMiddleware.ListenerType) objects[1];
+        if (futures.containsKey(i)) {
+            Map.Entry<ListenerType, CompletableFuture<?>> futureAndType = futures.remove(i);
+            CoreMiddleware.ListenerType type = futureAndType.getKey();
             Object result = object.opt("result");
             switch (type) {
                 case LOGIN:
-                    LoginListener loginListener = (LoginListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        loginListener.onLogin(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         TokenObject tokenObject = new TokenObject((JSONObject) result);
-                        loginListener.onLogin(tokenObject, null);
+                        ((CompletableFuture<TokenObject>) futureAndType.getValue()).complete(tokenObject);
                     }
                     break;
                 case GET_PERMISSIONS:
-                    AccountListener.getPermissionsListener getPermissionsListener = (AccountListener.getPermissionsListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        getPermissionsListener.onGetPermissions(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<Permission> permissions = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             permissions.add(new Permission(array.optJSONObject(j)));
                         }
-                        getPermissionsListener.onGetPermissions(permissions, null);
+                        ((CompletableFuture<List<Permission>>) futureAndType.getValue()).complete(permissions);
                     }
                     break;
                 case GET_PUBLIC_SETTINGS:
-                    AccountListener.getPublicSettingsListener getPublicSettingsListener = (AccountListener.getPublicSettingsListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        getPublicSettingsListener.onGetPublicSettings(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<PublicSetting> settings = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             settings.add(new PublicSetting(array.optJSONObject(j)));
                         }
-                        getPublicSettingsListener.onGetPublicSettings(settings, null);
+                        ((CompletableFuture<List<PublicSetting>>) futureAndType.getValue()).complete(settings);
                     }
                     break;
                 case GET_USER_ROLES:
-                    UserListener.getUserRoleListener userRoleListener = (UserListener.getUserRoleListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        userRoleListener.onUserRoles(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<UserObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new UserObject(array.optJSONObject(j)));
                         }
-                        userRoleListener.onUserRoles(list, null);
+                        ((CompletableFuture<List<UserObject>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case GET_SUBSCRIPTIONS:
-                    GetSubscriptionListener subscriptionListener = (GetSubscriptionListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        subscriptionListener.onGetSubscriptions(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<SubscriptionObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new SubscriptionObject(array.optJSONObject(j)));
                         }
-                        subscriptionListener.onGetSubscriptions(list, null);
+                        ((CompletableFuture<List<SubscriptionObject>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case GET_ROOMS:
-                    RoomListener.GetRoomListener getRoomListener = (RoomListener.GetRoomListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        getRoomListener.onGetRooms(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<RoomObject> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RoomObject(array.optJSONObject(j)));
                         }
-                        getRoomListener.onGetRooms(list, null);
+                        ((CompletableFuture<List<RoomObject>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case GET_ROOM_ROLES:
-                    RoomListener.RoomRolesListener roomRolesListener = (RoomListener.RoomRolesListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        roomRolesListener.onGetRoomRoles(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<RoomRole> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RoomRole(array.optJSONObject(j)));
                         }
-                        roomRolesListener.onGetRoomRoles(list, null);
+                        ((CompletableFuture<List<RoomRole>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case LIST_CUSTOM_EMOJI:
-                    EmojiListener emojiListener = (EmojiListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        emojiListener.onListCustomEmoji(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<Emoji> list = new ArrayList<>();
                         JSONArray array = (JSONArray) result;
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new Emoji(array.optJSONObject(j)));
                         }
-                        emojiListener.onListCustomEmoji(list, null);
+                        ((CompletableFuture<List<Emoji>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case LOAD_HISTORY:
-                    HistoryListener historyListener = (HistoryListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        historyListener.onLoadHistory(null, 0, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<RocketChatMessage> list = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
-                        historyListener.onLoadHistory(list, unreadNotLoaded, null);
+                        ((CompletableFuture<LoadHistoryResult>) futureAndType.getValue()).complete(new LoadHistoryResult(list, unreadNotLoaded));
                     }
                     break;
                 case GET_ROOM_MEMBERS:
-                    RoomListener.GetMembersListener membersListener = (RoomListener.GetMembersListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        membersListener.onGetRoomMembers(null, null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<UserObject> users = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("records");
                         for (int j = 0; j < array.length(); j++) {
                             users.add(new UserObject(array.optJSONObject(j)));
                         }
                         Integer total = ((JSONObject) result).optInt("total");
-                        membersListener.onGetRoomMembers(total, users, null);
+                        ((CompletableFuture<GetRoomMembersResult>) futureAndType.getValue()).complete(new GetRoomMembersResult(total, users));
                     }
                     break;
                 case SEND_MESSAGE:
-                    MessageListener.MessageAckListener ackListener = (MessageListener.MessageAckListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        ackListener.onMessageAck(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         RocketChatMessage message = new RocketChatMessage((JSONObject) result);
-                        ackListener.onMessageAck(message, null);
+                        ((CompletableFuture<RocketChatMessage>) futureAndType.getValue()).complete(message);
                     }
                     break;
-                case MESSAGE_OP:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case SEARCH_MESSAGE:
-                    MessageListener.SearchMessageListener searchMessageListener = (MessageListener.SearchMessageListener) listener;
-                    if (result == null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        searchMessageListener.onSearchMessage(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfResultNull(object, futureAndType.getValue(), result)) {
                         ArrayList<RocketChatMessage> list = new ArrayList<>();
                         JSONArray array = ((JSONObject) result).optJSONArray("messages");
                         for (int j = 0; j < array.length(); j++) {
                             list.add(new RocketChatMessage(array.optJSONObject(j)));
                         }
-                        searchMessageListener.onSearchMessage(list, null);
+                        ((CompletableFuture<List<RocketChatMessage>>) futureAndType.getValue()).complete(list);
                     }
                     break;
                 case CREATE_GROUP:
-                    RoomListener.GroupListener groupListener = (RoomListener.GroupListener) listener;
-                    if (object.opt("error") != null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        groupListener.onCreateGroup(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfErrorNotNull(object, futureAndType.getValue())) {
                         String roomId = ((JSONObject) result).optString("rid");
-                        groupListener.onCreateGroup(roomId, null);
+                        ((CompletableFuture<String>) futureAndType.getValue()).complete(roomId);
                     }
                     break;
+                case MESSAGE_OP:
                 case DELETE_GROUP:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case ARCHIVE:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case UNARCHIVE:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case JOIN_PUBLIC_GROUP:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case LEAVE_GROUP:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case OPEN_ROOM:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case HIDE_ROOM:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case SET_FAVOURITE_ROOM:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
-                    break;
                 case SET_STATUS:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
+                case LOGOUT:
+                    handleCallbackBySimpleListener(futureAndType.getValue(), object.opt("error"));
                     break;
                 case UFS_CREATE:
-                    IFileUpload.UfsCreateListener ufsCreateListener = (IFileUpload.UfsCreateListener) listener;
-                    if (object.opt("error") != null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        ufsCreateListener.onUfsCreate(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfErrorNotNull(object, futureAndType.getValue())) {
                         FileUploadToken token = new FileUploadToken((JSONObject) result);
-                        ufsCreateListener.onUfsCreate(token, null);
+                        ((CompletableFuture<FileUploadToken>) futureAndType.getValue()).complete(token);
                     }
                     break;
                 case UFS_COMPLETE:
-                    IFileUpload.UfsCompleteListener completeListener = (IFileUpload.UfsCompleteListener) listener;
-                    if (object.opt("error") != null) {
-                        ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
-                        completeListener.onUfsComplete(null, errorObject);
-                    } else {
+                    if (!completeExceptionallyIfErrorNotNull(object, futureAndType.getValue())) {
                         FileObject file = new FileObject((JSONObject) result);
-                        completeListener.onUfsComplete(file, null);
+                        ((CompletableFuture<FileObject>) futureAndType.getValue()).complete(file);
                     }
-                    break;
-                case LOGOUT:
-                    handleCallbackBySimpleListener((SimpleListener) listener, object.opt("error"));
                     break;
             }
         }
     }
 
-    private void handleCallbackBySimpleListener(SimpleListener listener, Object error) {
+    private boolean completeExceptionallyIfResultNull(JSONObject object, CompletableFuture<?> futureResult, Object result) {
+        if (result == null) {
+            ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+            futureResult.completeExceptionally(new ErrorException(errorObject));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean completeExceptionallyIfErrorNotNull(JSONObject object, CompletableFuture<?> futureResult) {
+        if (object.opt("error") != null) {
+            ErrorObject errorObject = new ErrorObject(object.optJSONObject("error"));
+            futureResult.completeExceptionally(new ErrorException(errorObject));
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void handleCallbackBySimpleListener(CompletableFuture<?> futureResult, Object error) {
         if (error != null) {
             ErrorObject errorObject = new ErrorObject((JSONObject) error);
-            listener.callback(null, errorObject);
+            futureResult.completeExceptionally(new ErrorException(errorObject));
         } else {
-            listener.callback(true, null);
+            ((CompletableFuture<Boolean>) futureResult).complete(Boolean.TRUE);
         }
     }
 

@@ -3,10 +3,14 @@ package RocketChatAPI.RocketChatRoomTest;
 import RocketChatAPI.RocketChatRoomTest.ChatRoomParent.RoomParent;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.listener.SimpleListener;
+import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.callback.MessageListener;
+import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.RocketChatMessage;
 import com.rocketchat.core.model.SubscriptionObject;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -29,76 +33,62 @@ public class MessageOpTest extends RoomParent {
     @Rule
     public TestName testName = new TestName();
 
-    @Mock
-    SimpleListener listener;
-
-    @Captor
-    ArgumentCaptor<Boolean> successCaptor;
-
-    @Captor
-    ArgumentCaptor<ErrorObject> errorArgumentCaptor;
-
     String msgId;
 
-    MessageListener.MessageAckListener acklistener = new MessageListener.MessageAckListener() {
-        @Override
-        public void onMessageAck(RocketChatMessage message, ErrorObject error) {
-            msgId = message.getMessageId();
-            if (testName.getMethodName().equals("A_updateMessageTest")) {
-                room.updateMessage(message.getMessageId(), "This is a updated message", listener);
-            } else if (testName.getMethodName().equals("B_pinMessageTest")) {
-                room.pinMessage(message.getRawJsonObject(), listener);
-            } else if (testName.getMethodName().equals("C_unpinMessageTest")) {
-                room.unpinMessage(message.getRawJsonObject(), listener);
-            } else if (testName.getMethodName().equals("D_starMessageTest")) {
-                room.starMessage(msgId, true, listener);
-            } else if (testName.getMethodName().equals("E_deleteMessageTest")) {
-                room.deleteMessage(msgId, listener);
-            }
-        }
-    };
+    public void TestThisCode() throws Exception {
+        CompletableFuture<RocketChatAPI.ChatRoom> roomResult = getChatRoom();
+        Boolean result = roomResult
+                .thenCompose(room -> room.sendMessage("Hey there bro"))
+                .thenCompose(message -> {
+                    msgId = message.getMessageId();
+                    if (testName.getMethodName().equals("A_updateMessageTest")) {
+                        return roomResult.thenCompose(r -> r.updateMessage(message.getMessageId(), "This is a updated message"));
+                    } else if (testName.getMethodName().equals("B_pinMessageTest")) {
+                        return roomResult.thenCompose(r -> r.pinMessage(message.getRawJsonObject()));
+                    } else if (testName.getMethodName().equals("C_unpinMessageTest")) {
+                        return roomResult.thenCompose(r -> r.unpinMessage(message.getRawJsonObject()));
+                    } else if (testName.getMethodName().equals("D_starMessageTest")) {
+                        return roomResult.thenCompose(r -> r.starMessage(msgId, true));
+                    } else if (testName.getMethodName().equals("E_deleteMessageTest")) {
+                        return roomResult.thenCompose(r -> r.deleteMessage(msgId));
+                    } else {
+                        throw new IllegalStateException();
+                    }
+                })
+                .get();
 
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        super.onGetSubscriptions(subscriptions, error);
-        room.sendMessage("Hey there bro", acklistener);
+        Assert.assertNotNull(result);
     }
 
-    public void TestThisCode() {
-        Mockito.verify(listener, timeout(12000).atLeastOnce()).callback(successCaptor.capture(), errorArgumentCaptor.capture());
-        Assert.assertNotNull(successCaptor.getValue());
-        Assert.assertNull(errorArgumentCaptor.getValue());
-    }
-
-    @Test
-    public void A_updateMessageTest() {
+    @Test(timeout = 12000)
+    public void A_updateMessageTest() throws Exception {
         TestThisCode();
     }
 
-    @Test
-    public void B_pinMessageTest() {
+    @Test(timeout = 12000)
+    public void B_pinMessageTest() throws Exception {
         TestThisCode();
     }
 
-    @Test
-    public void C_unpinMessageTest() {
+    @Test(timeout = 12000)
+    public void C_unpinMessageTest() throws Exception {
         TestThisCode();
     }
 
-    @Test
-    public void D_starMessageTest() {
+    @Test(timeout = 12000)
+    public void D_starMessageTest() throws Exception {
         TestThisCode();
     }
 
-    @Test
-    public void E_deleteMessageTest() {
+    @Test(timeout = 12000)
+    public void E_deleteMessageTest() throws Exception {
         TestThisCode();
     }
 
     @Override
     public void logout() throws InterruptedException {
         if (msgId != null) {
-            room.deleteMessage(msgId, null);
+            room.deleteMessage(msgId);
         }
         super.logout();
     }

@@ -18,7 +18,4 @@ public class MessageListener {
         void onMessageAck(RocketChatMessage message, ErrorObject error);
     }
 
-    public interface SearchMessageListener extends Listener {
-        void onSearchMessage(List<RocketChatMessage> messageList, ErrorObject error);
-    }
 }

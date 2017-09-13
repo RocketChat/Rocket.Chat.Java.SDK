@@ -22,36 +22,18 @@ public class LogoutTest extends RocketChatParent {
     String username = "testuserrocks";
     String password = "testuserrocks";
 
-    @Mock
-    SimpleListener listener;
-
-    @Captor
-    ArgumentCaptor<Boolean> successArgumentCaptor;
-
-    @Captor
-    ArgumentCaptor<ErrorObject> errorArgumentCaptor;
-
     @Before
     public void setUp() {
-        super.setUpBefore(true);
+        super.setUpBefore();
     }
 
-    @Override
-    public void onConnect(String sessionID) {
-        System.out.println("Connected successfully");
-        api.login(username, password, this);
-    }
-
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.logout(listener);
-    }
-
-    @Test
-    public void logoutTest() {
-        Mockito.verify(listener, timeout(12000).atLeastOnce()).callback(successArgumentCaptor.capture(), errorArgumentCaptor.capture());
-        Assert.assertNotNull(successArgumentCaptor.getValue());
-        Assert.assertNull(errorArgumentCaptor.getValue());
+    @Test(timeout = 12000)
+    public void logoutTest() throws Exception {
+        Boolean result = api.singleConnect()
+                .thenCompose(v -> api.login(username, password))
+                .thenCompose(token -> api.logout())
+                .get();
+        Assert.assertNotNull(result);
     }
 
 }
