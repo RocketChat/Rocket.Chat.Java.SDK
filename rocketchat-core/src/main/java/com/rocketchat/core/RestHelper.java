@@ -56,8 +56,10 @@ class RestHelper {
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     procressCallbackError(response, loginCallback);
+                    return;
                 }
 
+                // TODO parse message and check the response type.
                 try {
                     JSONObject json = new JSONObject(response.body().string());
                     JSONObject data = json.getJSONObject("data");
@@ -74,6 +76,7 @@ class RestHelper {
     }
 
     private void procressCallbackError(Response response, Callback callback) {
+        // TODO - parse response body
         if (response.code() == 401) {
             callback.onError(new RocketChatAuthException("Invalid credentials"));
         } else {

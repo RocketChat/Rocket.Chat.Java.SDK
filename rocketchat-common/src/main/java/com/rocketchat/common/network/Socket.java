@@ -194,7 +194,6 @@ public class Socket extends WebSocketListener {
     protected void createSocket() {
         // Create a WebSocket with a socket connection timeout value.
         request = new Request.Builder()
-                //.url("wss://demo.rocket.chat/websocket")
                 .url(url)
                 .addHeader("Accept-Encoding", "gzip, deflate, sdch")
                 .addHeader("Accept-Language", "en-US,en;q=0.8")
