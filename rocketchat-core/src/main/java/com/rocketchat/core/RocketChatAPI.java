@@ -1,15 +1,11 @@
 package com.rocketchat.core;
 
-import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.RocketChatAuthException;
-import com.rocketchat.common.RocketChatException;
-import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.lightdb.DbManager;
 import com.rocketchat.common.data.model.Room;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.data.rpc.RPC;
-import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
@@ -53,19 +49,13 @@ import com.rocketchat.core.uploader.IFileUpload;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-import okhttp3.Call;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static com.rocketchat.common.utils.Utils.checkNotNull;
 
@@ -153,10 +143,14 @@ public class RocketChatAPI implements SocketListener {
         restHelper.signin(username, password, loginCallback);
     }
 
-    public void login(String userId, LoginCallback loginCallback) {
-        TokenObject token = tokenProvider != null ? tokenProvider.getToken(userId) : null;
+    public void pinMessage(String messageId, SimpleCallback callback) {
+        restHelper.pinMessage(messageId, callback);
+    }
+
+    public void login(LoginCallback loginCallback) {
+        TokenObject token = tokenProvider != null ? tokenProvider.getToken() : null;
         if (token == null) {
-            loginCallback.onError(new RocketChatAuthException("Missing token for userId: " + userId));
+            loginCallback.onError(new RocketChatAuthException("Missing token"));
             return;
         }
 

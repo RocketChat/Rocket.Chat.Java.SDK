@@ -7,7 +7,6 @@ import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.TokenObject;
 import com.rocketchat.core.provider.TokenProvider;
 
-import org.hamcrest.Matchers;
 import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
@@ -21,19 +20,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 import io.fabric8.mockwebserver.DefaultMockServer;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
-import okhttp3.mockwebserver.MockWebServer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -68,8 +61,9 @@ public class RestHelperTest {
         helper = new RestHelper(client, baseUrl, tokenProvider);
     }
 
+    // start signin tests
     @Test
-    public void tesSigninShouldSuccessfull() {
+    public void tesSigninShouldBeSuccessfull() {
         mockServer.expect().post().withPath("/login")
                 .andReturn(200, "{\"status\": \"success\",\"data\": {\"authToken\": \"token\",\"userId\": \"userid\"}}").once();
 
@@ -96,7 +90,7 @@ public class RestHelperTest {
     }
 
     @Test
-    public void testShouldFailIfNot2xx() {
+    public void testSiginShouldFailWithAuthExceptionOn401() {
         mockServer.expect().post().withPath("/login")
                 .andReturn(401, "{\"status\": \"error\",\"message\": \"Unauthorized\"}").once();
 
@@ -106,6 +100,16 @@ public class RestHelperTest {
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
         assertThat(exception.getMessage(), is(equalTo("Invalid credentials")));
     }
+
+    @Test
+    public void testSigninShouldFailIfNot2xx() {
+        helper.signin("user", "password", loginCallback);
+        verify(loginCallback, timeout(200).only()).onError(exceptionCaptor.capture());
+        RocketChatException exception = exceptionCaptor.getValue();
+        assertThat(exception, is(instanceOf(RocketChatException.class)));
+
+    }
+    // end signin tests
 
     @After
     public void cleanup() {

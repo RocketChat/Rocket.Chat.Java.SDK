@@ -1,9 +1,13 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatApiException;
+import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.network.Socket;
+import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.TokenObject;
 
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,50 +15,86 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.OkHttpClient;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RocketChatApiTest {
 
     @Mock
     LoginCallback loginCallback;
+
+    @Mock
+    Socket mockedSocket;
+
     @Captor
     ArgumentCaptor<TokenObject> tokenArgumentCaptor;
+
     @Captor
     ArgumentCaptor<RocketChatApiException> errorArgumentCaptor;
+
     private DefaultMockServer server;
     private RocketChatAPI api;
+    private SocketListener listener;
 
     @Before
     public void setUp() {
-        server = new DefaultMockServer();
-        server.start();
+        /*server = new DefaultMockServer();
+        server.start();*/
+
+        String socketUrl = "https://test.rocket.chat/websocket";
+        String restUrl = "https://test.rocket.chat/api/v1/";
 
         api = new RocketChatAPI.Builder()
-                .restBaseUrl(server.url("/api/v1/"))
-                .websocketUrl(server.url("/websocket"))
+                /*.restBaseUrl(server.url("/api/v1/"))
+                .websocketUrl(server.url("/websocket"))*/
+                .restBaseUrl(restUrl)
+                .websocketUrl(socketUrl)
+                .socketFactory(new SocketFactory() {
+                    @Override
+                    public Socket create(OkHttpClient client, String url, SocketListener socketListener) {
+                        listener = socketListener;
+                        return mockedSocket;
+                    }
+                })
                 .build();
         api.disablePing();
+
+        when(loginCallback.getClassType()).thenReturn(LoginCallback.class);
     }
 
     @Test
     public void testShouldLoginSuccessfully() throws InterruptedException {
-        TestUtils.setupMockServer(api, server,
+        /*TestUtils.setupMockServer(api, server,
                 TestUtils.pair(TestMessages.LOGIN_REQUEST,
-                        TestMessages.LOGIN_RESPONSE_OK));
+                        TestMessages.LOGIN_RESPONSE_OK));*/
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESPONSE_OK));
+                return null;
+            }
+        }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST);
 
         api.login("testuserrocks", "testuserrocks", loginCallback);
 
-        verify(loginCallback, timeout(500)).onLoginSuccess(tokenArgumentCaptor.capture());
+        verify(loginCallback).getClassType();
+        verify(loginCallback).onLoginSuccess(tokenArgumentCaptor.capture());
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
@@ -67,13 +107,22 @@ public class RocketChatApiTest {
 
     @Test
     public void testShouldFailLoginWithWrongPassword() throws InterruptedException {
-        TestUtils.setupMockServer(api, server,
+        /*TestUtils.setupMockServer(api, server,
                 TestUtils.pair(TestMessages.LOGIN_REQUEST_FAIL,
-                        TestMessages.LOGIN_RESPONSE_FAIL));
+                        TestMessages.LOGIN_RESPONSE_FAIL));*/
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESPONSE_FAIL));
+                return null;
+            }
+        }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST_FAIL);
 
         api.login("testuserrocks", "wrongpassword", loginCallback);
 
-        verify(loginCallback, timeout(500)).onError(errorArgumentCaptor.capture());
+        verify(loginCallback).getClassType();
+        verify(loginCallback).onError(errorArgumentCaptor.capture());
         verify(loginCallback, never()).onLoginSuccess(any(TokenObject.class));
         RocketChatApiException error = errorArgumentCaptor.getValue();
         assertTrue(error != null);
@@ -87,12 +136,21 @@ public class RocketChatApiTest {
 
     @Test
     public void testShouldResumeLogin() throws InterruptedException {
-        TestUtils.setupMockServer(api, server,
+        /*TestUtils.setupMockServer(api, server,
                 TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST,
-                        TestMessages.LOGIN_RESUME_RESPONSE_OK));
+                        TestMessages.LOGIN_RESUME_RESPONSE_OK));*/
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESUME_RESPONSE_OK));
+                return null;
+            }
+        }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST);
 
         api.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD", loginCallback);
-        verify(loginCallback, timeout(1500)).onLoginSuccess(tokenArgumentCaptor.capture());
+        verify(loginCallback).getClassType();
+        verify(loginCallback, times(1)).onLoginSuccess(tokenArgumentCaptor.capture());
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         TokenObject token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
@@ -105,12 +163,21 @@ public class RocketChatApiTest {
 
     @Test
     public void testShouldFailResumeLoginWithWrongToken() throws InterruptedException {
-        TestUtils.setupMockServer(api, server,
+        /*TestUtils.setupMockServer(api, server,
                 TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST_FAIL,
-                        TestMessages.LOGIN_RESUME_RESPONSE_FAIL));
+                        TestMessages.LOGIN_RESUME_RESPONSE_FAIL));*/
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESUME_RESPONSE_FAIL));
+                return null;
+            }
+        }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST_FAIL);
 
         api.loginUsingToken("INVALID_TOKEN", loginCallback);
-        verify(loginCallback, timeout(1500)).onError(errorArgumentCaptor.capture());
+        verify(loginCallback).getClassType();
+        verify(loginCallback).onError(errorArgumentCaptor.capture());
         verify(loginCallback, never()).onLoginSuccess(any(TokenObject.class));
 
         RocketChatApiException error = errorArgumentCaptor.getValue();
@@ -127,6 +194,6 @@ public class RocketChatApiTest {
     public void shutdown() {
         verifyNoMoreInteractions(loginCallback);
         System.out.println("shutdown");
-        server.shutdown();
+        //server.shutdown();
     }
 }

@@ -6,6 +6,7 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.listener.Callback;
+import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.TokenObject;
 import com.rocketchat.core.provider.TokenProvider;
@@ -48,7 +49,6 @@ class RestHelper {
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                //LOGGER.info("CALL FAILURE: " + e);
                 loginCallback.onError(new RocketChatNetworkErrorException("network error", e));
             }
 
@@ -73,6 +73,49 @@ class RestHelper {
                 }
             }
         });
+    }
+
+    public void pinMessage(String messageId, final SimpleCallback callback) {
+        RequestBody body = new FormBody.Builder()
+                .add("messageId", messageId)
+                .build();
+        Request request = requestBuilder("chat.pinMessage").post(body).build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    procressCallbackError(response, callback);
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    System.out.println("RESPONSE: " + json.toString());
+                    callback.onSuccess();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private Request.Builder requestBuilder(String path) {
+        Request.Builder builder = new Request.Builder()
+                .url(baseUrl.newBuilder().addPathSegment(path).build());
+
+        if (tokenProvider != null && tokenProvider.getToken() != null) {
+            TokenObject token = tokenProvider.getToken();
+            builder.addHeader("X-Auth-Token", token.getAuthToken())
+                    .addHeader("X-User-Id", token.getUserId());
+        }
+
+        return builder;
     }
 
     private void procressCallbackError(Response response, Callback callback) {
