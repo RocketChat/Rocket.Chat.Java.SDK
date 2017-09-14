@@ -1,6 +1,3 @@
-import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
-import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
-import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
 import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
@@ -13,8 +10,6 @@ import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.model.attachment.TAttachment;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * Created by sachin on 7/6/17.
@@ -23,8 +18,8 @@ import java.util.Observer;
 
 public class Main extends CoreAdapter {
 
-    String username = "sachin.shinde";
-    String password = "sachin9924";
+    String username = "";
+    String password = "";
 
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
@@ -49,7 +44,7 @@ public class Main extends CoreAdapter {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login(username,password,this);
+        api.login(username, password, this);
     }
 
     @Override
@@ -176,15 +171,19 @@ public class Main extends CoreAdapter {
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
- *
+ * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
- *
+ * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
- *
+ * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
- *
+ * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
- *
+ * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ * <p>
+ * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
+ * <p>
  * Localhost dummy user: {"userName":"guest-18","roomId":"u7xcgonkr7sh","userId":"rQ2EHbhjryZnqbZxC","visitorToken":"707d47ae407b3790465f61d28ee4c63d","authToken":"VYIvfsfIdBaOy8hdWLNmzsW0yVsKK4213edmoe52133"}
  */
 
