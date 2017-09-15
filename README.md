@@ -10,7 +10,19 @@ Overview
 --------
 This SDK is divided into two parts
 1. Core SDK
+- ![Core SDK intro](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT_INTRO.md)
+- ![RocketChat API usage documentation](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT_API.md)
+- ![RocketChat room API usage documentation](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT_ROOM_DOC.md)
+
+[ ![Download](https://api.bintray.com/packages/rocketchat/RocketChat-SDK/RocketChat-Java-SDK-Core/images/download.svg) ](https://bintray.com/rocketchat/RocketChat-SDK/RocketChat-Java-SDK-Core/_latestVersion) <a href="http://www.methodscount.com/?lib=com.rocketchat.core%3Arocketchat-core%3A0.7.1"><img src="https://img.shields.io/badge/Methods and size-core: 548 | deps: 1614 | 80 KB-e91e63.svg"/></a>
+
 2. LiveChat SDK
+- ![LiveChat SDK intro](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT_INTRO.md)
+- ![LiveChat API usage documentation](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT_API.md)
+- ![LiveChat room API usage documentation](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT_ROOM_DOC.md)
+
+[ ![Download](https://api.bintray.com/packages/rocketchat/RocketChat-SDK/RocketChat-Java-SDK-LiveChat/images/download.svg) ](https://bintray.com/rocketchat/RocketChat-SDK/RocketChat-Java-SDK-LiveChat/_latestVersion) <a href="http://www.methodscount.com/?lib=com.rocketchat.livechat%3Arocketchat-livechat%3A0.7.1"><img src="https://img.shields.io/badge/Methods and size-core: 282 | deps: 1614 | 37 KB-e91e63.svg"/></a>
+
 
 License
 -------
@@ -58,10 +70,9 @@ dependencies {
 }
 ```
 
-[ ![Download](https://api.bintray.com/packages/sacoo7/Maven/RocketChat-SDK/images/download.svg) ](https://bintray.com/sacoo7/Maven/RocketChat-SDK/_latestVersion) <a href="http://www.methodscount.com/?lib=io.rocketchat%3Arocketchatjavasdk%3A0.6.0"><img src="https://img.shields.io/badge/Methods and size-core: 788 | deps: 1256 | 116 KB-e91e63.svg"/></a>
 
 
-Documentation
+Features
 -------------
 
 ### 1. Core SDK
@@ -90,10 +101,11 @@ Documentation
 21. Set favourite room
 22. Set status (ONLINE, OFFLINE, BUSY, AWAY)
 23. Getting room roles
-24. Logout
+24. Upload files
+25. Getting status of other users in realtime (Register for user status by userId)
+26. Logout
 
-- **User documentation can be found here** => [Core SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT.md)
-- Core SDK is under development ....
+- **User documentation can be found here** => [Core SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/ROCKETCHAT_INTRO.md)
 
 ### 2. LiveChat SDK
 - This SDK refers to providing helpDesk feature (LiveChat )in any JVM platform.
@@ -108,4 +120,11 @@ Documentation
 7. Subscribe room
 8. Close conversation
 
-- **User documentation can be found here** => [LiveChat SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT.md)
+- **User documentation can be found here** => [LiveChat SDK](https://github.com/RocketChat/Rocket.Chat.Java.SDK/blob/develop/docs/LIVECHAT_INTRO.md)
+
+
+### Important Note
+All docs are available under **docs/** directory on the repo.
+
+#### Demo Android App
+- **Android app based on Java SDK can be found here** => [Demo Android App based on SDK](https://github.com/RocketChat/RocketChat-Android-Demo)

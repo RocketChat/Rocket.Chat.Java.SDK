@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-//    compile project (':rocketchat-core')
+    compile project (':rocketchat-core')
 //    compile project (':rocketchat-livechat')
-    compile 'com.rocketchat.core:rocketchat-core:0.7.0'
+//    compile 'com.rocketchat.core:rocketchat-core:0.7.0'
 
 }

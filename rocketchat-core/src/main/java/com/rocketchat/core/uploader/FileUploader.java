@@ -1,7 +1,7 @@
 package com.rocketchat.core.uploader;
 
 import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.utils.MultipartUploader;
+import com.rocketchat.common.utils.UploaderUtility;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.callback.FileListener;
@@ -30,7 +30,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     String description;
     RocketChatAPI.ChatRoom room;
     String charset = "UTF-8";
-    MultipartUploader multipart;
+    UploaderUtility uploaderUtility;
     FileListener fileListener;
     int statusCode;
 
@@ -56,8 +56,8 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
                 @Override
                 public void run() {
                     try {
-                        multipart = new MultipartUploader(token.getUrl(), charset);
-                        multipart.addObserver(new Observer() {
+                        uploaderUtility = new UploaderUtility(token.getUrl(), charset);
+                        uploaderUtility.addObserver(new Observer() {
                             @Override
                             public void update(Observable o, Object arg) {
                                 if (arg != null) {
@@ -66,8 +66,8 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
                             }
                         });
 
-                        multipart.addFilePart("file", file);
-                        statusCode = multipart.finish();
+                        uploaderUtility.addFilePart("file", file);
+                        statusCode = uploaderUtility.finish();
                         api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), FileUploader.this);
 
                     } catch (IOException e) {
