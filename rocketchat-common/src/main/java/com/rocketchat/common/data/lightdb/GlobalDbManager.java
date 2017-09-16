@@ -1,10 +1,10 @@
 package com.rocketchat.common.data.lightdb;
 
 import com.rocketchat.common.data.lightdb.collection.Collection;
-import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
-import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
-import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
-import com.rocketchat.common.data.lightdb.document.UserDocument;
+import com.rocketchat.common.data.lightdb.document.global.ClientVersionsDocument;
+import com.rocketchat.common.data.lightdb.document.global.LoginConfDocument;
+import com.rocketchat.common.data.lightdb.document.global.RocketChatRolesDocument;
+import com.rocketchat.common.data.lightdb.document.global.UserDocument;
 import com.rocketchat.common.data.rpc.RPC;
 import java.util.Observable;
 import org.json.JSONObject;
@@ -12,7 +12,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 11/8/17.
  */
-public class DbManager extends Observable {
+public class GlobalDbManager extends Observable {
 
     private Collection<String, UserDocument> usersCollection;
     private Collection<String, LoginConfDocument> loginConfDocumentCollection;
@@ -25,7 +25,7 @@ public class DbManager extends Observable {
     private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
-    public DbManager() {
+    public GlobalDbManager() {
         usersCollection = new Collection<>();
         loginConfDocumentCollection = new Collection<>();
         rolesDocumentCollection = new Collection<>();

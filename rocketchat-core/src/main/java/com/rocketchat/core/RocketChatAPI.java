@@ -1,6 +1,6 @@
 package com.rocketchat.core;
 
-import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.lightdb.GlobalDbManager;
 import com.rocketchat.common.data.model.Room;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.data.rpc.RPC;
@@ -54,7 +54,7 @@ public class RocketChatAPI extends Socket {
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
-    private DbManager dbManager;
+    private GlobalDbManager globalDbManager;
 
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
@@ -64,12 +64,12 @@ public class RocketChatAPI extends Socket {
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
-        dbManager = new DbManager();
+        globalDbManager = new GlobalDbManager();
         chatRoomFactory = new ChatRoomFactory(this);
     }
 
     public String getMyUserName() {
-        return dbManager.getUserCollection().get(userId).getUserName();
+        return globalDbManager.getUserCollection().get(userId).getUserName();
     }
 
     public String getMyUserId() {
@@ -80,8 +80,8 @@ public class RocketChatAPI extends Socket {
         return chatRoomFactory;
     }
 
-    public DbManager getDbManager() {
-        return dbManager;
+    public GlobalDbManager getGlobalDbManager() {
+        return globalDbManager;
     }
 
     //Tested
@@ -412,7 +412,7 @@ public class RocketChatAPI extends Socket {
                 processCollectionsChanged(object);
                 break;
             case REMOVED:
-                dbManager.update(object, RPC.MsgType.REMOVED);
+                globalDbManager.update(object, RPC.MsgType.REMOVED);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubSuccess(object);
@@ -441,16 +441,16 @@ public class RocketChatAPI extends Socket {
         if (userId == null) {
             userId = object.optString("id");
         }
-        dbManager.update(object, RPC.MsgType.ADDED);
+        globalDbManager.update(object, RPC.MsgType.ADDED);
     }
 
     private void processCollectionsChanged(JSONObject object) {
-        switch (DbManager.getCollectionType(object)) {
+        switch (GlobalDbManager.getCollectionType(object)) {
             case STREAM_COLLECTION:
                 coreStreamMiddleware.processCallback(object);
                 break;
             case COLLECTION:
-                dbManager.update(object, RPC.MsgType.CHANGED);
+                globalDbManager.update(object, RPC.MsgType.CHANGED);
                 break;
         }
     }
