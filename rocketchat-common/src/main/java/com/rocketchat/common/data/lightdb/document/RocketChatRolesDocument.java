@@ -1,4 +1,4 @@
-package com.rocketchat.common.data.lightdb.document.global;
+package com.rocketchat.common.data.lightdb.document;
 
 import java.util.Date;
 import org.json.JSONObject;

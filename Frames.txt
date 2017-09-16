@@ -431,6 +431,8 @@ a["{\"msg\":\"added\",\"collection\":\"rocketchat_starred_message\",\"id\":\"Ree
 
 a["{\"msg\":\"added\",\"collection\":\"rocketchat_starred_message\",\"id\":\"XDJrsotGtKLhehxFg\",\"fields\":{\"rid\":\"GENERAL\",\"msg\":\"Hi - testing\",\"ts\":{\"$date\":1505565138531},\"u\":{\"_id\":\"JqmGgW9tpiBf9sTtA\",\"username\":\"richard.noble\",\"name\":\"Richard Noble\"},\"mentions\":[],\"channels\":[],\"_updatedAt\":{\"$date\":1505568352789},\"translations\":{\"en\":\"Hi - testing\"},\"starred\":[{\"_id\":\"g9vNPgp6C4nDpSp8W\"}]}}"]
 
+// sunscribe for pinned messages
+
 ["{\"msg\":\"sub\",\"id\":\"woPhzGhzGnXMfBvzg\",\"name\":\"pinnedMessages\",\"params\":[\"GENERAL\",50]}"]
 
 a["{\"msg\":\"added\",\"collection\":\"rocketchat_pinned_message\",\"id\":\"myD7u4cdsBbzaLgkn\",\"fields\":{\"rid\":\"GENERAL\",\"msg\":\"@yyu \",\"ts\":{\"$date\":1503369650339},\"u\":{\"_id\":\"aczPWsLKai6GYaDcC\",\"username\":\"agiledots\",\"name\":\"agiledots\"},\"mentions\":[{\"_id\":\"DeN45i8KcBtvhK7eE\",\"username\":\"yyu\"}],\"channels\":[],\"_updatedAt\":{\"$date\":1503369709070},\"translations\":{\"pt\":\"@yyu\"},\"pinned\":true,\"pinnedAt\":{\"$date\":1503369709070},\"pinnedBy\":{\"_id\":\"DeN45i8KcBtvhK7eE\",\"username\":\"yyu\"}}}"]

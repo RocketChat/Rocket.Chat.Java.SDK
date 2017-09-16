@@ -1,4 +1,4 @@
-package com.rocketchat.common.data.lightdb.document.global;
+package com.rocketchat.common.data.lightdb.document;
 
 import com.rocketchat.common.data.model.UserObject;
 import java.util.ArrayList;

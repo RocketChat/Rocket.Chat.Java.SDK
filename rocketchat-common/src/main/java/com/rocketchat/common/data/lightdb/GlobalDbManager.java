@@ -1,10 +1,10 @@
 package com.rocketchat.common.data.lightdb;
 
 import com.rocketchat.common.data.lightdb.collection.Collection;
-import com.rocketchat.common.data.lightdb.document.global.ClientVersionsDocument;
-import com.rocketchat.common.data.lightdb.document.global.LoginConfDocument;
-import com.rocketchat.common.data.lightdb.document.global.RocketChatRolesDocument;
-import com.rocketchat.common.data.lightdb.document.global.UserDocument;
+import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
+import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
+import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
+import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.data.rpc.RPC;
 import java.util.Observable;
 import org.json.JSONObject;

@@ -9,18 +9,18 @@ import org.json.JSONObject;
  */
 public class FileObject {
 
-    private String fileId;
-    private String fileName;
-    private String description;
-    private int size;
-    private String fileType;
-    private String roomId;
-    private String extension;
-    private String store;
+    protected String fileId;
+    protected String fileName;
+    protected String description;
+    protected int size;
+    protected String fileType;
+    protected String roomId;
+    protected String extension;
+    protected String store;
 
-    private Date uploadedAt;
-    private Date updatedAt;
-    private String url;
+    protected Date uploadedAt;
+    protected Date updatedAt;
+    protected String url;
 
     public FileObject(JSONObject object) {
 

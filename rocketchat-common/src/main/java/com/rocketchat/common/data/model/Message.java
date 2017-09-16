@@ -10,16 +10,16 @@ import org.json.JSONObject;
 
 public class Message {
 
-    private String messageId;
+    protected String messageId;
     protected String roomId;
     protected String message;
-    private Date msgTimestamp;
-    private UserObject sender;
-    private Date updatedAt;  //Message saved on the server
-    private Date editedAt;
-    private UserObject editedBy;
-    private String messagetype;
-    private String senderAlias;
+    protected Date msgTimestamp;
+    protected UserObject sender;
+    protected Date updatedAt;  //Message saved on the server
+    protected Date editedAt;
+    protected UserObject editedBy;
+    protected String messagetype;
+    protected String senderAlias;
 
     public Message(JSONObject object) {
         try {
