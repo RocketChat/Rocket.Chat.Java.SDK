@@ -1,8 +1,6 @@
 package com.rocketchat.core.rpc;
 
 import com.rocketchat.common.data.rpc.SubRPC;
-import com.rocketchat.common.listener.SubscribeListener;
-import com.rocketchat.common.utils.Utils;
 
 /**
  * Created by sachin on 21/7/17.
@@ -17,7 +15,7 @@ public class CoreSubRPC extends SubRPC {
     private static final String LOGIN_SERVICE_CONFIGURATION = "meteor.loginServiceConfiguration";
     private static final String AUTO_UPDATE_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
     private static final String ROOM_FILES = "roomFiles";
-    private static final String MENTIONED_MESSAGES= "mentionedMessages";
+    private static final String MENTIONED_MESSAGES = "mentionedMessages";
     private static final String STARRED_MESSAGES = "starredMessages";
     private static final String PINNED_MESSAGES = "pinnedMessages";
     private static final String SNIPETTED_MESSAGES = "snippetedMessages";

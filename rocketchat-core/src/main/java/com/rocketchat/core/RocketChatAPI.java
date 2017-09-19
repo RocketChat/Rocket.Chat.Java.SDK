@@ -483,7 +483,7 @@ public class RocketChatAPI extends Socket {
                 System.out.println("Local collection " + object.toString());
                 ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
                 if (room != null) {
-                    System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                    System.out.println("Got into room " + room.getRoomData().getRoomName());
                     room.getRoomDbManager().update(object, RPC.MsgType.ADDED);
                 } else {
                     System.out.println("Room not found for subscribed room");
@@ -502,7 +502,7 @@ public class RocketChatAPI extends Socket {
                 System.out.println("Local collection " + object.toString());
                 ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
                 if (room != null) {
-                    System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                    System.out.println("Got into room " + room.getRoomData().getRoomName());
                     room.getRoomDbManager().update(object, RPC.MsgType.REMOVED);
                 } else {
                     System.out.println("Room not found for subscribed room");
@@ -535,7 +535,7 @@ public class RocketChatAPI extends Socket {
                         System.out.println("Local collection " + object.toString());
                         ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
                         if (room != null) {
-                            System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                            System.out.println("Got into room " + room.getRoomData().getRoomName());
                             room.getRoomDbManager().update(object, RPC.MsgType.CHANGED);
                         } else {
                             System.out.println("Room not found for subscribed room");
@@ -751,7 +751,7 @@ public class RocketChatAPI extends Socket {
 
         public void subscribeStarredMessages(int limit, SubscribeListener listener) {
             if (starredMessagesSubId == null) {
-                   starredMessagesSubId = RocketChatAPI.this.subscribeStarredMessages(room.getRoomId(), limit, listener);
+                starredMessagesSubId = RocketChatAPI.this.subscribeStarredMessages(room.getRoomId(), limit, listener);
             }
         }
 

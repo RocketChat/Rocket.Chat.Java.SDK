@@ -32,7 +32,7 @@ public class MessageDocument extends RocketChatMessage {
                 message = object.getString("msg");
             }
             if (object.opt("ts") != null) {
-                    msgTimestamp = new Date(object.getJSONObject("ts").getLong("$date"));
+                msgTimestamp = new Date(object.getJSONObject("ts").getLong("$date"));
             }
             if (object.opt("u") != null) {
                 sender = new UserObject(object.getJSONObject("u"));
