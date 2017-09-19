@@ -168,7 +168,7 @@ public class GlobalDbManager extends Observable {
     }
 
     public enum Type {
-        STREAM_COLLECTION,
+        OTHER_COLLECTION,
         GLOBAL_COLLECTION
     }
 
@@ -180,7 +180,7 @@ public class GlobalDbManager extends Observable {
                 collectionName.equals(COLLECTION_TYPE_ROCKETCHAT_ROLES)) {
             return Type.GLOBAL_COLLECTION;
         } else {
-            return Type.STREAM_COLLECTION;
+            return Type.OTHER_COLLECTION;
         }
     }
 }

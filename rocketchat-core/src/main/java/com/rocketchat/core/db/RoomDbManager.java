@@ -73,23 +73,23 @@ public class RoomDbManager extends Observable {
     }
 
     public void updateRoomFiles(JSONObject object, RPC.MsgType type) {
-
+        System.out.println("Got into update room files");
     }
 
     public void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
-
+        System.out.println("Got into mentioned messages");
     }
 
     public void updateStarredMessages(JSONObject object, RPC.MsgType type) {
-
+        System.out.println("Got into starred messages");
     }
 
     public void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
-
+        System.out.println("Got into pinned messages");
     }
 
     public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
-
+        System.out.println("Got into snipetted messages");
     }
 
     public enum Type {

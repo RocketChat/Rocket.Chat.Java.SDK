@@ -40,6 +40,7 @@ import com.rocketchat.core.uploader.IFileUpload;
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -447,7 +448,7 @@ public class RocketChatAPI extends Socket {
                 processCollectionsChanged(object);
                 break;
             case REMOVED:
-                globalDbManager.update(object, RPC.MsgType.REMOVED);
+                processCollectionsRemoved(object);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubSuccess(object);
@@ -476,18 +477,69 @@ public class RocketChatAPI extends Socket {
         if (userId == null) {
             userId = object.optString("id");
         }
-        globalDbManager.update(object, RPC.MsgType.ADDED);
+
+        switch (GlobalDbManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                System.out.println("Local collection " + object.toString());
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+                    System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                    room.getRoomDbManager().update(object, RPC.MsgType.ADDED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalDbManager.update(object, RPC.MsgType.ADDED);
+                break;
+        }
+
+    }
+
+    private void processCollectionsRemoved(JSONObject object) {
+        switch (GlobalDbManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                System.out.println("Local collection " + object.toString());
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+                    System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                    room.getRoomDbManager().update(object, RPC.MsgType.REMOVED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalDbManager.update(object, RPC.MsgType.REMOVED);
+                break;
+        }
+    }
+
+    private String getRoomIdFromCollection(JSONObject object) {
+        String roomId = null;
+        try {
+            roomId = object.getJSONObject("fields").getString("rid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return roomId;
     }
 
     private void processCollectionsChanged(JSONObject object) {
         switch (GlobalDbManager.getCollectionType(object)) {
-            case STREAM_COLLECTION:
+            case OTHER_COLLECTION:
                 switch (RoomDbManager.getCollectionType(object)) {
                     case STREAM_COLLECTION:
                         coreStreamMiddleware.processCallback(object);
                         break;
                     case LOCAL_COLLECTION:
                         System.out.println("Local collection " + object.toString());
+                        ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                        if (room != null) {
+                            System.out.println("Got into room "+ room.getRoomData().getRoomName());
+                            room.getRoomDbManager().update(object, RPC.MsgType.CHANGED);
+                        } else {
+                            System.out.println("Room not found for subscribed room");
+                        }
                         break;
                 }
                 break;
@@ -545,6 +597,10 @@ public class RocketChatAPI extends Socket {
 
         public Room getRoomData() {
             return room;
+        }
+
+        public RoomDbManager getRoomDbManager() {
+            return roomDbManager;
         }
 
         //RPC methods
