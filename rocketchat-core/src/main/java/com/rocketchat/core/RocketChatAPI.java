@@ -482,7 +482,14 @@ public class RocketChatAPI extends Socket {
     private void processCollectionsChanged(JSONObject object) {
         switch (GlobalDbManager.getCollectionType(object)) {
             case STREAM_COLLECTION:
-                coreStreamMiddleware.processCallback(object);
+                switch (RoomDbManager.getCollectionType(object)) {
+                    case STREAM_COLLECTION:
+                        coreStreamMiddleware.processCallback(object);
+                        break;
+                    case LOCAL_COLLECTION:
+                        System.out.println("Local collection " + object.toString());
+                        break;
+                }
                 break;
             case GLOBAL_COLLECTION:
                 globalDbManager.update(object, RPC.MsgType.CHANGED);

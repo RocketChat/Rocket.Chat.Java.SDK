@@ -174,4 +174,5 @@ public class ChatRoomFactory {
     public void removeAllChatRooms() {
         rooms.clear();
     }
+
 }
