@@ -19,6 +19,7 @@ import com.rocketchat.core.callback.LoginListener;
 import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.callback.RoomListener;
 import com.rocketchat.core.callback.UserListener;
+import com.rocketchat.core.db.RoomDbManager;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.middleware.CoreMiddleware;
 import com.rocketchat.core.middleware.CoreStreamMiddleware;
@@ -342,6 +343,40 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(CoreSubRPC.subscribeClientVersions(uniqueID));
     }
 
+    private String subscribeRoomFiles(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeRoomFiles(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeMentionedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeMentionedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeStarredMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeStarredMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribePinnedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribePinnedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeSnipettedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
 
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
@@ -449,7 +484,7 @@ public class RocketChatAPI extends Socket {
             case STREAM_COLLECTION:
                 coreStreamMiddleware.processCallback(object);
                 break;
-            case COLLECTION:
+            case GLOBAL_COLLECTION:
                 globalDbManager.update(object, RPC.MsgType.CHANGED);
                 break;
         }
@@ -476,14 +511,25 @@ public class RocketChatAPI extends Socket {
     public class ChatRoom {
 
         Room room;
+        RoomDbManager roomDbManager;
 
         //Subscription Ids for new subscriptions
         private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
         private String typingSubId;
         private String deleteSubId;
 
+
+        //subscription Ids for room collections
+        private String filesSubId;
+        private String mentionedMessagesSubId;
+        private String starredMessagesSubId;
+        private String pinnedMessagesSubId;
+        private String snipetedMessagesSubId;
+
+
         public ChatRoom(Room room) {
             this.room = room;
+            roomDbManager = new RoomDbManager();
         }
 
         public Boolean isSubscriptionObject() {
@@ -607,7 +653,7 @@ public class RocketChatAPI extends Socket {
         }
 
 
-        public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
+        public void unsubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
             if (roomSubId != null) {
                 coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_MESSAGE);
                 RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
@@ -617,7 +663,7 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
+        public void unsubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
             if (typingSubId != null) {
                 coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_TYPING);
                 RocketChatAPI.this.unsubscribeRoom(typingSubId, subscribeListener);
@@ -625,10 +671,83 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        public void unSubscribeAllEvents() {
+
+        // Subscription methods available for flex-tab-container border-component-color on the right side
+
+        public void subscribeRoomFiles(int limit, SubscribeListener listener) {
+            if (filesSubId == null) {
+                filesSubId = RocketChatAPI.this.subscribeRoomFiles(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeMentionedMessages(int limit, SubscribeListener listener) {
+            if (mentionedMessagesSubId == null) {
+                mentionedMessagesSubId = RocketChatAPI.this.subscribeMentionedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeStarredMessages(int limit, SubscribeListener listener) {
+            if (starredMessagesSubId == null) {
+                   starredMessagesSubId = RocketChatAPI.this.subscribeStarredMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribePinnedMessages(int limit, SubscribeListener listener) {
+            if (pinnedMessagesSubId == null) {
+                pinnedMessagesSubId = RocketChatAPI.this.subscribePinnedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeSnipettedMessages(int limit, SubscribeListener listener) {
+            if (snipetedMessagesSubId == null) {
+                snipetedMessagesSubId = RocketChatAPI.this.subscribeSnipettedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void unsubscribeRoomFiles(SubscribeListener subscribeListener) {
+            if (filesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(filesSubId, subscribeListener);
+                filesSubId = null;
+            }
+        }
+
+        public void unsubscribeMentionedMessages(SubscribeListener subscribeListener) {
+            if (mentionedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(mentionedMessagesSubId, subscribeListener);
+                mentionedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeStarredMessages(SubscribeListener subscribeListener) {
+            if (starredMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(starredMessagesSubId, subscribeListener);
+                starredMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribePinnedMessages(SubscribeListener subscribeListener) {
+            if (pinnedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(pinnedMessagesSubId, subscribeListener);
+                pinnedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeSnipettedMessages(SubscribeListener subscribeListener) {
+            if (snipetedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(snipetedMessagesSubId, subscribeListener);
+                snipetedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeAllEvents() {
             coreStreamMiddleware.removeAllSub(room.getRoomId());
-            unSubscribeRoomMessageEvent(null);
-            unSubscribeRoomTypingEvent(null);
+            unsubscribeRoomMessageEvent(null);
+            unsubscribeRoomTypingEvent(null);
+            unsubscribeRoomFiles(null);
+            unsubscribeMentionedMessages(null);
+            unsubscribePinnedMessages(null);
+            unsubscribeStarredMessages(null);
+            unsubscribeSnipettedMessages(null);
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room

@@ -169,7 +169,7 @@ public class GlobalDbManager extends Observable {
 
     public enum Type {
         STREAM_COLLECTION,
-        COLLECTION
+        GLOBAL_COLLECTION
     }
 
     public static Type getCollectionType(JSONObject object) {
@@ -178,7 +178,7 @@ public class GlobalDbManager extends Observable {
                 collectionName.equals(COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF) ||
                 collectionName.equals(COLLECTION_TYPE_METEOR_CLIENT_VERSIONS) ||
                 collectionName.equals(COLLECTION_TYPE_ROCKETCHAT_ROLES)) {
-            return Type.COLLECTION;
+            return Type.GLOBAL_COLLECTION;
         } else {
             return Type.STREAM_COLLECTION;
         }

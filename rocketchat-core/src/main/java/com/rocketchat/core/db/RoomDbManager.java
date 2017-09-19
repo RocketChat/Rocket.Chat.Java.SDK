@@ -20,7 +20,7 @@ public class RoomDbManager extends Observable {
     private static final String COLLECTION_TYPE_FILES = "room_files";
     private static final String COLLECTION_TYPE_MENTIONED_MESSAGES = "rocketchat_mentioned_message";
     private static final String COLLECTION_TYPE_STARRED_MESSAGES = "rocketchat_starred_message";
-    private static final String COLLECTION_TYPE_PINNED_MESSAGEDS = "rocketchat_pinned_message";
+    private static final String COLLECTION_TYPE_PINNED_MESSAGES = "rocketchat_pinned_message";
     private static final String COLLECTION_TYPE_SNIPETED_MESSAGES = "rocketchat_snippeted_message";
 
     public RoomDbManager() {
@@ -60,7 +60,7 @@ public class RoomDbManager extends Observable {
             case COLLECTION_TYPE_MENTIONED_MESSAGES:
                 updateMentionedMessages(object, type);
                 break;
-            case COLLECTION_TYPE_PINNED_MESSAGEDS:
+            case COLLECTION_TYPE_PINNED_MESSAGES:
                 updatePinnedMessages(object, type);
                 break;
             case COLLECTION_TYPE_STARRED_MESSAGES:
@@ -90,5 +90,23 @@ public class RoomDbManager extends Observable {
 
     public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
 
+    }
+
+    public enum Type {
+        STREAM_COLLECTION,
+        LOCAL_COLLECTION
+    }
+
+    public static Type getCollectionType(JSONObject object) {
+        String collectionName = object.optString("collection");
+        if (collectionName.equals(COLLECTION_TYPE_FILES) ||
+                collectionName.equals(COLLECTION_TYPE_MENTIONED_MESSAGES) ||
+                collectionName.equals(COLLECTION_TYPE_STARRED_MESSAGES) ||
+                collectionName.equals(COLLECTION_TYPE_PINNED_MESSAGES) ||
+                collectionName.equals(COLLECTION_TYPE_SNIPETED_MESSAGES)) {
+            return Type.LOCAL_COLLECTION;
+        } else {
+            return Type.STREAM_COLLECTION;
+        }
     }
 }
