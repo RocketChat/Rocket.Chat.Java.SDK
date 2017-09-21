@@ -47,7 +47,7 @@ public class Main extends CoreAdapter {
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         api.getChatRoomFactory().createChatRooms(subscriptions);
         RocketChatAPI.ChatRoom room = api.getChatRoomFactory().getChatRoomByName("general");
-        room.subscribeRoomFiles(20, new SubscribeListener() {
+        room.subscribeStarredMessages(20, new SubscribeListener() {
             public void onSubscribe(Boolean isSubscribed, String subId) {
                 if (isSubscribed) {
                     System.out.println("Subscribed to room successfully with subId " + subId);

@@ -1,6 +1,7 @@
 package com.rocketchat.core.db;
 
 import com.rocketchat.common.data.lightdb.collection.Collection;
+import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
@@ -73,22 +74,54 @@ public class RoomDbManager extends Observable {
     }
 
     public void updateRoomFiles(JSONObject object, RPC.MsgType type) {
+        String id = object.optString("id");
+
+        switch (type) {
+            case ADDED:
+                FileDocument document = new FileDocument(object.optJSONObject("fields"));
+                document .setId(id);
+                roomFilesCollection.add(id, document);
+                setChanged();
+                notifyObservers(document);
+                break;
+            case CHANGED:
+                roomFilesCollection.get(id).update(object.optJSONObject("fields"));
+                FileDocument fileDocument = roomFilesCollection.get(id);
+                roomFilesCollection.update(id, fileDocument);
+                setChanged();
+                notifyObservers(fileDocument);
+                break;
+            case REMOVED:
+                roomFilesCollection.remove(id);
+                setChanged();
+                notifyObservers();
+                break;
+        }
+
         System.out.println("Got into update room files");
     }
 
     public void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
+        String id = object.optString("id");
+
         System.out.println("Got into mentioned messages");
     }
 
     public void updateStarredMessages(JSONObject object, RPC.MsgType type) {
+        String id = object.optString("id");
+
         System.out.println("Got into starred messages");
     }
 
     public void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
+        String id = object.optString("id");
+
         System.out.println("Got into pinned messages");
     }
 
     public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
+        String id = object.optString("id");
+
         System.out.println("Got into snipetted messages");
     }
 

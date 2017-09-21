@@ -14,6 +14,10 @@ public class FileDocument extends FileObject {
         super(object);
     }
 
+    public void setId(String id) {
+        this.fileId = id;
+    }
+
     public void update(JSONObject file) {
         try {
             if (file.opt("_id") != null) {
