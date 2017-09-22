@@ -104,6 +104,27 @@ public class RoomDbManager extends Observable {
     public void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
+        switch (type) {
+            case ADDED:
+                MessageDocument document = new MessageDocument(object.optJSONObject("fields"));
+                document.setId(id);
+                mentionedMessagesCollection.add(id, document);
+                setChanged();
+                notifyObservers(document);
+                break;
+            case CHANGED:
+                mentionedMessagesCollection.get(id).update(object.optJSONObject("fields"));
+                MessageDocument messageDocument = mentionedMessagesCollection.get(id);
+                mentionedMessagesCollection.update(id, messageDocument);
+                setChanged();
+                notifyObservers(messageDocument);
+                break;
+            case REMOVED:
+                mentionedMessagesCollection.remove(id);
+                setChanged();
+                notifyObservers();
+                break;
+        }
         System.out.println("Got into mentioned messages");
     }
 

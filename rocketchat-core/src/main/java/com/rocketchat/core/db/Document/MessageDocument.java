@@ -19,6 +19,10 @@ public class MessageDocument extends RocketChatMessage {
         super(object);
     }
 
+    public void setId (String id) {
+        messageId = id;
+    }
+
     public void update(JSONObject object) {
 
         try {
