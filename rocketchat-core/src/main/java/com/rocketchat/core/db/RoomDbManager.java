@@ -1,7 +1,6 @@
 package com.rocketchat.core.db;
 
 import com.rocketchat.common.data.lightdb.collection.Collection;
-import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
@@ -102,48 +101,51 @@ public class RoomDbManager extends Observable {
     }
 
     public void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
+        updateMessageCollection(mentionedMessagesCollection, object, type);
+        System.out.println("Got into mentioned messages");
+    }
+
+    public void updateStarredMessages(JSONObject object, RPC.MsgType type) {
+        updateMessageCollection(starredMessagesCollection, object, type);
+        System.out.println("Got into starred messages");
+    }
+
+    public void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
+        updateMessageCollection(pinnedMessagesCollection, object, type);
+        System.out.println("Got into pinned messages");
+    }
+
+    public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
+        updateMessageCollection(snipetedMessagesCollection, object, type);
+
+        System.out.println("Got into snipetted messages");
+    }
+
+
+    public void updateMessageCollection(Collection<String, MessageDocument> collection,JSONObject object, RPC.MsgType type ) {
         String id = object.optString("id");
 
         switch (type) {
             case ADDED:
                 MessageDocument document = new MessageDocument(object.optJSONObject("fields"));
                 document.setId(id);
-                mentionedMessagesCollection.add(id, document);
+                collection.add(id, document);
                 setChanged();
                 notifyObservers(document);
                 break;
             case CHANGED:
-                mentionedMessagesCollection.get(id).update(object.optJSONObject("fields"));
-                MessageDocument messageDocument = mentionedMessagesCollection.get(id);
-                mentionedMessagesCollection.update(id, messageDocument);
+                collection.get(id).update(object.optJSONObject("fields"));
+                MessageDocument messageDocument = collection.get(id);
+                collection.update(id, messageDocument);
                 setChanged();
                 notifyObservers(messageDocument);
                 break;
             case REMOVED:
-                mentionedMessagesCollection.remove(id);
+                collection.remove(id);
                 setChanged();
                 notifyObservers();
                 break;
         }
-        System.out.println("Got into mentioned messages");
-    }
-
-    public void updateStarredMessages(JSONObject object, RPC.MsgType type) {
-        String id = object.optString("id");
-
-        System.out.println("Got into starred messages");
-    }
-
-    public void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
-        String id = object.optString("id");
-
-        System.out.println("Got into pinned messages");
-    }
-
-    public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
-        String id = object.optString("id");
-
-        System.out.println("Got into snipetted messages");
     }
 
     public enum Type {
