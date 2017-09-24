@@ -476,6 +476,7 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 **17. subscriptions for starred, snipetted, mentioned and file messages**
 
+- These are all room specific subscriptions and data returned is stored in memory db.
 - It is used for getting individual set of messages from all messages.
 - This individual set contains starred messages, pinned messages, snipetty messages, mentioned and file messages.
 - Subscription allows to get those messages as well as observer for the change of messages.
@@ -483,12 +484,177 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 - To get next set of messages, unsubscribe current subscription and fetch total extra messages (new limit = prev limit+ extra)
 
 1. Starred messages
-- 
+- This subscription is used for getting individual set of starred messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting starred messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// subscribe for starred messages
+        room.subscribeStarredMessages(50, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for starred messages
+room.getRoomDbManager().getStarredMessagesCollection().addObserver(new Observer() {
+    public void update(Observable o, Object arg) {
+        MessageDocument messageDocument = (MessageDocument) arg;
+        System.out.println("Starred message is " + messageDocument.getMessage());
+        System.out.println("Starred message Sender is " + messageDocument.getSender().getUserName());
+    }
+});
+```
+
+III. Getting all messages from DB anytime needed.
+
+```java
+    System.out.println("Number of starred messages for room are " + room.getRoomDbManager().getStarredMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
 
 2. Pinned messages
+- This subscription is used for getting individual set of pinned messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change. 
 
-3. Snipetted messsages
+I. subscribing for getting pinned messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+        // subcribing for getting pinned messages
+        room.subscribePinnedMessages(50, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for pinned messages
+        room.getRoomDbManager().getPinnedMessagesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                MessageDocument messageDocument = (MessageDocument) arg;
+                System.out.println("Pinned message is " + messageDocument.getMessage());
+                System.out.println("Sender is " + messageDocument.getSender().getUserName());
+
+            }
+        });
+
+```
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of pinned messages for room are " + room.getRoomDbManager().getPinnedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
+
+3. Snipetted messsages (Message containing code)
+- This subscription is used for getting individual set of snipetted messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+I. subscribing for getting snipetted messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// Subscribing for getting max 20 snipetted documents in collection, callbacks will be available at above method
+        room.subscribeSnipettedMessages(20, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// Adding observer for snipetted messages
+room.getRoomDbManager().getSnipetedMessagesCollection().addObserver(new Observer() {
+    public void update(Observable o, Object arg) {
+        MessageDocument document = (MessageDocument) arg;
+        System.out.println("snipetted message is " + document.getMessage());
+        System.out.println("snipetted message sender is"  + document.getSender().getUserName());
+    }
+});
+```
+
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of snipetted messages for room are " + room.getRoomDbManager().getSnipetedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
 
 4. Mentioned messages
+- This subscription is used for getting individual set of mentioned messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting mentioned messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// subscribe for mentioned messages
+        room.subscribeMentionedMessages(50, null);
+        
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for mentioned messages
+        room.getRoomDbManager().getMentionedMessagesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                MessageDocument messageDocument = (MessageDocument) arg;
+                System.out.println("Mentioned message is " + messageDocument.getMessage());
+                System.out.println("Mentioned message Sender is " + messageDocument.getSender().getUserName());
+            }
+});
+
+```
+
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of mentioned messages for room are " + room.getRoomDbManager().getMentionedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
 
 5. File Messages
+- This subscription is used for getting individual set of file messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting file messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// Subscribing to the room files for getting 20 files in collection, callbacks will be available at above method
+        room.subscribeRoomFiles(20, null);
+```        
+        
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// Adding observer for file collection document files
+        room.getRoomDbManager().getRoomFilesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                FileDocument document = (FileDocument) arg;
+                System.out.println("document file name is " + document.getFileName());
+                System.out.println("document file type is " + document.getFileType());
+            }
+        });
+```
+
+III. Getting all messages from DB anytime needed.
+
+```java
+    System.out.println("Number of files are " + room.getRoomDbManager().getRoomFilesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
