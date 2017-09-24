@@ -14,8 +14,8 @@ import java.util.List;
 
 public class Main extends CoreAdapter {
 
-    String username = "sachin.shinde";
-    String password = "sachin9924";
+    String username = "*****";
+    String password = "*****";
 
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
