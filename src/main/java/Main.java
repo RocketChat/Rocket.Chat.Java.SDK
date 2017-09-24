@@ -1,17 +1,10 @@
 import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
-import com.rocketchat.core.db.Document.FileDocument;
-import com.rocketchat.core.db.Document.MessageDocument;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
@@ -20,8 +13,8 @@ import java.util.TimerTask;
 
 public class Main extends CoreAdapter {
 
-    String username = "sachin.shinde";
-    String password = "sachin123";
+    String username = "";
+    String password = "";
 
     private static String serverurl = "wss://demo.rocket.chat";
     RocketChatAPI api;
@@ -52,30 +45,7 @@ public class Main extends CoreAdapter {
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
         api.getChatRoomFactory().createChatRooms(subscriptions);
-        final RocketChatAPI.ChatRoom room = api.getChatRoomFactory().getChatRoomByName("general");
-
-        room.getRoomDbManager().getPinnedMessagesCollection().addObserver(new Observer() {
-            public void update(Observable o, Object arg) {
-                MessageDocument messageDocument = (MessageDocument) arg;
-                System.out.println("Pinned message is " + messageDocument.getMessage());
-                System.out.println("Sender is " + messageDocument.getSender().getUserName());
-
-            }
-        });
-
-
-        room.subscribePinnedMessages(50, null);
-
-// When data gets added in database, you can access it anytime
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("Number of pinned messages for room are " + room.getRoomDbManager().getPinnedMessagesCollection().getData().size());
-            }
-        },2000);
-
-//        room.subscribeMentionedMessages(20, null);
-//        room.subscribeStarredMessages(20, null);
+        RocketChatAPI.ChatRoom room = api.getChatRoomFactory().getChatRoomByName("general");
     }
 
 
