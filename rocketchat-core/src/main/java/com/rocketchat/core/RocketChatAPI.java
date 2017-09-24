@@ -480,10 +480,9 @@ public class RocketChatAPI extends Socket {
 
         switch (GlobalDbManager.getCollectionType(object)) {
             case OTHER_COLLECTION:
-                System.out.println("Local collection " + object.toString());
                 ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
                 if (room != null) {
-                    System.out.println("Got into room " + room.getRoomData().getRoomName());
+//                    System.out.println("Got into room " + room.getRoomData().getRoomName());
                     room.getRoomDbManager().update(object, RPC.MsgType.ADDED);
                 } else {
                     System.out.println("Room not found for subscribed room");

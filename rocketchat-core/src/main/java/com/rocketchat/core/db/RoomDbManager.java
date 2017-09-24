@@ -10,6 +10,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 16/9/17.
  */
+// TODO: 24/9/17 sort collections in accordance with date
 public class RoomDbManager extends Observable {
     private Collection<String, FileDocument> roomFilesCollection;
     private Collection<String, MessageDocument> mentionedMessagesCollection;
