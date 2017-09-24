@@ -16,6 +16,7 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 - subscribe room for new messages (Room will receive messages in real-time)
 - subscribe room for typing events (Room will receive messages regarding typing events in real-time)
 - uploading file to the server (Update AUDIO, VIDEO, IMAGE file to the server)
+- subscribe for getting starred, pinned, mentioned, snippeted and file messages
  
 **1. getChatHistory**
 
@@ -472,3 +473,22 @@ Following methods are provided by RocketChatAPI.ChatRoom API
         });
 
 ```
+
+**17. subscriptions for starred, snipetted, mentioned and file messages**
+
+- It is used for getting individual set of messages from all messages.
+- This individual set contains starred messages, pinned messages, snipetty messages, mentioned and file messages.
+- Subscription allows to get those messages as well as observer for the change of messages.
+- All subscription API's has as limit param to get total number of latest set of individual messages.
+- To get next set of messages, unsubscribe current subscription and fetch total extra messages (new limit = prev limit+ extra)
+
+1. Starred messages
+- 
+
+2. Pinned messages
+
+3. Snipetted messsages
+
+4. Mentioned messages
+
+5. File Messages
