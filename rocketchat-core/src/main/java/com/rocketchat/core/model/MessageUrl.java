@@ -58,14 +58,28 @@ public class MessageUrl {
         public Meta(JSONObject object) {
             try {
                 pageTitle = object.getString("pageTitle");
-                fbAppId = object.getString("fbAppId");
+                if (object.opt("fbAppId") != null) {
+                    fbAppId = object.getString("fbAppId");
+                }
                 description = object.getString("description");
-                ogImage = object.getString("ogImage");
-                ogSiteName = object.getString("ogSiteName");
-                ogType = object.getString("ogType");
-                ogTitle = object.getString("ogTitle");
-                ogUrl = object.getString("ogUrl");
-                ogDescription = object.getString("ogDescription");
+                if (object.opt("ogImage") != null) {
+                    ogImage = object.getString("ogImage");
+                }
+                if (object.opt("ogSiteName") != null) {
+                    ogSiteName = object.getString("ogSiteName");
+                }
+                if (object.opt("ogType") != null) {
+                    ogType = object.getString("ogType");
+                }
+                if (object.opt("ogTitle") != null) {
+                    ogTitle = object.getString("ogTitle");
+                }
+                if (object.opt("ogUrl") != null) {
+                    ogUrl = object.getString("ogUrl");
+                }
+                if (object.opt("ogDescription") != null) {
+                    ogDescription = object.getString("ogDescription");
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

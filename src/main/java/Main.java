@@ -4,6 +4,7 @@ import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.adapter.CoreAdapter;
 import com.rocketchat.core.db.Document.FileDocument;
+import com.rocketchat.core.db.Document.MessageDocument;
 import com.rocketchat.core.model.SubscriptionObject;
 import com.rocketchat.core.model.TokenObject;
 import java.util.List;
@@ -53,25 +54,26 @@ public class Main extends CoreAdapter {
         api.getChatRoomFactory().createChatRooms(subscriptions);
         final RocketChatAPI.ChatRoom room = api.getChatRoomFactory().getChatRoomByName("general");
 
-        room.getRoomDbManager().getRoomFilesCollection().addObserver(new Observer() {
+        room.getRoomDbManager().getPinnedMessagesCollection().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
-                FileDocument document = (FileDocument) arg;
-                System.out.println("document file name is " + document.getFileName());
-                System.out.println("document file type is " + document.getFileType());
+                MessageDocument messageDocument = (MessageDocument) arg;
+                System.out.println("Pinned message is " + messageDocument.getMessage());
+                System.out.println("Sender is " + messageDocument.getSender().getUserName());
+
             }
         });
 
-        room.subscribeRoomFiles(20, null);
 
+        room.subscribePinnedMessages(50, null);
+
+// When data gets added in database, you can access it anytime
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                System.out.println("Number of files are " + room.getRoomDbManager().getRoomFilesCollection().getData().size());
+                System.out.println("Number of pinned messages for room are " + room.getRoomDbManager().getPinnedMessagesCollection().getData().size());
             }
         },2000);
 
-//        room.subscribeSnipettedMessages(20, null);
-//        room.subscribePinnedMessages(20, null);
 //        room.subscribeMentionedMessages(20, null);
 //        room.subscribeStarredMessages(20, null);
     }
