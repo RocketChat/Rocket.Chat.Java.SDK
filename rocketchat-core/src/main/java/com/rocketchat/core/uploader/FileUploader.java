@@ -3,7 +3,8 @@ package com.rocketchat.core.uploader;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.utils.MultipartUploader;
 import com.rocketchat.common.utils.Utils;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.ChatRoom;
+import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.model.FileDescriptor;
@@ -22,17 +23,17 @@ public class FileUploader {
 
     public static final String DEFAULT_STORE = "Uploads";
 
-    RocketChatAPI api;
+    RocketChatClient api;
     java.io.File file;
     String newFileName;
     String description;
-    RocketChatAPI.ChatRoom room;
+    ChatRoom room;
     String charset = "UTF-8";
     MultipartUploader multipart;
     FileListener fileListener;
     int statusCode;
 
-    public FileUploader(RocketChatAPI api, java.io.File file, String newFileName, String description, RocketChatAPI.ChatRoom room, FileListener fileListener) {
+    public FileUploader(RocketChatClient api, java.io.File file, String newFileName, String description, ChatRoom room, FileListener fileListener) {
         this.api = api;
         this.file = file;
         this.newFileName = newFileName;

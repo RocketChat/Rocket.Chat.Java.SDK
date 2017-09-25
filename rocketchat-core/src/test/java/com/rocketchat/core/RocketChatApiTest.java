@@ -47,7 +47,7 @@ public class RocketChatApiTest {
     ArgumentCaptor<RocketChatApiException> errorArgumentCaptor;
 
     private DefaultMockServer server;
-    private RocketChatAPI sut;
+    private RocketChatClient sut;
     private SocketListener listener;
 
     @Before
@@ -58,7 +58,7 @@ public class RocketChatApiTest {
         String socketUrl = "https://test.rocket.chat/websocket";
         String restUrl = "https://test.rocket.chat/sut/v1/";
 
-        sut = new RocketChatAPI.Builder()
+        sut = new RocketChatClient.Builder()
                 /*.restBaseUrl(server.url("/sut/v1/"))
                 .websocketUrl(server.url("/websocket"))*/
                 .restBaseUrl(restUrl)

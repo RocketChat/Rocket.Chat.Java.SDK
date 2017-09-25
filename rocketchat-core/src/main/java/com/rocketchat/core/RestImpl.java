@@ -7,9 +7,11 @@ import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
+import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,24 +26,24 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.rocketchat.common.utils.Utils.checkParamNotNull;
+import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
-class RestHelper {
+class RestImpl {
 
     private final OkHttpClient client;
     private final HttpUrl baseUrl;
     private final TokenProvider tokenProvider;
 
-    public RestHelper(OkHttpClient client, HttpUrl baseUrl, TokenProvider tokenProvider) {
+    RestImpl(OkHttpClient client, Moshi moshi, HttpUrl baseUrl, TokenProvider tokenProvider, Logger logger) {
         this.client = client;
         this.baseUrl = baseUrl;
         this.tokenProvider = tokenProvider;
     }
 
-    public void signin(String username, String password, final LoginCallback loginCallback) {
-        checkParamNotNull(username, "username == null");
-        checkParamNotNull(password, "password == null");
-        checkParamNotNull(loginCallback, "loginCallback == null");
+    void signin(String username, String password, final LoginCallback loginCallback) {
+        checkNotNull(username, "username == null");
+        checkNotNull(password, "password == null");
+        checkNotNull(loginCallback, "loginCallback == null");
 
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
@@ -81,7 +83,7 @@ class RestHelper {
         });
     }
 
-    public void pinMessage(String messageId, final SimpleCallback callback) {
+    void pinMessage(String messageId, final SimpleCallback callback) {
         RequestBody body = new FormBody.Builder()
                 .add("id", messageId)
                 .build();

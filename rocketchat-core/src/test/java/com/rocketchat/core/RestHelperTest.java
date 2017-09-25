@@ -31,7 +31,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class RestHelperTest {
 
-    RestHelper sut;
+    RestImpl sut;
     OkHttpClient client;
     HttpUrl baseUrl;
 
@@ -57,7 +57,7 @@ public class RestHelperTest {
         baseUrl = HttpUrl.parse(mockServer.url("/"));
         client = new OkHttpClient();
 
-        sut = new RestHelper(client, baseUrl, tokenProvider);
+        //sut = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
     }
 
     // start signin tests

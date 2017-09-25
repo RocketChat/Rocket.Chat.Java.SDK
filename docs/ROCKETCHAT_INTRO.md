@@ -11,13 +11,13 @@
 public class Main{
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(new ConnectListener() {
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(new ConnectListener() {
             @Override
             public void onConnect(String sessionID) {
                 System.out.println("Connected to server");
@@ -48,13 +48,13 @@ public class Main{
 public class Main{
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(new CoreAdapter(){
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(new CoreAdapter(){
             @Override
             public void onConnect(String sessionID) {
                 System.out.println("Connected to server");
@@ -86,13 +86,13 @@ public class Main{
 public class Main implements ConnectListener{
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -128,15 +128,15 @@ public class Main implements ConnectListener{
 public class Main implements ConnectListener, LoginListener {
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String username="";
     private static String password="";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -146,7 +146,7 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login(username,password,this);
+        client.login(username,password,this);
     }
 
     @Override
@@ -179,14 +179,14 @@ public class Main implements ConnectListener, LoginListener {
 ```
 public class Main implements ConnectListener, LoginListener {
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String token="xxx"; //Your token after first login goes here
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -196,7 +196,7 @@ public class Main implements ConnectListener, LoginListener {
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
+        client.loginUsingToken(token,this);
     }
 
     @Override
@@ -231,14 +231,14 @@ public class Main implements ConnectListener, LoginListener {
 public class Main implements ConnectListener, LoginListener, RoomListener.GetRoomListener {
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -248,14 +248,14 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
+        client.loginUsingToken(token,this);
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         if (error==null) {
             System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-            api.getRooms(this);
+            client.getRooms(this);
         }else{
             System.out.println("Got error "+error.getMessage());
         }
@@ -294,14 +294,14 @@ public class Main implements ConnectListener, LoginListener, RoomListener.GetRoo
 ```
 public class Main implements ConnectListener, LoginListener, GetSubscriptionListener {
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -311,14 +311,14 @@ public class Main implements ConnectListener, LoginListener, GetSubscriptionList
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
+        client.loginUsingToken(token,this);
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         if (error==null) {
             System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-            api.getSubscriptions(this);
+            client.getSubscriptions(this);
         }else{
             System.out.println("Got error "+error.getMessage());
         }
@@ -361,14 +361,14 @@ public class Main implements ConnectListener, LoginListener, GetSubscriptionList
 public class Main implements ConnectListener, LoginListener, SubscriptionListener.GetSubscriptionListener {
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -378,14 +378,14 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
+        client.loginUsingToken(token,this);
     }
 
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
         if (error==null) {
             System.out.println("Logged in successfully, returned token "+ token.getAuthToken());
-            api.getSubscriptions(this);
+            client.getSubscriptions(this);
         }else{
             System.out.println("Got error "+error.getMessage());
         }
@@ -395,7 +395,7 @@ public class Main implements ConnectListener, LoginListener, SubscriptionListene
     public void onGetSubscriptions(ArrayList<SubscriptionObject> subscriptions, ErrorObject error) {
 
         //Creating Logical ChatRooms using factory class
-        ChatRoomFactory factory=api.getFactory();
+        ChatRoomFactory factory=client.getFactory();
 
         /* Number of operations can be performed on below room object like
          * sendMessage
@@ -452,15 +452,15 @@ I. Manual reconnection
 - Set reconnection to null before connecting to server.  
 
 ```java
-    api.setReconnectionStrategy(null);
-    api.connect(this);
+    client.setReconnectionStrategy(null);
+    client.connect(this);
 ```
 - After disconnect event, reconnect to the server
 
 ```java
     @Override
     public void onDisconnect(boolean closedByServer) {
-            api.reconnect();
+            client.reconnect();
             System.out.println("Disconnected from server");
     }
 
@@ -472,7 +472,7 @@ II. Automatic reconnection
 ```java
         int maxAttempts=10;    //Number of attemps are 10
         int timeInterval=5000; // in milliseconds, reconnection will be called after 5 seconds
-        api.setReconnectionStrategy(new ReconnectionStrategy(maxAttempts,timeInterval));  
+        client.setReconnectionStrategy(new ReconnectionStrategy(maxAttempts,timeInterval));
 ```
 
 #### 7. Log out
@@ -483,14 +483,14 @@ II. Automatic reconnection
 public class Main implements ConnectListener, LoginListener{
 
 
-    RocketChatAPI api;
+    RocketChatAPI client;
     private static String serverurl="wss://demo.rocket.chat";
     private static String token="";
 
     public void call(){
-        api=new RocketChatAPI(serverurl);
-        api.setReconnectionStrategy(null);
-        api.connect(this);
+        client=new RocketChatAPI(serverurl);
+        client.setReconnectionStrategy(null);
+        client.connect(this);
     }
 
     public static void main(String [] args){
@@ -500,7 +500,7 @@ public class Main implements ConnectListener, LoginListener{
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken(token,this);
+        client.loginUsingToken(token,this);
     }
 
     @Override
@@ -523,7 +523,7 @@ public class Main implements ConnectListener, LoginListener{
     }
 
     private void logout() {
-       api.logout(new SimpleListener() {
+       client.logout(new SimpleListener() {
            @Override
            public void callback(Boolean success, ErrorObject error) {
                if (success){

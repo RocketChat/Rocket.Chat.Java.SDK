@@ -16,7 +16,6 @@ import org.json.JSONObject;
  */
 public class DbManager extends Observable {
 
-    private final Moshi moshi;
     private final JsonAdapter<UserDocument> adapter;
     private Collection<String, UserDocument> usersCollection;
 
@@ -27,7 +26,6 @@ public class DbManager extends Observable {
 
     // TODO - we should not need Moshi here, we should pass the object already serialized.
     public DbManager(Moshi moshi) {
-        this.moshi = moshi/*.newBuilder().add(CommonJsonAdapterFactory.create()).build()*/;
         adapter = moshi.adapter(UserDocument.class);
         usersCollection = new Collection<>();
     }
@@ -78,6 +76,7 @@ public class DbManager extends Observable {
             // TODO - Better error handling.
             e.printStackTrace();
         }
+        System.out.println("DB SIZE: " + usersCollection.size());
     }
 
     public enum Type {

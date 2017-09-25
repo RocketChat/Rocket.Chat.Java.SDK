@@ -2,7 +2,7 @@ package com.rocketchat.core.rxjava;
 
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
 
@@ -26,7 +26,7 @@ public class RxRocketChatClientTest {
     RxRocketChatClient sut;
 
     @Mock
-    RocketChatAPI api;
+    RocketChatClient api;
 
     Token token = new Token("userId", "token", null);
 

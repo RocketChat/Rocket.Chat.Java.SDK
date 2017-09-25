@@ -2,7 +2,9 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.network.ReconnectionStrategy;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.common.utils.Logger;
+import com.rocketchat.core.ChatRoom;
+import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
@@ -20,8 +22,8 @@ public class Main {
 
     private static String serverurl = "ws://demo.rocket.chat/websocket";
     private static String baseUrl = "https://demo.rocket.chat/";
-    RocketChatAPI api;
-    RocketChatAPI.ChatRoom room;
+    RocketChatClient client;
+    ChatRoom room;
 
     String file_path = "/home/sachin/Pictures/pain.jpg";
 
@@ -30,17 +32,21 @@ public class Main {
     }
 
     public void call() {
-        api = new RocketChatAPI.Builder().websocketUrl(serverurl).restBaseUrl(baseUrl).build();
-        api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
-        api.setPingInterval(15000);
-        api.connect(connectListener);
+        client = new RocketChatClient.Builder()
+                .websocketUrl(serverurl)
+                .restBaseUrl(baseUrl)
+                .logger(logger)
+                .build();
+        client.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
+        client.setPingInterval(15000);
+        client.connect(connectListener);
 
     }
 
     ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
-            api.loginUsingToken("mb3ChOAItBEtQ9x9n30xzU1EmRsmaFRVRoO0GWjdfPQ", loginCallback);
+            client.loginUsingToken("mb3ChOAItBEtQ9x9n30xzU1EmRsmaFRVRoO0GWjdfPQ", loginCallback);
         }
 
         public void onConnectError(Throwable websocketException) {
@@ -55,7 +61,7 @@ public class Main {
     public LoginCallback loginCallback = new LoginCallback() {
         @Override
         public void onLoginSuccess(Token token) {
-            api.getSubscriptions(subscriptionsCallback);
+            client.getSubscriptions(subscriptionsCallback);
         }
 
         @Override
@@ -67,7 +73,7 @@ public class Main {
     public SimpleListCallback<Subscription> subscriptionsCallback = new SimpleListCallback<Subscription>() {
         @Override
         public void onSuccess(List<Subscription> subscriptions) {
-            ChatRoomFactory factory = api.getChatRoomFactory();
+            ChatRoomFactory factory = client.getChatRoomFactory();
             room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
             room.subscribeRoomMessageEvent(null, messageCallback);
         }
@@ -155,6 +161,23 @@ public class Main {
                 case OTHER:
                     break;
             }
+        }
+    };
+
+    private Logger logger = new Logger() {
+        @Override
+        public void info(String format, String... args) {
+            System.out.println(String.format(format, args));
+        }
+
+        @Override
+        public void warning(String format, String... args) {
+            System.out.println(String.format(format, args));
+        }
+
+        @Override
+        public void debug(String format, String... args) {
+            System.out.println(String.format(format, args));
         }
     };
 }
