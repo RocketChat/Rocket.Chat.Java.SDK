@@ -2,7 +2,7 @@ package com.rocketchat.core.callback;
 
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.Listener;
-import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.core.model.Message;
 
 import java.lang.reflect.Type;
 
@@ -12,11 +12,11 @@ import java.lang.reflect.Type;
 
 public class MessageCallback {
     public interface SubscriptionCallback extends Listener {
-        void onMessage(String roomId, RocketChatMessage message);
+        void onMessage(String roomId, Message message);
     }
 
     public static abstract class MessageAckCallback extends Callback {
-        public abstract void onMessageAck(RocketChatMessage message);
+        public abstract void onMessageAck(Message message);
 
         @Override
         public Type getClassType() {

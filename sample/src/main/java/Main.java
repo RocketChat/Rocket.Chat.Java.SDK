@@ -6,10 +6,9 @@ import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
-import com.rocketchat.core.model.RocketChatMessage;
-import com.rocketchat.core.model.SubscriptionObject;
-import com.rocketchat.core.model.TokenObject;
-import com.rocketchat.core.model.attachment.TAttachment;
+import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.Token;
 
 import java.util.List;
 
@@ -19,8 +18,8 @@ import java.util.List;
 
 public class Main {
 
-    private static String serverurl = "ws://localhost:3000";
-    private static String baseUrl = "htttps://localhost:3000/";
+    private static String serverurl = "ws://demo.rocket.chat/websocket";
+    private static String baseUrl = "https://demo.rocket.chat/";
     RocketChatAPI api;
     RocketChatAPI.ChatRoom room;
 
@@ -33,7 +32,7 @@ public class Main {
     public void call() {
         api = new RocketChatAPI.Builder().websocketUrl(serverurl).restBaseUrl(baseUrl).build();
         api.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
-        api.setPingInterval(3000);
+        api.setPingInterval(15000);
         api.connect(connectListener);
 
     }
@@ -41,7 +40,7 @@ public class Main {
     ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
-            api.loginUsingToken("token", loginCallback);
+            api.loginUsingToken("mb3ChOAItBEtQ9x9n30xzU1EmRsmaFRVRoO0GWjdfPQ", loginCallback);
         }
 
         public void onConnectError(Throwable websocketException) {
@@ -55,7 +54,7 @@ public class Main {
 
     public LoginCallback loginCallback = new LoginCallback() {
         @Override
-        public void onLoginSuccess(TokenObject token) {
+        public void onLoginSuccess(Token token) {
             api.getSubscriptions(subscriptionsCallback);
         }
 
@@ -65,9 +64,9 @@ public class Main {
         }
     };
 
-    public SimpleListCallback<SubscriptionObject> subscriptionsCallback = new SimpleListCallback<SubscriptionObject>() {
+    public SimpleListCallback<Subscription> subscriptionsCallback = new SimpleListCallback<Subscription>() {
         @Override
-        public void onSuccess(List<SubscriptionObject> subscriptions) {
+        public void onSuccess(List<Subscription> subscriptions) {
             ChatRoomFactory factory = api.getChatRoomFactory();
             room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
             room.subscribeRoomMessageEvent(null, messageCallback);
@@ -80,14 +79,14 @@ public class Main {
     };
 
     public MessageCallback.SubscriptionCallback messageCallback = new MessageCallback.SubscriptionCallback() {
-        public void onMessage(String roomId, RocketChatMessage message) {
-            System.out.println("Got message " + message.getMessage());
+        public void onMessage(String roomId, Message message) {
+            System.out.println("Got message " + message.message());
             switch (message.getMsgType()) {
                 case TEXT:
                     System.out.println("This is a text message");
                     break;
-                case ATTACHMENT:
-                    List<TAttachment> attachments = message.getAttachments();
+                /*case ATTACHMENT:
+                    List<TAttachment> attachments = message.attachments();
                     for (TAttachment attachment : attachments) {
                         switch (attachment.getAttachmentType()) {
                             case TEXT_ATTACHMENT:
@@ -104,7 +103,7 @@ public class Main {
                                 break;
                         }
                     }
-                    break;
+                    break;*/
                 case MESSAGE_EDITED:
                     System.out.println("Message has been edited");
                     break;

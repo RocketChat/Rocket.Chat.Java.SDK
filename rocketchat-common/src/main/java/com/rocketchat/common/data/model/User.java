@@ -1,16 +1,29 @@
 package com.rocketchat.common.data.model;
 
-import com.rocketchat.common.utils.Utils;
-import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.auto.value.AutoValue;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 /**
  * Created by sachin on 12/6/17.
  */
-public class UserObject {
-    private String userId;
+@AutoValue
+public abstract class User extends BaseUser {
+
+    public static JsonAdapter<User> jsonAdapter(Moshi moshi) {
+        return new AutoValue_User.MoshiJsonAdapter(moshi);
+    }
+
+    public static Builder builder() {
+        return new AutoValue_User.Builder();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder extends BaseUser.Builder<Builder> {
+        public abstract User build();
+    }
+
+    /*private String userId;
     protected String userName;
     protected ArrayList<String> roles;
     protected JSONArray emails;
@@ -102,5 +115,5 @@ public class UserObject {
             return Status.AWAY;
         }
         return Status.OTHER;
-    }
+    }*/
 }

@@ -7,8 +7,10 @@ import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.core.TestMessages;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.RoomRole;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Token;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,13 +46,16 @@ public class CoreMiddlewareTest {
     ArgumentCaptor<RocketChatException> errorArgumentCaptor;
 
     @Captor
-    ArgumentCaptor<TokenObject> tokenCaptor;
+    ArgumentCaptor<Token> tokenCaptor;
 
     CoreMiddleware middleware;
 
     @Before
     public void setup() {
-        middleware = new CoreMiddleware();
+        Moshi moshi = new Moshi.Builder()
+                .add(JsonAdapterFactory.create())
+                .build();
+        middleware = new CoreMiddleware(moshi);
         // Call real getClassType on mocked interfaces...
         given(loginCallback.getClassType()).willCallRealMethod();
         given(simpleCallback.getClassType()).willCallRealMethod();

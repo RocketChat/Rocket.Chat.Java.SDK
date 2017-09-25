@@ -7,7 +7,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 18/8/17.
  */
-public class FileObject {
+public class FileDescriptor {
 
     private String fileId;
     private String fileName;
@@ -22,7 +22,7 @@ public class FileObject {
     private Date updatedAt;
     private String url;
 
-    public FileObject(JSONObject object) {
+    public FileDescriptor(JSONObject object) {
 
         try {
             fileId = object.optString("_id");

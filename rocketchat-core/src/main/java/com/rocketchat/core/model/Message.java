@@ -1,12 +1,15 @@
 package com.rocketchat.core.model;
 
-import com.rocketchat.common.data.model.Message;
-import com.rocketchat.core.model.attachment.Attachment;
-import com.rocketchat.core.model.attachment.TAttachment;
-import java.util.ArrayList;
+import com.google.auto.value.AutoValue;
+import com.rocketchat.common.data.model.BaseMessage;
+import com.rocketchat.common.data.model.User;
+import com.squareup.moshi.Json;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by sachin on 21/7/17.
@@ -16,12 +19,28 @@ import org.json.JSONObject;
  * // TODO: 21/7/17 Convert members to strict data
  */
 
-public class RocketChatMessage extends Message {
+@AutoValue
+public abstract class Message extends BaseMessage {
 
-    private JSONArray mentions;
+    @Nullable public abstract Boolean groupable();
+    @Nullable public abstract List<Url> urls();
+    @Nullable public abstract String avatar();
+    @Nullable public abstract List<User> mentions();
+    @Nullable public abstract Boolean parseUrls();
+    // TODO -> channels
+    // TODO -> attachments
+    // TODO -> translations
+    // TODO -> reactions
+    @Json(name = "starred") @Nullable public abstract List<User> starredBy();
+
+    public static JsonAdapter<Message> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Message.MoshiJsonAdapter(moshi);
+    }
+
+    /*private JSONArray mentions;
     private JSONArray channels;
     private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
-    private List<MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
+    private List<Url> urls; //A collection of URLs metadata. Available when the message contains at least one URL
     private List<TAttachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
     private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
     private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
@@ -33,7 +52,7 @@ public class RocketChatMessage extends Message {
     private JSONObject rawMessage;
 
     //File
-    FileObject file;
+    FileObject file;*/
 
     private static final String TYPE_MESSAGE_REMOVED = "rm";
     private static final String TYPE_ROOM_NAME_CHANGED = "r";
@@ -50,7 +69,7 @@ public class RocketChatMessage extends Message {
     private static final String TYPE_SUBSCRIPTION_ROLE_REMOVED = "subscription-role-removed";
 
 
-    public RocketChatMessage(JSONObject object) {
+    /*public RocketChatMessage(JSONObject object) {
         super(object);
         mentions = object.optJSONArray("mentions");
         channels = object.optJSONArray("channels");
@@ -64,7 +83,7 @@ public class RocketChatMessage extends Message {
             urls = new ArrayList<>();
             JSONArray array = object.optJSONArray("urls");
             for (int i = 0; i < array.length(); i++) {
-                urls.add(new MessageUrl(array.optJSONObject(i)));
+                urls.add(new Url(array.optJSONObject(i)));
             }
         }
 
@@ -104,46 +123,46 @@ public class RocketChatMessage extends Message {
         rawMessage = object;
     }
 
-    public JSONArray getMentions() {
+    public JSONArray mentions() {
         return mentions;
     }
 
-    public JSONArray getChannels() {
+    public JSONArray channels() {
         return channels;
     }
 
-    public Boolean getGroupable() {
+    public Boolean groupable() {
         return groupable;
     }
 
-    public List<MessageUrl> getUrls() {
+    public List<Url> urls() {
         return urls;
     }
 
-    public List<TAttachment> getAttachments() {
+    public List<TAttachment> attachments() {
         return attachments;
     }
 
-    public String getAvatar() {
+    public String avatar() {
         return avatar;
     }
 
-    public Boolean getParseUrls() {
+    public Boolean parseUrls() {
         return parseUrls;
     }
 
-    public JSONObject getTranslations() {
+    public JSONObject translations() {
         return translations;
     }
 
     public JSONObject getRawJsonObject() {
         return rawMessage;
-    }
+    }*/
 
 
     // URLS can be present in any type of message
 
-    public enum Type {
+    public enum MessageType {
         TEXT,
         ATTACHMENT,
         MESSAGE_EDITED,
@@ -166,11 +185,11 @@ public class RocketChatMessage extends Message {
     }
 
     // TODO: 22/8/17 Try sending each type of message and test it accordingly
-    public Type getMsgType() {
-        if (getMessagetype() != null && !getMessagetype().equals("")) {
-            return getType(getMessagetype());
+    public MessageType getMsgType() {
+        if (type() != null && !type().equals("")) {
+            return getType(type());
         } else {
-            if (getEditedBy() != null) {
+            /*if (editedBy() != null) {
                 return Type.MESSAGE_EDITED;
             } else if (starred_by != null) {
                 return Type.MESSAGE_STARRED;
@@ -178,41 +197,41 @@ public class RocketChatMessage extends Message {
                 return Type.MESSAGE_REACTION;
             } else if (attachments != null) {
                 return Type.ATTACHMENT;
-            } else {
-                return Type.TEXT;
-            }
+            } else {*/
+                return MessageType.TEXT;
+            //}
         }
     }
 
-    private static Type getType(String s) {
+    private static MessageType getType(String s) {
         switch (s) {
             case TYPE_MESSAGE_REMOVED:
-                return Type.MESSAGE_REMOVED;
+                return MessageType.MESSAGE_REMOVED;
             case TYPE_ROOM_NAME_CHANGED:
-                return Type.ROOM_NAME_CHANGED;
+                return MessageType.ROOM_NAME_CHANGED;
             case TYPE_ROOM_ARCHIVED:
-                return Type.ROOM_ARCHIVED;
+                return MessageType.ROOM_ARCHIVED;
             case TYPE_ROOM_UNARCHIVED:
-                return Type.ROOM_UNARCHIVED;
+                return MessageType.ROOM_UNARCHIVED;
             case TYPE_USER_ADDED:
-                return Type.USER_ADDED;
+                return MessageType.USER_ADDED;
             case TYPE_USER_REMOVED:
-                return Type.USER_REMOVED;
+                return MessageType.USER_REMOVED;
             case TYPE_USER_JOINED:
-                return Type.USER_JOINED;
+                return MessageType.USER_JOINED;
             case TYPE_USER_LEFT:
-                return Type.USER_LEFT;
+                return MessageType.USER_LEFT;
             case TYPE_USER_MUTED:
-                return Type.USER_MUTED;
+                return MessageType.USER_MUTED;
             case TYPE_USER_UNMUTED:
-                return Type.USER_UNMUTED;
+                return MessageType.USER_UNMUTED;
             case TYPE_WELCOME:
-                return Type.WELCOME;
+                return MessageType.WELCOME;
             case TYPE_SUBSCRIPTION_ROLE_ADDED:
-                return Type.SUBSCRIPTION_ROLE_ADDED;
+                return MessageType.SUBSCRIPTION_ROLE_ADDED;
             case TYPE_SUBSCRIPTION_ROLE_REMOVED:
-                return Type.SUBSCRIPTION_ROLE_REMOVED;
+                return MessageType.SUBSCRIPTION_ROLE_REMOVED;
         }
-        return Type.OTHER;
+        return MessageType.OTHER;
     }
 }

@@ -1,7 +1,7 @@
 package com.rocketchat.core.callback;
 
 import com.rocketchat.common.RocketChatApiException;
-import com.rocketchat.common.data.model.UserObject;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Listener;
 
 import java.util.List;
@@ -11,6 +11,6 @@ import java.util.List;
  */
 public class UserListener {
     public interface getUserRoleListener extends Listener {
-        void onUserRoles(List<UserObject> users, RocketChatApiException error);
+        void onUserRoles(List<User> users, RocketChatApiException error);
     }
 }

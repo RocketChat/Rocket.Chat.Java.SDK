@@ -4,11 +4,10 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 
 import org.json.JSONException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +31,7 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class RestHelperTest {
 
-    RestHelper helper;
+    RestHelper sut;
     OkHttpClient client;
     HttpUrl baseUrl;
 
@@ -43,7 +42,7 @@ public class RestHelperTest {
     LoginCallback loginCallback;
 
     @Captor
-    ArgumentCaptor<TokenObject> tokenCaptor;
+    ArgumentCaptor<Token> tokenCaptor;
 
     @Captor
     ArgumentCaptor<RocketChatException> exceptionCaptor;
@@ -58,7 +57,7 @@ public class RestHelperTest {
         baseUrl = HttpUrl.parse(mockServer.url("/"));
         client = new OkHttpClient();
 
-        helper = new RestHelper(client, baseUrl, tokenProvider);
+        sut = new RestHelper(client, baseUrl, tokenProvider);
     }
 
     // start signin tests
@@ -67,10 +66,10 @@ public class RestHelperTest {
         mockServer.expect().post().withPath("/login")
                 .andReturn(200, "{\"status\": \"success\",\"data\": {\"authToken\": \"token\",\"userId\": \"userid\"}}").once();
 
-        helper.signin("user", "password", loginCallback);
+        sut.signin("user", "password", loginCallback);
 
         verify(loginCallback, timeout(100).only()).onLoginSuccess(tokenCaptor.capture());
-        TokenObject token = tokenCaptor.getValue();
+        Token token = tokenCaptor.getValue();
         assertThat(token.getUserId(), is(equalTo("userid")));
         assertThat(token.getAuthToken(), is(equalTo("token")));
         assertThat(token.getExpiry(), is(nullValue()));
@@ -81,7 +80,7 @@ public class RestHelperTest {
         mockServer.expect().post().withPath("/login")
                 .andReturn(200, "NOT A JSON").once();
 
-        helper.signin("user", "password", loginCallback);
+        sut.signin("user", "password", loginCallback);
         verify(loginCallback, timeout(100).only()).onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatInvalidResponseException.class)));
@@ -94,7 +93,7 @@ public class RestHelperTest {
         mockServer.expect().post().withPath("/login")
                 .andReturn(401, "{\"status\": \"error\",\"message\": \"Unauthorized\"}").once();
 
-        helper.signin("user", "password", loginCallback);
+        sut.signin("user", "password", loginCallback);
         verify(loginCallback, timeout(200).only()).onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
@@ -103,16 +102,26 @@ public class RestHelperTest {
 
     @Test
     public void testSigninShouldFailIfNot2xx() {
-        helper.signin("user", "password", loginCallback);
+        sut.signin("user", "password", loginCallback);
         verify(loginCallback, timeout(200).only()).onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatException.class)));
 
     }
-    // end signin tests
 
-    @After
-    public void cleanup() {
-        mockServer.shutdown();
+    @Test(expected = IllegalArgumentException.class)
+    public void testSigninShouldFailWithNullUsername() {
+        sut.signin(null, "password", loginCallback);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSigninShouldFailWithNullPassword() {
+        sut.signin("username", null, loginCallback);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSigninShouldFailWithNullCallback() {
+        sut.signin("username", "password", null);
+    }
+    // end signin tests
 }

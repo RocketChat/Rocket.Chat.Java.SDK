@@ -1,7 +1,7 @@
 package com.rocketchat.core.uploader;
 
 import com.rocketchat.common.listener.Callback;
-import com.rocketchat.core.model.FileObject;
+import com.rocketchat.core.model.FileDescriptor;
 
 import java.lang.reflect.Type;
 
@@ -20,7 +20,7 @@ public class IFileUpload {
     }
 
     public static abstract class UfsCompleteListener extends Callback {
-        public abstract void onUfsComplete(FileObject file);
+        public abstract void onUfsComplete(FileDescriptor file);
 
         @Override
         public Type getClassType() {

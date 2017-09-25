@@ -1,8 +1,13 @@
 package com.rocketchat.common.data.lightdb;
 
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.lightdb.collection.Collection;
 import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.data.rpc.RPC;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import java.io.IOException;
 import java.util.Observable;
 import org.json.JSONObject;
 
@@ -11,6 +16,8 @@ import org.json.JSONObject;
  */
 public class DbManager extends Observable {
 
+    private final Moshi moshi;
+    private final JsonAdapter<UserDocument> adapter;
     private Collection<String, UserDocument> usersCollection;
 
     private static final String COLLECTION_TYPE_USERS = "users";
@@ -18,7 +25,10 @@ public class DbManager extends Observable {
     private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
-    public DbManager() {
+    // TODO - we should not need Moshi here, we should pass the object already serialized.
+    public DbManager(Moshi moshi) {
+        this.moshi = moshi/*.newBuilder().add(CommonJsonAdapterFactory.create()).build()*/;
+        adapter = moshi.adapter(UserDocument.class);
         usersCollection = new Collection<>();
     }
 
@@ -35,31 +45,38 @@ public class DbManager extends Observable {
 
     private void updateUsers(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
+        UserDocument document;
 
-        switch (type) {
-            case ADDED:
-                UserDocument userDocument = new UserDocument(object.optJSONObject("fields"));
-                userDocument.setUserId(id);
-                usersCollection.add(id, userDocument);
-                setChanged();
-                notifyObservers(userDocument);
-                break;
-            case CHANGED:
-                usersCollection.get(id).update(object.optJSONObject("fields"));
-                UserDocument document = usersCollection.get(id);
-                usersCollection.update(id, document);
-                setChanged();
-                notifyObservers(document);
-                break;
-            case REMOVED:
-                usersCollection.remove(id);
-                setChanged();
-                notifyObservers();
-                break;
-            case OTHER:
-                break;
-            default:
-                break;
+        try {
+            switch (type) {
+                case ADDED:
+                    document = adapter.fromJson(object.optJSONObject("fields").toString());
+                    document = document.withId(id);
+                    usersCollection.add(id, document);
+                    setChanged();
+                    notifyObservers(document);
+                    break;
+                case CHANGED:
+                    UserDocument newDocument = adapter.fromJson(object.optJSONObject("fields").toString());
+                    document = usersCollection.get(id);
+                    document = document.update(newDocument);
+                    usersCollection.update(id, document);
+                    setChanged();
+                    notifyObservers(document);
+                    break;
+                case REMOVED:
+                    usersCollection.remove(id);
+                    setChanged();
+                    notifyObservers();
+                    break;
+                case OTHER:
+                    break;
+                default:
+                    break;
+            }
+        } catch (IOException e) {
+            // TODO - Better error handling.
+            e.printStackTrace();
         }
     }
 

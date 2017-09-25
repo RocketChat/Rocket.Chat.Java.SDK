@@ -1,9 +1,9 @@
 package com.rocketchat.core.provider;
 
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Token;
 
 public interface TokenProvider {
-    void saveToken(TokenObject token);
+    void saveToken(Token token);
 
-    TokenObject getToken();
+    Token getToken();
 }

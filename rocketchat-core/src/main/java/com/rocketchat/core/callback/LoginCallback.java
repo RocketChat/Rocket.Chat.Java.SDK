@@ -1,7 +1,7 @@
 package com.rocketchat.core.callback;
 
 import com.rocketchat.common.listener.Callback;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Token;
 
 import java.lang.reflect.Type;
 
@@ -9,7 +9,10 @@ import java.lang.reflect.Type;
  * Created by sachin on 18/7/17.
  */
 public abstract class LoginCallback extends Callback {
-    public abstract void onLoginSuccess(TokenObject token);
+    /**
+     * Called when the Login was successful. The callback may proceed to read the {@link Token}
+     */
+    public abstract void onLoginSuccess(Token token);
 
     @Override
     public Type getClassType() {

@@ -3,10 +3,18 @@ package com.rocketchat.core.middleware;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
+import com.rocketchat.common.utils.Types;
 import com.rocketchat.core.callback.MessageCallback;
-import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.core.model.Message;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -15,11 +23,12 @@ import org.json.JSONObject;
 
 public class CoreStreamMiddleware {
 
-
+    private final Moshi moshi;
     private ConcurrentHashMap<String, SubscribeListener> listeners;
     private ConcurrentHashMap<String, ConcurrentHashMap<SubscriptionType, Listener>> subs;
 
-    public CoreStreamMiddleware() {
+    public CoreStreamMiddleware(Moshi moshi) {
+        this.moshi = moshi;
         listeners = new ConcurrentHashMap<>();
         subs = new ConcurrentHashMap<>();
     }
@@ -61,13 +70,17 @@ public class CoreStreamMiddleware {
         Listener listener;
 
         if (subs.containsKey(roomId)) {
-
             switch (parse(s)) {
                 case SUBSCRIBE_ROOM_MESSAGE:
                     listener = subs.get(roomId).get(SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
                     MessageCallback.SubscriptionCallback subscriptionListener = (MessageCallback.SubscriptionCallback) listener;
-                    RocketChatMessage message = new RocketChatMessage(array.optJSONObject(0));
-                    subscriptionListener.onMessage(roomId, message);
+
+                    try {
+                        Message message = getMessageAdapter().fromJson(array.getJSONObject(0).toString());
+                        subscriptionListener.onMessage(roomId, message);
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case SUBSCRIBE_ROOM_TYPING:
                     listener = subs.get(roomId).get(SubscriptionType.SUBSCRIBE_ROOM_TYPING);
@@ -96,6 +109,24 @@ public class CoreStreamMiddleware {
             SubscribeListener subscribeListener = listeners.remove(id);
             subscribeListener.onSubscribe(false, id);
         }
+    }
+
+    private JsonAdapter<Message> messageAdapter;
+    private JsonAdapter<List<Message>> messageListAdapter;
+
+    private JsonAdapter<Message> getMessageAdapter() {
+        if (messageAdapter == null) {
+            messageAdapter = moshi.adapter(Message.class);
+        }
+        return messageAdapter;
+    }
+
+    private JsonAdapter<List<Message>> getMessageListAdapter() {
+        if (messageListAdapter == null) {
+            Type objectType = Types.newParameterizedType(List.class, Message.class);
+            messageListAdapter = moshi.adapter(objectType);
+        }
+        return messageListAdapter;
     }
 
     public enum SubscriptionType {

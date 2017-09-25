@@ -6,9 +6,9 @@ import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.RocketChatAPI;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.MessageCallback;
-import com.rocketchat.core.model.FileObject;
-import com.rocketchat.core.model.RocketChatMessage;
-import java.io.File;
+import com.rocketchat.core.model.FileDescriptor;
+import com.rocketchat.core.model.Message;
+
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -23,7 +23,7 @@ public class FileUploader {
     public static final String DEFAULT_STORE = "Uploads";
 
     RocketChatAPI api;
-    File file;
+    java.io.File file;
     String newFileName;
     String description;
     RocketChatAPI.ChatRoom room;
@@ -32,7 +32,7 @@ public class FileUploader {
     FileListener fileListener;
     int statusCode;
 
-    public FileUploader(RocketChatAPI api, File file, String newFileName, String description, RocketChatAPI.ChatRoom room, FileListener fileListener) {
+    public FileUploader(RocketChatAPI api, java.io.File file, String newFileName, String description, RocketChatAPI.ChatRoom room, FileListener fileListener) {
         this.api = api;
         this.file = file;
         this.newFileName = newFileName;
@@ -43,16 +43,16 @@ public class FileUploader {
 
     public void startUpload() {
         api.createUFS(newFileName, (int) file.length(), Utils.getFileTypeUsingName(newFileName),
-                room.getRoomData().getRoomId(), description, DEFAULT_STORE, createCallback);
+                room.getRoomData().roomId(), description, DEFAULT_STORE, createCallback);
     }
 
     IFileUpload.UfsCompleteListener completeListener = new IFileUpload.UfsCompleteListener() {
         @Override
-        public void onUfsComplete(FileObject file) {
-            fileListener.onUploadComplete(statusCode, file, room.getRoomData().getRoomId(), newFileName, description);
+        public void onUfsComplete(FileDescriptor file) {
+            fileListener.onUploadComplete(statusCode, file, room.getRoomData().roomId(), newFileName, description);
             room.sendFileMessage(file, new MessageCallback.MessageAckCallback() {
                 @Override
-                public void onMessageAck(RocketChatMessage message) {
+                public void onMessageAck(Message message) {
                     fileListener.onSendFile(message, null);
                 }
 
@@ -78,7 +78,7 @@ public class FileUploader {
 
         @Override
         public void onUfsCreate(final FileUploadToken token) {
-            fileListener.onUploadStarted(room.getRoomData().getRoomId(), newFileName, description);
+            fileListener.onUploadStarted(room.getRoomData().roomId(), newFileName, description);
 
             new Thread(new Runnable() {
                 @Override
@@ -89,7 +89,7 @@ public class FileUploader {
                             @Override
                             public void update(Observable o, Object arg) {
                                 if (arg != null) {
-                                    fileListener.onUploadProgress((Integer) arg, room.getRoomData().getRoomId(), newFileName, description);
+                                    fileListener.onUploadProgress((Integer) arg, room.getRoomData().roomId(), newFileName, description);
                                 }
                             }
                         });

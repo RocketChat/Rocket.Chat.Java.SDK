@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.UUID;
@@ -93,6 +94,13 @@ public class Utils {
     public static <T> T checkNotNull(T object, String message) {
         if (object == null) {
             throw new NullPointerException(message);
+        }
+        return object;
+    }
+
+    public static <T> T checkParamNotNull(T object, String message) {
+        if (object == null) {
+            throw new IllegalArgumentException(message);
         }
         return object;
     }

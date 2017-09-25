@@ -31,6 +31,7 @@ public class Collection<T, K> {
     }
 
     public void update(T key, K newValue) {
+        documents.put(key, newValue);
         publish(Type.CHANGED, key, newValue);
     }
 

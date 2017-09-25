@@ -1,17 +1,18 @@
 package com.rocketchat.common.data.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.squareup.moshi.Json;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by sachin on 22/7/17.
  */
 
-public class Room {
+public abstract class BaseRoom {
 
-    protected String roomId;
+    /*protected String roomId;
     private String roomName;
-    private UserObject userInfo;
+    //TODO - private UserObject userInfo;
     private Type roomType;
 
     public Room(JSONObject object) {
@@ -26,33 +27,26 @@ public class Room {
                 roomType = Type.PRIVATE;
             }
             roomName = object.optString("name");
-            if (object.optJSONObject("u") != null) {
+            *//*if (object.optJSONObject("u") != null) {
                 userInfo = new UserObject(object.optJSONObject("u"));
-            }
+            }*//*
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    public String getRoomId() {
-        return roomId;
-    }
+    @Json(name = "_id") public abstract String roomId();
 
-    public Type getRoomType() {
-        return roomType;
-    }
+    @Json(name = "t") @Nullable public abstract RoomType type();
 
-    public String getRoomName() {
-        return roomName;
-    }
+    @Json(name = "u") @Nullable public abstract User user();
 
-    public UserObject getUserInfo() {
-        return userInfo;
-    }
+    @Nullable public abstract String name();
 
-    enum Type {
-        PUBLIC,
-        PRIVATE,
-        ONE_TO_ONE
+    public enum RoomType {
+        @Json(name = "c") PUBLIC,
+        @Json(name = "p") PRIVATE,
+        @Json(name = "d") ONE_TO_ONE,
+        @Json(name = "l") LIVECHAT
     }
 }

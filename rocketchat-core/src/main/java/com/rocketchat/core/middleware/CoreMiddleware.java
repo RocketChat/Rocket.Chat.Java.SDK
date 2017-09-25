@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
-import com.rocketchat.common.data.model.UserObject;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
@@ -15,21 +15,24 @@ import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.model.Emoji;
-import com.rocketchat.core.model.FileObject;
+import com.rocketchat.core.model.FileDescriptor;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Permission;
 import com.rocketchat.core.model.PublicSetting;
-import com.rocketchat.core.model.RocketChatMessage;
-import com.rocketchat.core.model.RoomObject;
+import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
-import com.rocketchat.core.model.SubscriptionObject;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.Token;
 import com.rocketchat.core.uploader.FileUploadToken;
 import com.rocketchat.core.uploader.IFileUpload;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +46,11 @@ import java.util.concurrent.ConcurrentHashMap;
 // TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
 public class CoreMiddleware {
 
+    private final Moshi moshi;
     private ConcurrentHashMap<Long, Pair<? extends Callback, CallbackType>> callbacks;
 
-    public CoreMiddleware() {
+    public CoreMiddleware(Moshi moshi) {
+        this.moshi = moshi;
         callbacks = new ConcurrentHashMap<>();
     }
 
@@ -76,7 +81,7 @@ public class CoreMiddleware {
                 switch (type) {
                     case LOGIN:
                         LoginCallback loginCallback = (LoginCallback) callback;
-                        TokenObject tokenObject = new TokenObject((JSONObject) result);
+                        Token tokenObject = new Token((JSONObject) result);
                         loginCallback.onLoginSuccess(tokenObject);
                         break;
                     case GET_PERMISSIONS:
@@ -98,30 +103,21 @@ public class CoreMiddleware {
                         settingsCallback.onSuccess(settings);
                         break;
                     case GET_USER_ROLES:
-                        SimpleListCallback<UserObject> rolesCallback = (SimpleListCallback<UserObject>) callback;
+                        SimpleListCallback<User> rolesCallback = (SimpleListCallback<User>) callback;
                         array = (JSONArray) result;
-                        List<UserObject> userObjects = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            userObjects.add(new UserObject(array.optJSONObject(j)));
-                        }
+                        List<User> userObjects = getUserListAdapter().fromJson(array.toString());
                         rolesCallback.onSuccess(userObjects);
                         break;
                     case GET_SUBSCRIPTIONS:
-                        SimpleListCallback<SubscriptionObject> subscriptionCallback = (SimpleListCallback<SubscriptionObject>) callback;
+                        SimpleListCallback<Subscription> subscriptionCallback = (SimpleListCallback<Subscription>) callback;
                         array = (JSONArray) result;
-                        List<SubscriptionObject> subscriptions = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            subscriptions.add(new SubscriptionObject(array.optJSONObject(j)));
-                        }
+                        List<Subscription> subscriptions = getSubscriptionListAdapter().fromJson(array.toString());
                         subscriptionCallback.onSuccess(subscriptions);
                         break;
                     case GET_ROOMS:
-                        SimpleListCallback<RoomObject> roomCallback = (SimpleListCallback<RoomObject>) callback;
+                        SimpleListCallback<Room> roomCallback = (SimpleListCallback<Room>) callback;
                         array = (JSONArray) result;
-                        List<RoomObject> rooms = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            rooms.add(new RoomObject(array.optJSONObject(j)));
-                        }
+                        List<Room> rooms = getRoomListAdapter().fromJson(array.toString());
                         roomCallback.onSuccess(rooms);
                         break;
                     case GET_ROOM_ROLES:
@@ -145,35 +141,27 @@ public class CoreMiddleware {
                     case LOAD_HISTORY:
                         HistoryCallback historyCallback = (HistoryCallback) callback;
                         array = ((JSONObject) result).optJSONArray("messages");
-                        List<RocketChatMessage> messages = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            messages.add(new RocketChatMessage(array.optJSONObject(j)));
-                        }
+                        List<Message> messages = getMessageListAdapter()
+                                .fromJson(array.toString());
                         int unreadNotLoaded = ((JSONObject) result).optInt("unreadNotLoaded");
                         historyCallback.onLoadHistory(messages, unreadNotLoaded);
                         break;
                     case GET_ROOM_MEMBERS:
                         RoomCallback.GetMembersCallback membersCallback = (RoomCallback.GetMembersCallback) callback;
                         array = ((JSONObject) result).optJSONArray("records");
-                        List<UserObject> users = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            users.add(new UserObject(array.optJSONObject(j)));
-                        }
                         Integer total = ((JSONObject) result).optInt("total");
+                        List<User> users = getUserListAdapter().fromJson(array.toString());
                         membersCallback.onGetRoomMembers(total, users);
                         break;
                     case SEND_MESSAGE:
                         MessageCallback.MessageAckCallback ackCallback = (MessageCallback.MessageAckCallback) callback;
-                        RocketChatMessage message = new RocketChatMessage((JSONObject) result);
+                        Message message = getMessageAdapter().fromJson(result.toString());
                         ackCallback.onMessageAck(message);
                         break;
                     case SEARCH_MESSAGE:
-                        SimpleListCallback<RocketChatMessage> searchMessageCallback = (SimpleListCallback<RocketChatMessage>) callback;
+                        SimpleListCallback<Message> searchMessageCallback = (SimpleListCallback<Message>) callback;
                         array = ((JSONObject) result).optJSONArray("messages");
-                        List<RocketChatMessage> searchMessages = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            searchMessages.add(new RocketChatMessage(array.optJSONObject(j)));
-                        }
+                        List<Message> searchMessages = getMessageListAdapter().fromJson(array.toString());
                         searchMessageCallback.onSuccess(searchMessages);
                         break;
                     case CREATE_GROUP:
@@ -188,7 +176,7 @@ public class CoreMiddleware {
                         break;
                     case UFS_COMPLETE:
                         IFileUpload.UfsCompleteListener completeCallback = (IFileUpload.UfsCompleteListener) callback;
-                        FileObject file = new FileObject((JSONObject) result);
+                        FileDescriptor file = new FileDescriptor((JSONObject) result);
                         completeCallback.onUfsComplete(file);
                         break;
                     case MESSAGE_OP:
@@ -207,6 +195,9 @@ public class CoreMiddleware {
                 }
             } catch (JSONException exception) {
                 callback.onError(new RocketChatInvalidResponseException(exception.getMessage(), exception));
+            } catch (IOException e) {
+                callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                e.printStackTrace();
             }
         }
     }
@@ -223,20 +214,81 @@ public class CoreMiddleware {
         callbacks.clear();
     }
 
+    private JsonAdapter<Message> messageAdapter;
+    private JsonAdapter<List<Message>> messageListAdapter;
+    private JsonAdapter<User> userAdapter;
+    private JsonAdapter<List<User>> userListAdapter;
+    private JsonAdapter<Room> roomAdapter;
+    private JsonAdapter<List<Room>> roomListAdapter;
+    private JsonAdapter<List<Subscription>> subscriptionListAdapter;
+
+    private JsonAdapter<Message> getMessageAdapter() {
+        if (messageAdapter == null) {
+            messageAdapter = moshi.adapter(Message.class);
+        }
+        return messageAdapter;
+    }
+
+    private JsonAdapter<List<Message>> getMessageListAdapter() {
+        if (messageListAdapter == null) {
+            Type type = Types.newParameterizedType(List.class, Message.class);
+            messageListAdapter = moshi.adapter(type);
+        }
+        return messageListAdapter;
+    }
+
+    private JsonAdapter<User> getUserAdapter() {
+        if (userAdapter == null) {
+            userAdapter = moshi.adapter(User.class);
+        }
+        return userAdapter;
+    }
+
+    private JsonAdapter<List<User>> getUserListAdapter() {
+        if (userListAdapter == null) {
+            Type type = Types.newParameterizedType(List.class, User.class);
+            userListAdapter = moshi.adapter(type);
+        }
+        return userListAdapter;
+    }
+
+    public JsonAdapter<Room> getRoomAdapter() {
+        if (roomAdapter == null) {
+            roomAdapter = moshi.adapter(Room.class);
+        }
+        return roomAdapter;
+    }
+
+    public JsonAdapter<List<Room>> getRoomListAdapter() {
+        if (roomListAdapter == null) {
+            Type type = Types.newParameterizedType(List.class, Room.class);
+            roomListAdapter = moshi.adapter(type);
+        }
+        return roomListAdapter;
+    }
+
+    public JsonAdapter<List<Subscription>> getSubscriptionListAdapter() {
+        if (subscriptionListAdapter == null) {
+            Type type = Types.newParameterizedType(List.class, Subscription.class);
+            subscriptionListAdapter = moshi.adapter(type);
+        }
+        return subscriptionListAdapter;
+    }
+
     public enum CallbackType {
         LOGIN(LoginCallback.class),
         GET_PERMISSIONS(SimpleListCallback.class, Permission.class),
         GET_PUBLIC_SETTINGS(SimpleListCallback.class, PublicSetting.class),
-        GET_USER_ROLES(SimpleListCallback.class, UserObject.class),
-        GET_SUBSCRIPTIONS(SimpleListCallback.class, SubscriptionObject.class),
-        GET_ROOMS(SimpleListCallback.class, RoomObject.class),
+        GET_USER_ROLES(SimpleListCallback.class, User.class),
+        GET_SUBSCRIPTIONS(SimpleListCallback.class, Subscription.class),
+        GET_ROOMS(SimpleListCallback.class, Room.class),
         GET_ROOM_ROLES(SimpleListCallback.class, RoomRole.class),
         LIST_CUSTOM_EMOJI(SimpleListCallback.class, Emoji.class),
         LOAD_HISTORY(HistoryCallback.class),
         GET_ROOM_MEMBERS(RoomCallback.GetMembersCallback.class),
         SEND_MESSAGE(MessageCallback.MessageAckCallback.class),
         MESSAGE_OP(SimpleCallback.class),
-        SEARCH_MESSAGE(SimpleListCallback.class, RocketChatMessage.class),
+        SEARCH_MESSAGE(SimpleListCallback.class, Message.class),
         CREATE_GROUP(RoomCallback.GroupCreateCallback.class),
         DELETE_GROUP(SimpleCallback.class),
         ARCHIVE(SimpleCallback.class),

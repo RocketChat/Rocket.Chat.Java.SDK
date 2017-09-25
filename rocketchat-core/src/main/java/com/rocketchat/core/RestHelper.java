@@ -8,7 +8,7 @@ import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 
 import org.json.JSONException;
@@ -24,6 +24,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.rocketchat.common.utils.Utils.checkParamNotNull;
+
 class RestHelper {
 
     private final OkHttpClient client;
@@ -37,6 +39,10 @@ class RestHelper {
     }
 
     public void signin(String username, String password, final LoginCallback loginCallback) {
+        checkParamNotNull(username, "username == null");
+        checkParamNotNull(password, "password == null");
+        checkParamNotNull(loginCallback, "loginCallback == null");
+
         RequestBody body = new FormBody.Builder()
                 .add("username", username)
                 .add("password", password)
@@ -66,7 +72,7 @@ class RestHelper {
                     String id = data.getString("userId");
                     String token = data.getString("authToken");
 
-                    loginCallback.onLoginSuccess(new TokenObject(id, token, null));
+                    loginCallback.onLoginSuccess(new Token(id, token, null));
                 } catch (JSONException e) {
                     e.printStackTrace();
                     loginCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
@@ -77,7 +83,7 @@ class RestHelper {
 
     public void pinMessage(String messageId, final SimpleCallback callback) {
         RequestBody body = new FormBody.Builder()
-                .add("messageId", messageId)
+                .add("id", messageId)
                 .build();
         Request request = requestBuilder("chat.pinMessage").post(body).build();
 
@@ -110,7 +116,7 @@ class RestHelper {
                 .url(baseUrl.newBuilder().addPathSegment(path).build());
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
-            TokenObject token = tokenProvider.getToken();
+            Token token = tokenProvider.getToken();
             builder.addHeader("X-Auth-Token", token.getAuthToken())
                     .addHeader("X-User-Id", token.getUserId());
         }

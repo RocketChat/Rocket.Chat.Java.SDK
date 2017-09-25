@@ -2,9 +2,11 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
-import com.rocketchat.common.data.model.Room;
-import com.rocketchat.common.data.model.UserObject;
+import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -25,14 +27,15 @@ import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.middleware.CoreMiddleware;
 import com.rocketchat.core.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.Emoji;
-import com.rocketchat.core.model.FileObject;
+import com.rocketchat.core.model.FileDescriptor;
+import com.rocketchat.core.model.JsonAdapterFactory;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Permission;
 import com.rocketchat.core.model.PublicSetting;
-import com.rocketchat.core.model.RocketChatMessage;
-import com.rocketchat.core.model.RoomObject;
+import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
-import com.rocketchat.core.model.SubscriptionObject;
-import com.rocketchat.core.model.TokenObject;
+import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.rpc.AccountRPC;
 import com.rocketchat.core.rpc.BasicRPC;
@@ -45,10 +48,10 @@ import com.rocketchat.core.rpc.RoomRPC;
 import com.rocketchat.core.rpc.TypingRPC;
 import com.rocketchat.core.uploader.FileUploader;
 import com.rocketchat.core.uploader.IFileUpload;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -81,6 +84,7 @@ public class RocketChatAPI implements SocketListener {
     private Socket socket;
     private TokenProvider tokenProvider;
     private RestHelper restHelper;
+    private Moshi moshi;
 
     private ConnectivityManager connectivityManager;
 
@@ -110,12 +114,19 @@ public class RocketChatAPI implements SocketListener {
             }.create(client, builder.websocketUrl, this);
         }
 
+        // TODO - Add to the Builder
+        Moshi moshi = new Moshi.Builder()
+                .add(new TimestampAdapter())
+                .add(JsonAdapterFactory.create())
+                .add(CommonJsonAdapterFactory.create())
+                .build();
+
         tokenProvider = builder.provider;
 
         integer = new AtomicInteger(1);
-        coreMiddleware = new CoreMiddleware();
-        coreStreamMiddleware = new CoreStreamMiddleware();
-        dbManager = new DbManager();
+        coreMiddleware = new CoreMiddleware(moshi);
+        coreStreamMiddleware = new CoreStreamMiddleware(moshi);
+        dbManager = new DbManager(moshi);
         chatRoomFactory = new ChatRoomFactory(this);
 
         connectivityManager = new ConnectivityManager();
@@ -124,7 +135,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     public String getMyUserName() {
-        return dbManager.getUserCollection().get(userId).getUserName();
+        return dbManager.getUserCollection().get(userId).username();
     }
 
     public String getMyUserId() {
@@ -148,7 +159,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     public void login(LoginCallback loginCallback) {
-        TokenObject token = tokenProvider != null ? tokenProvider.getToken() : null;
+        Token token = tokenProvider != null ? tokenProvider.getToken() : null;
         if (token == null) {
             loginCallback.onError(new RocketChatAuthException("Missing token"));
             return;
@@ -186,7 +197,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void getUserRoles(SimpleListCallback<UserObject> callback) {
+    public void getUserRoles(SimpleListCallback<User> callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_USER_ROLES);
         socket.sendData(BasicRPC.getUserRoles(uniqueID));
@@ -207,14 +218,14 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void getSubscriptions(SimpleListCallback<SubscriptionObject> callback) {
+    public void getSubscriptions(SimpleListCallback<Subscription> callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_SUBSCRIPTIONS);
         socket.sendData(BasicRPC.getSubscriptions(uniqueID));
     }
 
     //Tested
-    public void getRooms(SimpleListCallback<RoomObject> callback) {
+    public void getRooms(SimpleListCallback<Room> callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_ROOMS);
         socket.sendData(BasicRPC.getRooms(uniqueID));
@@ -297,7 +308,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     private void searchMessage(String message, String roomId, int limit, 
-                               SimpleListCallback<RocketChatMessage> callback) {
+                               SimpleListCallback<Message> callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SEARCH_MESSAGE);
         socket.sendData(MessageRPC.searchMessage(uniqueID, message, roomId, limit));
@@ -385,7 +396,7 @@ public class RocketChatAPI implements SocketListener {
     }
 
     //Tested
-    public void setStatus(UserObject.Status s, SimpleCallback callback) {
+    public void setStatus(User.Status s, SimpleCallback callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SET_STATUS);
         socket.sendData(PresenceRPC.setDefaultStatus(uniqueID, s));
@@ -557,56 +568,56 @@ public class RocketChatAPI implements SocketListener {
     // TODO: 29/7/17 add throw custom exceptions if method call violates permission required to execute given RPC
     public class ChatRoom {
 
-        Room room;
+        BaseRoom room;
 
         //Subscription Ids for new subscriptions
         private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
         private String typingSubId;
 
-        public ChatRoom(Room room) {
+        public ChatRoom(BaseRoom room) {
             this.room = room;
         }
 
         public Boolean isSubscriptionObject() {
-            return room instanceof SubscriptionObject;
+            return room instanceof Subscription;
         }
 
-        public Room getRoomData() {
+        public BaseRoom getRoomData() {
             return room;
         }
 
         //RPC methods
 
         public void getRoomRoles(SimpleListCallback<RoomRole> callback) {
-            RocketChatAPI.this.getRoomRoles(room.getRoomId(), callback);
+            RocketChatAPI.this.getRoomRoles(room.roomId(), callback);
         }
 
         public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp,
                                    HistoryCallback callback) {
-            RocketChatAPI.this.getChatHistory(room.getRoomId(), limit, oldestMessageTimestamp, lasttimestamp, callback);
+            RocketChatAPI.this.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lasttimestamp, callback);
         }
 
         public void getMembers(RoomCallback.GetMembersCallback callback) {
-            RocketChatAPI.this.getRoomMembers(room.getRoomId(), false, callback);
+            RocketChatAPI.this.getRoomMembers(room.roomId(), false, callback);
         }
 
         public void sendIsTyping(Boolean istyping) {
-            RocketChatAPI.this.sendIsTyping(room.getRoomId(), getMyUserName(), istyping);
+            RocketChatAPI.this.sendIsTyping(room.roomId(), getMyUserName(), istyping);
         }
 
         public void sendMessage(String message) {
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.getRoomId(), message, null);
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.roomId(), message, null);
         }
 
         public void sendMessage(String message, MessageCallback.MessageAckCallback callback) {
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.getRoomId(), message, callback);
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.roomId(), message, callback);
         }
 
         // TODO: 27/7/17 Need more attention on replying to message
-        private void replyMessage(RocketChatMessage msg, String message,
+        private void replyMessage(Message msg, String message,
                                   MessageCallback.MessageAckCallback callback) {
-            message = "[ ](?msg=" + msg.getMessageId() + ") @" + msg.getSender().getUserName() + " " + message;
-            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.getRoomId(), message, callback);
+            /*message = "[ ](?msg=" + msg.id() + ") @" + msg.sender().getUserName() + " " + message;
+            RocketChatAPI.this.sendMessage(Utils.shortUUID(), room.roomId(), message, callback);*/
         }
 
         public void deleteMessage(String msgId, SimpleCallback callback) {
@@ -614,7 +625,7 @@ public class RocketChatAPI implements SocketListener {
         }
 
         public void updateMessage(String msgId, String message, SimpleCallback callback) {
-            RocketChatAPI.this.updateMessage(msgId, room.getRoomId(), message, callback);
+            RocketChatAPI.this.updateMessage(msgId, room.roomId(), message, callback);
         }
 
         public void pinMessage(JSONObject message, SimpleCallback callback) {
@@ -626,7 +637,7 @@ public class RocketChatAPI implements SocketListener {
         }
 
         public void starMessage(String msgId, Boolean starred, SimpleCallback callback) {
-            RocketChatAPI.this.starMessage(msgId, room.getRoomId(), starred, callback);
+            RocketChatAPI.this.starMessage(msgId, room.roomId(), starred, callback);
         }
 
         public void setReaction(String emojiId, String msgId, SimpleCallback callback) {
@@ -634,48 +645,48 @@ public class RocketChatAPI implements SocketListener {
         }
 
         public void searchMessage(String message, int limit,
-                                  SimpleListCallback<RocketChatMessage> callback) {
-            RocketChatAPI.this.searchMessage(message, room.getRoomId(), limit, callback);
+                                  SimpleListCallback<Message> callback) {
+            RocketChatAPI.this.searchMessage(message, room.roomId(), limit, callback);
         }
 
         public void deleteGroup(SimpleCallback callback) {
-            RocketChatAPI.this.deleteGroup(room.getRoomId(), callback);
+            RocketChatAPI.this.deleteGroup(room.roomId(), callback);
         }
 
         public void archive(SimpleCallback callback) {
-            RocketChatAPI.this.archiveRoom(room.getRoomId(), callback);
+            RocketChatAPI.this.archiveRoom(room.roomId(), callback);
         }
 
         public void unarchive(SimpleCallback callback) {
-            RocketChatAPI.this.unarchiveRoom(room.getRoomId(), callback);
+            RocketChatAPI.this.unarchiveRoom(room.roomId(), callback);
         }
 
         public void leave(SimpleCallback callback) {
-            RocketChatAPI.this.leaveGroup(room.getRoomId(), callback);
+            RocketChatAPI.this.leaveGroup(room.roomId(), callback);
         }
 
         public void hide(SimpleCallback callback) {
-            RocketChatAPI.this.hideRoom(room.getRoomId(), callback);
+            RocketChatAPI.this.hideRoom(room.roomId(), callback);
         }
 
         public void open(SimpleCallback callback) {
-            RocketChatAPI.this.openRoom(room.getRoomId(), callback);
+            RocketChatAPI.this.openRoom(room.roomId(), callback);
         }
 
-        public void uploadFile(File file, String newName, String description, FileListener fileListener) {
+        public void uploadFile(java.io.File file, String newName, String description, FileListener fileListener) {
             FileUploader uploader = new FileUploader(RocketChatAPI.this, file, newName, description,
                     this, fileListener);
             uploader.startUpload();
         }
 
-        public void sendFileMessage(FileObject file, MessageCallback.MessageAckCallback callback) {
-            RocketChatAPI.this.sendFileMessage(room.getRoomId(), file.getStore(), file.getFileId(),
+        public void sendFileMessage(FileDescriptor file, MessageCallback.MessageAckCallback callback) {
+            RocketChatAPI.this.sendFileMessage(room.roomId(), file.getStore(), file.getFileId(),
                     file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(),
                     file.getUrl(), callback);
         }
 
         public void setFavourite(Boolean isFavoutite, SimpleCallback callback) {
-            RocketChatAPI.this.setFavouriteRoom(room.getRoomId(), isFavoutite, callback);
+            RocketChatAPI.this.setFavouriteRoom(room.roomId(), isFavoutite, callback);
         }
 
         //Subscription methods
@@ -683,20 +694,20 @@ public class RocketChatAPI implements SocketListener {
         public void subscribeRoomMessageEvent(SubscribeListener subscribeListener,
                                               MessageCallback.SubscriptionCallback callback) {
             if (roomSubId == null) {
-                roomSubId = RocketChatAPI.this.subscribeRoomMessageEvent(room.getRoomId(),
+                roomSubId = RocketChatAPI.this.subscribeRoomMessageEvent(room.roomId(),
                         true, subscribeListener, callback);
             }
         }
 
         public void subscribeRoomTypingEvent(SubscribeListener subscribeListener, TypingListener listener) {
             if (typingSubId == null) {
-                typingSubId = RocketChatAPI.this.subscribeRoomTypingEvent(room.getRoomId(), true, subscribeListener, listener);
+                typingSubId = RocketChatAPI.this.subscribeRoomTypingEvent(room.roomId(), true, subscribeListener, listener);
             }
         }
 
         public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
             if (roomSubId != null) {
-                coreStreamMiddleware.removeSubscription(room.getRoomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
+                coreStreamMiddleware.removeSubscription(room.roomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
                 RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
                 roomSubId = null;
             }
@@ -704,14 +715,14 @@ public class RocketChatAPI implements SocketListener {
 
         public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
             if (typingSubId != null) {
-                coreStreamMiddleware.removeSubscription(room.getRoomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
+                coreStreamMiddleware.removeSubscription(room.roomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
                 RocketChatAPI.this.unsubscribeRoom(typingSubId, subscribeListener);
                 typingSubId = null;
             }
         }
 
         public void unSubscribeAllEvents() {
-            coreStreamMiddleware.removeAllSubscriptions(room.getRoomId());
+            coreStreamMiddleware.removeAllSubscriptions(room.roomId());
             unSubscribeRoomMessageEvent(null);
             unSubscribeRoomTypingEvent(null);
         }

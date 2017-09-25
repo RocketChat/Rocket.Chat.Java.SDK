@@ -1,6 +1,6 @@
 package com.rocketchat.core.callback;
 
-import com.rocketchat.common.data.model.UserObject;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 
 import java.lang.reflect.Type;
@@ -20,7 +20,7 @@ public class RoomCallback {
     }
 
     public static abstract class GetMembersCallback extends Callback {
-        public abstract void onGetRoomMembers(Integer total, List<UserObject> members);
+        public abstract void onGetRoomMembers(Integer total, List<User> members);
 
         @Override
         public Type getClassType() {

@@ -7,19 +7,19 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 18/7/17.
  */
-public class TokenObject {
+public class Token {
 
     private String userId;
     private String authToken;
     private Date expiry;
 
-    public TokenObject(String userId, String authToken, Date expiry) {
+    public Token(String userId, String authToken, Date expiry) {
         this.userId = userId;
         this.authToken = authToken;
         this.expiry = expiry;
     }
 
-    public TokenObject(JSONObject object) throws JSONException {
+    public Token(JSONObject object) throws JSONException {
         userId = object.getString("id");
         authToken = object.getString("token");
         JSONObject expires = object.optJSONObject("tokenExpires");
