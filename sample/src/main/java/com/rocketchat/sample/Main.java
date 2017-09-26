@@ -1,3 +1,5 @@
+package com.rocketchat.sample;
+
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleListCallback;
