@@ -166,17 +166,17 @@ public class Main {
 
     private Logger logger = new Logger() {
         @Override
-        public void info(String format, String... args) {
+        public void info(String format, Object... args) {
             System.out.println(String.format(format, args));
         }
 
         @Override
-        public void warning(String format, String... args) {
+        public void warning(String format, Object... args) {
             System.out.println(String.format(format, args));
         }
 
         @Override
-        public void debug(String format, String... args) {
+        public void debug(String format, Object... args) {
             System.out.println(String.format(format, args));
         }
     };

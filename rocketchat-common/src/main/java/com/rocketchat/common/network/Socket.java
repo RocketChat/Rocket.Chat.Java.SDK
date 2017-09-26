@@ -2,18 +2,15 @@ package com.rocketchat.common.network;
 
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.utils.Logger;
+import com.rocketchat.common.utils.NoopLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -28,9 +25,8 @@ import okio.ByteString;
 
 public class Socket extends WebSocketListener {
 
-    public static final Logger LOGGER = Logger.getLogger(Socket.class.getName());
-
     private final SocketListener listener;
+    private final Logger logger;
     private Request request;
     private OkHttpClient client;
     private String url;
@@ -44,14 +40,11 @@ public class Socket extends WebSocketListener {
     private Timer timer;
     private boolean selfDisconnect;
     private boolean pingEnable;
-    protected ConnectivityManager connectivityManager;
 
-    private boolean isTesting;
-
-    public Socket(OkHttpClient client, String url, SocketListener socketListener) {
-        LOGGER.setLevel(Level.INFO);
+    public Socket(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
         this.url = url;
         this.client = client;
+        this.logger = logger;
         this.listener = socketListener;
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -62,12 +55,11 @@ public class Socket extends WebSocketListener {
         pingInterval = 2000;
         pingHandler = new TaskHandler();
         timeoutHandler = new TaskHandler();
-        connectivityManager = new ConnectivityManager();
         createSocket();
     }
 
     public Socket(String url, SocketListener listener) {
-        this(new OkHttpClient(), url, listener);
+        this(new OkHttpClient(), url, new NoopLogger(), listener);
     }
 
     public void setReconnectionStrategy(ReconnectionStrategy strategy) {
@@ -100,7 +92,7 @@ public class Socket extends WebSocketListener {
     }
 
     private void setState(State state) {
-        LOGGER.info(String.format("setState: old %s, new %s", currentState.name(), state.name()));
+        logger.info(String.format("setState: old %s, new %s", currentState.name(), state.name()));
         currentState = state;
     }
 
@@ -108,19 +100,11 @@ public class Socket extends WebSocketListener {
         return currentState;
     }
 
-    public ConnectivityManager getConnectivityManager() {
-        return connectivityManager;
-    }
-
     // OkHttp WebSocket callbacks
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
-        LOGGER.info("Connected to server");
+        logger.info("Connected to server");
         setState(State.CONNECTED);
-
-        if (isTesting) {
-            return;
-        }
 
         if (strategy != null) {
             strategy.setNumberOfAttempts(0);
@@ -140,7 +124,7 @@ public class Socket extends WebSocketListener {
 
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
-        LOGGER.info("WebSocket closing: " + code + " - " + reason);
+        logger.info("WebSocket closing: " + code + " - " + reason);
         setState(State.DISCONNECTING);
         listener.onClosing();
     }
@@ -148,7 +132,7 @@ public class Socket extends WebSocketListener {
     @Override
     public void onClosed(WebSocket webSocket, int code, String reason) {
         setState(State.DISCONNECTED);
-        LOGGER.warning("Disconnected from server");
+        logger.warning("Disconnected from server");
         pingHandler.removeLast();
         timeoutHandler.removeLast();
         processReconnection();
@@ -157,7 +141,7 @@ public class Socket extends WebSocketListener {
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable throwable, Response response) {
-        LOGGER.warning("Connect error: " + throwable);
+        logger.warning("Connect error: " + throwable);
         setState(State.DISCONNECTED);
         pingHandler.removeLast();
         timeoutHandler.removeLast();
@@ -166,7 +150,7 @@ public class Socket extends WebSocketListener {
     }
 
     private void onTextMessage(String text) {
-        LOGGER.info("Receiving: " + text);
+        logger.info("Receiving: " + text);
         JSONObject message = null;
         try {
             message = new JSONObject(text);
@@ -209,11 +193,6 @@ public class Socket extends WebSocketListener {
         ws = client.newWebSocket(request, this);
     }
 
-    public void connectForTesting() {
-        isTesting = true;
-        connect();
-    }
-
     protected void connectAsync() {
         connect();
     }
@@ -224,18 +203,18 @@ public class Socket extends WebSocketListener {
 
     public void sendData(String message) {
         if (getState() == State.CONNECTED) {
-            LOGGER.info("Sending: " + message);
+            logger.info("Sending: " + message);
             ws.send(message);
         }
     }
 
     public void reconnect() {
-        LOGGER.info("reconnecting");
+        logger.info("reconnecting");
         connect();
     }
 
     public void disconnect() {
-        LOGGER.info("Calling disconnect");
+        logger.info("Calling disconnect");
         if (currentState == State.DISCONNECTED) {
             return;
         } else if (currentState == State.CONNECTED) {
@@ -267,7 +246,7 @@ public class Socket extends WebSocketListener {
 
             } else {
                 pingHandler.cancel();
-                LOGGER.info("Number of attempts are complete");
+                logger.info("Number of attempts are complete");
             }
         } else {
             pingHandler.cancel();
@@ -280,13 +259,13 @@ public class Socket extends WebSocketListener {
         if (!pingEnable)
             return;
 
-        LOGGER.info("Scheduling ping in: " + pingInterval + " ms");
+        logger.info("Scheduling ping in: " + pingInterval + " ms");
         pingHandler.removeLast();
         timeoutHandler.removeLast();
         pingHandler.postDelayed(new TimerTask() {
             @Override
             public void run() {
-                LOGGER.info("SENDING PING");
+                logger.info("SENDING PING");
                 sendData(RPC.PING_MESSAGE);
             }
         }, pingInterval);
@@ -294,7 +273,7 @@ public class Socket extends WebSocketListener {
             @Override
             public void run() {
                 if (getState() != State.DISCONNECTING && getState() != State.DISCONNECTED) {
-                    LOGGER.warning("PONG RECEIVE FAILED");
+                    logger.warning("PONG RECEIVE FAILED");
                     ws.cancel();
                     //onFailure(ws, new IOException("PING Timeout"), null);
                 }

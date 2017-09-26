@@ -12,6 +12,7 @@ import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
+import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.callback.HistoryCallback;
@@ -48,8 +49,9 @@ import okhttp3.OkHttpClient;
 
 public class WebsocketImpl implements SocketListener {
     private final OkHttpClient client;
-    private final String baseUrl;
+    private final SocketFactory factory;
     private final Moshi moshi;
+    private final String baseUrl;
     private final Logger logger;
     private final Socket socket;
 
@@ -61,12 +63,13 @@ public class WebsocketImpl implements SocketListener {
     private String sessionId;
     private String userId;
 
-    WebsocketImpl(OkHttpClient client, Moshi moshi, String baseUrl, Logger logger) {
+    WebsocketImpl(OkHttpClient client, SocketFactory factory, Moshi moshi, String baseUrl, Logger logger) {
         this.client = client;
+        this.factory = factory;
         this.baseUrl = baseUrl;
         this.moshi = moshi;
         this.logger = logger;
-        this.socket = new Socket(client, baseUrl, this);
+        this.socket = factory.create(client, baseUrl, logger, this);
 
         connectivityManager = new ConnectivityManager();
         coreMiddleware = new CoreMiddleware(moshi);

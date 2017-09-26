@@ -2,10 +2,16 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
+import com.rocketchat.common.utils.Logger;
+import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONObject;
 import org.junit.After;
@@ -20,6 +26,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
 import static junit.framework.TestCase.assertTrue;
@@ -32,7 +39,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RocketChatApiTest {
+public class WebsocketImplTest {
 
     @Mock
     LoginCallback loginCallback;
@@ -47,7 +54,7 @@ public class RocketChatApiTest {
     ArgumentCaptor<RocketChatApiException> errorArgumentCaptor;
 
     private DefaultMockServer server;
-    private RocketChatClient sut;
+    private WebsocketImpl sut;
     private SocketListener listener;
 
     @Before
@@ -58,19 +65,41 @@ public class RocketChatApiTest {
         String socketUrl = "https://test.rocket.chat/websocket";
         String restUrl = "https://test.rocket.chat/sut/v1/";
 
-        sut = new RocketChatClient.Builder()
-                /*.restBaseUrl(server.url("/sut/v1/"))
-                .websocketUrl(server.url("/websocket"))*/
+        /*sut = new RocketChatClient.Builder()
+                .restBaseUrl(server.url("/sut/v1/"))
+                .websocketUrl(server.url("/websocket"))
                 .restBaseUrl(restUrl)
                 .websocketUrl(socketUrl)
                 .socketFactory(new SocketFactory() {
                     @Override
-                    public Socket create(OkHttpClient client, String url, SocketListener socketListener) {
+                    public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
                         listener = socketListener;
                         return mockedSocket;
                     }
                 })
+                .build();*/
+        /*mockServer = new DefaultMockServer();
+        mockServer.start();
+
+        baseUrl = HttpUrl.parse(mockServer.url("/"));
+        client = new OkHttpClient();*/
+
+        OkHttpClient client = new OkHttpClient();
+        SocketFactory factory = new SocketFactory() {
+            @Override
+            public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
+                listener = socketListener;
+                return mockedSocket;
+            }
+        };
+
+        Moshi moshi = new Moshi.Builder()
+                .add(new TimestampAdapter())
+                .add(JsonAdapterFactory.create())
+                .add(CommonJsonAdapterFactory.create())
                 .build();
+
+        sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger());
         sut.disablePing();
 
         when(loginCallback.getClassType()).thenReturn(LoginCallback.class);

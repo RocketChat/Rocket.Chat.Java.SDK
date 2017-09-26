@@ -1,6 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatAuthException;
+import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
@@ -11,6 +12,7 @@ import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
+import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
@@ -54,6 +56,7 @@ public class RocketChatClient {
     private final HttpUrl baseUrl;
     private final OkHttpClient client;
     private final Logger logger;
+    private final SocketFactory factory;
 
     private DbManager dbManager;
     private TokenProvider tokenProvider;
@@ -76,16 +79,16 @@ public class RocketChatClient {
             client = builder.client;
         }
 
-        /*if (builder.factory != null) {
-            this.socket = builder.factory.create(client, builder.websocketUrl, this);
+        if (builder.factory != null) {
+            this.factory = builder.factory;
         } else {
-            this.socket = new SocketFactory() {
+            this.factory = new SocketFactory() {
                 @Override
-                public Socket create(OkHttpClient client, String url, SocketListener socketListener) {
-                    return new Socket(client, url, socketListener);
+                public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
+                    return new Socket(client, url, logger, socketListener);
                 }
-            }.create(client, builder.websocketUrl, this);
-        }*/
+            };
+        }
 
         if (builder.logger != null) {
             this.logger = builder.logger;
@@ -106,7 +109,7 @@ public class RocketChatClient {
         chatRoomFactory = new ChatRoomFactory(this);
 
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
-        websocketImpl = new WebsocketImpl(client, moshi, builder.websocketUrl, logger);
+        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
     }
 
     public String getMyUserName() {

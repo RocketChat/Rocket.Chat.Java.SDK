@@ -3,9 +3,14 @@ package com.rocketchat.core;
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
+import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
+import com.squareup.moshi.Moshi;
 
 import org.json.JSONException;
 import org.junit.Before;
@@ -29,7 +34,7 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
-public class RestHelperTest {
+public class RestImplTest {
 
     RestImpl sut;
     OkHttpClient client;
@@ -57,7 +62,13 @@ public class RestHelperTest {
         baseUrl = HttpUrl.parse(mockServer.url("/"));
         client = new OkHttpClient();
 
-        //sut = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
+        Moshi moshi = new Moshi.Builder()
+                .add(new TimestampAdapter())
+                .add(JsonAdapterFactory.create())
+                .add(CommonJsonAdapterFactory.create())
+                .build();
+
+        sut = new RestImpl(client, moshi, baseUrl, tokenProvider, new NoopLogger());
     }
 
     // start signin tests
@@ -109,17 +120,17 @@ public class RestHelperTest {
 
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testSigninShouldFailWithNullUsername() {
         sut.signin(null, "password", loginCallback);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testSigninShouldFailWithNullPassword() {
         sut.signin("username", null, loginCallback);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testSigninShouldFailWithNullCallback() {
         sut.signin("username", "password", null);
     }
