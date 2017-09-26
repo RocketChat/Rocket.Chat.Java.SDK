@@ -132,8 +132,11 @@ class RestImpl {
             callback.onError(new RocketChatAuthException("Invalid credentials"));
         } else {
             try {
-                callback.onError(new RocketChatApiException(response.code(), response.body().string()));
-            } catch (IOException e) {
+                JSONObject json = new JSONObject(response.body().string());
+                String message = json.optString("error");
+                String errorType = json.optString("errorType");
+                callback.onError(new RocketChatApiException(response.code(), message, errorType));
+            } catch (IOException | JSONException e) {
                 callback.onError(new RocketChatException(e.getMessage(), e));
             }
         }

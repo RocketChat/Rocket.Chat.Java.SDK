@@ -8,6 +8,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -29,7 +30,7 @@ public abstract class Message extends BaseMessage {
     @Nullable public abstract Boolean parseUrls();
     // TODO -> channels
     // TODO -> attachments
-    // TODO -> translations
+    @Nullable public abstract Map<String, String> translations();
     // TODO -> reactions
     @Json(name = "starred") @Nullable public abstract List<User> starredBy();
 
