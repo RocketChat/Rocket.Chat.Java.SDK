@@ -59,30 +59,7 @@ public class WebsocketImplTest {
 
     @Before
     public void setUp() {
-        /*server = new DefaultMockServer();
-        server.start();*/
-
         String socketUrl = "https://test.rocket.chat/websocket";
-        String restUrl = "https://test.rocket.chat/sut/v1/";
-
-        /*sut = new RocketChatClient.Builder()
-                .restBaseUrl(server.url("/sut/v1/"))
-                .websocketUrl(server.url("/websocket"))
-                .restBaseUrl(restUrl)
-                .websocketUrl(socketUrl)
-                .socketFactory(new SocketFactory() {
-                    @Override
-                    public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
-                        listener = socketListener;
-                        return mockedSocket;
-                    }
-                })
-                .build();*/
-        /*mockServer = new DefaultMockServer();
-        mockServer.start();
-
-        baseUrl = HttpUrl.parse(mockServer.url("/"));
-        client = new OkHttpClient();*/
 
         OkHttpClient client = new OkHttpClient();
         SocketFactory factory = new SocketFactory() {
@@ -107,10 +84,6 @@ public class WebsocketImplTest {
 
     @Test
     public void testShouldLoginSuccessfully() throws InterruptedException {
-        /*TestUtils.setupMockServer(sut, server,
-                TestUtils.pair(TestMessages.LOGIN_REQUEST,
-                        TestMessages.LOGIN_RESPONSE_OK));*/
-
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -135,10 +108,6 @@ public class WebsocketImplTest {
 
     @Test
     public void testShouldFailLoginWithWrongPassword() throws InterruptedException {
-        /*TestUtils.setupMockServer(sut, server,
-                TestUtils.pair(TestMessages.LOGIN_REQUEST_FAIL,
-                        TestMessages.LOGIN_RESPONSE_FAIL));*/
-
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -164,10 +133,6 @@ public class WebsocketImplTest {
 
     @Test
     public void testShouldResumeLogin() throws InterruptedException {
-        /*TestUtils.setupMockServer(sut, server,
-                TestUtils.pair(TestMessages.LOGIN_RESUME_REQUEST,
-                        TestMessages.LOGIN_RESUME_RESPONSE_OK));*/
-
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {

@@ -108,7 +108,7 @@ public class RestImplTest {
         verify(loginCallback, timeout(200).only()).onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
-        assertThat(exception.getMessage(), is(equalTo("Invalid credentials")));
+        assertThat(exception.getMessage(), is(equalTo("Unauthorized")));
     }
 
     @Test
