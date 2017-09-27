@@ -5,6 +5,7 @@ import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -231,6 +232,7 @@ public class RocketChatClient {
     }
 
     //Tested
+    @Deprecated
     void pinMessage(JSONObject message, SimpleCallback callback) {
         websocketImpl.pinMessage(message, callback);
     }

@@ -5,10 +5,12 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
+import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.helper.RestHelper;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.Moshi;
@@ -49,8 +51,11 @@ class RestImpl {
                 .add("username", username)
                 .add("password", password)
                 .build();
+
+        HttpUrl url = baseUrl.newBuilder().addPathSegment("login").build();
+
         Request request = new Request.Builder()
-                .url(baseUrl.newBuilder().addPathSegment("login").build())
+                .url(url)
                 .post(body)
                 .build();
 
@@ -84,10 +89,15 @@ class RestImpl {
     }
 
     void pinMessage(String messageId, final SimpleCallback callback) {
+        checkNotNull(messageId, "messageId == null");
+        checkNotNull(callback, "callback == null");
+
         RequestBody body = new FormBody.Builder()
-                .add("id", messageId)
+                .add("messageId", messageId)
                 .build();
-        Request request = requestBuilder("chat.pinMessage").post(body).build();
+        Request request = requestBuilder("chat.pinMessage")
+                .post(body)
+                .build();
 
         client.newCall(request).enqueue(new okhttp3.Callback() {
             @Override
@@ -127,18 +137,20 @@ class RestImpl {
     }
 
     private void procressCallbackError(Response response, Callback callback) {
-        // TODO - parse response body
-        if (response.code() == 401) {
-            callback.onError(new RocketChatAuthException("Invalid credentials"));
-        } else {
-            try {
+        try {
+            if (response.code() == 401) {
+                JSONObject json = new JSONObject(response.body().string());
+                callback.onError(new RocketChatAuthException(json.optString("message")));
+            } else {
                 JSONObject json = new JSONObject(response.body().string());
                 String message = json.optString("error");
                 String errorType = json.optString("errorType");
                 callback.onError(new RocketChatApiException(response.code(), message, errorType));
-            } catch (IOException | JSONException e) {
-                callback.onError(new RocketChatException(e.getMessage(), e));
+
             }
+        } catch (IOException | JSONException e) {
+            callback.onError(new RocketChatException(e.getMessage(), e));
         }
+
     }
 }

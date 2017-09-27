@@ -86,6 +86,11 @@ public class ChatRoom {
         client.updateMessage(msgId, room.roomId(), message, callback);
     }
 
+    public void pinMessage(String messageId, SimpleCallback callback) {
+        client.pinMessage(messageId, callback);
+    }
+
+    @Deprecated
     public void pinMessage(JSONObject message, SimpleCallback callback) {
         client.pinMessage(message, callback);
     }
