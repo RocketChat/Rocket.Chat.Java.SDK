@@ -10,21 +10,11 @@ import java.lang.reflect.Type;
  */
 public class IFileUpload {
 
-    public static abstract class UfsCreateCallback extends Callback {
-        public abstract void onUfsCreate(FileUploadToken token);
-
-        @Override
-        public Type getClassType() {
-            return UfsCreateCallback.class;
-        }
+    public interface UfsCreateCallback extends Callback {
+        void onUfsCreate(FileUploadToken token);
     }
 
-    public static abstract class UfsCompleteListener extends Callback {
-        public abstract void onUfsComplete(FileDescriptor file);
-
-        @Override
-        public Type getClassType() {
-            return UfsCompleteListener.class;
-        }
+    public interface UfsCompleteListener extends Callback {
+        void onUfsComplete(FileDescriptor file);
     }
 }

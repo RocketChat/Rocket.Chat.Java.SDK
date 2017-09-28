@@ -15,12 +15,7 @@ public class MessageCallback {
         void onMessage(String roomId, Message message);
     }
 
-    public static abstract class MessageAckCallback extends Callback {
-        public abstract void onMessageAck(Message message);
-
-        @Override
-        public Type getClassType() {
-            return MessageAckCallback.class;
-        }
+    public interface MessageAckCallback extends Callback {
+        void onMessageAck(Message message);
     }
 }

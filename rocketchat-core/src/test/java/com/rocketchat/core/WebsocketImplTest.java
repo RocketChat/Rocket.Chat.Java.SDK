@@ -26,7 +26,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import io.fabric8.mockwebserver.DefaultMockServer;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
 import static junit.framework.TestCase.assertTrue;
@@ -36,7 +35,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WebsocketImplTest {
@@ -78,8 +76,6 @@ public class WebsocketImplTest {
 
         sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger());
         sut.disablePing();
-
-        when(loginCallback.getClassType()).thenReturn(LoginCallback.class);
     }
 
     @Test
@@ -94,7 +90,6 @@ public class WebsocketImplTest {
 
         sut.login("testuserrocks", "testuserrocks", loginCallback);
 
-        verify(loginCallback).getClassType();
         verify(loginCallback).onLoginSuccess(tokenArgumentCaptor.capture());
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         Token token = tokenArgumentCaptor.getValue();
@@ -118,7 +113,6 @@ public class WebsocketImplTest {
 
         sut.login("testuserrocks", "wrongpassword", loginCallback);
 
-        verify(loginCallback).getClassType();
         verify(loginCallback).onError(errorArgumentCaptor.capture());
         verify(loginCallback, never()).onLoginSuccess(any(Token.class));
         RocketChatApiException error = errorArgumentCaptor.getValue();
@@ -142,7 +136,6 @@ public class WebsocketImplTest {
         }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST);
 
         sut.loginUsingToken("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD", loginCallback);
-        verify(loginCallback).getClassType();
         verify(loginCallback, times(1)).onLoginSuccess(tokenArgumentCaptor.capture());
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         Token token = tokenArgumentCaptor.getValue();
@@ -169,7 +162,6 @@ public class WebsocketImplTest {
         }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST_FAIL);
 
         sut.loginUsingToken("INVALID_TOKEN", loginCallback);
-        verify(loginCallback).getClassType();
         verify(loginCallback).onError(errorArgumentCaptor.capture());
         verify(loginCallback, never()).onLoginSuccess(any(Token.class));
 

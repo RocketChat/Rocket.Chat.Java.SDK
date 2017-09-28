@@ -5,7 +5,6 @@ import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
-import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -22,7 +21,7 @@ import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
-import com.rocketchat.core.middleware.CoreStreamMiddleware;
+import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.Emoji;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
@@ -52,7 +51,6 @@ import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
 // TODO: 30/7/17 Make it singletone like eventbus, add builder class to RocketChatAPI in order to use it anywhere, maybe a common builder class
 public class RocketChatClient {
-
 
     private final HttpUrl baseUrl;
     private final OkHttpClient client;

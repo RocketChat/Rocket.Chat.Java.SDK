@@ -23,7 +23,7 @@ import okio.ByteString;
  * Created by sachin on 7/6/17.
  */
 
-public class Socket extends WebSocketListener {
+public /*final*/ class Socket extends WebSocketListener {
 
     private final SocketListener listener;
     private final Logger logger;
