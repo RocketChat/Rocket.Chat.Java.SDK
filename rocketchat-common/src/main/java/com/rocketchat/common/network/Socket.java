@@ -16,7 +16,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import okhttp3.logging.HttpLoggingInterceptor;
 import okio.ByteString;
 
 /**
@@ -47,8 +46,6 @@ public /*final*/ class Socket extends WebSocketListener {
         this.logger = logger;
         this.listener = socketListener;
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         setState(State.DISCONNECTED);
         selfDisconnect = false;
         pingEnable = false;
