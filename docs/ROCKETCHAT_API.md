@@ -32,12 +32,12 @@ Following methods are provided by RocketChatAPI class
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.login("username", "password", this);
+        client.login("username", "password", this);
     }
     
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
     }
     
 ```
@@ -49,13 +49,13 @@ Following methods are provided by RocketChatAPI class
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
     }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken("token",this);
+        client.loginUsingToken("token",this);
     }
 ```
 
@@ -67,9 +67,9 @@ Following methods are provided by RocketChatAPI class
 ```
 @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
 
-        System.out.println("My userid is "+ api.getMyUserId());
+        System.out.println("My userid is "+ client.getMyUserId());
     }
 ```  
     
@@ -78,9 +78,9 @@ Following methods are provided by RocketChatAPI class
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
 
-        System.out.println("My username is "+ api.getMyUserName());
+        System.out.println("My username is "+ client.getMyUserName());
     }
 ```    
 
@@ -91,12 +91,12 @@ Following methods are provided by RocketChatAPI class
 ```
 @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+        ChatRoomFactory factory = client.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
         room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
     }
     
@@ -157,7 +157,7 @@ factory.removeChatRoomByName(room);
 - Getting user status from id (method returns doc which also contains other information of a given user)
 
 ```
-   UserDocument user = api.getDbManager().getUserCollection().get("userid");
+   UserDocument user = client.getDbManager().getUserCollection().get("userid");
    System.out.println("UserName is " + user.getName());
    System.out.println("User status is "+ user.getStatus());
    System.out.println("User avatar url is "+ user.getAvatarUrl());
@@ -167,7 +167,7 @@ factory.removeChatRoomByName(room);
 - Observe for status change of a particular user by providing his/her user-id
 
 ```
-        api.getDbManager().getUserCollection().register("user_id", new 
+        client.getDbManager().getUserCollection().register("user_id", new
             Collection.Observer<UserDocument>() {
             public void onUpdate(Collection.Type type, UserDocument user) {
                 switch (type) {
@@ -189,7 +189,7 @@ factory.removeChatRoomByName(room);
 - Observe all users for status changes.
 
 ```
-        api.getDbManager().addObserver(new Observer() {
+        client.getDbManager().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
                 if (arg !=null) {
                     UserDocument document = (UserDocument) arg;
@@ -208,7 +208,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+        client.getSubscriptions(this);
     }
     
     @Override
@@ -224,7 +224,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getPublicSettings(this);
+        client.getPublicSettings(this);
     }
     
     @Override
@@ -241,7 +241,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        api.getUserRoles(this);
+        client.getUserRoles(this);
     }
     
     @Override
@@ -293,7 +293,7 @@ factory.removeChatRoomByName(room);
 
 ```
    // Params : Group name, array of usernames to join directly, read only or now , listener 
-   api.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
+   client.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
             public void onCreateGroup(String roomId, ErrorObject error) {
                 System.out.println("Created public Group with roomId "+ roomId);
             }
@@ -306,7 +306,7 @@ factory.removeChatRoomByName(room);
 
 ```
    // Params : Group name, array of usernames to join directly, listener 
-        api.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
+        client.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
             public void onCreateGroup(String roomId, ErrorObject error) {
                 
             }
@@ -318,7 +318,7 @@ factory.removeChatRoomByName(room);
 - Create SimpleListener Callback directly.
 
 ```
-        api.joinPublicGroup("roomId", null, new SimpleListener() {
+        client.joinPublicGroup("roomId", null, new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 if (success) {
                     System.out.println("room joined successfully");
@@ -334,7 +334,7 @@ factory.removeChatRoomByName(room);
 
 ```
 //Status can be ONLINE, OFFLINE, BUSY, AWAY
-        api.setStatus(UserObject.Status.ONLINE, new SimpleListener() {
+        client.setStatus(UserObject.Status.ONLINE, new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 if (success) {
                     System.out.println("Status set to online");
@@ -349,7 +349,7 @@ factory.removeChatRoomByName(room);
 - Directly pass subscribeListener interface for success callback.
 
 ```
-        api.subscribeActiveUsers(new SubscribeListener() {
+        client.subscribeActiveUsers(new SubscribeListener() {
             public void onSubscribe(Boolean isSubscribed, String subId) {
                 System.out.println("Subscribed to active users successfully");
             }
@@ -362,7 +362,7 @@ factory.removeChatRoomByName(room);
 - Directly pass subscribeListener interface for success callback.
 
 ```
-        api.subscribeUserData(new SubscribeListener() {
+        client.subscribeUserData(new SubscribeListener() {
             public void onSubscribe(Boolean isSubscribed, String subId) {
                 System.out.println("Subscribed to user data");
             }
@@ -374,7 +374,7 @@ factory.removeChatRoomByName(room);
 - Used for logging out from the server.
 
 ```
-        api.logout(new SimpleListener() {
+        client.logout(new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 System.out.println("Logged out from the server");
             }

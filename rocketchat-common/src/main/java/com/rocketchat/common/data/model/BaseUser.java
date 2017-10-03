@@ -1,9 +1,6 @@
 package com.rocketchat.common.data.model;
 
-import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
-
-import org.json.JSONArray;
 
 import java.util.List;
 

@@ -90,19 +90,4 @@ public class Utils {
     public static String getAvatar(String username) {
         return DOMAIN_NAME + URL_SEPARATOR + AVATAR + URL_SEPARATOR + username;
     }
-
-    public static <T> T checkNotNull(T object, String message) {
-        if (object == null) {
-            throw new NullPointerException(message);
-        }
-        return object;
-    }
-
-    public static <T> T checkParamNotNull(T object, String message) {
-        if (object == null) {
-            throw new IllegalArgumentException(message);
-        }
-        return object;
-    }
-
 }

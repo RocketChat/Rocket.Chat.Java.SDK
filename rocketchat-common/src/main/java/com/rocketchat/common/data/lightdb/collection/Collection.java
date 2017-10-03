@@ -75,6 +75,10 @@ public class Collection<T, K> {
         }
     }
 
+    public int size() {
+        return documents.size();
+    }
+
     public void unregisterAll() {
         observers.clear();
     }

@@ -2,7 +2,7 @@ package com.rocketchat.core.rxjava;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
 
@@ -12,9 +12,9 @@ import io.reactivex.SingleOnSubscribe;
 
 public class RxRocketChatClient implements ConnectListener {
 
-    private final RocketChatAPI client;
+    private final RocketChatClient client;
 
-    public RxRocketChatClient(RocketChatAPI client) {
+    public RxRocketChatClient(RocketChatClient client) {
         this.client = client;
     }
 

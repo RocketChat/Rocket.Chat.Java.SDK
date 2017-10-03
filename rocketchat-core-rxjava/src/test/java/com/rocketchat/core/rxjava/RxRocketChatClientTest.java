@@ -2,7 +2,7 @@ package com.rocketchat.core.rxjava;
 
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
 
@@ -14,6 +14,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,7 +27,7 @@ public class RxRocketChatClientTest {
     RxRocketChatClient sut;
 
     @Mock
-    RocketChatAPI api;
+    RocketChatClient api;
 
     Token token = new Token("userId", "token", null);
 
@@ -47,8 +48,13 @@ public class RxRocketChatClientTest {
 
         TestObserver<Token> testObserver = sut.signin("username", "password").test();
 
-        testObserver.assertValue(token -> token != null && token.getUserId().contentEquals("userId")
-                && token.getAuthToken().contentEquals("token"));
+        testObserver.assertValue(new Predicate<Token>() {
+            @Override
+            public boolean test(Token token) throws Exception {
+                return token != null && token.getUserId().contentEquals("userId")
+                        && token.getAuthToken().contentEquals("token");
+            }
+        });
         testObserver.assertComplete();
         testObserver.assertNoErrors();
     }
@@ -56,7 +62,7 @@ public class RxRocketChatClientTest {
     @Test
     public void testSigninShouldFailWithNullUsername() {
         doThrow(new IllegalArgumentException("username == null"))
-                .when(api).signin(isNull(), any(String.class), any(LoginCallback.class));
+                .when(api).signin((String) isNull(), any(String.class), any(LoginCallback.class));
 
         TestObserver<Token> testObserver = sut.signin(null, "password").test();
 
@@ -66,7 +72,7 @@ public class RxRocketChatClientTest {
     @Test
     public void testSigninShouldFailWithNullPassword() {
         doThrow(new IllegalArgumentException("password == null"))
-                .when(api).signin(any(String.class), isNull(), any(LoginCallback.class));
+                .when(api).signin(any(String.class), (String) isNull(), any(LoginCallback.class));
 
         TestObserver<Token> testObserver = sut.signin("username", null).test();
 
@@ -84,9 +90,14 @@ public class RxRocketChatClientTest {
         }).when(api).signin(any(String.class), any(String.class), any(LoginCallback.class));
 
         TestObserver<Token> testObserver = sut.signin("username", "password").test();
-        testObserver.assertError(throwable -> throwable != null
-                && throwable instanceof RocketChatNetworkErrorException
-                && throwable.getMessage().contentEquals("network error"));
+        testObserver.assertError(new Predicate<Throwable>() {
+            @Override
+            public boolean test(Throwable throwable) throws Exception {
+                return throwable != null
+                        && throwable instanceof RocketChatNetworkErrorException
+                        && throwable.getMessage().contentEquals("network error");
+            }
+        });
         testObserver.assertNoValues();
     }
 
@@ -101,9 +112,14 @@ public class RxRocketChatClientTest {
         }).when(api).signin(any(String.class), any(String.class), any(LoginCallback.class));
 
         TestObserver<Token> testObserver = sut.signin("username", "password").test();
-        testObserver.assertError(throwable -> throwable != null
-                && throwable instanceof RocketChatAuthException
-                && throwable.getMessage().contentEquals("Invalid credentials"));
+        testObserver.assertError(new Predicate<Throwable>() {
+            @Override
+            public boolean test(Throwable throwable) throws Exception {
+                return throwable != null
+                        && throwable instanceof RocketChatAuthException
+                        && throwable.getMessage().contentEquals("Invalid credentials");
+            }
+        });
         testObserver.assertNoValues();
     }
 }
