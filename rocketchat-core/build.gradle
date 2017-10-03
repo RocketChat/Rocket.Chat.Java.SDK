@@ -80,8 +80,9 @@ dependencies {
     // JSON parsing
     compile 'com.squareup.moshi:moshi:1.5.0'
 
-    /*apt "com.ryanharter.auto.value:auto-value-moshi:0.4.3"
-    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"*/
+    // Waiting for 0.4.4 release to use it directly
     apt 'com.github.rharter:auto-value-moshi:bff0dd8f3e'
     compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"
+    /*apt "com.ryanharter.auto.value:auto-value-moshi:0.4.3"
+    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"*/
 }

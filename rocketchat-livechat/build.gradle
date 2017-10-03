@@ -1,39 +1,15 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 plugins {
     id "com.jfrog.bintray" version "1.7"
 }
 
-allprojects {
-    tasks.withType(JavaCompile) {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
-    }
-}
-
-group 'com.rocketchat.livechat'
-version '0.7.1'
+group 'com.rocketchat.core'
+version '0.7.2'
 
 apply plugin: 'java'
-
-sourceCompatibility = 1.5
-
-repositories {
-    mavenCentral()
-}
-
-allprojects {
-    repositories {
-        jcenter()
-    }
-    apply plugin: 'java'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
-}
+apply plugin: 'idea'
+apply plugin: 'net.ltgt.apt'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 task sourceJar(type: Jar) {
     classifier = 'sources'
@@ -78,10 +54,10 @@ bintray {
         publicDownloadNumbers = true
 
         version {
-            name = '0.7.1'
+            name = '0.7.2'
             released = new Date()
             desc = 'Rocket.Chat java SDK : LiveChat'
-            vcsTag = '0.7.1'
+            vcsTag = '0.7.2'
         }
 
     }
@@ -92,5 +68,19 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile "org.mockito:mockito-core:1.+"
     compile project (':rocketchat-common')
-//    compile 'com.rocketchat.common:rocketchat-common:0.7.1'
+//    compile 'com.rocketchat.common:rocketchat-common:0.7.2'
+
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
+    compileOnly "com.google.auto.value:auto-value:1.5"
+    apt         "com.google.auto.value:auto-value:1.5"
+
+    // JSON parsing
+    compile 'com.squareup.moshi:moshi:1.5.0'
+
+    // Waiting for 0.4.4 release to use it directly
+    apt 'com.github.rharter:auto-value-moshi:bff0dd8f3e'
+    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"
+    /*apt "com.ryanharter.auto.value:auto-value-moshi:0.4.3"
+    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"*/
 }

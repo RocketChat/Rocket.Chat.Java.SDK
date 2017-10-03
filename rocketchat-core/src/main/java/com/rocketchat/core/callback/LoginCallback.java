@@ -8,14 +8,9 @@ import java.lang.reflect.Type;
 /**
  * Created by sachin on 18/7/17.
  */
-public abstract class LoginCallback extends Callback {
+public interface LoginCallback extends Callback {
     /**
      * Called when the Login was successful. The callback may proceed to read the {@link Token}
      */
-    public abstract void onLoginSuccess(Token token);
-
-    @Override
-    public Type getClassType() {
-        return LoginCallback.class;
-    }
+    void onLoginSuccess(Token token);
 }

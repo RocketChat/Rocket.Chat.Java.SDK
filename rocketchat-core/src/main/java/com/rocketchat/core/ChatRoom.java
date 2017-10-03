@@ -10,7 +10,7 @@ import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
-import com.rocketchat.core.middleware.CoreStreamMiddleware;
+import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.RoomRole;

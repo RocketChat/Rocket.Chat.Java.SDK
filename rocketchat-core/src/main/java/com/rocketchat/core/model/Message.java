@@ -190,17 +190,18 @@ public abstract class Message extends BaseMessage {
         if (type() != null && !type().equals("")) {
             return getType(type());
         } else {
-            /*if (editedBy() != null) {
-                return Type.MESSAGE_EDITED;
-            } else if (starred_by != null) {
-                return Type.MESSAGE_STARRED;
-            } else if (reactions != null) {
-                return Type.MESSAGE_REACTION;
+            if (editedBy() != null) {
+                return MessageType.MESSAGE_EDITED;
+            } else if (starredBy() != null) {
+                return MessageType.MESSAGE_STARRED;
+            // TODO - implement reactions and attachments...
+            /*} else if (reactions != null) {
+                return MessageType.MESSAGE_REACTION;
             } else if (attachments != null) {
-                return Type.ATTACHMENT;
-            } else {*/
+                return MessageType.ATTACHMENT;*/
+            } else {
                 return MessageType.TEXT;
-            //}
+            }
         }
     }
 
