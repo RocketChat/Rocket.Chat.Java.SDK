@@ -66,7 +66,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, loginCallback);
+                    processCallbackError(response, loginCallback);
                     return;
                 }
 
@@ -106,7 +106,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, callback);
+                    processCallbackError(response, callback);
                     return;
                 }
 
@@ -134,7 +134,7 @@ class RestImpl {
         return builder;
     }
 
-    private void procressCallbackError(Response response, Callback callback) {
+    private void processCallbackError(Response response, Callback callback) {
         try {
             if (response.code() == 401) {
                 JSONObject json = new JSONObject(response.body().string());
