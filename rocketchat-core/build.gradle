@@ -81,8 +81,8 @@ dependencies {
     compile 'com.squareup.moshi:moshi:1.5.0'
 
     // Waiting for 0.4.4 release to use it directly
-    apt 'com.github.rharter:auto-value-moshi:bff0dd8f3e'
-    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"
-    /*apt "com.ryanharter.auto.value:auto-value-moshi:0.4.3"
-    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.3"*/
+    apt 'com.github.luciofm:auto-value-moshi:35980c1deb'
+    compileOnly 'com.github.luciofm:auto-value-moshi:35980c1deb'
+    /*apt "com.ryanharter.auto.value:auto-value-moshi:0.4.4"
+    compileOnly "com.ryanharter.auto.value:auto-value-moshi-annotations:0.4.4"*/
 }
