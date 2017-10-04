@@ -26,6 +26,7 @@ import com.rocketchat.core.model.Token;
 import com.rocketchat.core.uploader.FileUploadToken;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
 
 import org.json.JSONArray;
@@ -198,8 +199,8 @@ public class CoreMiddleware {
                         ((SimpleCallback) callback).onSuccess();
                         break;
                 }
-            } catch (JSONException exception) {
-                callback.onError(new RocketChatInvalidResponseException(exception.getMessage(), exception));
+            } catch (JsonDataException | JSONException jsonException) {
+                callback.onError(new RocketChatInvalidResponseException(jsonException.getMessage(), jsonException));
             } catch (IOException e) {
                 callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 e.printStackTrace();
