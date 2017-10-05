@@ -49,7 +49,7 @@ public abstract class BaseMessage {
     @Json(name = "rid") public abstract String roomId();
     @Json(name = "msg") public abstract String message();
     @Json(name = "ts") public abstract @Timestamp Long timestamp();
-    @Nullable public abstract User sender();
+    @Json(name = "u") @Nullable public abstract User sender();
     @Json(name = "_updatedAt") public abstract @Timestamp Long updatedAt();
     @Nullable public abstract @Timestamp Long editedAt();
     @Nullable public abstract User editedBy();

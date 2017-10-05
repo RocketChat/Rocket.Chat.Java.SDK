@@ -83,8 +83,20 @@ public class WebsocketImpl implements SocketListener {
         socket.connect();
     }
 
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
+    }
+
     void disconnect() {
         socket.disconnect();
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public String getMyUserId() {
+        return userId;
     }
 
     //Tested

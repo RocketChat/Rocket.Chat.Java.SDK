@@ -111,6 +111,10 @@ public class RocketChatClient {
         websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
     }
 
+    public WebsocketImpl getWebsocketImpl() {
+        return websocketImpl;
+    }
+
     public String getMyUserName() {
         // TODO - re-implement
         return null;

@@ -59,7 +59,12 @@ public class Main {
                                 public void onLoadHistory(List<Message> list, int unreadNotLoaded) {
                                     System.out.println("got data here" + list.size());
                                     for (Message message : list) {
-                                        System.out.println("Message is " + message.message());
+                                        try {
+                                            System.out.println("Message is " + message.message());
+                                            System.out.println("User is " + message.sender());
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
 
