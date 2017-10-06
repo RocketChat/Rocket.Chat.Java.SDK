@@ -57,7 +57,7 @@ public abstract class BaseMessage {
     @Json(name = "t") @Nullable public abstract String type();
     @Json(name = "alias") @Nullable public abstract String senderAlias();
 
-    public abstract static class Builder<T extends Builder<T>> {
+    public abstract static class BaseBuilder<T extends BaseBuilder<T>> {
         public abstract T setId(String id);
         public abstract T setRoomId(String id);
         public abstract T setMessage(String message);

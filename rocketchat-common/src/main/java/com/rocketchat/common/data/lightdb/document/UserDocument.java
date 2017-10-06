@@ -36,7 +36,7 @@ public abstract class UserDocument extends BaseUser {
     }
 
     @AutoValue.Builder
-    public abstract static class Builder extends BaseUser.Builder<Builder> {
+    public abstract static class Builder extends BaseBuilder<Builder> {
         public abstract Builder active(Boolean active);
         public abstract Builder name(String name);
         public abstract Builder status(Status status);

@@ -19,7 +19,7 @@ public abstract class User extends BaseUser {
     }
 
     @AutoValue.Builder
-    public abstract static class Builder extends BaseUser.Builder<Builder> {
+    public abstract static class Builder extends BaseBuilder<Builder> {
         public abstract User build();
     }
 
