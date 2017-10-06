@@ -11,7 +11,7 @@ public abstract class BaseUser {
     @Nullable public abstract String username();
     @Nullable public abstract List<String> roles();
 
-    public abstract static class Builder<T extends Builder<T>> {
+    public abstract static class BaseBuilder<T extends BaseBuilder<T>> {
         public abstract T id(String id);
         public abstract T username(String username);
         public abstract T roles(List<String> roles);
