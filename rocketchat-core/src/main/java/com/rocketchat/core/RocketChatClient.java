@@ -20,6 +20,7 @@ import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
+import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.Emoji;
@@ -129,6 +130,10 @@ public class RocketChatClient {
 
     public DbManager getDbManager() {
         return dbManager;
+    }
+
+    public void serverInfo(ServerInfoCallback callback) {
+        restImpl.serverInfo(callback);
     }
 
     public void signin(String username, String password, final LoginCallback loginCallback) {
