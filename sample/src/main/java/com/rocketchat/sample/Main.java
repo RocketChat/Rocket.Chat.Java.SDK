@@ -1,16 +1,20 @@
 package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
+import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
+import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.PublicSetting;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 
@@ -27,6 +31,8 @@ public class Main {
     RocketChatClient client;
     ChatRoom room;
 
+    Token token;
+
     String file_path = "/home/sachin/Pictures/pain.jpg";
 
     public static void main(String[] args) {
@@ -41,14 +47,40 @@ public class Main {
                 .build();
         client.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         client.setPingInterval(15000);
-        client.connect(connectListener);
 
+
+        // Example login with REST Api, then use the token for websocket login
+        client.signin("username", "password", new LoginCallback() {
+            @Override
+            public void onLoginSuccess(Token token) {
+                Main.this.token = token;
+                client.connect(connectListener);
+            }
+
+            @Override
+            public void onError(RocketChatException error) {
+                System.out.println("Error: " + error);
+            }
+        });
+
+        client.serverInfo(new ServerInfoCallback() {
+            @Override
+            public void onServerInfo(ServerInfo info) {
+                System.out.println("ServerInfo: " + info);
+            }
+
+            @Override
+            public void onError(RocketChatException error) {
+                System.out.println("Error: " + error);
+            }
+        });
     }
 
     ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
-            client.loginUsingToken("mb3ChOAItBEtQ9x9n30xzU1EmRsmaFRVRoO0GWjdfPQ", loginCallback);
+            client.getPublicSettings(settingsCallback);
+            client.loginUsingToken(token.getAuthToken(), loginCallback);
         }
 
         public void onConnectError(Throwable websocketException) {
@@ -57,6 +89,20 @@ public class Main {
 
         public void onDisconnect(boolean closedByServer) {
             System.out.println("Disconnect detected here");
+        }
+    };
+
+    SimpleListCallback<PublicSetting> settingsCallback = new SimpleListCallback<PublicSetting>() {
+        @Override
+        public void onSuccess(List<PublicSetting> list) {
+            for (PublicSetting setting : list) {
+                System.out.println("Setting: " + setting);
+            }
+        }
+
+        @Override
+        public void onError(RocketChatException error) {
+
         }
     };
 
@@ -78,6 +124,19 @@ public class Main {
             ChatRoomFactory factory = client.getChatRoomFactory();
             room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
             room.subscribeRoomMessageEvent(null, messageCallback);
+            room.getChatHistory(100, null, null, new HistoryCallback() {
+                @Override
+                public void onLoadHistory(List<Message> list, int unreadNotLoaded) {
+                    for (Message message : list) {
+                        System.out.println(message);
+                    }
+                }
+
+                @Override
+                public void onError(RocketChatException error) {
+                    error.printStackTrace();
+                }
+            });
         }
 
         @Override
