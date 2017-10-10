@@ -1,6 +1,6 @@
 package com.rocketchat.core;
 
-import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.lightdb.GlobalDbManager;
 import com.rocketchat.common.data.model.Room;
 import com.rocketchat.common.data.model.UserObject;
 import com.rocketchat.common.data.rpc.RPC;
@@ -19,6 +19,7 @@ import com.rocketchat.core.callback.LoginListener;
 import com.rocketchat.core.callback.MessageListener;
 import com.rocketchat.core.callback.RoomListener;
 import com.rocketchat.core.callback.UserListener;
+import com.rocketchat.core.db.RoomDbManager;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.middleware.CoreMiddleware;
 import com.rocketchat.core.middleware.CoreStreamMiddleware;
@@ -39,6 +40,7 @@ import com.rocketchat.core.uploader.IFileUpload;
 import java.io.File;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -54,7 +56,7 @@ public class RocketChatAPI extends Socket {
 
     private CoreMiddleware coreMiddleware;
     private CoreStreamMiddleware coreStreamMiddleware;
-    private DbManager dbManager;
+    private GlobalDbManager globalDbManager;
 
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
@@ -64,12 +66,12 @@ public class RocketChatAPI extends Socket {
         integer = new AtomicInteger(1);
         coreMiddleware = new CoreMiddleware();
         coreStreamMiddleware = new CoreStreamMiddleware();
-        dbManager = new DbManager();
+        globalDbManager = new GlobalDbManager();
         chatRoomFactory = new ChatRoomFactory(this);
     }
 
     public String getMyUserName() {
-        return dbManager.getUserCollection().get(userId).getUserName();
+        return globalDbManager.getUserCollection().get(userId).getUserName();
     }
 
     public String getMyUserId() {
@@ -80,8 +82,8 @@ public class RocketChatAPI extends Socket {
         return chatRoomFactory;
     }
 
-    public DbManager getDbManager() {
-        return dbManager;
+    public GlobalDbManager getGlobalDbManager() {
+        return globalDbManager;
     }
 
     //Tested
@@ -324,6 +326,59 @@ public class RocketChatAPI extends Socket {
         sendDataInBackground(CoreSubRPC.subscribeUserData(uniqueID));
     }
 
+    public void subscribeUserRoles(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeUserRoles(uniqueID));
+    }
+
+    public void subscribeLoginConf(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeLoginServiceConfiguration(uniqueID));
+    }
+
+    public void subscribeClientVersions(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeClientVersions(uniqueID));
+    }
+
+    private String subscribeRoomFiles(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeRoomFiles(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeMentionedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeMentionedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeStarredMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeStarredMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribePinnedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribePinnedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    private String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeSnipettedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
     //Tested
     private String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
@@ -338,6 +393,13 @@ public class RocketChatAPI extends Socket {
         coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
         coreStreamMiddleware.createSub(roomId, listener, CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_TYPING);
         sendDataInBackground(CoreSubRPC.subscribeRoomTypingEvent(uniqueID, roomId, enable));
+        return uniqueID;
+    }
+
+    private String subscribeRoomDeleteEvent(String roomId, Boolean enable, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubCallback(uniqueID, subscribeListener);
+        sendDataInBackground(CoreSubRPC.subscribeRoomMessageDeleteEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
@@ -386,7 +448,7 @@ public class RocketChatAPI extends Socket {
                 processCollectionsChanged(object);
                 break;
             case REMOVED:
-                dbManager.update(object, RPC.MsgType.REMOVED);
+                processCollectionsRemoved(object);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubSuccess(object);
@@ -415,16 +477,73 @@ public class RocketChatAPI extends Socket {
         if (userId == null) {
             userId = object.optString("id");
         }
-        dbManager.update(object, RPC.MsgType.ADDED);
+
+        switch (GlobalDbManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+//                    System.out.println("Got into room " + room.getRoomData().getRoomName());
+                    room.getRoomDbManager().update(object, RPC.MsgType.ADDED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalDbManager.update(object, RPC.MsgType.ADDED);
+                break;
+        }
+
+    }
+
+    private void processCollectionsRemoved(JSONObject object) {
+        switch (GlobalDbManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                System.out.println("Local collection " + object.toString());
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+                    System.out.println("Got into room " + room.getRoomData().getRoomName());
+                    room.getRoomDbManager().update(object, RPC.MsgType.REMOVED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalDbManager.update(object, RPC.MsgType.REMOVED);
+                break;
+        }
+    }
+
+    private String getRoomIdFromCollection(JSONObject object) {
+        String roomId = null;
+        try {
+            roomId = object.getJSONObject("fields").getString("rid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return roomId;
     }
 
     private void processCollectionsChanged(JSONObject object) {
-        switch (DbManager.getCollectionType(object)) {
-            case STREAM_COLLECTION:
-                coreStreamMiddleware.processCallback(object);
+        switch (GlobalDbManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                switch (RoomDbManager.getCollectionType(object)) {
+                    case STREAM_COLLECTION:
+                        coreStreamMiddleware.processCallback(object);
+                        break;
+                    case LOCAL_COLLECTION:
+                        System.out.println("Local collection " + object.toString());
+                        ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                        if (room != null) {
+                            System.out.println("Got into room " + room.getRoomData().getRoomName());
+                            room.getRoomDbManager().update(object, RPC.MsgType.CHANGED);
+                        } else {
+                            System.out.println("Room not found for subscribed room");
+                        }
+                        break;
+                }
                 break;
-            case COLLECTION:
-                dbManager.update(object, RPC.MsgType.CHANGED);
+            case GLOBAL_COLLECTION:
+                globalDbManager.update(object, RPC.MsgType.CHANGED);
                 break;
         }
     }
@@ -450,13 +569,25 @@ public class RocketChatAPI extends Socket {
     public class ChatRoom {
 
         Room room;
+        RoomDbManager roomDbManager;
 
         //Subscription Ids for new subscriptions
         private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
         private String typingSubId;
+        private String deleteSubId;
+
+
+        //subscription Ids for room collections
+        private String filesSubId;
+        private String mentionedMessagesSubId;
+        private String starredMessagesSubId;
+        private String pinnedMessagesSubId;
+        private String snipetedMessagesSubId;
+
 
         public ChatRoom(Room room) {
             this.room = room;
+            roomDbManager = new RoomDbManager();
         }
 
         public Boolean isSubscriptionObject() {
@@ -465,6 +596,10 @@ public class RocketChatAPI extends Socket {
 
         public Room getRoomData() {
             return room;
+        }
+
+        public RoomDbManager getRoomDbManager() {
+            return roomDbManager;
         }
 
         //RPC methods
@@ -569,6 +704,7 @@ public class RocketChatAPI extends Socket {
         public void subscribeRoomMessageEvent(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
             if (roomSubId == null) {
                 roomSubId = RocketChatAPI.this.subscribeRoomMessageEvent(room.getRoomId(), true, subscribeListener, listener);
+                deleteSubId = RocketChatAPI.this.subscribeRoomDeleteEvent(room.getRoomId(), true, null);
             }
         }
 
@@ -578,15 +714,18 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
+
+        public void unsubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
             if (roomSubId != null) {
                 coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_MESSAGE);
                 RocketChatAPI.this.unsubscribeRoom(roomSubId, subscribeListener);
+                RocketChatAPI.this.unsubscribeRoom(deleteSubId, null);
                 roomSubId = null;
+                deleteSubId = null;
             }
         }
 
-        public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
+        public void unsubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
             if (typingSubId != null) {
                 coreStreamMiddleware.removeSub(room.getRoomId(), CoreStreamMiddleware.SubType.SUBSCRIBE_ROOM_TYPING);
                 RocketChatAPI.this.unsubscribeRoom(typingSubId, subscribeListener);
@@ -594,10 +733,83 @@ public class RocketChatAPI extends Socket {
             }
         }
 
-        public void unSubscribeAllEvents() {
+
+        // Subscription methods available for flex-tab-container border-component-color on the right side
+
+        public void subscribeRoomFiles(int limit, SubscribeListener listener) {
+            if (filesSubId == null) {
+                filesSubId = RocketChatAPI.this.subscribeRoomFiles(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeMentionedMessages(int limit, SubscribeListener listener) {
+            if (mentionedMessagesSubId == null) {
+                mentionedMessagesSubId = RocketChatAPI.this.subscribeMentionedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeStarredMessages(int limit, SubscribeListener listener) {
+            if (starredMessagesSubId == null) {
+                starredMessagesSubId = RocketChatAPI.this.subscribeStarredMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribePinnedMessages(int limit, SubscribeListener listener) {
+            if (pinnedMessagesSubId == null) {
+                pinnedMessagesSubId = RocketChatAPI.this.subscribePinnedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void subscribeSnipettedMessages(int limit, SubscribeListener listener) {
+            if (snipetedMessagesSubId == null) {
+                snipetedMessagesSubId = RocketChatAPI.this.subscribeSnipettedMessages(room.getRoomId(), limit, listener);
+            }
+        }
+
+        public void unsubscribeRoomFiles(SubscribeListener subscribeListener) {
+            if (filesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(filesSubId, subscribeListener);
+                filesSubId = null;
+            }
+        }
+
+        public void unsubscribeMentionedMessages(SubscribeListener subscribeListener) {
+            if (mentionedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(mentionedMessagesSubId, subscribeListener);
+                mentionedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeStarredMessages(SubscribeListener subscribeListener) {
+            if (starredMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(starredMessagesSubId, subscribeListener);
+                starredMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribePinnedMessages(SubscribeListener subscribeListener) {
+            if (pinnedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(pinnedMessagesSubId, subscribeListener);
+                pinnedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeSnipettedMessages(SubscribeListener subscribeListener) {
+            if (snipetedMessagesSubId != null) {
+                RocketChatAPI.this.unsubscribeRoom(snipetedMessagesSubId, subscribeListener);
+                snipetedMessagesSubId = null;
+            }
+        }
+
+        public void unsubscribeAllEvents() {
             coreStreamMiddleware.removeAllSub(room.getRoomId());
-            unSubscribeRoomMessageEvent(null);
-            unSubscribeRoomTypingEvent(null);
+            unsubscribeRoomMessageEvent(null);
+            unsubscribeRoomTypingEvent(null);
+            unsubscribeRoomFiles(null);
+            unsubscribeMentionedMessages(null);
+            unsubscribePinnedMessages(null);
+            unsubscribeStarredMessages(null);
+            unsubscribeSnipettedMessages(null);
         }
 
         // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room

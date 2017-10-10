@@ -3,13 +3,14 @@ package com.rocketchat.common.data.lightdb.collection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by sachin on 11/8/17.
  */
-public class Collection<T, K> {
+public class Collection<T, K> extends Observable {
 
     ConcurrentHashMap<T, K> documents;
 
@@ -24,6 +25,8 @@ public class Collection<T, K> {
     public void add(T key, K value) {
         documents.put(key, value);
         publish(Type.ADDED, key, value);
+        setChanged();
+        notifyObservers(value);
     }
 
     public K get(T key) {
@@ -32,11 +35,15 @@ public class Collection<T, K> {
 
     public void update(T key, K newValue) {
         publish(Type.CHANGED, key, newValue);
+        setChanged();
+        notifyObservers(newValue);
     }
 
     public K remove(T key) {
         K value = documents.remove(key);
         publish(Type.REMOVED, key, value);
+        setChanged();
+        notifyObservers();
         return value;
     }
 

@@ -10,16 +10,16 @@ import org.json.JSONObject;
 
 public class Message {
 
-    private String messageId;
+    protected String messageId;
     protected String roomId;
     protected String message;
-    private Date msgTimestamp;
-    private UserObject sender;
-    private Date updatedAt;  //Message saved on the server
-    private Date editedAt;
-    private UserObject editedBy;
-    private String messagetype;
-    private String senderAlias;
+    protected Date msgTimestamp;
+    protected UserObject sender;
+    protected Date updatedAt;  //Message saved on the server
+    protected Date editedAt;
+    protected UserObject editedBy;
+    protected String messagetype;
+    protected String senderAlias;
 
     public Message(JSONObject object) {
         try {
@@ -30,7 +30,10 @@ public class Message {
                 msgTimestamp = new Date(object.getJSONObject("ts").getLong("$date"));
             }
             sender = new UserObject(object.optJSONObject("u"));
-            updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
+
+            if (object.opt("_updatedAt") != null) {
+                updatedAt = new Date(object.getJSONObject("_updatedAt").getLong("$date"));
+            }
 
             if (object.optJSONObject("editedAt") != null) {
                 editedAt = new Date(object.getJSONObject("editedAt").getLong("$date"));

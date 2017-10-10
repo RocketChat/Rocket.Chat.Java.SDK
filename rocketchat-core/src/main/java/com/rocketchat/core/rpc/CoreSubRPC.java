@@ -11,13 +11,20 @@ public class CoreSubRPC extends SubRPC {
     private static final String STREAM_NOTIFY_ROOM = "stream-notify-room";
     private static final String USER_DATA = "userData";
     private static final String ACTIVE_USERS = "activeUsers";
-    // might be used in future
-    private static final String STREAM_NOTIFY_USER = "stream-notify-user";
-    private static final String STREAM_NOTIFY_LOGGED = "stream-notify-logged";
-    private static final String STREAM_NOTIFY_ALL = "stream-notify-all";
     private static final String ROLES = "roles";
     private static final String LOGIN_SERVICE_CONFIGURATION = "meteor.loginServiceConfiguration";
     private static final String AUTO_UPDATE_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
+    private static final String ROOM_FILES = "roomFiles";
+    private static final String MENTIONED_MESSAGES = "mentionedMessages";
+    private static final String STARRED_MESSAGES = "starredMessages";
+    private static final String PINNED_MESSAGES = "pinnedMessages";
+    private static final String SNIPETTED_MESSAGES = "snippetedMessages";
+
+
+    // might be used in future (comes under collections)
+    private static final String STREAM_NOTIFY_USER = "stream-notify-user";
+    private static final String STREAM_NOTIFY_LOGGED = "stream-notify-logged";
+    private static final String STREAM_NOTIFY_ALL = "stream-notify-all";
 
     // Events (comes under params)
     private static final String TYPING_EVENT = "/typing";
@@ -55,13 +62,44 @@ public class CoreSubRPC extends SubRPC {
         return getRemoteSubscriptionObject(uniqueid, ACTIVE_USERS).toString();
     }
 
-    public static String subscribeRoomMessageDeleteEvent(String uniqueid, String room_id, Boolean persistenceEnable) {
-        return getRemoteSubscriptionObject(uniqueid, STREAM_NOTIFY_ROOM, room_id + DELETE_EVENT, persistenceEnable).toString();
+    public static String subscribeLoginServiceConfiguration(String uniqueid) {
+        return getRemoteSubscriptionObject(uniqueid, LOGIN_SERVICE_CONFIGURATION).toString();
     }
 
+    public static String subscribeClientVersions(String uniqueid) {
+        return getRemoteSubscriptionObject(uniqueid, AUTO_UPDATE_CLIENT_VERSIONS).toString();
+    }
+
+    public static String subscribeUserRoles(String uniqueId) {
+        return getRemoteSubscriptionObject(uniqueId, ROLES).toString();
+    }
+
+    public static String subscribeRoomMessageDeleteEvent(String uniqueid, String roomId, Boolean persistenceEnable) {
+        return getRemoteSubscriptionObject(uniqueid, STREAM_NOTIFY_ROOM, roomId + DELETE_EVENT, persistenceEnable).toString();
+    }
 
     public static String unsubscribeRoom(String subId) {
         return getRemoteUnsubscriptionObject(subId).toString();
+    }
+
+    public static String subscribeRoomFiles(String subId, String roomId, int limit) {
+        return getRemoteSubscriptionObject(subId, ROOM_FILES, roomId, limit).toString();
+    }
+
+    public static String subscribeMentionedMessages(String subId, String roomId, int limit) {
+        return getRemoteSubscriptionObject(subId, MENTIONED_MESSAGES, roomId, limit).toString();
+    }
+
+    public static String subscribeStarredMessages(String subId, String roomId, int limit) {
+        return getRemoteSubscriptionObject(subId, STARRED_MESSAGES, roomId, limit).toString();
+    }
+
+    public static String subscribePinnedMessages(String subId, String roomId, int limit) {
+        return getRemoteSubscriptionObject(subId, PINNED_MESSAGES, roomId, limit).toString();
+    }
+
+    public static String subscribeSnipettedMessages(String subId, String roomId, int limit) {
+        return getRemoteSubscriptionObject(subId, SNIPETTED_MESSAGES, roomId, limit).toString();
     }
 
 }

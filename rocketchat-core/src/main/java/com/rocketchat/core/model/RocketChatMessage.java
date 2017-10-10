@@ -18,22 +18,22 @@ import org.json.JSONObject;
 
 public class RocketChatMessage extends Message {
 
-    private JSONArray mentions;
-    private JSONArray channels;
-    private Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
-    private List<MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
-    private List<TAttachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
-    private String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
-    private Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
-    private JSONObject translations;
-    private List<String> starred_by;
-    private JSONObject reactions; // Need to dump to get data
+    protected JSONArray mentions;
+    protected JSONArray channels;
+    protected Boolean groupable;  //Boolean that states whether or not this message should be grouped together with other messages from the same userBoolean that states whether or not this message should be grouped together with other messages from the same user
+    protected List<MessageUrl> urls; //A collection of URLs metadata. Available when the message contains at least one URL
+    protected List<TAttachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
+    protected String avatar; //A url to an image, that is accessible to anyone, to display as the avatar instead of the message user’s account avatar
+    protected Boolean parseUrls; //Whether Rocket.Chat should try and parse the urls or not
+    protected JSONObject translations;
+    protected List<String> starred_by;
+    protected JSONObject reactions; // Need to dump to get data
 
     //This is required for message pin and unpin
-    private JSONObject rawMessage;
+    protected JSONObject rawMessage;
 
     //File
-    FileObject file;
+    protected FileObject file;
 
     private static final String TYPE_MESSAGE_REMOVED = "rm";
     private static final String TYPE_ROOM_NAME_CHANGED = "r";

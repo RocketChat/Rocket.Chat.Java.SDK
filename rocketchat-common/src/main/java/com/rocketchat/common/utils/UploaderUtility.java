@@ -13,7 +13,7 @@ import java.util.Observable;
 /**
  * Created by sachin on 18/8/17.
  */
-public class MultipartUploader extends Observable {
+public class UploaderUtility extends Observable {
     private final String boundary;
     private static final String LINE_FEED = "\r\n";
     private HttpURLConnection httpConn;
@@ -27,7 +27,7 @@ public class MultipartUploader extends Observable {
      *
      * @throws IOException
      */
-    public MultipartUploader(String requestURL, String charset)
+    public UploaderUtility(String requestURL, String charset)
             throws IOException {
         this.charset = charset;
 
