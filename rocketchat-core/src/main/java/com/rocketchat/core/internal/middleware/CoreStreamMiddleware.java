@@ -73,7 +73,7 @@ public class CoreStreamMiddleware {
             switch (parse(s)) {
                 case SUBSCRIBE_ROOM_MESSAGE:
                     listener = subs.get(roomId).get(SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
-                    MessageCallback.SubscriptionCallback subscriptionListener = (MessageCallback.SubscriptionCallback) listener;
+                    MessageCallback.SubscriptionListener subscriptionListener = (MessageCallback.SubscriptionListener) listener;
 
                     try {
                         Message message = getMessageAdapter().fromJson(array.getJSONObject(0).toString());

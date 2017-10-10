@@ -33,6 +33,9 @@ public abstract class Message extends BaseMessage {
     @Nullable public abstract Map<String, String> translations();
     // TODO -> reactions
     @Json(name = "starred") @Nullable public abstract List<User> starredBy();
+    // TODO: 10/10/17 Implement boolean parseURLS inside message defines =>Whether Rocket.Chat should try and parse the urls or not
+    // TODO : Add file which is required for getting attachments
+
 
     public static JsonAdapter<Message> jsonAdapter(Moshi moshi) {
         return new AutoValue_Message.MoshiJsonAdapter(moshi);

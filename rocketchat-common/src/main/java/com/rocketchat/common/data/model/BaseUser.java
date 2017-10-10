@@ -11,6 +11,8 @@ public abstract class BaseUser {
     @Nullable public abstract String username();
     @Nullable public abstract List<String> roles();
 
+    // TODO: 9/10/17 Implement JSONArray for emails e.g. emails = object.optJSONArray("emails");
+
     public abstract static class BaseBuilder<T extends BaseBuilder<T>> {
         public abstract T id(String id);
         public abstract T username(String username);

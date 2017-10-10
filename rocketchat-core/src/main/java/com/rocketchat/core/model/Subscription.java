@@ -35,6 +35,13 @@ public abstract class Subscription extends BaseRoom {
 
     @Nullable public abstract String emailNotifications();
 
+
+    // TODO: 10/10/17 subscriptionId = object.getString("_id");
+    // TODO: 10/10/17 favourite = object.getBoolean("f");
+    // TODO: 10/10/17  blocked = object.optBoolean("blocked");
+    // TODO: 10/10/17 fullname = object.optString("fname");
+    // TODO: 10/10/17 lastActivity = new Date(object.getJSONObject("lastActivity").getLong("$date"));
+
     public static JsonAdapter<Subscription> jsonAdapter(Moshi moshi) {
         return new AutoValue_Subscription.MoshiJsonAdapter(moshi);
     }

@@ -53,7 +53,8 @@ public abstract class BaseMessage {
     @Json(name = "_updatedAt") public abstract @Timestamp Long updatedAt();
     @Nullable public abstract @Timestamp Long editedAt();
     @Nullable public abstract User editedBy();
-    // TODO - use an ENUM
+
+    // TODO - use an ENUM (Convert it into proper enum)
     @Json(name = "t") @Nullable public abstract String type();
     @Json(name = "alias") @Nullable public abstract String senderAlias();
 

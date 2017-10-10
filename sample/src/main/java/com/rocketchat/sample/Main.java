@@ -2,18 +2,13 @@ package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
-import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
-import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.factory.ChatRoomFactory;
-import com.rocketchat.core.model.Message;
-import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
-import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by sachin on 7/6/17.
@@ -44,42 +39,19 @@ public class Main {
     ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
+
             client.login("sachin.shinde", "sachin123", new LoginCallback() {
                 @Override
                 public void onLoginSuccess(Token token) {
                     System.out.println("Login is successful");
-                    client.getSubscriptions(new SimpleListCallback<Subscription>() {
+                    new Timer().schedule(new TimerTask() {
                         @Override
-                        public void onSuccess(List<Subscription> list) {
-                            ChatRoomFactory factory = client.getChatRoomFactory();
-                            factory.createChatRooms(list);
-                            ChatRoom chatRoom = factory.getChatRoomByName("general");
-                            chatRoom.getChatHistory(20, null, null, new HistoryCallback() {
-                                @Override
-                                public void onLoadHistory(List<Message> list, int unreadNotLoaded) {
-                                    System.out.println("got data here" + list.size());
-                                    for (Message message : list) {
-                                        try {
-                                            System.out.println("Message is " + message.message());
-                                            System.out.println("User is " + message.sender());
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onError(RocketChatException error) {
-
-                                }
-                            });
+                        public void run() {
+                            client.logout(null);
                         }
+                    },2000);
 
-                        @Override
-                        public void onError(RocketChatException error) {
 
-                        }
-                    });
                 }
 
                 @Override

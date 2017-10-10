@@ -15,7 +15,7 @@ public abstract class UserDocument extends BaseUser {
 
     @Nullable public abstract Boolean active();
     @Nullable public abstract String name();
-    // TODO -> private JSONObject services;
+    // TODO -> private JSONObject services (Add services JSONObject inside model);
     @Nullable public abstract Status status();
     @Nullable public abstract Status statusConnection();
     @Nullable public abstract Status statusDefault();

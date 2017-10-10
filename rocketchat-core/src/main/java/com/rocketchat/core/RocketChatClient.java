@@ -332,7 +332,7 @@ public class RocketChatClient {
     }
 
     //Tested
-    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionCallback listener) {
+    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionListener listener) {
         return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeListener, listener);
     }
 
