@@ -1,0 +1,96 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
+allprojects {
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '1.7'
+        targetCompatibility = '1.7'
+    }
+}
+
+group 'com.rocketchat.common'
+version '0.7.1'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.5
+
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+}
+
+task sourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId 'com.rocketchat.common'
+            artifactId 'rocketchat-common'
+            version '0.7.1'
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
+//    configurations = ['archives']
+    publications = ['MyPublication']
+    pkg {
+        userOrg = 'rocketchat'
+        repo = 'RocketChat-SDK'
+        name = 'RocketChat-Java-SDK-Common'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/RocketChat/Rocket.Chat.Java.SDK.git'
+        publicDownloadNumbers = true
+
+        version {
+            name = '0.7.1'
+            released = new Date()
+            desc = 'Rocket.Chat java SDK : commons'
+            vcsTag = '0.7.1'
+        }
+
+    }
+}
+
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile "org.mockito:mockito-core:1.+"
+    compile 'com.neovisionaries:nv-websocket-client:2.2'
+    compile group: 'org.json', name: 'json', version: '20090211'
+}

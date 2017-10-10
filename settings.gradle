@@ -1,2 +1,5 @@
 rootProject.name = 'RocketChatSDK'
+include 'rocketchat-common'
+include 'rocketchat-core'
+include 'rocketchat-livechat'
 
