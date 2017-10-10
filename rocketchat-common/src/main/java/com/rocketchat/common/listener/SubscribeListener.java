@@ -5,6 +5,5 @@ package com.rocketchat.common.listener;
  */
 
 public interface SubscribeListener extends Listener {
-
     void onSubscribe(Boolean isSubscribed, String subId);
 }

@@ -31,6 +31,7 @@ public class Collection<T, K> {
     }
 
     public void update(T key, K newValue) {
+        documents.put(key, newValue);
         publish(Type.CHANGED, key, newValue);
     }
 
@@ -64,7 +65,7 @@ public class Collection<T, K> {
     }
 
 
-    public void unRegister(T key) {
+    public void unregister(T key) {
         observers.remove(key);
     }
 
@@ -74,7 +75,11 @@ public class Collection<T, K> {
         }
     }
 
-    public void unRegisterAll() {
+    public int size() {
+        return documents.size();
+    }
+
+    public void unregisterAll() {
         observers.clear();
     }
 

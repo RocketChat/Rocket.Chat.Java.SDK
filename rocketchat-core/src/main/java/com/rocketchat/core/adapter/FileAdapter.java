@@ -1,9 +1,10 @@
 package com.rocketchat.core.adapter;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.RocketChatException;
 import com.rocketchat.core.callback.FileListener;
-import com.rocketchat.core.model.FileObject;
-import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.core.model.FileDescriptor;
+import com.rocketchat.core.model.Message;
+
 import java.io.IOException;
 
 /**
@@ -21,17 +22,17 @@ public class FileAdapter implements FileListener {
     }
 
     @Override
-    public void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description) {
+    public void onUploadComplete(int statusCode, FileDescriptor file, String roomId, String fileName, String description) {
 
     }
 
     @Override
-    public void onUploadError(ErrorObject error, IOException e) {
+    public void onUploadError(RocketChatException error, IOException e) {
 
     }
 
     @Override
-    public void onSendFile(RocketChatMessage message, ErrorObject error) {
+    public void onSendFile(Message message, RocketChatException error) {
 
     }
 }

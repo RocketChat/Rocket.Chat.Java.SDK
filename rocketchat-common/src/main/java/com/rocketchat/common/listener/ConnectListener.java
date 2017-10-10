@@ -8,10 +8,10 @@ package com.rocketchat.common.listener;
  * Gets called after successful connection with server
  */
 
-public interface ConnectListener extends Listener {
+public interface ConnectListener {
     void onConnect(String sessionID);
 
     void onDisconnect(boolean closedByServer);
 
-    void onConnectError(Exception websocketException);
+    void onConnectError(Throwable websocketException);
 }

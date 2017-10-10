@@ -1,7 +1,8 @@
 package com.rocketchat.core.factory;
 
-import com.rocketchat.common.data.model.Room;
-import com.rocketchat.core.RocketChatAPI;
+import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.core.ChatRoom;
+import com.rocketchat.core.RocketChatClient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,50 +14,51 @@ import java.util.List;
 // TODO: 29/7/17 might have to make separate arraylist for each type, seems little impossible, better to keep generic
 public class ChatRoomFactory {
 
-    private RocketChatAPI api;
-    private ArrayList<RocketChatAPI.ChatRoom> rooms;
+    private RocketChatClient client;
+    private List<ChatRoom> rooms;
 
-    public ChatRoomFactory(RocketChatAPI api) {
-        this.api = api;
+    public ChatRoomFactory(RocketChatClient client) {
+        this.client = client;
         rooms = new ArrayList<>();
     }
 
-    private RocketChatAPI.ChatRoom createChatRoom(Room room) {
-        return api.new ChatRoom(room);
+    private ChatRoom createChatRoom(BaseRoom room) {
+        return new ChatRoom(client, room);
     }
 
-    public ChatRoomFactory createChatRooms(List<? extends Room> roomObjects) {
+    public ChatRoomFactory createChatRooms(List<? extends BaseRoom> roomObjects) {
         removeAllChatRooms();
-        for (Room room : roomObjects) {
+        for (BaseRoom room : roomObjects) {
             rooms.add(createChatRoom(room));
         }
         return this;
     }
 
-    public ChatRoomFactory addChatRoom(Room room) {
-        if (getChatRoomByName(room.getRoomName()) == null) {
-            RocketChatAPI.ChatRoom newRoom = createChatRoom(room);
+    public ChatRoomFactory addChatRoom(BaseRoom room) {
+        if (getChatRoomByName(room.name()) == null) {
+            ChatRoom newRoom = createChatRoom(room);
             rooms.add(newRoom);
         }
         return this;
     }
 
-    public ArrayList<RocketChatAPI.ChatRoom> getChatRooms() {
+    public List<ChatRoom> getChatRooms() {
         return rooms;
     }
 
-    public RocketChatAPI.ChatRoom getChatRoomByName(String roomName) {
-        for (RocketChatAPI.ChatRoom room : rooms) {
-            if (room.getRoomData().getRoomName().equals(roomName)) {
+    public ChatRoom getChatRoomByName(String roomName) {
+        for (ChatRoom room : rooms) {
+            if (room.getRoomData().name() != null
+                    && roomName.contentEquals(room.getRoomData().name())) {
                 return room;
             }
         }
         return null;
     }
 
-    public RocketChatAPI.ChatRoom getChatRoomById(String roomId) {
-        for (RocketChatAPI.ChatRoom room : rooms) {
-            if (room.getRoomData().getRoomId().equals(roomId)) {
+    public ChatRoom getChatRoomById(String roomId) {
+        for (ChatRoom room : rooms) {
+            if (roomId.contentEquals(room.getRoomData().roomId())) {
                 return room;
             }
         }
@@ -64,8 +66,9 @@ public class ChatRoomFactory {
     }
 
     public Boolean removeChatRoomByName(String roomName) {
-        for (RocketChatAPI.ChatRoom room : rooms) {
-            if (room.getRoomData().getRoomName().equals(roomName)) {
+        for (ChatRoom room : rooms) {
+            if (room.getRoomData().name() != null
+                    && roomName.contentEquals(room.getRoomData().name())) {
                 return rooms.remove(room);
             }
         }
@@ -73,15 +76,15 @@ public class ChatRoomFactory {
     }
 
     public Boolean removeChatRoomById(String roomId) {
-        for (RocketChatAPI.ChatRoom room : rooms) {
-            if (room.getRoomData().getRoomId().equals(roomId)) {
+        for (ChatRoom room : rooms) {
+            if (room.getRoomData().roomId().equals(roomId)) {
                 return rooms.remove(room);
             }
         }
         return false;
     }
 
-    public Boolean removeChatRoom(RocketChatAPI.ChatRoom room) {
+    public Boolean removeChatRoom(ChatRoom room) {
         return rooms.remove(room);
     }
 

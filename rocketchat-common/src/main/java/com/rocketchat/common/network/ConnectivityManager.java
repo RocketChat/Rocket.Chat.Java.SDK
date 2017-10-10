@@ -10,7 +10,7 @@ public class ConnectivityManager {
 
     private ConcurrentLinkedQueue<ConnectListener> listeners;
 
-    ConnectivityManager() {
+    public ConnectivityManager() {
         listeners = new ConcurrentLinkedQueue<>();
     }
 
@@ -32,7 +32,7 @@ public class ConnectivityManager {
         }
     }
 
-    public void publishConnectError(Exception websocketException) {
+    public void publishConnectError(Throwable websocketException) {
         for (ConnectListener listener : listeners) {
             listener.onConnectError(websocketException);
         }

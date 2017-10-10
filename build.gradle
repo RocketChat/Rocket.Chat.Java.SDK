@@ -1,11 +1,35 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+
+    dependencies {
+        classpath 'net.ltgt.gradle:gradle-apt-plugin:0.9'
     }
 }
 
+allprojects {
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '1.7'
+        targetCompatibility = '1.7'
+    }
+
+    //apply from: rootProject.file('dependencies.gradle')
+}
+/*
+
+
 group 'io.rocketchat'
-version '0.7.0'
+version '0.7.2'
 
 
 apply plugin: 'java'
@@ -23,8 +47,9 @@ repositories {
 }
 
 dependencies {
-//    compile project (':rocketchat-core')
+    compile project (':rocketchat-core')
 //    compile project (':rocketchat-livechat')
-    compile 'com.rocketchat.core:rocketchat-core:0.7.0'
+//    compile 'com.rocketchat.core:rocketchat-core:0.7.0'
 
 }
+*/

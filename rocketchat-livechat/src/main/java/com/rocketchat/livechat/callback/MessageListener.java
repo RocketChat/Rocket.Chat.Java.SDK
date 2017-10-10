@@ -1,6 +1,6 @@
 package com.rocketchat.livechat.callback;
 
-import com.rocketchat.common.data.model.ErrorObject;
+import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.livechat.model.LiveChatMessage;
 
@@ -19,11 +19,11 @@ public class MessageListener {
         void onAgentDisconnect(String roomId, LiveChatMessage object);
     }
 
-    public interface MessageAckListener extends Listener {
-        void onMessageAck(LiveChatMessage object, ErrorObject error);
+    public interface MessageAckCallback extends Callback {
+        void onMessageAck(LiveChatMessage object);
     }
 
-    public interface OfflineMessageListener extends Listener {
-        void onOfflineMesssageSuccess(Boolean success, ErrorObject error);
+    public interface OfflineMessageCallback extends Callback {
+        void onOfflineMesssageSuccess(Boolean success);
     }
 }

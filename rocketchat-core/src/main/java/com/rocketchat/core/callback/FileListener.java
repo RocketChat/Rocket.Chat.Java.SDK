@@ -1,8 +1,9 @@
 package com.rocketchat.core.callback;
 
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.core.model.FileObject;
-import com.rocketchat.core.model.RocketChatMessage;
+import com.rocketchat.common.RocketChatException;
+import com.rocketchat.core.model.FileDescriptor;
+import com.rocketchat.core.model.Message;
+
 import java.io.IOException;
 
 /**
@@ -13,9 +14,9 @@ public interface FileListener {
 
     void onUploadProgress(int progress, String roomId, String fileName, String description);
 
-    void onUploadComplete(int statusCode, FileObject file, String roomId, String fileName, String description);
+    void onUploadComplete(int statusCode, FileDescriptor file, String roomId, String fileName, String description);
 
-    void onUploadError(ErrorObject error, IOException e);
+    void onUploadError(RocketChatException error, IOException e);
 
-    void onSendFile(RocketChatMessage message, ErrorObject error);
+    void onSendFile(Message message, RocketChatException error);
 }

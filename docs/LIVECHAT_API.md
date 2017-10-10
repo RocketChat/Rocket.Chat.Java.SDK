@@ -25,7 +25,7 @@ Following methods are provided by LiveChatAPI class
 ```
         //Name, Email and Message is given, listener will give appropriate callback.
         //Mail will be sent to Agent's official email Id on the server.
-        api.sendOfflineMessage("aditya", "aditya123@gmail.com", "This is a test message", new MessageListener.OfflineMessageListener() {
+        client.sendOfflineMessage("aditya", "aditya123@gmail.com", "This is a test message", new MessageListener.OfflineMessageListener() {
             @Override
             public void onOfflineMesssageSuccess(Boolean success, ErrorObject error) {
                 if (success) {
@@ -42,7 +42,7 @@ Following methods are provided by LiveChatAPI class
 
 ```
 
-api.setConnectListener(this);
+client.setConnectListener(this);
 
 ```
 

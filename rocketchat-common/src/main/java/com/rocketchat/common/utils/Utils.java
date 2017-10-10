@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URLConnection;
 import java.nio.ByteBuffer;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.UUID;
@@ -89,5 +90,4 @@ public class Utils {
     public static String getAvatar(String username) {
         return DOMAIN_NAME + URL_SEPARATOR + AVATAR + URL_SEPARATOR + username;
     }
-
 }

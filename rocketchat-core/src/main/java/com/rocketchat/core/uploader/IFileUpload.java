@@ -1,19 +1,20 @@
 package com.rocketchat.core.uploader;
 
-import com.rocketchat.common.data.model.ErrorObject;
-import com.rocketchat.common.listener.Listener;
-import com.rocketchat.core.model.FileObject;
+import com.rocketchat.common.listener.Callback;
+import com.rocketchat.core.model.FileDescriptor;
+
+import java.lang.reflect.Type;
 
 /**
  * Created by sachin on 17/8/17.
  */
 public class IFileUpload {
 
-    public interface UfsCreateListener extends Listener {
-        void onUfsCreate(FileUploadToken token, ErrorObject error);
+    public interface UfsCreateCallback extends Callback {
+        void onUfsCreate(FileUploadToken token);
     }
 
-    public interface UfsCompleteListener extends Listener {
-        void onUfsComplete(FileObject file, ErrorObject error);
+    public interface UfsCompleteListener extends Callback {
+        void onUfsComplete(FileDescriptor file);
     }
 }

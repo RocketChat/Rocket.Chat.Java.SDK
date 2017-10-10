@@ -1,124 +1,82 @@
 package com.rocketchat.common.data.lightdb.document;
 
-import com.rocketchat.common.data.model.UserObject;
-import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.google.auto.value.AutoValue;
+import com.rocketchat.common.data.model.BaseUser;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by sachin on 13/8/17.
  */
-public class UserDocument extends UserObject {
+@AutoValue
+public abstract class UserDocument extends BaseUser {
 
-    Boolean active;
-    private String name;
-    private JSONObject services;
-    private Status status;
-    private Status statusConnection;
-    private Status statusDefault;
-    private Integer utcOffset;
+    @Nullable public abstract Boolean active();
+    @Nullable public abstract String name();
+    // TODO -> private JSONObject services;
+    @Nullable public abstract Status status();
+    @Nullable public abstract Status statusConnection();
+    @Nullable public abstract Status statusDefault();
+    @Nullable public abstract Integer utcOffset();
 
-    public UserDocument(JSONObject object) {
+    public static JsonAdapter<UserDocument> jsonAdapter(Moshi moshi) {
+        return new AutoValue_UserDocument.MoshiJsonAdapter(moshi);
+    }
 
-        super(object);
+    public static Builder builder() {
+        return new AutoValue_UserDocument.Builder();
+    }
 
-        try {
-            active = object.optBoolean("active");
-            name = object.optString("name");
-            services = object.optJSONObject("services");
-            status = UserObject.getStatus(object.optString("status"));
-            statusConnection = UserObject.getStatus(object.optString("statusConnection"));
-            statusDefault = UserObject.getStatus(object.optString("statusDefault"));
-            utcOffset = object.optInt("utcOffset");
-        } catch (Exception e) {
-            e.printStackTrace();
+    public abstract Builder toBuilder();
+
+    public UserDocument withId(String id) {
+        return toBuilder().id(id).build();
+    }
+
+    @AutoValue.Builder
+    public abstract static class Builder extends BaseBuilder<Builder> {
+        public abstract Builder active(Boolean active);
+        public abstract Builder name(String name);
+        public abstract Builder status(Status status);
+        public abstract Builder statusConnection(Status status);
+        public abstract Builder statusDefault(Status status);
+        public abstract Builder utcOffset(Integer offset);
+
+        public abstract UserDocument build();
+    }
+
+    public UserDocument update(UserDocument object) {
+        UserDocument.Builder builder = toBuilder();
+
+        if (object.username() != null) {
+            builder.username(object.username());
         }
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public JSONObject getServices() {
-        return services;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Status getStatusConnection() {
-        return statusConnection;
-    }
-
-    public Status getStatusDefault() {
-        return statusDefault;
-    }
-
-    public Integer getUtcOffset() {
-        return utcOffset;
-    }
-
-    public void update(JSONObject object) {
-
-        try {
-            if (object.opt("username") != null) {
-                userName = object.optString("username");
-            }
-            if (object.opt("roles") != null) {
-                if (roles != null) {
-                    roles.clear();
-                } else {
-                    roles = new ArrayList<>();
-                }
-                JSONArray array = object.optJSONArray("roles");
-                for (int i = 0; i < array.length(); i++) {
-                    roles.add(array.optString(i));
-                }
-            }
-            if (object.opt("emails") != null) {
-                emails = object.optJSONArray("emails");
-            }
-            if (object.opt("active") != null) {
-                active = object.optBoolean("active");
-            }
-            if (object.opt("name") != null) {
-                name = object.optString("name");
-            }
-            if (object.opt("services") != null) {
-                services = object.optJSONObject("services");
-            }
-            if (object.opt("status") != null) {
-                status = UserObject.getStatus(object.optString("status"));
-            }
-            if (object.opt("statusConnection") != null) {
-                statusConnection = UserObject.getStatus(object.optString("statusConnection"));
-            }
-            if (object.opt("statusDefault") != null) {
-                statusDefault = UserObject.getStatus(object.optString("statusDefault"));
-            }
-            if (object.opt("utcOffset") != null) {
-                utcOffset = object.optInt("utcOffset");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (object.name() != null) {
+            builder.name(object.name());
         }
-    }
+        if (object.roles() != null) {
+            builder.roles(object.roles());
+        }
+        // TODO - emails
+        if (object.active() != null) {
+            builder.active(object.active());
+        }
+        // TODO - services
+        if (object.status() != null) {
+            builder.status(object.status());
+        }
+        if (object.statusConnection() != null) {
+            builder.statusConnection(object.statusConnection());
+        }
+        if (object.statusDefault() != null) {
+            builder.statusDefault(object.statusDefault());
+        }
+        if (object.utcOffset() != null) {
+            builder.utcOffset(object.utcOffset());
+        }
 
-    @Override
-    public String toString() {
-        return "UserDocument{" +
-                "active=" + active +
-                ", name='" + name + '\'' +
-                ", services=" + services +
-                ", status=" + status +
-                ", statusConnection=" + statusConnection +
-                ", statusDefault=" + statusDefault +
-                ", utcOffset=" + utcOffset +
-                '}';
+        return builder.build();
     }
 }
