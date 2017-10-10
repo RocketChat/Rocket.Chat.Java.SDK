@@ -44,7 +44,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     }
 
     public void startUpload() {
-        api.createUFS(newFileName, (int) file.length(), Utils.getFileTypeUsingName(newFileName), room.getRoomData().getRoomId(), description, DEFAULT_STORE, this);
+        api.createUFS(newFileName, (int) file.length(), Utils.getFileTypeUsingName(newFileName), room.getRoomData().getRoomId(), description, DEFAULT_STORE);
     }
 
     @Override
@@ -68,7 +68,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
 
                         multipart.addFilePart("file", file);
                         statusCode = multipart.finish();
-                        api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken(), FileUploader.this);
+                        api.completeUFS(token.getFileId(), DEFAULT_STORE, token.getToken());
 
                     } catch (IOException e) {
                         fileListener.onUploadError(null, e);
@@ -86,7 +86,7 @@ public class FileUploader implements IFileUpload.UfsCreateListener,
     public void onUfsComplete(FileObject file, ErrorObject error) {
         if (error == null) {
             fileListener.onUploadComplete(statusCode, file, room.getRoomData().getRoomId(), newFileName, description);
-            room.sendFileMessage(file, this);
+            room.sendFileMessage(file);
         } else {
             fileListener.onUploadError(error, null);
         }

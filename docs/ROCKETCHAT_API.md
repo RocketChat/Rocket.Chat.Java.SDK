@@ -20,27 +20,13 @@ Following methods are provided by RocketChatAPI class
 - subscribeUserData (subscribing to the user data, getting user data in more detail, should be called in more detail)
 - logout (Logging out from the server)
 
-### Important Notes
-**Get rid of callback hell:** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. </br>
-**Receive no Callback:** Pass null in case callback receive is not important.
-
 ### Methods : RocketChatAPI
 **1. login**
 
-- Make sure you have implemented _LoginListener_ interface.
-
 ```
-    @Override
-    public void onConnect(String sessionID) {
-        System.out.println("Connected to server");
-        api.login("username", "password", this);
-    }
-    
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-    }
-    
+    api.singleConnect()
+      .thenCompose(v -> api.login("username", "password"))
+      .thenCompose(token -> api.getSubscriptions());
 ```
 
 **2. loginUsingToken**
@@ -56,33 +42,32 @@ Following methods are provided by RocketChatAPI class
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        api.loginUsingToken("token",this);
+        api.loginUsingToken("token");
     }
 ```
 
 **3. getMyUserId**
 
-- In this class, make sure you have implemented _LoginListener_ interface, which returns callback when login is invoked.
-- Same interface implementation should be followed for remaining methods, as login listener interface is used everywhere.
-
 ```
-@Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-
-        System.out.println("My userid is "+ api.getMyUserId());
-    }
+    String userId = api.singleConnect()
+           .thenCompose(v -> api.login("username", "password"))
+           .thenCompose(token -> api.getSubscriptions(this))
+           .thenCompose(s -> api.getMyUserId())
+           .get()
+    
+    System.out.println("My userid is "+ userId);
 ```  
     
 **4. getMyUserName**
 
 ```
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
+    String username = api.singleConnect()
+       .thenCompose(v -> api.login("username", "password"))
+       .thenCompose(token -> api.getSubscriptions(this))
+       .thenCompose(s -> api.getMyUserName())
+       .get()
 
-        System.out.println("My username is "+ api.getMyUserName());
-    }
+    System.out.println("My username is "+ api.getMyUserName());
 ```    
 
 **5. getChatRoomFactory**
@@ -90,17 +75,12 @@ Following methods are provided by RocketChatAPI class
 - Make sure you have implemented _LoginListener_ interface.
 
 ```
-@Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-    }
-
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
-        room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
-    }
-    
+    List<SubscriptionObject> subscriptions = api.singleConnect()
+               .thenCompose(v -> api.login("username", "password"))
+               .thenCompose(token -> api.getSubscriptions())
+               .get();
+    ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+    room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
 ```    
 
 - There are various factory API's available to manipulate rooms, once they are created.
@@ -204,128 +184,92 @@ factory.removeChatRoomByName(room);
 
 **7. getPermissions**
 
-- Make sure you have implemented _GetSubscriptionListener_ interface.
-
 ```
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getSubscriptions(this);
-    }
-    
-    @Override
-    public void onGetPermissions(List<Permission> permissions, ErrorObject error) {
-        System.out.println("Got here list of permissions");
-    }
+    List<Permission> permissions = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.getPermissions())
+                   .get();
+    System.out.println("Got here list of permissions");
 ```
 
 **8. getPublicSettings**
 
-- Make sure you have implemented _AccountListener.getPublicSettingsListener_ interface.
-
 ```
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getPublicSettings(this);
-    }
-    
-    @Override
-    public void onGetPublicSettings(List<PublicSetting> settings, ErrorObject error) {
-        super.onGetPublicSettings(settings, error);
-    }
-    
+    List<PublicSetting> settings = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.getPublicSettings())
+                   .get();
 ```
 
 **9. getUserRoles**
 
-- Make sure you have implemented _UserListener.getUserRoleListener_ interface.
-
 ```
-    @Override
-    public void onLogin(TokenObject token, ErrorObject error) {
-        api.getUserRoles(this);
-    }
-    
-    @Override
-    public void onUserRoles(List<UserObject> users, ErrorObject error) {
-        
-    }
-    
+    List<UserObject> users = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.getUserRoles())
+                   .get();
 ```
 
 
 **10. listCustomEmoji**
 
-- Make sure you have implemented _EmojiListener_ interface.
-
 ```
-    @Override
-    public void onListCustomEmoji(List<Emoji> emojis, ErrorObject error) {
-
-    }
-    
+    List<Emoji> emojis = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.listCustomEmoji())
+                   .get();
 ```
 
 **11. getSubscriptions**
 
-- Make sure you have implemented _GetSubscriptionListener_ interface.
-
 ```
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-    
-    }
-    
+    List<SubscriptionObject> subscriptions = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.getSubscriptions())
+                   .get();
 ```
 
 **12. getRooms**
 
-- Make sure you have implemented _RoomListener.GetRoomListener_ interface.
-
 ```
-    @Override
-    public void onGetRooms(List<RoomObject> rooms, ErrorObject error) {
-
-    }
+    List<RoomObject> rooms = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.getRooms())
+                   .get();
 ```
 
 **13. createPublicGroup**
 
-- Do not implement interface, try to create callback corresponding to method directly. 
-
 ```
-   // Params : Group name, array of usernames to join directly, read only or now , listener 
-   api.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
-            public void onCreateGroup(String roomId, ErrorObject error) {
-                System.out.println("Created public Group with roomId "+ roomId);
-            }
-    });
+    String roomId = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                    // Params : Group name, array of usernames to join directly, read only or now 
+                   .thenCompose(token -> api.createPublicGroup("MyPublicGroup", null, false))
+                   .get();
+    System.out.println("Created public Group with roomId " + roomId);
 ```
 
 **14. createPrivateGroup**
 
-- Do not implement interface, try to create callback corresponding to method directly. 
-
 ```
-   // Params : Group name, array of usernames to join directly, listener 
-        api.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
-            public void onCreateGroup(String roomId, ErrorObject error) {
-                
-            }
-        });
+    String roomId = api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                    // Params : Group name, array of usernames to join directly
+                   .thenCompose(token -> api.createPrivateGroup("MyPrivateGroup", null))
+                   .get();
 ```
 
 **15. joinPublicGroup**
 
-- Create SimpleListener Callback directly.
-
 ```
-        api.joinPublicGroup("roomId", null, new SimpleListener() {
-            public void callback(Boolean success, ErrorObject error) {
-                if (success) {
-                    System.out.println("room joined successfully");
-                }
-            }
-        });
+    api.singleConnect()
+                   .thenCompose(v -> api.login("username", "password"))
+                   .thenCompose(token -> api.joinPublicGroup("roomId", null))
+                   .thenAccept(success -> {
+                       if (success) {
+                           System.out.println("room joined successfully");
+                       }
+                   });
 
 ```
 
@@ -375,10 +319,7 @@ factory.removeChatRoomByName(room);
 - Used for logging out from the server.
 
 ```
-        api.logout(new SimpleListener() {
-            public void callback(Boolean success, ErrorObject error) {
-                System.out.println("Logged out from the server");
-            }
+        api.logout().thenAccept(success -> {
+            System.out.println("Logged out from the server");
         });
-
 ```

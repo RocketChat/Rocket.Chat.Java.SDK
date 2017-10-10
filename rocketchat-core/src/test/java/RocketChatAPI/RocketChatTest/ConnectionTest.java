@@ -31,7 +31,7 @@ public class ConnectionTest extends RocketChatParent {
 
     @Before
     public void setUp() {
-        super.setUpBefore(false);
+        super.setUpBefore();
     }
 
     @Test

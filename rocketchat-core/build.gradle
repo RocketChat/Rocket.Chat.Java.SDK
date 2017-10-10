@@ -10,8 +10,8 @@ plugins {
 
 allprojects {
     tasks.withType(JavaCompile) {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
     }
 }
 
@@ -20,7 +20,7 @@ version '0.7.1'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.5
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()

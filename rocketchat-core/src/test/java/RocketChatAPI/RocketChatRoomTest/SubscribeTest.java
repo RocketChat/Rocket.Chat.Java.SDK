@@ -1,10 +1,7 @@
 package RocketChatAPI.RocketChatRoomTest;
 
 import RocketChatAPI.RocketChatRoomTest.ChatRoomParent.RoomParent;
-import com.rocketchat.common.data.model.ErrorObject;
 import com.rocketchat.common.listener.SubscribeListener;
-import com.rocketchat.core.model.SubscriptionObject;
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,25 +27,17 @@ public class SubscribeTest extends RoomParent {
     @Captor
     ArgumentCaptor<String> stringSubArgumentCaptor;
 
-    @Override
-    public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        super.onGetSubscriptions(subscriptions, error);
-        if (testName.getMethodName().equals("subscribeRoomMessageEventTest")) {
-            room.subscribeRoomMessageEvent(listener, null);
-        } else if (testName.getMethodName().equals("subsribeRoomTypingEventTest")) {
-            room.subscribeRoomTypingEvent(listener, null);
-        }
-    }
-
-    @Test
-    public void subscribeRoomMessageEventTest() {
+    @Test(timeout = 12000)
+    public void subscribeRoomMessageEventTest() throws Exception {
+        getChatRoom().get().subscribeRoomMessageEvent(listener, null);
         Mockito.verify(listener, timeout(12000).atLeastOnce()).onSubscribe(isSubscribed.capture(), stringSubArgumentCaptor.capture());
         Assert.assertNotNull(isSubscribed.getValue());
         Assert.assertNotNull(stringSubArgumentCaptor.getValue());
     }
 
-    @Test
-    public void subsribeRoomTypingEventTest() {
+    @Test(timeout = 12000)
+    public void subsribeRoomTypingEventTest() throws Exception {
+        getChatRoom().get().subscribeRoomTypingEvent(listener, null);
         Mockito.verify(listener, timeout(12000).atLeastOnce()).onSubscribe(isSubscribed.capture(), stringSubArgumentCaptor.capture());
         Assert.assertNotNull(isSubscribed.getValue());
         Assert.assertNotNull(stringSubArgumentCaptor.getValue());
