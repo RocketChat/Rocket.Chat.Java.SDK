@@ -147,7 +147,12 @@ public /*final*/ class Socket extends WebSocketListener {
     }
 
     private void onTextMessage(String text) {
-        logger.info("Receiving: " + text);
+        try {
+            logger.info("Receiving: " + text);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         JSONObject message = null;
         try {
             message = new JSONObject(text);

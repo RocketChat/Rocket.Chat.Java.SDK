@@ -138,4 +138,30 @@ public class PublicSetting {
     public Integer getLoki() {
         return loki;
     }
+
+    @Override
+    public String toString() {
+        return "PublicSetting{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", ispublic=" + ispublic +
+                ", section='" + section + '\'' +
+                ", enableQuery=" + enableQuery +
+                ", group='" + group + '\'' +
+                ", hidden=" + hidden +
+                ", packageValue=" + packageValue +
+                ", valueSource='" + valueSource + '\'' +
+                ", blocked=" + blocked +
+                ", sorter=" + sorter +
+                ", i18nLabel='" + i18nLabel + '\'' +
+                ", i18nDescription='" + i18nDescription + '\'' +
+                ", timestamp=" + timestamp +
+                ", updatedAt=" + updatedAt +
+                ", createdAt=" + createdAt +
+                ", value=" + value +
+                ", meteorSettingsValue='" + meteorSettingsValue + '\'' +
+                ", metaData=" + metaData +
+                ", loki=" + loki +
+                '}';
+    }
 }

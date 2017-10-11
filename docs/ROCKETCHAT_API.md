@@ -20,10 +20,11 @@ Following methods are provided by RocketChatAPI class
 - subscribeUserData (subscribing to the user data, getting user data in more detail, should be called in more detail)
 - logout (Logging out from the server)
 
-**Note (Get rid of callback hell):** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. 
-**No Callback:** Pass null in case callback receive is not important.
+### Important Notes
+**Get rid of callback hell:** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. </br>
+**Receive no Callback:** Pass null in case callback receive is not important.
 
-
+### Methods : RocketChatAPI
 **1. login**
 
 - Make sure you have implemented _LoginListener_ interface.

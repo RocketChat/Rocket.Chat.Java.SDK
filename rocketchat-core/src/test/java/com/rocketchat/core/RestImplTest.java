@@ -74,7 +74,7 @@ public class RestImplTest {
     // start signin tests
     @Test
     public void tesSigninShouldBeSuccessfull() {
-        mockServer.expect().post().withPath("/login")
+        mockServer.expect().post().withPath("/api/v1/login")
                 .andReturn(200, "{\"status\": \"success\",\"data\": {\"authToken\": \"token\",\"userId\": \"userid\"}}").once();
 
         sut.signin("user", "password", loginCallback);
@@ -88,7 +88,7 @@ public class RestImplTest {
 
     @Test
     public void testSigninShouldFailOnInvalidJson() {
-        mockServer.expect().post().withPath("/login")
+        mockServer.expect().post().withPath("/api/v1/login")
                 .andReturn(200, "NOT A JSON").once();
 
         sut.signin("user", "password", loginCallback);
@@ -101,7 +101,7 @@ public class RestImplTest {
 
     @Test
     public void testSiginShouldFailWithAuthExceptionOn401() {
-        mockServer.expect().post().withPath("/login")
+        mockServer.expect().post().withPath("/api/v1/login")
                 .andReturn(401, "{\"status\": \"error\",\"message\": \"Unauthorized\"}").once();
 
         sut.signin("user", "password", loginCallback);

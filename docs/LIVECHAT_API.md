@@ -6,9 +6,12 @@ Following methods are provided by LiveChatAPI class
 - set connect listener (register connection listener for the callback)
 - create room (using userId and authToken)
 
-**Note (Get rid of callback hell):** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. 
-**No Callback:** Pass null in case callback receive is not important.
 
+### Important Notes
+**Get rid of callback hell:** Best way to write down callbacks is to let given Class implement the interface and passing it's instance to the room method as a callback parameter. Same should be followed for other methods. </br>
+**Receive no Callback:** Pass null in case callback receive is not important.
+
+### Methods : LiveChatAPI
 **1. getInitialData**
 
 - Already described in LiveChat overview. 
