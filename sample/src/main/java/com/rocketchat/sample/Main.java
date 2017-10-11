@@ -145,7 +145,7 @@ public class Main {
         }
     };
 
-    public MessageCallback.SubscriptionCallback messageCallback = new MessageCallback.SubscriptionCallback() {
+    public MessageCallback.SubscriptionListener messageCallback = new MessageCallback.SubscriptionListener() {
         public void onMessage(String roomId, Message message) {
             System.out.println("Got message " + message.message());
             switch (message.getMsgType()) {

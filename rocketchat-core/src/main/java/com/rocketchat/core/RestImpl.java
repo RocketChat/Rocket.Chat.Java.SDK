@@ -67,7 +67,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, callback);
+                    processCallbackError(response, callback);
                     return;
                 }
 
