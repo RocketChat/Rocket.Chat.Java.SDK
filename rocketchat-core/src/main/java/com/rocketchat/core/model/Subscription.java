@@ -27,6 +27,8 @@ public abstract class Subscription extends BaseRoom {
 
     @Nullable public abstract Integer unread();
 
+    @Json(name = "f") @Nullable public abstract Boolean favourite();
+
     @Json(name = "_updatedAt") @Nullable public abstract  @Timestamp Long updatedAt();
 
     @Nullable public abstract String desktopNotifications();

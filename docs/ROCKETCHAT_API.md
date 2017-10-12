@@ -33,12 +33,12 @@ Following methods are provided by RocketChatAPI class
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        client.login("username", "password", this);
+        api.login("username", "password", this);
     }
     
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
     }
     
 ```
@@ -50,13 +50,13 @@ Following methods are provided by RocketChatAPI class
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
     }
 
     @Override
     public void onConnect(String sessionID) {
         System.out.println("Connected to server");
-        client.loginUsingToken("token",this);
+        api.loginUsingToken("token",this);
     }
 ```
 
@@ -68,9 +68,9 @@ Following methods are provided by RocketChatAPI class
 ```
 @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
 
-        System.out.println("My userid is "+ client.getMyUserId());
+        System.out.println("My userid is "+ api.getMyUserId());
     }
 ```  
     
@@ -79,9 +79,9 @@ Following methods are provided by RocketChatAPI class
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
 
-        System.out.println("My username is "+ client.getMyUserName());
+        System.out.println("My username is "+ api.getMyUserName());
     }
 ```    
 
@@ -92,12 +92,12 @@ Following methods are provided by RocketChatAPI class
 ```
 @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
     }
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = client.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+        ChatRoomFactory factory = api.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
         room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
     }
     
@@ -158,7 +158,10 @@ factory.removeChatRoomByName(room);
 - Getting user status from id (method returns doc which also contains other information of a given user)
 
 ```
-   UserDocument user = client.getDbManager().getUserCollection().get("userid");
+   api.subscribeUserData(null);
+   api.subscribeActiveUsers(null);
+   //Make sure you are subscribed by using above code
+   UserDocument user = api.getDbManager().getUserCollection().get("userid");
    System.out.println("UserName is " + user.getName());
    System.out.println("User status is "+ user.getStatus());
    System.out.println("User avatar url is "+ user.getAvatarUrl());
@@ -168,7 +171,9 @@ factory.removeChatRoomByName(room);
 - Observe for status change of a particular user by providing his/her user-id
 
 ```
-        client.getDbManager().getUserCollection().register("user_id", new
+        api.subscribeUserData(null);
+        api.subscribeActiveUsers(null);
+        api.getDbManager().getUserCollection().register("user_id", new 
             Collection.Observer<UserDocument>() {
             public void onUpdate(Collection.Type type, UserDocument user) {
                 switch (type) {
@@ -187,10 +192,15 @@ factory.removeChatRoomByName(room);
 
 ```
 
-- Observe all users for status changes.
+- Observe all collections for document changes.
 
 ```
-        client.getDbManager().addObserver(new Observer() {
+        api.subscribeUserData(null);
+        api.subscribeActiveUsers(null);
+        api.subscribeClientVersions(null);
+        api.subscribeLoginConf(null);
+        api.subscribeUserRoles(null);
+        api.getDbManager().addObserver(new Observer() {
             public void update(Observable o, Object arg) {
                 if (arg !=null) {
                     UserDocument document = (UserDocument) arg;
@@ -202,6 +212,49 @@ factory.removeChatRoomByName(room);
 
 ```
 
+- Observe particular collection for change
+1. This is a loginConfiguration collection change.
+
+```
+        api.subscribeLoginConf(null);
+        api.getDbManager().getLoginConfDocumentCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                LoginConfDocument document = (LoginConfDocument) arg;
+                System.out.println("New document name is "+ document.getService());
+                System.out.println("Client Id is " + document.getClientId());
+                System.out.println("App id is " + document.getAppId());
+                System.out.println("Consumer key is " + document.getConsumerKey());
+            }
+        });
+```
+
+2. This is a client version change
+```
+        api.subscribeClientVersions(null);
+        api.getDbManager().getVersionsDocumentCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                ClientVersionsDocument document = (ClientVersionsDocument) arg;
+                System.out.println("id is " + document.getId());
+                System.out.println("version is " + document.getVersion());
+            }
+        });
+```
+
+3. This is change to the user roles
+
+```
+        api.subscribeUserRoles(null);
+        api.getDbManager().getRolesDocumentCollection().addObserver(new Observer() {
+          public void update(Observable o, Object arg) {
+              RocketChatRolesDocument document = (RocketChatRolesDocument) arg;
+              System.out.println("Role name is " + document.getName());
+              System.out.println("Description is " + document.getDescription());
+              System.out.println("Scope is " + document.getScope());
+              System.out.println("Updated at " + document.getUpdatedAt());
+          }
+        });
+```
+
 **7. getPermissions**
 
 - Make sure you have implemented _GetSubscriptionListener_ interface.
@@ -209,7 +262,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getSubscriptions(this);
+        api.getSubscriptions(this);
     }
     
     @Override
@@ -225,7 +278,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getPublicSettings(this);
+        api.getPublicSettings(this);
     }
     
     @Override
@@ -242,7 +295,7 @@ factory.removeChatRoomByName(room);
 ```
     @Override
     public void onLogin(TokenObject token, ErrorObject error) {
-        client.getUserRoles(this);
+        api.getUserRoles(this);
     }
     
     @Override
@@ -294,7 +347,7 @@ factory.removeChatRoomByName(room);
 
 ```
    // Params : Group name, array of usernames to join directly, read only or now , listener 
-   client.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
+   api.createPublicGroup("MyPublicGroup", null, false, new RoomListener.GroupListener() {
             public void onCreateGroup(String roomId, ErrorObject error) {
                 System.out.println("Created public Group with roomId "+ roomId);
             }
@@ -307,7 +360,7 @@ factory.removeChatRoomByName(room);
 
 ```
    // Params : Group name, array of usernames to join directly, listener 
-        client.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
+        api.createPrivateGroup("MyPrivateGroup", null, new RoomListener.GroupListener() {
             public void onCreateGroup(String roomId, ErrorObject error) {
                 
             }
@@ -319,7 +372,7 @@ factory.removeChatRoomByName(room);
 - Create SimpleListener Callback directly.
 
 ```
-        client.joinPublicGroup("roomId", null, new SimpleListener() {
+        api.joinPublicGroup("roomId", null, new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 if (success) {
                     System.out.println("room joined successfully");
@@ -335,7 +388,7 @@ factory.removeChatRoomByName(room);
 
 ```
 //Status can be ONLINE, OFFLINE, BUSY, AWAY
-        client.setStatus(UserObject.Status.ONLINE, new SimpleListener() {
+        api.setStatus(UserObject.Status.ONLINE, new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 if (success) {
                     System.out.println("Status set to online");
@@ -350,7 +403,7 @@ factory.removeChatRoomByName(room);
 - Directly pass subscribeListener interface for success callback.
 
 ```
-        client.subscribeActiveUsers(new SubscribeListener() {
+        api.subscribeActiveUsers(new SubscribeListener() {
             public void onSubscribe(Boolean isSubscribed, String subId) {
                 System.out.println("Subscribed to active users successfully");
             }
@@ -363,11 +416,31 @@ factory.removeChatRoomByName(room);
 - Directly pass subscribeListener interface for success callback.
 
 ```
-        client.subscribeUserData(new SubscribeListener() {
+        api.subscribeUserData(new SubscribeListener() {
             public void onSubscribe(Boolean isSubscribed, String subId) {
                 System.out.println("Subscribed to user data");
             }
         });
+```
+
+19. subscribeUserRoles
+- Used to get different user roles 
+```java
+
+```
+
+20. subscribeLoginConf
+- Used to get different login configurations used for facebook, twitter, github etc
+
+```java
+
+```
+21. subscribeClientVersions
+- Used to get different client versions
+
+```java
+
+
 ```
 
 **19. logout**
@@ -375,7 +448,7 @@ factory.removeChatRoomByName(room);
 - Used for logging out from the server.
 
 ```
-        client.logout(new SimpleListener() {
+        api.logout(new SimpleListener() {
             public void callback(Boolean success, ErrorObject error) {
                 System.out.println("Logged out from the server");
             }

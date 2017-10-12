@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.lightdb.GlobalDbManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -58,7 +58,7 @@ public class RocketChatClient {
     private final Logger logger;
     private final SocketFactory factory;
 
-    private DbManager dbManager;
+    private GlobalDbManager dbManager;
     private TokenProvider tokenProvider;
     private RestImpl restImpl;
     private WebsocketImpl websocketImpl;
@@ -105,7 +105,7 @@ public class RocketChatClient {
 
         tokenProvider = builder.provider;
 
-        dbManager = new DbManager(moshi);
+        dbManager = new GlobalDbManager();
         chatRoomFactory = new ChatRoomFactory(this);
 
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
@@ -132,7 +132,7 @@ public class RocketChatClient {
         return chatRoomFactory;
     }
 
-    public DbManager getDbManager() {
+    public GlobalDbManager getDbManager() {
         return dbManager;
     }
 
@@ -424,7 +424,7 @@ public class RocketChatClient {
         /**
          * Set the API base URL.
          * <p>
-         * The specified endpoint values (such as with {@link GET @GET}) are resolved against this
+         * The specified endpoint values (such as with {@link @GET}) are resolved against this
          * value using {@link HttpUrl#resolve(String)}. The behavior of this matches that of an
          * {@code <a href="">} link on a website resolving on the current URL.
          * <p>

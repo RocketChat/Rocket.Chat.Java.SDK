@@ -1,7 +1,7 @@
-package com.rocketchat.core.uploader;
+    package com.rocketchat.core.uploader;
 
 import com.rocketchat.common.RocketChatException;
-import com.rocketchat.common.utils.MultipartUploader;
+import com.rocketchat.common.utils.UploaderUtility;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
@@ -29,7 +29,7 @@ public class FileUploader {
     String description;
     ChatRoom room;
     String charset = "UTF-8";
-    MultipartUploader multipart;
+    UploaderUtility multipart;
     FileListener fileListener;
     int statusCode;
 
@@ -85,7 +85,7 @@ public class FileUploader {
                 @Override
                 public void run() {
                     try {
-                        multipart = new MultipartUploader(token.getUrl(), charset);
+                        multipart = new UploaderUtility(token.getUrl(), charset);
                         multipart.addObserver(new Observer() {
                             @Override
                             public void update(Observable o, Object arg) {
