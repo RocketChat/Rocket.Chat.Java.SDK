@@ -4,7 +4,7 @@ Great to have you here! Here are a few ways you can help make this project bette
 
 ## Reporting an Issue
 
-[Github Issues](https://github.com/RocketChat/Rocket.Chat.Android/issues) are used to track todos, bugs, feature requests, and more.
+[Github Issues](https://github.com/RocketChat/Rocket.Chat.Java.SDK/issues) are used to track todos, bugs, feature requests, and more.
 
 ## Setting up a development environment
 In case you're interested in playing around with the code or giving something back, here are some instructions on how to set up your project:
