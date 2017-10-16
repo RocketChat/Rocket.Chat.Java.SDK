@@ -4,7 +4,6 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -35,14 +34,11 @@ import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
-
-import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.List;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import org.json.JSONObject;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -58,7 +54,6 @@ public class RocketChatClient {
     private final Logger logger;
     private final SocketFactory factory;
 
-    private GlobalStreamCollectionManager dbManager;
     private TokenProvider tokenProvider;
     private RestImpl restImpl;
     private WebsocketImpl websocketImpl;
@@ -105,11 +100,10 @@ public class RocketChatClient {
 
         tokenProvider = builder.provider;
 
-        dbManager = new GlobalStreamCollectionManager();
         chatRoomFactory = new ChatRoomFactory(this);
 
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
-        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
+        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger, chatRoomFactory);
     }
 
     public WebsocketImpl getWebsocketImpl() {
@@ -132,8 +126,8 @@ public class RocketChatClient {
         return chatRoomFactory;
     }
 
-    public GlobalStreamCollectionManager getDbManager() {
-        return dbManager;
+    public Moshi getMoshi() {
+        return moshi;
     }
 
     public void serverInfo(ServerInfoCallback callback) {
@@ -341,8 +335,33 @@ public class RocketChatClient {
         return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeListener, listener);
     }
 
+
     String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
         return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeListener, listener);
+    }
+
+    public String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeListener subscribeListener) {
+        return websocketImpl.subscribeRoomDeleteEvent(roomId, enable, subscribeListener);
+    }
+
+    public String subscribeRoomFiles(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeRoomFiles(roomId, limit, listener);
+    }
+
+    public String subscribeMentionedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeMentionedMessages(roomId, limit, listener);
+    }
+
+    public String subscribeStarredMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeStarredMessages(roomId, limit, listener);
+    }
+
+    public String subscribePinnedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribePinnedMessages(roomId, limit, listener);
+    }
+
+    public String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeSnipettedMessages(roomId, limit, listener);
     }
 
     void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
@@ -388,6 +407,9 @@ public class RocketChatClient {
     public void removeAllSubscriptions(String roomId) {
         websocketImpl.removeAllSubscriptions(roomId);
     }
+
+
+
 
     public static final class Builder {
         private String websocketUrl;

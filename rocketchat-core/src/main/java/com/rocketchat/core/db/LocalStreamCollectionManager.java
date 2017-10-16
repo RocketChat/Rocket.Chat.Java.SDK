@@ -4,6 +4,7 @@ import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
+import com.rocketchat.core.model.Message;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import org.json.JSONObject;
  * Created by sachin on 16/9/17.
  */
 // TODO: 24/9/17 sort collections in accordance with date
-public class LocalStreamCollectionManager extends Observable {
+public class LocalStreamCollectionManager{
 
     private Moshi moshi;
 
@@ -126,7 +127,7 @@ public class LocalStreamCollectionManager extends Observable {
                 MessageDocument document = null;
                 try {
                     try {
-                        document = getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString());
+                        document = new MessageDocument(getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -164,11 +165,11 @@ public class LocalStreamCollectionManager extends Observable {
         }
     }
 
-    private JsonAdapter<MessageDocument> messageDocumentAdapter;
+    private JsonAdapter<Message> messageDocumentAdapter;
 
-    private JsonAdapter<MessageDocument> getMessageDocumentAdapter() {
+    private JsonAdapter<Message> getMessageDocumentAdapter() {
         if (messageDocumentAdapter == null) {
-            messageDocumentAdapter = moshi.adapter(MessageDocument.class);
+            messageDocumentAdapter = moshi.adapter(Message.class);
         }
         return messageDocumentAdapter;
     }

@@ -19,15 +19,10 @@ import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
+import com.rocketchat.core.db.LocalStreamCollectionManager;
+import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreMiddleware;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
-import com.rocketchat.core.model.Emoji;
-import com.rocketchat.core.model.Message;
-import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.PublicSetting;
-import com.rocketchat.core.model.Room;
-import com.rocketchat.core.model.RoomRole;
-import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.internal.rpc.AccountRPC;
 import com.rocketchat.core.internal.rpc.BasicRPC;
 import com.rocketchat.core.internal.rpc.ChatHistoryRPC;
@@ -37,15 +32,20 @@ import com.rocketchat.core.internal.rpc.MessageRPC;
 import com.rocketchat.core.internal.rpc.PresenceRPC;
 import com.rocketchat.core.internal.rpc.RoomRPC;
 import com.rocketchat.core.internal.rpc.TypingRPC;
+import com.rocketchat.core.model.Emoji;
+import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.Permission;
+import com.rocketchat.core.model.PublicSetting;
+import com.rocketchat.core.model.Room;
+import com.rocketchat.core.model.RoomRole;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
-
-import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import okhttp3.OkHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WebsocketImpl implements SocketListener {
     private final OkHttpClient client;
@@ -58,12 +58,14 @@ public class WebsocketImpl implements SocketListener {
     private final CoreMiddleware coreMiddleware;
     private final CoreStreamMiddleware coreStreamMiddleware;
     private final ConnectivityManager connectivityManager;
+    private GlobalStreamCollectionManager globalStreamCollectionManager;
 
     private AtomicInteger integer;
     private String sessionId;
     private String userId;
+    private ChatRoomFactory chatRoomFactory;
 
-    WebsocketImpl(OkHttpClient client, SocketFactory factory, Moshi moshi, String baseUrl, Logger logger) {
+    WebsocketImpl(OkHttpClient client, SocketFactory factory, Moshi moshi, String baseUrl, Logger logger, ChatRoomFactory chatRoomFactory) {
         this.client = client;
         this.factory = factory;
         this.baseUrl = baseUrl;
@@ -76,6 +78,8 @@ public class WebsocketImpl implements SocketListener {
         coreStreamMiddleware = new CoreStreamMiddleware(moshi);
 
         integer = new AtomicInteger(1);
+        globalStreamCollectionManager = new GlobalStreamCollectionManager(moshi);
+        this.chatRoomFactory = chatRoomFactory;
     }
 
     void connect(ConnectListener connectListener) {
@@ -87,6 +91,10 @@ public class WebsocketImpl implements SocketListener {
         return connectivityManager;
     }
 
+    public GlobalStreamCollectionManager getGlobalStreamCollectionManager() {
+        return globalStreamCollectionManager;
+    }
+
     void disconnect() {
         socket.disconnect();
     }
@@ -94,6 +102,7 @@ public class WebsocketImpl implements SocketListener {
     public Socket getSocket() {
         return socket;
     }
+
 
     public String getMyUserId() {
         return userId;
@@ -247,7 +256,7 @@ public class WebsocketImpl implements SocketListener {
 
     //Tested
     void createPublicGroup(String groupName, String[] users, Boolean readOnly,
-                                  RoomCallback.GroupCreateCallback callback) {
+                           RoomCallback.GroupCreateCallback callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.CREATE_GROUP);
         socket.sendData(RoomRPC.createPublicGroup(uniqueID, groupName, users, readOnly));
@@ -255,7 +264,7 @@ public class WebsocketImpl implements SocketListener {
 
     //Tested
     void createPrivateGroup(String groupName, String[] users,
-                                   RoomCallback.GroupCreateCallback callback) {
+                            RoomCallback.GroupCreateCallback callback) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.CREATE_GROUP);
         socket.sendData(RoomRPC.createPrivateGroup(uniqueID, groupName, users));
@@ -345,6 +354,59 @@ public class WebsocketImpl implements SocketListener {
         socket.sendData(CoreSubRPC.subscribeUserData(uniqueID));
     }
 
+    void subscribeUserRoles(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeUserRoles(uniqueID));
+    }
+
+    void subscribeLoginConf(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeLoginServiceConfiguration(uniqueID));
+    }
+
+    void subscribeClientVersions(SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeClientVersions(uniqueID));
+    }
+
+    String subscribeRoomFiles(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeRoomFiles(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    String subscribeMentionedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeMentionedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    String subscribeStarredMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeStarredMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    String subscribePinnedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribePinnedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
+    String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeSnipettedMessages(uniqueID, roomId, limit));
+        return uniqueID;
+    }
+
     //Tested
     String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionListener listener) {
         String uniqueID = Utils.shortUUID();
@@ -359,6 +421,13 @@ public class WebsocketImpl implements SocketListener {
         coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
         coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
         socket.sendData(CoreSubRPC.subscribeRoomTypingEvent(uniqueID, roomId, enable));
+        return uniqueID;
+    }
+
+    String subscribeRoomDeleteEvent(String roomId, Boolean enable, SubscribeListener subscribeListener) {
+        String uniqueID = Utils.shortUUID();
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        socket.sendData(CoreSubRPC.subscribeRoomMessageDeleteEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
@@ -405,20 +474,74 @@ public class WebsocketImpl implements SocketListener {
         if (userId == null) {
             userId = object.optString("id");
         }
-        // TODO - collections added
-        //dbManager.update(object, RPC.MsgType.ADDED);
+
+        switch (GlobalStreamCollectionManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+//                    System.out.println("Got into room " + room.getRoomData().getRoomName());
+                    room.getLocalStreamCollectionManager().update(object, RPC.MsgType.ADDED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalStreamCollectionManager.update(object, RPC.MsgType.ADDED);
+                break;
+        }
     }
 
     private void processCollectionsChanged(JSONObject object) {
         switch (GlobalStreamCollectionManager.getCollectionType(object)) {
             case OTHER_COLLECTION:
-                coreStreamMiddleware.processListeners(object);
+                switch (LocalStreamCollectionManager.getCollectionType(object)) {
+                    case STREAM_COLLECTION:
+                        coreStreamMiddleware.processListeners(object);
+                        break;
+                    case LOCAL_COLLECTION:
+                        System.out.println("Local collection " + object.toString());
+                        ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                        if (room != null) {
+                            System.out.println("Got into room " + room.getRoomData().name());
+                            room.getLocalStreamCollectionManager().update(object, RPC.MsgType.CHANGED);
+                        } else {
+                            System.out.println("Room not found for subscribed room");
+                        }
+                        break;
+                }
                 break;
             case GLOBAL_COLLECTION:
-                // TODO - Collections changed...
-                //dbManager.update(object, RPC.MsgType.CHANGED);
+                globalStreamCollectionManager.update(object, RPC.MsgType.CHANGED);
                 break;
         }
+    }
+
+    private void processCollectionsRemoved(JSONObject object) {
+        switch (GlobalStreamCollectionManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
+                System.out.println("Local collection " + object.toString());
+                ChatRoom room = chatRoomFactory.getChatRoomById(getRoomIdFromCollection(object));
+                if (room != null) {
+                    System.out.println("Got into room " + room.getRoomData().name());
+                    room.getLocalStreamCollectionManager().update(object, RPC.MsgType.REMOVED);
+                } else {
+                    System.out.println("Room not found for subscribed room");
+                }
+                break;
+            case GLOBAL_COLLECTION:
+                globalStreamCollectionManager.update(object, RPC.MsgType.REMOVED);
+                break;
+        }
+    }
+
+    private String getRoomIdFromCollection(JSONObject object) {
+        String roomId = null;
+        try {
+            roomId = object.getJSONObject("fields").getString("rid");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return roomId;
     }
 
     @Override
@@ -447,8 +570,7 @@ public class WebsocketImpl implements SocketListener {
                 processCollectionsChanged(message);
                 break;
             case REMOVED:
-                // TODO - collection REMOVED...
-                //dbManager.update(message, RPC.MsgType.REMOVED);
+                processCollectionsRemoved(message);
                 break;
             case NOSUB:
                 coreStreamMiddleware.processUnsubscriptionSuccess(message);

@@ -74,7 +74,7 @@ public class WebsocketImplTest {
                 .add(CommonJsonAdapterFactory.create())
                 .build();
 
-        sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger());
+        sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger(), null);
         sut.disablePing();
     }
 
