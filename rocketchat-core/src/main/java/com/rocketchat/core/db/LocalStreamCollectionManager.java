@@ -1,22 +1,29 @@
 package com.rocketchat.core.db;
 
-import com.rocketchat.common.data.lightdb.collection.Collection;
 import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import java.io.IOException;
 import java.util.Observable;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by sachin on 16/9/17.
  */
 // TODO: 24/9/17 sort collections in accordance with date
-public class RoomDbManager extends Observable {
-    private Collection<String, FileDocument> roomFilesCollection;
-    private Collection<String, MessageDocument> mentionedMessagesCollection;
-    private Collection<String, MessageDocument> starredMessagesCollection;
-    private Collection<String, MessageDocument> pinnedMessagesCollection;
-    private Collection<String, MessageDocument> snipetedMessagesCollection;
+public class LocalStreamCollectionManager extends Observable {
+
+    private Moshi moshi;
+
+    StreamCollectionListener <FileDocument> roomFilesCollection;
+    StreamCollectionListener <MessageDocument> mentionedMessagesCollection;
+    StreamCollectionListener <MessageDocument> starredMessagesCollection;
+    StreamCollectionListener <MessageDocument> pinnedMessagesCollection;
+    StreamCollectionListener <MessageDocument> snipetedMessagesCollection;
 
     private static final String COLLECTION_TYPE_FILES = "room_files";
     private static final String COLLECTION_TYPE_MENTIONED_MESSAGES = "rocketchat_mentioned_message";
@@ -24,32 +31,28 @@ public class RoomDbManager extends Observable {
     private static final String COLLECTION_TYPE_PINNED_MESSAGES = "rocketchat_pinned_message";
     private static final String COLLECTION_TYPE_SNIPETED_MESSAGES = "rocketchat_snippeted_message";
 
-    public RoomDbManager() {
-        roomFilesCollection = new Collection<>();
-        mentionedMessagesCollection = new Collection<>();
-        starredMessagesCollection = new Collection<>();
-        pinnedMessagesCollection = new Collection<>();
-        snipetedMessagesCollection = new Collection<>();
+    public LocalStreamCollectionManager(Moshi moshi) {
+        this.moshi = moshi;
     }
 
-    public Collection<String, FileDocument> getRoomFilesCollection() {
-        return roomFilesCollection;
+    public void setRoomFilesCollection(StreamCollectionListener<FileDocument> roomFilesCollection) {
+        this.roomFilesCollection = roomFilesCollection;
     }
 
-    public Collection<String, MessageDocument> getMentionedMessagesCollection() {
-        return mentionedMessagesCollection;
+    public void setMentionedMessagesCollection(StreamCollectionListener<MessageDocument> mentionedMessagesCollection) {
+        this.mentionedMessagesCollection = mentionedMessagesCollection;
     }
 
-    public Collection<String, MessageDocument> getStarredMessagesCollection() {
-        return starredMessagesCollection;
+    public void setStarredMessagesCollection(StreamCollectionListener<MessageDocument> starredMessagesCollection) {
+        this.starredMessagesCollection = starredMessagesCollection;
     }
 
-    public Collection<String, MessageDocument> getPinnedMessagesCollection() {
-        return pinnedMessagesCollection;
+    public void setPinnedMessagesCollection(StreamCollectionListener<MessageDocument> pinnedMessagesCollection) {
+        this.pinnedMessagesCollection = pinnedMessagesCollection;
     }
 
-    public Collection<String, MessageDocument> getSnipetedMessagesCollection() {
-        return snipetedMessagesCollection;
+    public void setSnipetedMessagesCollection(StreamCollectionListener<MessageDocument> snipetedMessagesCollection) {
+        this.snipetedMessagesCollection = snipetedMessagesCollection;
     }
 
     public void update(JSONObject object, RPC.MsgType type) {
@@ -79,22 +82,14 @@ public class RoomDbManager extends Observable {
         switch (type) {
             case ADDED:
                 FileDocument document = new FileDocument(object.optJSONObject("fields"));
-                document .setId(id);
-                roomFilesCollection.add(id, document);
-                setChanged();
-                notifyObservers(document);
+                document.setId(id);
+                roomFilesCollection.onAdded(document);
                 break;
             case CHANGED:
-                roomFilesCollection.get(id).update(object.optJSONObject("fields"));
-                FileDocument fileDocument = roomFilesCollection.get(id);
-                roomFilesCollection.update(id, fileDocument);
-                setChanged();
-                notifyObservers(fileDocument);
+                roomFilesCollection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                roomFilesCollection.remove(id);
-                setChanged();
-                notifyObservers();
+                roomFilesCollection.onRemoved(id);
                 break;
         }
 
@@ -123,28 +118,30 @@ public class RoomDbManager extends Observable {
     }
 
 
-    public void updateMessageCollection(Collection<String, MessageDocument> collection,JSONObject object, RPC.MsgType type ) {
+    public void updateMessageCollection(StreamCollectionListener <MessageDocument> collection,JSONObject object, RPC.MsgType type ) {
         String id = object.optString("id");
 
         switch (type) {
             case ADDED:
-                MessageDocument document = new MessageDocument(object.optJSONObject("fields"));
-                document.setId(id);
-                collection.add(id, document);
-                setChanged();
-                notifyObservers(document);
+                MessageDocument document = null;
+                try {
+                    try {
+                        document = getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                collection.onAdded(document);
+
                 break;
             case CHANGED:
-                collection.get(id).update(object.optJSONObject("fields"));
-                MessageDocument messageDocument = collection.get(id);
-                collection.update(id, messageDocument);
-                setChanged();
-                notifyObservers(messageDocument);
+                collection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                collection.remove(id);
-                setChanged();
-                notifyObservers();
+                collection.onRemoved(id);
                 break;
         }
     }
@@ -165,5 +162,14 @@ public class RoomDbManager extends Observable {
         } else {
             return Type.STREAM_COLLECTION;
         }
+    }
+
+    private JsonAdapter<MessageDocument> messageDocumentAdapter;
+
+    private JsonAdapter<MessageDocument> getMessageDocumentAdapter() {
+        if (messageDocumentAdapter == null) {
+            messageDocumentAdapter = moshi.adapter(MessageDocument.class);
+        }
+        return messageDocumentAdapter;
     }
 }

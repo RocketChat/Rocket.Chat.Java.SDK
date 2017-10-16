@@ -1,7 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.SocketListener;
-import com.rocketchat.common.data.lightdb.GlobalDbManager;
+import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
@@ -410,11 +410,11 @@ public class WebsocketImpl implements SocketListener {
     }
 
     private void processCollectionsChanged(JSONObject object) {
-        switch (GlobalDbManager.getCollectionType(object)) {
-            case STREAM_COLLECTION:
+        switch (GlobalStreamCollectionManager.getCollectionType(object)) {
+            case OTHER_COLLECTION:
                 coreStreamMiddleware.processListeners(object);
                 break;
-            case COLLECTION:
+            case GLOBAL_COLLECTION:
                 // TODO - Collections changed...
                 //dbManager.update(object, RPC.MsgType.CHANGED);
                 break;

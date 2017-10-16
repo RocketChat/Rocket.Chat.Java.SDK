@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.lightdb.GlobalDbManager;
+import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -58,7 +58,7 @@ public class RocketChatClient {
     private final Logger logger;
     private final SocketFactory factory;
 
-    private GlobalDbManager dbManager;
+    private GlobalStreamCollectionManager dbManager;
     private TokenProvider tokenProvider;
     private RestImpl restImpl;
     private WebsocketImpl websocketImpl;
@@ -105,7 +105,7 @@ public class RocketChatClient {
 
         tokenProvider = builder.provider;
 
-        dbManager = new GlobalDbManager();
+        dbManager = new GlobalStreamCollectionManager();
         chatRoomFactory = new ChatRoomFactory(this);
 
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
@@ -132,7 +132,7 @@ public class RocketChatClient {
         return chatRoomFactory;
     }
 
-    public GlobalDbManager getDbManager() {
+    public GlobalStreamCollectionManager getDbManager() {
         return dbManager;
     }
 

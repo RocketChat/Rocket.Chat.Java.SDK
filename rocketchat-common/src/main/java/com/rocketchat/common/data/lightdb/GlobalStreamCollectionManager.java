@@ -1,29 +1,25 @@
 package com.rocketchat.common.data.lightdb;
 
-import com.rocketchat.common.data.lightdb.collection.Collection;
 import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
 import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
 import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
 import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.listener.StreamCollectionListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
-import java.util.Observable;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by sachin on 11/8/17.
  */
-public class GlobalDbManager extends Observable {
+public class GlobalStreamCollectionManager {
 
-    private Collection<String, UserDocument> usersCollection;
-    private Collection<String, LoginConfDocument> loginConfDocumentCollection;
-    private Collection<String, RocketChatRolesDocument> rolesDocumentCollection;
-    private Collection<String, ClientVersionsDocument> versionsDocumentCollection;
-
-    Moshi moshi;
+    StreamCollectionListener<UserDocument> usersCollection;
+    StreamCollectionListener<LoginConfDocument> loginConfDocumentCollection;
+    StreamCollectionListener<RocketChatRolesDocument> rolesDocumentCollection;
+    StreamCollectionListener<ClientVersionsDocument> versionsDocumentCollection;
 
 
     private static final String COLLECTION_TYPE_USERS = "users";
@@ -31,28 +27,27 @@ public class GlobalDbManager extends Observable {
     private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
-    public GlobalDbManager(Moshi moshi) {
-        usersCollection = new Collection<>();
-        loginConfDocumentCollection = new Collection<>();
-        rolesDocumentCollection = new Collection<>();
-        versionsDocumentCollection = new Collection<>();
+    Moshi moshi;
+
+    public GlobalStreamCollectionManager(Moshi moshi) {
         this.moshi = moshi;
     }
 
-    public Collection<String, UserDocument> getUserCollection() {
-        return usersCollection;
+
+    public void setUsersCollection(StreamCollectionListener<UserDocument> usersCollection) {
+        this.usersCollection = usersCollection;
     }
 
-    public Collection<String, LoginConfDocument> getLoginConfDocumentCollection() {
-        return loginConfDocumentCollection;
+    public void setLoginConfDocumentCollection(StreamCollectionListener<LoginConfDocument> loginConfDocumentCollection) {
+        this.loginConfDocumentCollection = loginConfDocumentCollection;
     }
 
-    public Collection<String, RocketChatRolesDocument> getRolesDocumentCollection() {
-        return rolesDocumentCollection;
+    public void setRolesDocumentCollection(StreamCollectionListener<RocketChatRolesDocument> rolesDocumentCollection) {
+        this.rolesDocumentCollection = rolesDocumentCollection;
     }
 
-    public Collection<String, ClientVersionsDocument> getVersionsDocumentCollection() {
-        return versionsDocumentCollection;
+    public void setVersionsDocumentCollection(StreamCollectionListener<ClientVersionsDocument> versionsDocumentCollection) {
+        this.versionsDocumentCollection = versionsDocumentCollection;
     }
 
     public void update(JSONObject object, RPC.MsgType type) {
@@ -68,33 +63,24 @@ public class GlobalDbManager extends Observable {
         }
     }
 
-    private void updateUsers(JSONObject object, RPC.MsgType type){
+    private void updateUsers(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
         switch (type) {
             case ADDED:
                 UserDocument userDocument = null;
                 try {
-                    userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").put("id", id).toString());
+                    userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString());
                 } catch (IOException e) {
                     e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-                usersCollection.add(id, userDocument);
-                setChanged();
-                notifyObservers(userDocument);
+                usersCollection.onAdded(userDocument);
                 break;
             case CHANGED:
-                UserDocument document = usersCollection.get(id).update(object.optJSONObject("fields"));
-                usersCollection.update(id, document);
-                setChanged();
-                notifyObservers(document);
+                usersCollection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                usersCollection.remove(id);
-                setChanged();
-                notifyObservers();
+                usersCollection.onRemoved(id);
                 break;
             case OTHER:
                 break;
@@ -109,21 +95,13 @@ public class GlobalDbManager extends Observable {
         switch (type) {
             case ADDED:
                 RocketChatRolesDocument rolesDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
-                rolesDocumentCollection.add(id, rolesDocument);
-                setChanged();
-                notifyObservers(rolesDocument);
+                rolesDocumentCollection.onAdded(rolesDocument);
                 break;
             case CHANGED:
-                rolesDocumentCollection.get(id).update(object.optJSONObject("fields"));
-                RocketChatRolesDocument document = rolesDocumentCollection.get(id);
-                rolesDocumentCollection.update(id, document);
-                setChanged();
-                notifyObservers(document);
+                rolesDocumentCollection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                rolesDocumentCollection.remove(id);
-                setChanged();
-                notifyObservers();
+                rolesDocumentCollection.onRemoved(id);
                 break;
         }
     }
@@ -134,21 +112,13 @@ public class GlobalDbManager extends Observable {
         switch (type) {
             case ADDED:
                 LoginConfDocument loginConfDocument = new LoginConfDocument(object.optJSONObject("fields"));
-                loginConfDocumentCollection.add(id, loginConfDocument);
-                setChanged();
-                notifyObservers(loginConfDocument);
+                loginConfDocumentCollection.onAdded(loginConfDocument);
                 break;
             case CHANGED:
-                loginConfDocumentCollection.get(id).update(object.optJSONObject("fields"));
-                LoginConfDocument document = loginConfDocumentCollection.get(id);
-                loginConfDocumentCollection.update(id, document);
-                setChanged();
-                notifyObservers(document);
+                loginConfDocumentCollection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                loginConfDocumentCollection.remove(id);
-                setChanged();
-                notifyObservers();
+                loginConfDocumentCollection.onRemoved(id);
                 break;
         }
     }
@@ -159,22 +129,13 @@ public class GlobalDbManager extends Observable {
         switch (type) {
             case ADDED:
                 ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
-                clientVersionsDocument.setId(id);
-                versionsDocumentCollection.add(id, clientVersionsDocument);
-                setChanged();
-                notifyObservers(clientVersionsDocument);
+                versionsDocumentCollection.onAdded(clientVersionsDocument);
                 break;
             case CHANGED:
-                versionsDocumentCollection.get(id).update(object.optJSONObject("fields"));
-                ClientVersionsDocument document = versionsDocumentCollection.get(id);
-                versionsDocumentCollection.update(id, document);
-                setChanged();
-                notifyObservers(document);
+                versionsDocumentCollection.onChanged(object.optJSONObject("fields"));
                 break;
             case REMOVED:
-                versionsDocumentCollection.remove(id);
-                setChanged();
-                notifyObservers();
+                versionsDocumentCollection.onRemoved(id);
                 break;
         }
     }
