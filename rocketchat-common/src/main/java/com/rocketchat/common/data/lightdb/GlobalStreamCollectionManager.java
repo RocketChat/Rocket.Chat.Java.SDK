@@ -9,6 +9,7 @@ import com.rocketchat.common.listener.StreamCollectionListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.json.JSONObject;
 
 /**
@@ -16,14 +17,14 @@ import org.json.JSONObject;
  */
 public class GlobalStreamCollectionManager {
 
-    StreamCollectionListener<UserDocument> usersCollection;
-    StreamCollectionListener<LoginConfDocument> loginConfDocumentCollection;
-    StreamCollectionListener<RocketChatRolesDocument> rolesDocumentCollection;
-    StreamCollectionListener<ClientVersionsDocument> versionsDocumentCollection;
+    private ConcurrentLinkedQueue<StreamCollectionListener<UserDocument>> usersCollectionListener;
+    private ConcurrentLinkedQueue<StreamCollectionListener<LoginConfDocument>> loginConfDocumentCollectionListener;
+    private ConcurrentLinkedQueue<StreamCollectionListener<RocketChatRolesDocument>> rolesDocumentCollectionListener;
+    private ConcurrentLinkedQueue<StreamCollectionListener<ClientVersionsDocument>> versionsDocumentCollectionListener;
 
 
     private static final String COLLECTION_TYPE_USERS = "users";
-    private static final String COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
+    private static final String COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration ";
     private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
@@ -31,23 +32,52 @@ public class GlobalStreamCollectionManager {
 
     public GlobalStreamCollectionManager(Moshi moshi) {
         this.moshi = moshi;
+        usersCollectionListener = new ConcurrentLinkedQueue<>();
+        loginConfDocumentCollectionListener = new ConcurrentLinkedQueue<>();
+        rolesDocumentCollectionListener = new ConcurrentLinkedQueue<>();
+        versionsDocumentCollectionListener = new ConcurrentLinkedQueue<>();
     }
 
 
-    public void setUsersCollection(StreamCollectionListener<UserDocument> usersCollection) {
-        this.usersCollection = usersCollection;
+    public void subscribeUserCollection(StreamCollectionListener<UserDocument> listener) {
+        if (listener != null && !usersCollectionListener.contains(listener)) {
+            usersCollectionListener.add(listener);
+        }
     }
 
-    public void setLoginConfDocumentCollection(StreamCollectionListener<LoginConfDocument> loginConfDocumentCollection) {
-        this.loginConfDocumentCollection = loginConfDocumentCollection;
+    public void subscribeLoginConfCollection(StreamCollectionListener<LoginConfDocument> listener) {
+        if (listener != null && !loginConfDocumentCollectionListener.contains(listener)) {
+            loginConfDocumentCollectionListener.add(listener);
+        }
     }
 
-    public void setRolesDocumentCollection(StreamCollectionListener<RocketChatRolesDocument> rolesDocumentCollection) {
-        this.rolesDocumentCollection = rolesDocumentCollection;
+    public void subscribeRocketChatRolesCollection(StreamCollectionListener<RocketChatRolesDocument> listener) {
+        if (listener != null && !rolesDocumentCollectionListener.contains(listener)) {
+            rolesDocumentCollectionListener.add(listener);
+        }
     }
 
-    public void setVersionsDocumentCollection(StreamCollectionListener<ClientVersionsDocument> versionsDocumentCollection) {
-        this.versionsDocumentCollection = versionsDocumentCollection;
+    public void subscribeClientVersionCollection(StreamCollectionListener<ClientVersionsDocument> listener) {
+        if (listener != null && !versionsDocumentCollectionListener.contains(listener)) {
+            versionsDocumentCollectionListener.add(listener);
+        }
+    }
+
+    public Boolean unsubscribeUserCollection(StreamCollectionListener<UserDocument> listener) {
+        return usersCollectionListener.remove(listener);
+    }
+
+    public Boolean unsubscribeLoginConfCollection(StreamCollectionListener<LoginConfDocument> listener) {
+        return loginConfDocumentCollectionListener.remove(listener);
+    }
+
+
+    public Boolean unsubscribeRocketChatRolesCollection(StreamCollectionListener<RocketChatRolesDocument> listener) {
+        return rolesDocumentCollectionListener.remove(listener);
+    }
+
+    public Boolean unsubscribeClientVersionCollection(StreamCollectionListener<ClientVersionsDocument> listener) {
+        return versionsDocumentCollectionListener.remove(listener);
     }
 
     public void update(JSONObject object, RPC.MsgType type) {
@@ -66,77 +96,83 @@ public class GlobalStreamCollectionManager {
     private void updateUsers(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        switch (type) {
-            case ADDED:
-                UserDocument userDocument = null;
-                try {
-                    userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                usersCollection.onAdded(userDocument);
-                break;
-            case CHANGED:
-                usersCollection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                usersCollection.onRemoved(id);
-                break;
-            case OTHER:
-                break;
-            default:
-                break;
+        for (StreamCollectionListener <UserDocument> userListener : usersCollectionListener) {
+            switch (type) {
+                case ADDED:
+                    UserDocument userDocument = null;
+                    try {
+                        userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    userListener.onAdded(userDocument);
+                    break;
+                case CHANGED:
+                    userListener.onChanged(object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    userListener.onRemoved(id);
+                    break;
+                case OTHER:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     private void updateRoles(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
-
-        switch (type) {
-            case ADDED:
-                RocketChatRolesDocument rolesDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
-                rolesDocumentCollection.onAdded(rolesDocument);
-                break;
-            case CHANGED:
-                rolesDocumentCollection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                rolesDocumentCollection.onRemoved(id);
-                break;
+        for (StreamCollectionListener <RocketChatRolesDocument> rolesListener : rolesDocumentCollectionListener) {
+            switch (type) {
+                case ADDED:
+                    RocketChatRolesDocument rolesDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
+                    rolesListener.onAdded(rolesDocument);
+                    break;
+                case CHANGED:
+                    rolesListener.onChanged(object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    rolesListener.onRemoved(id);
+                    break;
+            }
         }
     }
 
     private void updateLoginConfiguration(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
-
-        switch (type) {
-            case ADDED:
-                LoginConfDocument loginConfDocument = new LoginConfDocument(object.optJSONObject("fields"));
-                loginConfDocumentCollection.onAdded(loginConfDocument);
-                break;
-            case CHANGED:
-                loginConfDocumentCollection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                loginConfDocumentCollection.onRemoved(id);
-                break;
+        for (StreamCollectionListener <LoginConfDocument> loginConfListener : loginConfDocumentCollectionListener) {
+            switch (type) {
+                case ADDED:
+                    LoginConfDocument loginConfDocument = new LoginConfDocument(object.optJSONObject("fields"));
+                    loginConfListener.onAdded(loginConfDocument);
+                    break;
+                case CHANGED:
+                    loginConfListener.onChanged(object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    loginConfListener.onRemoved(id);
+                    break;
+            }
         }
     }
 
     public void updateClientVersions(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        switch (type) {
-            case ADDED:
-                ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
-                versionsDocumentCollection.onAdded(clientVersionsDocument);
-                break;
-            case CHANGED:
-                versionsDocumentCollection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                versionsDocumentCollection.onRemoved(id);
-                break;
+        for (StreamCollectionListener <ClientVersionsDocument> clientVersionListener : versionsDocumentCollectionListener) {
+            switch (type) {
+                case ADDED:
+                    ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
+                    clientVersionListener.onAdded(clientVersionsDocument);
+                    break;
+                case CHANGED:
+                    clientVersionListener.onChanged(object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    clientVersionListener.onRemoved(id);
+                    break;
+            }
         }
     }
 
