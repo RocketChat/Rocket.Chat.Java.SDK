@@ -57,15 +57,16 @@ public class WebsocketImpl implements SocketListener {
 
     private final CoreMiddleware coreMiddleware;
     private final CoreStreamMiddleware coreStreamMiddleware;
-    private final ConnectivityManager connectivityManager;
-    private GlobalStreamCollectionManager globalStreamCollectionManager;
 
     private AtomicInteger integer;
     private String sessionId;
     private String userId;
+
+    private final ConnectivityManager connectivityManager;
+    private GlobalStreamCollectionManager globalStreamCollectionManager;
     private ChatRoomFactory chatRoomFactory;
 
-    WebsocketImpl(OkHttpClient client, SocketFactory factory, Moshi moshi, String baseUrl, Logger logger, ChatRoomFactory chatRoomFactory) {
+    WebsocketImpl(OkHttpClient client, SocketFactory factory, Moshi moshi, String baseUrl, Logger logger, ChatRoomFactory chatRoomFactory, GlobalStreamCollectionManager globalStreamCollectionManager, ConnectivityManager connectivityManager) {
         this.client = client;
         this.factory = factory;
         this.baseUrl = baseUrl;
@@ -73,26 +74,21 @@ public class WebsocketImpl implements SocketListener {
         this.logger = logger;
         this.socket = factory.create(client, baseUrl, logger, this);
 
-        connectivityManager = new ConnectivityManager();
+
+
         coreMiddleware = new CoreMiddleware(moshi);
         coreStreamMiddleware = new CoreStreamMiddleware(moshi);
 
         integer = new AtomicInteger(1);
-        globalStreamCollectionManager = new GlobalStreamCollectionManager(moshi);
+
+        this.connectivityManager = connectivityManager;
+        this.globalStreamCollectionManager = globalStreamCollectionManager;
         this.chatRoomFactory = chatRoomFactory;
     }
 
     void connect(ConnectListener connectListener) {
         connectivityManager.register(connectListener);
         socket.connect();
-    }
-
-    public ConnectivityManager getConnectivityManager() {
-        return connectivityManager;
-    }
-
-    public GlobalStreamCollectionManager getGlobalStreamCollectionManager() {
-        return globalStreamCollectionManager;
     }
 
     void disconnect() {

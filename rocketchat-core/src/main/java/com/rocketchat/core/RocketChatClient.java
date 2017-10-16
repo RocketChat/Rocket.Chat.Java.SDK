@@ -4,12 +4,14 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
+import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
+import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
@@ -61,6 +63,8 @@ public class RocketChatClient {
 
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
+    private GlobalStreamCollectionManager globalStreamCollectionManager;
+    private ConnectivityManager connectivityManager;
 
     private RocketChatClient(final Builder builder) {
         if (builder.baseUrl == null || builder.websocketUrl == null) {
@@ -100,10 +104,12 @@ public class RocketChatClient {
 
         tokenProvider = builder.provider;
 
+        connectivityManager = new ConnectivityManager();
         chatRoomFactory = new ChatRoomFactory(this);
+        globalStreamCollectionManager = new GlobalStreamCollectionManager(moshi);
 
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
-        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger, chatRoomFactory);
+        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger, chatRoomFactory, globalStreamCollectionManager, connectivityManager);
     }
 
     public WebsocketImpl getWebsocketImpl() {
@@ -124,6 +130,15 @@ public class RocketChatClient {
 
     public ChatRoomFactory getChatRoomFactory() {
         return chatRoomFactory;
+    }
+
+    public GlobalStreamCollectionManager getGlobalStreamCollectionManager() {
+        return globalStreamCollectionManager;
+    }
+
+
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
     }
 
     public Moshi getMoshi() {
@@ -407,8 +422,6 @@ public class RocketChatClient {
     public void removeAllSubscriptions(String roomId) {
         websocketImpl.removeAllSubscriptions(roomId);
     }
-
-
 
 
     public static final class Builder {
