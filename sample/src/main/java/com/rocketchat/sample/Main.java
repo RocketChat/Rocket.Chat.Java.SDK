@@ -2,6 +2,7 @@ package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
+import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
 import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.StreamCollectionListener;
@@ -35,20 +36,20 @@ public class Main {
                 .build();
         client.connect(connectListener);
 
-        client.getGlobalStreamCollectionManager().subscribeClientVersionCollection(new StreamCollectionListener<ClientVersionsDocument>() {
+        client.getGlobalStreamCollectionManager().subscribeLoginConfCollection(new StreamCollectionListener<LoginConfDocument>() {
             @Override
-            public void onAdded(String documentKey, ClientVersionsDocument document) {
-                System.out.println("Got document "+ document);
+            public void onAdded(String documentKey, LoginConfDocument document) {
+                System.out.println("Added to collection " + document);
             }
 
             @Override
             public void onChanged(String documentKey, JSONObject values) {
-                System.out.println("Got Json Data " + values);
+                System.out.println("Changed JsonObject " + values);
             }
 
             @Override
             public void onRemoved(String documentKey) {
-                System.out.println("Removed key");
+                System.out.println("Removed key " + documentKey);
             }
         });
 
@@ -58,11 +59,11 @@ public class Main {
         @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
-            client.subscribeClientVersions(new SubscribeListener() {
+            client.subscribeLoginConf(new SubscribeListener() {
                 @Override
                 public void onSubscribe(Boolean isSubscribed, String subId) {
                     if (isSubscribed) {
-                        System.out.println("Subscribed to client versions");
+                        System.out.println("subscribed with id " + subId);
                     }
                 }
             });

@@ -46,4 +46,14 @@ public class LoginConfDocument {
             consumerKey = object.optString("consumerKey");
         }
     }
+
+    @Override
+    public String toString() {
+        return "LoginConfDocument{" +
+                "service='" + service + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", appId='" + appId + '\'' +
+                ", consumerKey='" + consumerKey + '\'' +
+                '}';
+    }
 }

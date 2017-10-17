@@ -25,7 +25,7 @@ public class GlobalStreamCollectionManager {
 
 
     private static final String COLLECTION_TYPE_USERS = "users";
-    private static final String COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration ";
+    private static final String COLLECTION_TYPE_METEOR_ACCOUNTS_LOGIN_CONF = "meteor_accounts_loginServiceConfiguration";
     private static final String COLLECTION_TYPE_ROCKETCHAT_ROLES = "rocketchat_roles";
     private static final String COLLECTION_TYPE_METEOR_CLIENT_VERSIONS = "meteor_autoupdate_clientVersions";
 
