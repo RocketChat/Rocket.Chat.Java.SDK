@@ -32,7 +32,7 @@ public abstract class UserDocument extends BaseUser {
     public abstract Status statusDefault();
 
     @Nullable
-    public abstract Integer utcOffset();
+    public abstract Double utcOffset();
 
     public static JsonAdapter<UserDocument> jsonAdapter(Moshi moshi) {
         return new AutoValue_UserDocument.MoshiJsonAdapter(moshi);
@@ -60,7 +60,7 @@ public abstract class UserDocument extends BaseUser {
 
         public abstract Builder statusDefault(Status status);
 
-        public abstract Builder utcOffset(Integer offset);
+        public abstract Builder utcOffset(Double offset);
 
         public abstract UserDocument build();
     }
@@ -93,11 +93,12 @@ public abstract class UserDocument extends BaseUser {
         if (object.opt("statusConnection") != null) {
             builder.statusConnection(BaseUser.getStatus(object.optString("statusConnection")));
         }
+
         if (object.opt("statusDefault") != null) {
             builder.statusDefault(BaseUser.getStatus(object.optString("statusDefault")));
         }
         if (object.opt("utcOffset") != null) {
-            builder.utcOffset(object.optInt("utcOffset"));
+            builder.utcOffset(object.optDouble("utcOffset"));
         }
 
         return builder.build();

@@ -8,7 +8,6 @@ import com.rocketchat.core.model.Message;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
-import java.util.Observable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,15 +15,15 @@ import org.json.JSONObject;
  * Created by sachin on 16/9/17.
  */
 // TODO: 24/9/17 sort collections in accordance with date
-public class LocalStreamCollectionManager{
+public class LocalStreamCollectionManager {
 
     private Moshi moshi;
 
-    StreamCollectionListener <FileDocument> roomFilesCollection;
-    StreamCollectionListener <MessageDocument> mentionedMessagesCollection;
-    StreamCollectionListener <MessageDocument> starredMessagesCollection;
-    StreamCollectionListener <MessageDocument> pinnedMessagesCollection;
-    StreamCollectionListener <MessageDocument> snipetedMessagesCollection;
+    StreamCollectionListener<FileDocument> roomFilesCollection;
+    StreamCollectionListener<MessageDocument> mentionedMessagesCollection;
+    StreamCollectionListener<MessageDocument> starredMessagesCollection;
+    StreamCollectionListener<MessageDocument> pinnedMessagesCollection;
+    StreamCollectionListener<MessageDocument> snipetedMessagesCollection;
 
     private static final String COLLECTION_TYPE_FILES = "room_files";
     private static final String COLLECTION_TYPE_MENTIONED_MESSAGES = "rocketchat_mentioned_message";
@@ -80,18 +79,20 @@ public class LocalStreamCollectionManager{
     public void updateRoomFiles(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        switch (type) {
-            case ADDED:
-                FileDocument document = new FileDocument(object.optJSONObject("fields"));
-                document.setId(id);
-                roomFilesCollection.onAdded(document);
-                break;
-            case CHANGED:
-                roomFilesCollection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                roomFilesCollection.onRemoved(id);
-                break;
+        if (roomFilesCollection != null) {
+            switch (type) {
+                case ADDED:
+                    FileDocument document = new FileDocument(object.optJSONObject("fields"));
+                    document.setId(id);
+                    roomFilesCollection.onAdded(id, document);
+                    break;
+                case CHANGED:
+                    roomFilesCollection.onChanged(id, object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    roomFilesCollection.onRemoved(id);
+                    break;
+            }
         }
 
         System.out.println("Got into update room files");
@@ -119,31 +120,33 @@ public class LocalStreamCollectionManager{
     }
 
 
-    public void updateMessageCollection(StreamCollectionListener <MessageDocument> collection,JSONObject object, RPC.MsgType type ) {
+    public void updateMessageCollection(StreamCollectionListener<MessageDocument> collectionListener, JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        switch (type) {
-            case ADDED:
-                MessageDocument document = null;
-                try {
+        if (collectionListener != null) {
+            switch (type) {
+                case ADDED:
+                    MessageDocument document = null;
                     try {
-                        document = new MessageDocument(getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString()));
-                    } catch (JSONException e) {
+                        try {
+                            document = new MessageDocument(getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString()));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                collection.onAdded(document);
+                    collectionListener.onAdded(id, document);
 
-                break;
-            case CHANGED:
-                collection.onChanged(object.optJSONObject("fields"));
-                break;
-            case REMOVED:
-                collection.onRemoved(id);
-                break;
+                    break;
+                case CHANGED:
+                    collectionListener.onChanged(id, object.optJSONObject("fields"));
+                    break;
+                case REMOVED:
+                    collectionListener.onRemoved(id);
+                    break;
+            }
         }
     }
 

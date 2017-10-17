@@ -97,21 +97,20 @@ public class GlobalStreamCollectionManager {
     private void updateUsers(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        for (StreamCollectionListener <UserDocument> userListener : usersCollectionListener) {
+        for (StreamCollectionListener<UserDocument> userListener : usersCollectionListener) {
             switch (type) {
                 case ADDED:
                     UserDocument userDocument = null;
                     try {
-                        userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id",id).toString());
+                        userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString()).withId(id);
                     } catch (IOException e) {
                         e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                    userListener.onAdded(userDocument);
+
+                    userListener.onAdded(id,userDocument);
                     break;
                 case CHANGED:
-                    userListener.onChanged(object.optJSONObject("fields"));
+                    userListener.onChanged(id, object.optJSONObject("fields"));
                     break;
                 case REMOVED:
                     userListener.onRemoved(id);
@@ -126,14 +125,14 @@ public class GlobalStreamCollectionManager {
 
     private void updateRoles(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
-        for (StreamCollectionListener <RocketChatRolesDocument> rolesListener : rolesDocumentCollectionListener) {
+        for (StreamCollectionListener<RocketChatRolesDocument> rolesListener : rolesDocumentCollectionListener) {
             switch (type) {
                 case ADDED:
                     RocketChatRolesDocument rolesDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
-                    rolesListener.onAdded(rolesDocument);
+                    rolesListener.onAdded(id, rolesDocument);
                     break;
                 case CHANGED:
-                    rolesListener.onChanged(object.optJSONObject("fields"));
+                    rolesListener.onChanged(id, object.optJSONObject("fields"));
                     break;
                 case REMOVED:
                     rolesListener.onRemoved(id);
@@ -144,14 +143,14 @@ public class GlobalStreamCollectionManager {
 
     private void updateLoginConfiguration(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
-        for (StreamCollectionListener <LoginConfDocument> loginConfListener : loginConfDocumentCollectionListener) {
+        for (StreamCollectionListener<LoginConfDocument> loginConfListener : loginConfDocumentCollectionListener) {
             switch (type) {
                 case ADDED:
                     LoginConfDocument loginConfDocument = new LoginConfDocument(object.optJSONObject("fields"));
-                    loginConfListener.onAdded(loginConfDocument);
+                    loginConfListener.onAdded(id, loginConfDocument);
                     break;
                 case CHANGED:
-                    loginConfListener.onChanged(object.optJSONObject("fields"));
+                    loginConfListener.onChanged(id, object.optJSONObject("fields"));
                     break;
                 case REMOVED:
                     loginConfListener.onRemoved(id);
@@ -163,14 +162,15 @@ public class GlobalStreamCollectionManager {
     public void updateClientVersions(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
-        for (StreamCollectionListener <ClientVersionsDocument> clientVersionListener : versionsDocumentCollectionListener) {
+        for (StreamCollectionListener<ClientVersionsDocument> clientVersionListener : versionsDocumentCollectionListener) {
             switch (type) {
                 case ADDED:
                     ClientVersionsDocument clientVersionsDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
-                    clientVersionListener.onAdded(clientVersionsDocument);
+                    clientVersionsDocument.setId(id);
+                    clientVersionListener.onAdded(id, clientVersionsDocument);
                     break;
                 case CHANGED:
-                    clientVersionListener.onChanged(object.optJSONObject("fields"));
+                    clientVersionListener.onChanged(id, object.optJSONObject("fields"));
                     break;
                 case REMOVED:
                     clientVersionListener.onRemoved(id);

@@ -345,38 +345,49 @@ public class RocketChatClient {
         websocketImpl.subscribeUserData(subscribeListener);
     }
 
+    public void subscribeUserRoles(SubscribeListener subscribeListener) {
+        websocketImpl.subscribeUserRoles(subscribeListener);
+    }
+
+    public void subscribeLoginConf(SubscribeListener subscribeListener) {
+        websocketImpl.subscribeLoginConf(subscribeListener);
+    }
+
+    public void subscribeClientVersions(SubscribeListener subscribeListener) {
+        websocketImpl.subscribeClientVersions(subscribeListener);
+    }
+
+    String subscribeRoomFiles(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeRoomFiles(roomId, limit, listener);
+    }
+
+    String subscribeMentionedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeMentionedMessages(roomId, limit, listener);
+    }
+
+    String subscribeStarredMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeStarredMessages(roomId, limit, listener);
+    }
+
+    String subscribePinnedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribePinnedMessages(roomId, limit, listener);
+    }
+
+    String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener listener) {
+        return websocketImpl.subscribeSnipettedMessages(roomId, limit, listener);
+    }
+
     //Tested
     String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionListener listener) {
         return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeListener, listener);
     }
 
-
     String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
         return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeListener, listener);
     }
 
-    public String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeListener subscribeListener) {
+    String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeListener subscribeListener) {
         return websocketImpl.subscribeRoomDeleteEvent(roomId, enable, subscribeListener);
-    }
-
-    public String subscribeRoomFiles(String roomId, int limit, SubscribeListener listener) {
-        return websocketImpl.subscribeRoomFiles(roomId, limit, listener);
-    }
-
-    public String subscribeMentionedMessages(String roomId, int limit, SubscribeListener listener) {
-        return websocketImpl.subscribeMentionedMessages(roomId, limit, listener);
-    }
-
-    public String subscribeStarredMessages(String roomId, int limit, SubscribeListener listener) {
-        return websocketImpl.subscribeStarredMessages(roomId, limit, listener);
-    }
-
-    public String subscribePinnedMessages(String roomId, int limit, SubscribeListener listener) {
-        return websocketImpl.subscribePinnedMessages(roomId, limit, listener);
-    }
-
-    public String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener listener) {
-        return websocketImpl.subscribeSnipettedMessages(roomId, limit, listener);
     }
 
     void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
@@ -419,7 +430,7 @@ public class RocketChatClient {
         websocketImpl.removeSubscription(roomId, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
     }
 
-    public void removeAllSubscriptions(String roomId) {
+    void removeAllSubscriptions(String roomId) {
         websocketImpl.removeAllSubscriptions(roomId);
     }
 

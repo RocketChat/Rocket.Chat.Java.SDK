@@ -1,9 +1,11 @@
 package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
 import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.StreamCollectionListener;
+import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.RocketChatClient;
@@ -33,28 +35,37 @@ public class Main {
                 .build();
         client.connect(connectListener);
 
-        client.getGlobalStreamCollectionManager().subscribeUserCollection(new StreamCollectionListener<UserDocument>() {
+        client.getGlobalStreamCollectionManager().subscribeClientVersionCollection(new StreamCollectionListener<ClientVersionsDocument>() {
             @Override
-            public void onAdded(UserDocument document) {
-                System.out.println("Added document "+ document);
+            public void onAdded(String documentKey, ClientVersionsDocument document) {
+                System.out.println("Got document "+ document);
             }
 
             @Override
-            public void onChanged(JSONObject value) {
-
+            public void onChanged(String documentKey, JSONObject values) {
+                System.out.println("Got Json Data " + values);
             }
 
             @Override
-            public void onRemoved(String key) {
-
+            public void onRemoved(String documentKey) {
+                System.out.println("Removed key");
             }
         });
+
     }
 
     LoginCallback loginCallback = new LoginCallback() {
         @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
+            client.subscribeClientVersions(new SubscribeListener() {
+                @Override
+                public void onSubscribe(Boolean isSubscribed, String subId) {
+                    if (isSubscribed) {
+                        System.out.println("Subscribed to client versions");
+                    }
+                }
+            });
         }
 
         @Override

@@ -38,4 +38,13 @@ public class ClientVersionsDocument {
             current = object.optBoolean("current");
         }
     }
+
+    @Override
+    public String toString() {
+        return "ClientVersionsDocument{" +
+                "id='" + id + '\'' +
+                ", version='" + version + '\'' +
+                ", current=" + current +
+                '}';
+    }
 }
