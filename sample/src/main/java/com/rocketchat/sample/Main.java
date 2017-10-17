@@ -1,12 +1,15 @@
 package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 7/6/17.
@@ -17,8 +20,6 @@ public class Main {
     private static String serverurl = "wss://demo.rocket.chat/websocket";
     private static String baseUrl = "https://demo.rocket.chat/";
     RocketChatClient client;
-
-    Token token;
 
     public static void main(String[] args) {
         new Main().call();
@@ -31,6 +32,23 @@ public class Main {
                 .logger(logger)
                 .build();
         client.connect(connectListener);
+
+        client.getGlobalStreamCollectionManager().subscribeUserCollection(new StreamCollectionListener<UserDocument>() {
+            @Override
+            public void onAdded(UserDocument document) {
+                System.out.println("Added document "+ document);
+            }
+
+            @Override
+            public void onChanged(JSONObject value) {
+
+            }
+
+            @Override
+            public void onRemoved(String key) {
+
+            }
+        });
     }
 
     LoginCallback loginCallback = new LoginCallback() {

@@ -10,6 +10,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -101,8 +102,10 @@ public class GlobalStreamCollectionManager {
                 case ADDED:
                     UserDocument userDocument = null;
                     try {
-                        userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString());
+                        userDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id",id).toString());
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     userListener.onAdded(userDocument);
