@@ -5,6 +5,7 @@ import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
+import com.rocketchat.common.utils.Sort;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
@@ -57,6 +58,13 @@ public class ChatRoom {
 
     public void getMembers(RoomCallback.GetMembersCallback callback) {
         client.getRoomMembers(room.roomId(), false, callback);
+    }
+
+    public void getFiles(String offset,
+                         String sortBy,
+                         Sort sort,
+                         RoomCallback.GetFilesCallback callback) {
+        client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 
     public void sendIsTyping(Boolean istyping) {
