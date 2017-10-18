@@ -87,7 +87,8 @@ public class RocketChatClient {
         } else {
             this.factory = new SocketFactory() {
                 @Override
-                public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
+                public Socket create(OkHttpClient client, String url, Logger logger,
+                                     SocketListener socketListener) {
                     return new Socket(client, url, logger, socketListener);
                 }
             };
@@ -186,7 +187,7 @@ public class RocketChatClient {
             return;
         }
 
-        loginUsingToken(token.getAuthToken(), loginCallback);
+        loginUsingToken(token.authToken(), loginCallback);
     }
 
     //Tested

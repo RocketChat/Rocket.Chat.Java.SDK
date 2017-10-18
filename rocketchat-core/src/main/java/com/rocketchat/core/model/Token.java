@@ -1,52 +1,29 @@
 package com.rocketchat.core.model;
 
-import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.auto.value.AutoValue;
+import com.rocketchat.common.data.Timestamp;
+import com.squareup.moshi.Json;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
-/**
- * Created by sachin on 18/7/17.
- */
-public class Token {
+import javax.annotation.Nullable;
 
-    private String userId;
-    private String authToken;
-    private Date expiry;
+@AutoValue
+public abstract class Token {
 
-    public Token(String userId, String authToken, Date expiry) {
-        this.userId = userId;
-        this.authToken = authToken;
-        this.expiry = expiry;
+    @Json(name = "id") public abstract String userId();
+    @Json(name = "token") public abstract String authToken();
+    @Json(name = "tokenExpires") @Nullable public abstract @Timestamp Long expiresAt();
+
+    public static Token create(String userId, String authToken) {
+        return create(userId, authToken, null);
     }
 
-    public Token(JSONObject object) throws JSONException {
-        userId = object.getString("id");
-        authToken = object.getString("token");
-        JSONObject expires = object.optJSONObject("tokenExpires");
-        if (expires != null) {
-            long date = expires.optLong("$date");
-            expiry = new Date(date);
-        }
+    public static Token create(String userId, String authToken, Long expiresAt) {
+        return new AutoValue_Token(userId, authToken, expiresAt);
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public Date getExpiry() {
-        return expiry;
-    }
-
-    @Override
-    public String toString() {
-        return "TokenObject{" +
-                "userId='" + userId + '\'' +
-                ", authToken='" + authToken + '\'' +
-                ", expiry=" + expiry +
-                '}';
+    public static JsonAdapter<Token> jsonAdapter(Moshi moshi) {
+        return new AutoValue_Token.MoshiJsonAdapter(moshi);
     }
 }

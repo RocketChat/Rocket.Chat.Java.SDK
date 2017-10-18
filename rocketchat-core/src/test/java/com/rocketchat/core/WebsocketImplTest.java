@@ -4,6 +4,7 @@ import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
+import com.rocketchat.common.data.model.MessageType;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
@@ -81,7 +82,7 @@ public class WebsocketImplTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESPONSE_OK));
+                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESPONSE_OK);
                 return null;
             }
         }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST);
@@ -92,9 +93,9 @@ public class WebsocketImplTest {
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         Token token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
-        assertTrue(token.getAuthToken().contentEquals("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg"));
-        assertTrue(token.getUserId().contentEquals("yG6FQYRsuTWRK8KP6"));
-        assertTrue(token.getExpiry().getTime() == 1511909570220L);
+        assertTrue(token.authToken().contentEquals("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg"));
+        assertTrue(token.userId().contentEquals("yG6FQYRsuTWRK8KP6"));
+        assertTrue(token.expiresAt() == 1511909570220L);
 
         sut.disconnect();
     }
@@ -104,7 +105,7 @@ public class WebsocketImplTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESPONSE_FAIL));
+                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESPONSE_FAIL);
                 return null;
             }
         }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST_FAIL);
@@ -128,7 +129,7 @@ public class WebsocketImplTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESUME_RESPONSE_OK));
+                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESUME_RESPONSE_OK);
                 return null;
             }
         }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST);
@@ -138,9 +139,9 @@ public class WebsocketImplTest {
         verify(loginCallback, never()).onError(any(RocketChatApiException.class));
         Token token = tokenArgumentCaptor.getValue();
         assertTrue(token != null);
-        assertTrue(token.getAuthToken().contentEquals("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD"));
-        assertTrue(token.getUserId().contentEquals("yG6FQYRsuTWRK8KP6"));
-        assertTrue(token.getExpiry().getTime() == 0L);
+        assertTrue(token.authToken().contentEquals("tHKn4H62mdBi_gh5hjjqmu-x4zdZRAYiiluqpdRzQKD"));
+        assertTrue(token.userId().contentEquals("yG6FQYRsuTWRK8KP6"));
+        assertTrue(token.expiresAt() == null);
 
         sut.disconnect();
     }
@@ -154,7 +155,7 @@ public class WebsocketImplTest {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(new JSONObject(TestMessages.LOGIN_RESUME_RESPONSE_FAIL));
+                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESUME_RESPONSE_FAIL);
                 return null;
             }
         }).when(mockedSocket).sendData(TestMessages.LOGIN_RESUME_REQUEST_FAIL);

@@ -92,7 +92,7 @@ class RestImpl {
                     String id = data.getString("userId");
                     String token = data.getString("authToken");
 
-                    loginCallback.onLoginSuccess(new Token(id, token, null));
+                    loginCallback.onLoginSuccess(Token.create(id, token));
                 } catch (JSONException e) {
                     loginCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
@@ -293,8 +293,8 @@ class RestImpl {
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
             Token token = tokenProvider.getToken();
-            builder.addHeader("X-Auth-Token", token.getAuthToken())
-                    .addHeader("X-User-Id", token.getUserId());
+            builder.addHeader("X-Auth-Token", token.authToken())
+                    .addHeader("X-User-Id", token.userId());
         }
 
         return builder;

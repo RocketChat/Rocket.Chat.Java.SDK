@@ -1,19 +1,25 @@
 package com.rocketchat.common.network;
 
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.model.MessageType;
+import com.rocketchat.common.data.model.internal.SocketMessage;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by sachin on 7/6/17.
@@ -31,6 +37,8 @@ public /*final*/ class Socket extends WebSocketListener {
     private long pingInterval;
     private WebSocket ws;
     private State currentState = State.DISCONNECTED;
+    private Moshi moshi;
+    private JsonAdapter<SocketMessage> messageAdapter;
 
     private ReconnectionStrategy strategy;
     private Timer timer;
@@ -49,6 +57,13 @@ public /*final*/ class Socket extends WebSocketListener {
         pingInterval = 2000;
         pingHandler = new TaskHandler();
         timeoutHandler = new TaskHandler();
+
+        // TODO - Add to the Builder
+        Moshi moshi = new Moshi.Builder()
+                .add(CommonJsonAdapterFactory.create())
+                .build();
+        messageAdapter = moshi.adapter(SocketMessage.class);
+
         createSocket();
     }
 
@@ -150,7 +165,7 @@ public /*final*/ class Socket extends WebSocketListener {
             e.printStackTrace();
         }
 
-        JSONObject message = null;
+        /*JSONObject message = null;
         try {
             message = new JSONObject(text);
         } catch (JSONException e) {
@@ -158,15 +173,31 @@ public /*final*/ class Socket extends WebSocketListener {
             return; // ignore non-json messages
         }
 
+        JsonReader reader;
+        try {
+            reader = Json.checkJsonMessage(text);
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
+        SocketMessage message = null;
+        try {
+            message = messageAdapter.fromJson(text);
+        } catch (IOException|NullPointerException e) {
+            // log and ignore parse errors
+            logger.debug("Error parsing message: " + e);
+            return;
+        }
+
         // Valid message - reschedule next ping
         reschedulePing();
 
         // Proccess PING messages or send the message downstream
-        RPC.MsgType messageType = RPC.getMessageType(message.optString("msg"));
-        if (messageType == RPC.MsgType.PING) {
+        if (message.messageType() == MessageType.PING) {
             sendData(RPC.PONG_MESSAGE);
         } else {
-            listener.onMessageReceived(message);
+            listener.onMessageReceived(message.messageType(), message.id(), text);
         }
     }
 
