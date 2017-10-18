@@ -34,6 +34,7 @@ import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
+import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
@@ -134,22 +135,37 @@ public class RocketChatClient {
         return dbManager;
     }
 
-    public void serverInfo(ServerInfoCallback callback) {
-        restImpl.serverInfo(callback);
-    }
-
     public void signin(String username, String password, final LoginCallback loginCallback) {
         restImpl.signin(username, password, loginCallback);
+    }
+
+    public void serverInfo(ServerInfoCallback callback) {
+        restImpl.serverInfo(callback);
     }
 
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
     }
 
+    // TODO
+    public void getRoomMembers() {
+
+    }
+
+    // TODO
+    public void getRoomFavoriteMessages() {
+
+    }
+
+    // TODO
+    public void getRoomPinnedMessages() {
+
+    }
+
     public void getRoomFiles(String roomId,
                              BaseRoom.RoomType roomType,
                              String offset,
-                             String sortBy,
+                             Attachment.SortBy sortBy,
                              Sort sort,
                              final RoomCallback.GetFilesCallback callback) {
         restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
