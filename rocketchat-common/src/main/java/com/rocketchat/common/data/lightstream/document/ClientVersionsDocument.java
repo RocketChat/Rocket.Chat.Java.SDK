@@ -1,4 +1,4 @@
-package com.rocketchat.common.data.lightdb.document;
+package com.rocketchat.common.data.lightstream.document;
 
 import org.json.JSONObject;
 

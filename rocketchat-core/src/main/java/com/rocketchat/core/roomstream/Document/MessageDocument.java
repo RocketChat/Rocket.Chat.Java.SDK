@@ -1,4 +1,4 @@
-package com.rocketchat.core.db.Document;
+package com.rocketchat.core.roomstream.Document;
 
 import com.rocketchat.core.model.Message;
 

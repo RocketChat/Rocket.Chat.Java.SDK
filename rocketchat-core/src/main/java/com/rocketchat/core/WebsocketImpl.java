@@ -1,7 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.SocketListener;
-import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
+import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
@@ -19,7 +19,7 @@ import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
-import com.rocketchat.core.db.LocalStreamCollectionManager;
+import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreMiddleware;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;

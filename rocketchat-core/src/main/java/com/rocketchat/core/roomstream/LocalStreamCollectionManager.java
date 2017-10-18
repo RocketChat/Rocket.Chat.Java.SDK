@@ -1,11 +1,11 @@
-package com.rocketchat.core.db;
+package com.rocketchat.core.roomstream;
 
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.StreamCollectionListener;
-import com.rocketchat.core.db.Document.FileDocument;
-import com.rocketchat.core.db.Document.MessageDocument;
+import com.rocketchat.core.roomstream.Document.FileDocument;
+import com.rocketchat.core.roomstream.Document.MessageDocument;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
 import com.squareup.moshi.JsonAdapter;
@@ -17,7 +17,7 @@ import org.json.JSONObject;
 /**
  * Created by sachin on 16/9/17.
  */
-// TODO: 24/9/17 sort collections in accordance with date
+
 public class LocalStreamCollectionManager {
 
     private static Moshi moshi = new Moshi.Builder()

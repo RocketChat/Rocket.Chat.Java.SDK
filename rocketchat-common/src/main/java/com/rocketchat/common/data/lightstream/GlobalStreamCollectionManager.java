@@ -1,16 +1,15 @@
-package com.rocketchat.common.data.lightdb;
+package com.rocketchat.common.data.lightstream;
 
-import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
-import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
-import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
-import com.rocketchat.common.data.lightdb.document.UserDocument;
+import com.rocketchat.common.data.lightstream.document.ClientVersionsDocument;
+import com.rocketchat.common.data.lightstream.document.LoginConfDocument;
+import com.rocketchat.common.data.lightstream.document.RocketChatRolesDocument;
+import com.rocketchat.common.data.lightstream.document.UserDocument;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

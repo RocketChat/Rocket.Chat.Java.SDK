@@ -1,4 +1,4 @@
-package com.rocketchat.common.data.lightdb.document;
+package com.rocketchat.common.data.lightstream.document;
 
 import com.google.auto.value.AutoValue;
 import com.rocketchat.common.data.model.BaseUser;

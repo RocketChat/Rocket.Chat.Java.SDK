@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.lightdb.GlobalStreamCollectionManager;
+import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;

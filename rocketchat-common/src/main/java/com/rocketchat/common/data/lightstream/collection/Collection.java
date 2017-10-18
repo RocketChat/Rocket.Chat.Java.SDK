@@ -1,4 +1,4 @@
-package com.rocketchat.common.data.lightdb.collection;
+package com.rocketchat.common.data.lightstream.collection;
 
 import java.util.ArrayList;
 import java.util.List;
