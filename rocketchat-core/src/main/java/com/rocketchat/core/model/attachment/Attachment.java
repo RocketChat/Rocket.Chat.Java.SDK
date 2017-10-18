@@ -220,5 +220,19 @@ public class Attachment {
         VIDEO,
         OTHER
     }
+
+    public enum SortBy {
+        UPLOADED_DATE("uploadedAt");
+
+        private String propertyName;
+
+        private SortBy(String propertyName) {
+            this.propertyName =  propertyName;
+        }
+
+        public String getPropertyName() {
+            return propertyName;
+        }
+    }
 }
 
