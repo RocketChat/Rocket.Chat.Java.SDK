@@ -20,6 +20,6 @@ public class RoomCallback {
     }
 
     public interface GetFilesCallback extends Callback {
-        void onGetRoomFiles(Integer total, List<Attachment> files);
+        void onGetRoomFiles(int total, List<Attachment> files);
     }
 }
