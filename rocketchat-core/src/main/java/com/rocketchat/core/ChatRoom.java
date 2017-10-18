@@ -48,7 +48,7 @@ public class ChatRoom {
     public ChatRoom(RocketChatClient api, BaseRoom room) {
         this.client = api;
         this.room = room;
-        this.localStreamCollectionManager = new LocalStreamCollectionManager(api.getMoshi());
+        this.localStreamCollectionManager = new LocalStreamCollectionManager();
     }
 
     public LocalStreamCollectionManager getLocalStreamCollectionManager() {

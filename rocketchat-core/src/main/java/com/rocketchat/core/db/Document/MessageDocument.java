@@ -16,4 +16,9 @@ public class MessageDocument {
     public Message getMessage() {
         return message;
     }
+
+    @Override
+    public String toString() {
+        return message.toString();
+    }
 }

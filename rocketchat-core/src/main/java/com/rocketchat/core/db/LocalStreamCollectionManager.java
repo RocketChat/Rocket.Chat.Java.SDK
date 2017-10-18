@@ -1,9 +1,12 @@
 package com.rocketchat.core.db;
 
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
+import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -17,7 +20,11 @@ import org.json.JSONObject;
 // TODO: 24/9/17 sort collections in accordance with date
 public class LocalStreamCollectionManager {
 
-    private Moshi moshi;
+    private static Moshi moshi = new Moshi.Builder()
+            .add(new TimestampAdapter())
+            .add(JsonAdapterFactory.create())
+            .add(CommonJsonAdapterFactory.create())
+            .build();
 
     StreamCollectionListener<FileDocument> roomFilesCollection;
     StreamCollectionListener<MessageDocument> mentionedMessagesCollection;
@@ -31,8 +38,8 @@ public class LocalStreamCollectionManager {
     private static final String COLLECTION_TYPE_PINNED_MESSAGES = "rocketchat_pinned_message";
     private static final String COLLECTION_TYPE_SNIPETED_MESSAGES = "rocketchat_snippeted_message";
 
-    public LocalStreamCollectionManager(Moshi moshi) {
-        this.moshi = moshi;
+    public LocalStreamCollectionManager() {
+
     }
 
     public void subscribeRoomFilesCollection(StreamCollectionListener<FileDocument> roomFilesCollection) {

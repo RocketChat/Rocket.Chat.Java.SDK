@@ -35,6 +35,9 @@ public abstract class Message extends BaseMessage {
     @Json(name = "starred") @Nullable public abstract List<User> starredBy();
     // TODO: 10/10/17 Implement boolean parseURLS inside message defines =>Whether Rocket.Chat should try and parse the urls or not
     // TODO : Add file which is required for getting attachments
+    // TODO: 19/10/17 pinned boolean that shows if this is a pinned message
+    // TODO: 19/10/17 pinned at : show date when a particular message was pinned
+    // TODO: 19/10/17 pinned by : shows who pinned the message (It is a user)
 
 
     public static JsonAdapter<Message> jsonAdapter(Moshi moshi) {

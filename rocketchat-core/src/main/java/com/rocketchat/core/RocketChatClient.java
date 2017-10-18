@@ -141,9 +141,6 @@ public class RocketChatClient {
         return connectivityManager;
     }
 
-    public Moshi getMoshi() {
-        return moshi;
-    }
 
     public void serverInfo(ServerInfoCallback callback) {
         restImpl.serverInfo(callback);

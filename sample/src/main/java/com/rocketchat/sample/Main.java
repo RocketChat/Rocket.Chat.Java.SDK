@@ -14,6 +14,7 @@ import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.db.Document.FileDocument;
 import com.rocketchat.core.db.Document.MessageDocument;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
@@ -47,6 +48,11 @@ public class Main {
 
     LoginCallback loginCallback = new LoginCallback() {
         @Override
+        public void onError(RocketChatException error) {
+
+        }
+
+        @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
             client.getSubscriptions(new SimpleListCallback<Subscription>() {
@@ -54,31 +60,29 @@ public class Main {
                 public void onSuccess(List<Subscription> list) {
                     client.getChatRoomFactory().createChatRooms(list);
                     ChatRoom chatRoom = client.getChatRoomFactory().getChatRoomByName("general");
-                    chatRoom.subscribeMentionedMessages(20, new SubscribeListener() {
+                    chatRoom.subscribeStarredMessages(20, new SubscribeListener() {
                         @Override
                         public void onSubscribe(Boolean isSubscribed, String subId) {
                             if (isSubscribed) {
-                                System.out.println("Subscribed to mentioned messages");
+                                System.out.println("Subscribed to starred messages");
                             }
                         }
                     }, new StreamCollectionListener<MessageDocument>() {
                         @Override
                         public void onAdded(String documentKey, MessageDocument document) {
-                            System.out.println("Pinned Message document added " + document.getMessage());
+                            System.out.println("Added starred messages " + document);
                         }
 
                         @Override
                         public void onChanged(String documentKey, JSONObject values) {
-                            System.out.println("Pinned message changed " + values);
+                            System.out.println("Value changed " + values);
                         }
 
                         @Override
                         public void onRemoved(String documentKey) {
-                            System.out.println("Removed key " + documentKey);
+                            System.out.println("Value removed " + documentKey);
                         }
                     });
-
-
                 }
 
                 @Override
@@ -88,10 +92,6 @@ public class Main {
             });
         }
 
-        @Override
-        public void onError(RocketChatException error) {
-
-        }
     };
 
     ConnectListener connectListener = new ConnectListener() {
@@ -113,7 +113,7 @@ public class Main {
     private Logger logger = new Logger() {
         @Override
         public void info(String format, Object... args) {
-            System.out.println(String.format(format, args));
+            System.out.println(format + args);
         }
 
         @Override
