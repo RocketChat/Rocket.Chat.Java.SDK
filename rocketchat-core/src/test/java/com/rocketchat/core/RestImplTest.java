@@ -107,9 +107,9 @@ public class RestImplTest {
                 .onLoginSuccess(tokenCaptor.capture());
 
         Token token = tokenCaptor.getValue();
-        assertThat(token.getUserId(), is(equalTo("userid")));
-        assertThat(token.getAuthToken(), is(equalTo("token")));
-        assertThat(token.getExpiry(), is(nullValue()));
+        assertThat(token.userId(), is(equalTo("userid")));
+        assertThat(token.authToken(), is(equalTo("token")));
+        assertThat(token.expiresAt(), is(nullValue()));
     }
 
     @Test

@@ -112,7 +112,7 @@ public class Main {
     private Logger logger = new Logger() {
         @Override
         public void info(String format, Object... args) {
-            System.out.println(format + args);
+            System.out.println(String.format(format, args));
         }
 
         @Override

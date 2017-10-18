@@ -5,11 +5,13 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.data.model.User;
+import com.rocketchat.common.data.model.internal.TypedListResponse;
+import com.rocketchat.common.data.model.internal.TypedResponse;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
+import com.rocketchat.common.utils.Json;
 import com.rocketchat.common.utils.Pair;
-import com.rocketchat.common.utils.Types;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -28,15 +30,17 @@ import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by sachin on 18/7/17.
@@ -60,12 +64,13 @@ public class CoreMiddleware {
     }
 
     @SuppressWarnings("unchecked")
-    public void processCallback(long i, JSONObject object) {
+    public void processCallback(long id, JSONObject object, String message) {
         JSONArray array;
-        if (callbacks.containsKey(i)) {
-            Pair<? extends Callback, CallbackType> callbackPair = callbacks.remove(i);
+        Type type;
+        if (callbacks.containsKey(id)) {
+            Pair<? extends Callback, CallbackType> callbackPair = callbacks.remove(id);
             Callback callback = callbackPair.first;
-            CallbackType type = callbackPair.second;
+            CallbackType callbackType = callbackPair.second;
             Object result = object.opt("result");
 
             /*
@@ -73,31 +78,29 @@ public class CoreMiddleware {
              * RocketChatInvalidResponseException...
              */
             if (result == null) {
-                JSONObject error = object.optJSONObject("error");
-                if (error == null) {
-                    String message = "Missing \"result\" or \"error\" values: " + object.toString();
-                    callback.onError(new RocketChatInvalidResponseException(message));
+                JSONObject errorObject = object.optJSONObject("error");
+                if (errorObject == null) {
+                    String error = "Missing \"result\" or \"error\" values: " + object.toString();
+                    callback.onError(new RocketChatInvalidResponseException(error));
                 } else {
-                    callback.onError(new RocketChatApiException(object.optJSONObject("error")));
+                    callback.onError(new RocketChatApiException(errorObject.optJSONObject("error")));
                 }
                 return;
             }
 
             try {
-                switch (type) {
+                switch (callbackType) {
                     case LOGIN:
                         LoginCallback loginCallback = (LoginCallback) callback;
-                        Token tokenObject = new Token((JSONObject) result);
-                        loginCallback.onLoginSuccess(tokenObject);
+                        type = Types.newParameterizedType(TypedResponse.class, Token.class);
+                        TypedResponse<Token> response = Json.parseJson(moshi, type, message);
+                        loginCallback.onLoginSuccess(response.result());
                         break;
                     case GET_PERMISSIONS:
                         SimpleListCallback<Permission> permissionCallback = (SimpleListCallback<Permission>) callback;
-                        array = (JSONArray) result;
-                        List<Permission> permissions = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            permissions.add(new Permission(array.optJSONObject(j)));
-                        }
-                        permissionCallback.onSuccess(permissions);
+                        type = Types.newParameterizedType(TypedListResponse.class, Permission.class);
+                        TypedListResponse<Permission> permissions = Json.parseJson(moshi, type, message);
+                        permissionCallback.onSuccess(permissions.result());
                         break;
                     case GET_PUBLIC_SETTINGS:
                         SimpleListCallback<PublicSetting> settingsCallback = (SimpleListCallback<PublicSetting>) callback;
@@ -161,8 +164,8 @@ public class CoreMiddleware {
                         break;
                     case SEND_MESSAGE:
                         MessageCallback.MessageAckCallback ackCallback = (MessageCallback.MessageAckCallback) callback;
-                        Message message = getMessageAdapter().fromJson(result.toString());
-                        ackCallback.onMessageAck(message);
+                        Message msg = getMessageAdapter().fromJson(result.toString());
+                        ackCallback.onMessageAck(msg);
                         break;
                     case SEARCH_MESSAGE:
                         SimpleListCallback<Message> searchMessageCallback = (SimpleListCallback<Message>) callback;
@@ -199,7 +202,7 @@ public class CoreMiddleware {
                         ((SimpleCallback) callback).onSuccess();
                         break;
                 }
-            } catch (JsonDataException | JSONException jsonException) {
+            } catch (JsonDataException jsonException) {
                 callback.onError(new RocketChatInvalidResponseException(jsonException.getMessage(), jsonException));
             } catch (IOException e) {
                 callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));

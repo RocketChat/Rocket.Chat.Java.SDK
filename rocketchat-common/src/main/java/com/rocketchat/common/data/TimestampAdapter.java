@@ -16,8 +16,14 @@ public class TimestampAdapter {
         reader.beginObject();
         if (reader.hasNext()) {
             switch (reader.selectName(options)) {
-                case 0:
-                    result = reader.nextLong();
+                case 0: {
+                    if (reader.peek() == JsonReader.Token.NULL) {
+                        result = reader.nextNull();
+                    } else {
+                        result = reader.nextLong();
+                    }
+                }
+
             }
         }
         reader.endObject();
@@ -27,7 +33,7 @@ public class TimestampAdapter {
 
     @ToJson
     public void toTimestampObject(JsonWriter writer, @Timestamp Long value) throws IOException {
-        if (value != null) {
+        if (value != null && value != 0) {
             writer.beginObject().name("$date").value(value).endObject();
         }
     }

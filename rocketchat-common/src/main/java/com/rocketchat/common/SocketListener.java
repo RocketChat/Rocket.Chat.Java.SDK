@@ -1,11 +1,12 @@
 package com.rocketchat.common;
 
-import org.json.JSONObject;
+import com.rocketchat.common.data.model.MessageType;
+import com.rocketchat.common.data.model.internal.SocketMessage;
 
 public interface SocketListener {
     void onConnected();
 
-    void onMessageReceived(JSONObject message);
+    void onMessageReceived(MessageType type, String id, String message);
 
     void onClosing();
 

@@ -27,7 +27,7 @@ public class RxRocketChatClientTest {
     @Mock
     RocketChatClient api;
 
-    Token token = new Token("userId", "token", null);
+    Token token = Token.create("userId", "token");
 
     @Before
     public void setup() {
@@ -49,8 +49,8 @@ public class RxRocketChatClientTest {
         testObserver.assertValue(new Predicate<Token>() {
             @Override
             public boolean test(Token token) throws Exception {
-                return token != null && token.getUserId().contentEquals("userId")
-                        && token.getAuthToken().contentEquals("token");
+                return token != null && token.userId().contentEquals("userId")
+                        && token.authToken().contentEquals("token");
             }
         });
         testObserver.assertComplete();
