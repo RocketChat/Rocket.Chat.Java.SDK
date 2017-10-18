@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -43,12 +44,60 @@ class RestImpl {
     private final HttpUrl baseUrl;
     private final TokenProvider tokenProvider;
     private final Moshi moshi;
+    private final Logger logger;
 
     RestImpl(OkHttpClient client, Moshi moshi, HttpUrl baseUrl, TokenProvider tokenProvider, Logger logger) {
         this.client = client;
         this.moshi = moshi;
         this.baseUrl = baseUrl;
         this.tokenProvider = tokenProvider;
+        this.logger = logger;
+    }
+
+    void signin(String username, String password, final LoginCallback loginCallback) {
+        checkNotNull(username, "username == null");
+        checkNotNull(password, "password == null");
+        checkNotNull(loginCallback, "loginCallback == null");
+
+        RequestBody body = new FormBody.Builder()
+                .add("username", username)
+                .add("password", password)
+                .build();
+
+        HttpUrl url = requestUrl(baseUrl, "login")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                loginCallback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, loginCallback);
+                    return;
+                }
+
+                // TODO parse message and check the response type.
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    JSONObject data = json.getJSONObject("data");
+                    String id = data.getString("userId");
+                    String token = data.getString("authToken");
+
+                    loginCallback.onLoginSuccess(new Token(id, token, null));
+                } catch (JSONException e) {
+                    loginCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     void serverInfo(final ServerInfoCallback callback) {
@@ -80,55 +129,10 @@ class RestImpl {
                 try {
                     JsonAdapter<ServerInfo> adapter = moshi.adapter(ServerInfo.class);
                     ServerInfo info = adapter.fromJson(response.body().string());
+
                     callback.onServerInfo(info);
                 } catch (IOException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
-    }
-
-    void signin(String username, String password, final LoginCallback loginCallback) {
-        checkNotNull(username, "username == null");
-        checkNotNull(password, "password == null");
-        checkNotNull(loginCallback, "loginCallback == null");
-
-        RequestBody body = new FormBody.Builder()
-                .add("username", username)
-                .add("password", password)
-                .build();
-
-        HttpUrl url = requestUrl(baseUrl, "login");
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                loginCallback.onError(new RocketChatNetworkErrorException("network error", e));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, loginCallback);
-                    return;
-                }
-
-                // TODO parse message and check the response type.
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    JSONObject data = json.getJSONObject("data");
-                    String id = data.getString("userId");
-                    String token = data.getString("authToken");
-
-                    loginCallback.onLoginSuccess(new Token(id, token, null));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    loginCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
             }
         });
@@ -141,7 +145,11 @@ class RestImpl {
         RequestBody body = new FormBody.Builder()
                 .add("messageId", messageId)
                 .build();
-        Request request = requestBuilder("chat.pinMessage")
+
+        HttpUrl httpUrl = requestUrl(baseUrl, "chat.pinMessage")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
                 .post(body)
                 .build();
 
@@ -161,6 +169,7 @@ class RestImpl {
                 try {
                     JSONObject json = new JSONObject(response.body().string());
                     System.out.println("RESPONSE: " + json.toString());
+
                     callback.onSuccess();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -169,40 +178,42 @@ class RestImpl {
         });
     }
 
+    // TODO
+    void getRoomMembers() {
+
+    }
+
+    // TODO
+    void getRoomFavoriteMessages() {
+
+    }
+
+    // TODO
+    void getRoomPinnedMessages() {
+
+    }
+
     void getRoomFiles(String roomId,
                       BaseRoom.RoomType roomType,
                       String offset,
-                      String sortBy,
+                      Attachment.SortBy sortBy,
                       Sort sort,
                       final RoomCallback.GetFilesCallback callback) {
-        checkNotNull(offset,"roomId == null");
-        checkNotNull(offset,"roomType == null");
+        checkNotNull(roomId,"roomId == null");
+        checkNotNull(roomType,"roomType == null");
         checkNotNull(offset,"offset == null");
         checkNotNull(sortBy,"sortBy == null");
-        checkNotNull(sort,"sortDirection == null");
+        checkNotNull(sort,"sort == null");
         checkNotNull(callback,"callback == null");
 
-        String path;
-        switch (roomType) {
-            case PUBLIC:
-                path = "channels.files";
-                break;
-            case PRIVATE:
-                path = "groups.files";
-                break;
-            default:
-                path = "dm.files";
-                break;
-        }
-
-        RequestBody body = new FormBody.Builder()
-                .add("roomId", roomId)
-                .add("offset", offset)
-                .add("sort", "{\"" + sortBy + "\":" + sort.getDirection() + "}")
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType) + "files")
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", offset)
+                .addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
                 .build();
 
-        Request request = requestBuilder(path)
-                .post(body)
+        Request request = requestBuilder(httpUrl)
+                .get()
                 .build();
 
         client.newCall(request).enqueue(new okhttp3.Callback() {
@@ -220,47 +231,64 @@ class RestImpl {
 
                 try {
                     JSONObject json = new JSONObject(response.body().string());
-                    System.out.println("RESPONSE: " + json.toString());
+                    logger.debug("getRoomFiles JSON = ", json.toString());
 
                     JSONArray filesJSONArray = json.getJSONArray("files");
                     int length = filesJSONArray.length();
-                    ArrayList<Attachment> attachments = new ArrayList<>();
+                    List<Attachment> attachments = new ArrayList<>(length);
                     for (int i = 0; i < length; ++i) {
                         attachments.add(new Attachment(filesJSONArray.getJSONObject(i)));
                     }
                     callback.onGetRoomFiles(json.optInt("total"), attachments);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
             }
         });
     }
 
-    void getRoomMembers() {
-
-    }
-
-    void getRoomFavoriteMessages() {
-
-    }
-
-    void getRoomPinnedMessages() {
-
+    /**
+     * Returns the correspondent Rest API method name accordingly with the room type.
+     *
+     * @param roomType The type of the room.
+     * @return A Rest API method name accordingly with the room type.
+     * @see #requestUrl(HttpUrl, String)
+     */
+    private String getRestApiMethodNameByRoomType(BaseRoom.RoomType roomType) {
+        switch (roomType) {
+            case PUBLIC:
+                return "channels.";
+            case PRIVATE:
+                return "groups.";
+            default:
+                return "dm.";
+        }
     }
 
     /**
-     * Builds the request url as {baseUrl}/api/v1/{method}
+     * Builds the request URL as {baseUrl}/api/v1/{method}
+     *
+     * @param baseUrl The base URL.
+     * @param method The method name.
+     * @return A HttpUrl pointing to the REST API call.
      */
-    private HttpUrl requestUrl(HttpUrl baseUrl, String method) {
+    private HttpUrl.Builder requestUrl(HttpUrl baseUrl, String method) {
         return baseUrl.newBuilder()
                 .addPathSegment("api")
                 .addPathSegment("v1")
-                .addPathSegment(method).build();
+                .addPathSegment(method);
     }
 
-    private Request.Builder requestBuilder(String path) {
+    /**
+     * Builds the Request.Builder with HttpUrl and header.
+     * Note: The user token and its ID will be added to the header only if present.
+     *
+     * @param httpUrl The HttpUrl.
+     * @return A Request.Builder with HttpUrl and the user token and its ID on the header (only if the tokenProvider is present).
+     */
+    private Request.Builder requestBuilder(HttpUrl httpUrl) {
         Request.Builder builder = new Request.Builder()
-                .url(requestUrl(baseUrl, path));
+                .url(httpUrl);
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
             Token token = tokenProvider.getToken();
