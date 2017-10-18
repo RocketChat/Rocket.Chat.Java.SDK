@@ -4,7 +4,6 @@ import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.Permission;
 import com.rocketchat.core.model.PublicSetting;
-
 import java.util.List;
 
 /**

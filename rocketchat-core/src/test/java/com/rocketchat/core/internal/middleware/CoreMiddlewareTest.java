@@ -12,7 +12,6 @@ import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Token;
 import com.squareup.moshi.Moshi;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;

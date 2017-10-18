@@ -11,7 +11,9 @@ import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.Moshi;
-
+import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,10 +22,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import io.fabric8.mockwebserver.DefaultMockServer;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

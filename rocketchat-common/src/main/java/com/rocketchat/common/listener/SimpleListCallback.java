@@ -1,6 +1,5 @@
 package com.rocketchat.common.listener;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**

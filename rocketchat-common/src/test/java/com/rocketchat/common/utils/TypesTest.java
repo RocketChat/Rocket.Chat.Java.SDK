@@ -15,15 +15,14 @@
  */
 package com.rocketchat.common.utils;
 
-import org.hamcrest.Matchers;
-import org.junit.Test;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import org.hamcrest.Matchers;
+import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

@@ -18,7 +18,6 @@ import com.rocketchat.livechat.model.LiveChatConfigObject;
 import com.rocketchat.livechat.model.LiveChatMessage;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;

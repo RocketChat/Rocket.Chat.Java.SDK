@@ -2,11 +2,11 @@ package com.rocketchat.common.utils;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
-import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.SimpleCallback;
-import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.JsonEncodingException;
-
+import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,17 +16,12 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import io.fabric8.mockwebserver.DefaultMockServer;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;

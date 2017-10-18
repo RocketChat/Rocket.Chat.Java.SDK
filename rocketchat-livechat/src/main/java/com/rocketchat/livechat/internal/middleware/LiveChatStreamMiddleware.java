@@ -8,7 +8,6 @@ import com.rocketchat.livechat.model.AgentObject;
 import com.rocketchat.livechat.model.LiveChatMessage;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;

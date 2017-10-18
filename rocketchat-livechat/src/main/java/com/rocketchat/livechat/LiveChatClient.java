@@ -19,20 +19,18 @@ import com.rocketchat.livechat.callback.LoadHistoryCallback;
 import com.rocketchat.livechat.callback.MessageListener;
 import com.rocketchat.livechat.internal.middleware.LiveChatMiddleware;
 import com.rocketchat.livechat.internal.middleware.LiveChatStreamMiddleware;
-import com.rocketchat.livechat.model.JsonAdapterFactory;
 import com.rocketchat.livechat.internal.rpc.LiveChatBasicRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatHistoryRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatSendMsgRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatSubRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatTypingRPC;
+import com.rocketchat.livechat.model.JsonAdapterFactory;
 import com.squareup.moshi.Moshi;
-
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import okhttp3.OkHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import okhttp3.OkHttpClient;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 

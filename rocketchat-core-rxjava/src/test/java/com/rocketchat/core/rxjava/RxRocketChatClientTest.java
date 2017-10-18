@@ -5,7 +5,8 @@ import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
-
+import io.reactivex.functions.Predicate;
+import io.reactivex.observers.TestObserver;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +14,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import io.reactivex.functions.Predicate;
-import io.reactivex.observers.TestObserver;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.isNull;

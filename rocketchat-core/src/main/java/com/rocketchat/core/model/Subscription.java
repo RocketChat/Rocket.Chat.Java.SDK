@@ -6,7 +6,6 @@ import com.rocketchat.common.data.model.BaseRoom;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import javax.annotation.Nullable;
 
 /**
@@ -15,27 +14,45 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Subscription extends BaseRoom {
 
-    @Json(name = "rid") public abstract String roomId();
+    @Json(name = "rid")
+    public abstract String roomId();
 
-    @Json(name = "ts") @Nullable public abstract  @Timestamp Long timestamp();
+    @Json(name = "ts")
+    @Nullable
+    public abstract @Timestamp
+    Long timestamp();
 
-    @Json(name = "ls") @Nullable public abstract @Timestamp Long lastSeen();
+    @Json(name = "ls")
+    @Nullable
+    public abstract @Timestamp
+    Long lastSeen();
 
-    @Nullable public abstract Boolean open();
+    @Nullable
+    public abstract Boolean open();
 
-    @Nullable public abstract Boolean alert();
+    @Nullable
+    public abstract Boolean alert();
 
-    @Nullable public abstract Integer unread();
+    @Nullable
+    public abstract Integer unread();
 
-    @Json(name = "f") @Nullable public abstract Boolean favourite();
+    @Json(name = "f")
+    @Nullable
+    public abstract Boolean favourite();
 
-    @Json(name = "_updatedAt") @Nullable public abstract  @Timestamp Long updatedAt();
+    @Json(name = "_updatedAt")
+    @Nullable
+    public abstract @Timestamp
+    Long updatedAt();
 
-    @Nullable public abstract String desktopNotifications();
+    @Nullable
+    public abstract String desktopNotifications();
 
-    @Nullable public abstract String mobilePushNotifications();
+    @Nullable
+    public abstract String mobilePushNotifications();
 
-    @Nullable public abstract String emailNotifications();
+    @Nullable
+    public abstract String emailNotifications();
 
 
     // TODO: 10/10/17 subscriptionId = object.getString("_id");

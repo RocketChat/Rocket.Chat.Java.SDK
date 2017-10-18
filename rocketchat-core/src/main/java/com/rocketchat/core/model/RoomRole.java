@@ -1,7 +1,6 @@
 package com.rocketchat.core.model;
 
 import com.rocketchat.common.data.model.User;
-
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;

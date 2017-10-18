@@ -19,7 +19,6 @@ import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
-import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreMiddleware;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
@@ -39,6 +38,7 @@ import com.rocketchat.core.model.PublicSetting;
 import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
 import java.util.Date;
@@ -73,7 +73,6 @@ public class WebsocketImpl implements SocketListener {
         this.moshi = moshi;
         this.logger = logger;
         this.socket = factory.create(client, baseUrl, logger, this);
-
 
 
         coreMiddleware = new CoreMiddleware(moshi);

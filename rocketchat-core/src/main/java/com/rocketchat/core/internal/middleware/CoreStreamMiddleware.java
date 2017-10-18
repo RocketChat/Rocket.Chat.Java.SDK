@@ -8,7 +8,6 @@ import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.model.Message;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;

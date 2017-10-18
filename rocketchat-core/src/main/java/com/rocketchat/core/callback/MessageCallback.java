@@ -3,8 +3,6 @@ package com.rocketchat.core.callback;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.Message;
-
-import java.lang.reflect.Type;
 import java.util.List;
 
 /**

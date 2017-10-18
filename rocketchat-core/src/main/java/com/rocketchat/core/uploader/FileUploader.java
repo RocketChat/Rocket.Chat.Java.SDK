@@ -1,4 +1,4 @@
-    package com.rocketchat.core.uploader;
+package com.rocketchat.core.uploader;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.utils.UploaderUtility;
@@ -9,7 +9,6 @@ import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
-
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;

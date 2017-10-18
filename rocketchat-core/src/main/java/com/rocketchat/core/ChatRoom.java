@@ -11,19 +11,17 @@ import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
-import com.rocketchat.core.roomstream.Document.FileDocument;
-import com.rocketchat.core.roomstream.Document.MessageDocument;
-import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.roomstream.Document.FileDocument;
+import com.rocketchat.core.roomstream.Document.MessageDocument;
+import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.uploader.FileUploader;
-
-import org.json.JSONObject;
-
 import java.util.Date;
+import org.json.JSONObject;
 
 // TODO: 29/7/17 add throw custom exceptions if method call violates permission required to execute given RPC
 public class ChatRoom {
@@ -230,7 +228,7 @@ public class ChatRoom {
         }
     }
 
-    public void subscribePinnedMessages(int limit, SubscribeListener listener,StreamCollectionListener<MessageDocument> pinnedMessagesCollectionListener ) {
+    public void subscribePinnedMessages(int limit, SubscribeListener listener, StreamCollectionListener<MessageDocument> pinnedMessagesCollectionListener) {
         if (pinnedMessagesSubId == null) {
             pinnedMessagesSubId = client.subscribePinnedMessages(room.roomId(), limit, listener);
             localStreamCollectionManager.subscribePinnedMessagesCollection(pinnedMessagesCollectionListener);

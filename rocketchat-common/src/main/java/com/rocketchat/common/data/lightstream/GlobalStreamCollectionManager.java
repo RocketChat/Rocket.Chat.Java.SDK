@@ -106,7 +106,7 @@ public class GlobalStreamCollectionManager {
                         e.printStackTrace();
                     }
 
-                    userListener.onAdded(id,userDocument);
+                    userListener.onAdded(id, userDocument);
                     break;
                 case CHANGED:
                     userListener.onChanged(id, object.optJSONObject("fields"));
