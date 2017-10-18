@@ -18,7 +18,7 @@ public class Attachment {
     protected String title_link;
     protected Boolean title_link_download;
 
-    Attachment(JSONObject object) {
+    public Attachment(JSONObject object) {
         title = object.optString("title");
         type = object.optString("type");
         description = object.optString("description");
