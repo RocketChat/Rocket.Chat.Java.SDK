@@ -5,6 +5,7 @@ import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -16,6 +17,7 @@ import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
+import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -142,6 +144,15 @@ public class RocketChatClient {
 
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
+    }
+
+    public void getRoomFiles(String roomId,
+                             BaseRoom.RoomType roomType,
+                             String offset,
+                             String sortBy,
+                             Sort sort,
+                             final RoomCallback.GetFilesCallback callback) {
+        restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
     }
 
     public void login(LoginCallback loginCallback) {
