@@ -24,6 +24,8 @@ public class Main {
     private static String serverurl = "wss://demo.rocket.chat/websocket";
     private static String baseUrl = "https://demo.rocket.chat/";
     RocketChatClient client;
+    String username = "";
+    String password = "";
 
     public static void main(String[] args) {
         new Main().call();
@@ -91,7 +93,7 @@ public class Main {
     ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
             System.out.println("Connected to server");
-            client.login("sachin.shinde", "sachin123", loginCallback);
+            client.login(username, password, loginCallback);
         }
 
         public void onConnectError(Throwable websocketException) {
