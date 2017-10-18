@@ -16,6 +16,7 @@ import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.uploader.FileUploader;
 
 import org.json.JSONObject;
@@ -61,7 +62,7 @@ public class ChatRoom {
     }
 
     public void getFiles(String offset,
-                         String sortBy,
+                         Attachment.SortBy sortBy,
                          Sort sort,
                          RoomCallback.GetFilesCallback callback) {
         client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
