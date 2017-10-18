@@ -5,21 +5,27 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
+import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.utils.Logger;
+import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.model.Token;
+import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -67,7 +73,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, callback);
+                    processCallbackError(response, callback);
                     return;
                 }
 
@@ -108,7 +114,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, loginCallback);
+                    processCallbackError(response, loginCallback);
                     return;
                 }
 
@@ -148,7 +154,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    procressCallbackError(response, callback);
+                    processCallbackError(response, callback);
                     return;
                 }
 
@@ -161,6 +167,85 @@ class RestImpl {
                 }
             }
         });
+    }
+
+    void getRoomFiles(String roomId,
+                      BaseRoom.RoomType roomType,
+                      String offset,
+                      String sortBy,
+                      Sort sort,
+                      final RoomCallback.GetFilesCallback callback) {
+        checkNotNull(offset,"roomId == null");
+        checkNotNull(offset,"roomType == null");
+        checkNotNull(offset,"offset == null");
+        checkNotNull(sortBy,"sortBy == null");
+        checkNotNull(sort,"sortDirection == null");
+        checkNotNull(callback,"callback == null");
+
+        String path;
+        switch (roomType) {
+            case PUBLIC:
+                path = "channels.files";
+                break;
+            case PRIVATE:
+                path = "groups.files";
+                break;
+            default:
+                path = "dm.files";
+                break;
+        }
+
+        RequestBody body = new FormBody.Builder()
+                .add("roomId", roomId)
+                .add("offset", offset)
+                .add("sort", "{\"" + sortBy + "\":" + sort.getDirection() + "}")
+                .build();
+
+        Request request = requestBuilder(path)
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, callback);
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    System.out.println("RESPONSE: " + json.toString());
+
+                    JSONArray filesJSONArray = json.getJSONArray("files");
+                    int length = filesJSONArray.length();
+                    ArrayList<Attachment> attachments = new ArrayList<>();
+                    for (int i = 0; i < length; ++i) {
+                        attachments.add(new Attachment(filesJSONArray.getJSONObject(i)));
+                    }
+                    callback.onGetRoomFiles(json.optInt("total"), attachments);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    void getRoomMembers() {
+
+    }
+
+    void getRoomFavoriteMessages() {
+
+    }
+
+    void getRoomPinnedMessages() {
+
     }
 
     /**
@@ -186,7 +271,7 @@ class RestImpl {
         return builder;
     }
 
-    private void procressCallbackError(Response response, Callback callback) {
+    private void processCallbackError(Response response, Callback callback) {
         try {
             if (response.code() == 401) {
                 JSONObject json = new JSONObject(response.body().string());
@@ -200,6 +285,5 @@ class RestImpl {
         } catch (IOException | JSONException e) {
             callback.onError(new RocketChatException(e.getMessage(), e));
         }
-
     }
 }
