@@ -96,7 +96,7 @@ public class RocketChatClient {
         }
 
         // TODO - Add to the Builder
-        Moshi moshi = new Moshi.Builder()
+        moshi = new Moshi.Builder()
                 .add(new TimestampAdapter())
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())

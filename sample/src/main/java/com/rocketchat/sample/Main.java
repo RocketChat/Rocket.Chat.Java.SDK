@@ -3,15 +3,21 @@ package com.rocketchat.sample;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.data.lightdb.document.ClientVersionsDocument;
 import com.rocketchat.common.data.lightdb.document.LoginConfDocument;
+import com.rocketchat.common.data.lightdb.document.RocketChatRolesDocument;
 import com.rocketchat.common.data.lightdb.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
+import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.db.Document.MessageDocument;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
+import java.util.List;
 import org.json.JSONObject;
 
 /**
@@ -36,35 +42,48 @@ public class Main {
                 .build();
         client.connect(connectListener);
 
-        client.getGlobalStreamCollectionManager().subscribeLoginConfCollection(new StreamCollectionListener<LoginConfDocument>() {
-            @Override
-            public void onAdded(String documentKey, LoginConfDocument document) {
-                System.out.println("Added to collection " + document);
-            }
-
-            @Override
-            public void onChanged(String documentKey, JSONObject values) {
-                System.out.println("Changed JsonObject " + values);
-            }
-
-            @Override
-            public void onRemoved(String documentKey) {
-                System.out.println("Removed key " + documentKey);
-            }
-        });
-
     }
+
 
     LoginCallback loginCallback = new LoginCallback() {
         @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
-            client.subscribeLoginConf(new SubscribeListener() {
+            client.getSubscriptions(new SimpleListCallback<Subscription>() {
                 @Override
-                public void onSubscribe(Boolean isSubscribed, String subId) {
-                    if (isSubscribed) {
-                        System.out.println("subscribed with id " + subId);
-                    }
+                public void onSuccess(List<Subscription> list) {
+                    client.getChatRoomFactory().createChatRooms(list);
+                    ChatRoom chatRoom = client.getChatRoomFactory().getChatRoomByName("general");
+                    chatRoom.subscribeMentionedMessages(20, new SubscribeListener() {
+                        @Override
+                        public void onSubscribe(Boolean isSubscribed, String subId) {
+                            if (isSubscribed) {
+                                System.out.println("Subscribed to mentioned messages");
+                            }
+                        }
+                    }, new StreamCollectionListener<MessageDocument>() {
+                        @Override
+                        public void onAdded(String documentKey, MessageDocument document) {
+                            System.out.println("Pinned Message document added " + document.getMessage());
+                        }
+
+                        @Override
+                        public void onChanged(String documentKey, JSONObject values) {
+                            System.out.println("Pinned message changed " + values);
+                        }
+
+                        @Override
+                        public void onRemoved(String documentKey) {
+                            System.out.println("Removed key " + documentKey);
+                        }
+                    });
+
+
+                }
+
+                @Override
+                public void onError(RocketChatException error) {
+
                 }
             });
         }

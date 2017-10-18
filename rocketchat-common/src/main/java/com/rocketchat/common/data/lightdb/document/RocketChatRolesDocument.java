@@ -74,4 +74,15 @@ public class RocketChatRolesDocument {
             updatedAt = new Date(object.optJSONObject("_updatedAt").optLong("$date"));
         }
     }
+
+    @Override
+    public String toString() {
+        return "RocketChatRolesDocument{" +
+                "name='" + name + '\'' +
+                ", scope='" + scope + '\'' +
+                ", description='" + description + '\'' +
+                ", _protected=" + _protected +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

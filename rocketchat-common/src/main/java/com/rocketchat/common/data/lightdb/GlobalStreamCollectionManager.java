@@ -159,7 +159,7 @@ public class GlobalStreamCollectionManager {
         }
     }
 
-    public void updateClientVersions(JSONObject object, RPC.MsgType type) {
+    private void updateClientVersions(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
         for (StreamCollectionListener<ClientVersionsDocument> clientVersionListener : versionsDocumentCollectionListener) {

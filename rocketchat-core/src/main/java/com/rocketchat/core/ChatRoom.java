@@ -3,6 +3,7 @@ package com.rocketchat.core;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
+import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.utils.Utils;
@@ -10,6 +11,8 @@ import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
+import com.rocketchat.core.db.Document.FileDocument;
+import com.rocketchat.core.db.Document.MessageDocument;
 import com.rocketchat.core.db.LocalStreamCollectionManager;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.FileDescriptor;
@@ -205,33 +208,39 @@ public class ChatRoom {
 
     // Subscription methods available for flex-tab-container border-component-color on the right side
 
-    public void subscribeRoomFiles(int limit, SubscribeListener listener) {
+    public void subscribeRoomFiles(int limit, SubscribeListener listener, StreamCollectionListener<FileDocument> roomFilesCollectionListener) {
         if (filesSubId == null) {
             filesSubId = client.subscribeRoomFiles(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeRoomFilesCollection(roomFilesCollectionListener);
         }
     }
 
-    public void subscribeMentionedMessages(int limit, SubscribeListener listener) {
+    public void subscribeMentionedMessages(int limit, SubscribeListener listener, StreamCollectionListener<MessageDocument> mentionedMessagesCollectionListener) {
         if (mentionedMessagesSubId == null) {
             mentionedMessagesSubId = client.subscribeMentionedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeMentionedMessagesCollection(mentionedMessagesCollectionListener);
+
         }
     }
 
-    public void subscribeStarredMessages(int limit, SubscribeListener listener) {
+    public void subscribeStarredMessages(int limit, SubscribeListener listener, StreamCollectionListener<MessageDocument> starredMessagesCollectionListener) {
         if (starredMessagesSubId == null) {
             starredMessagesSubId = client.subscribeStarredMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeStarredMessagesCollection(starredMessagesCollectionListener);
         }
     }
 
-    public void subscribePinnedMessages(int limit, SubscribeListener listener) {
+    public void subscribePinnedMessages(int limit, SubscribeListener listener,StreamCollectionListener<MessageDocument> pinnedMessagesCollectionListener ) {
         if (pinnedMessagesSubId == null) {
             pinnedMessagesSubId = client.subscribePinnedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribePinnedMessagesCollection(pinnedMessagesCollectionListener);
         }
     }
 
-    public void subscribeSnipettedMessages(int limit, SubscribeListener listener) {
+    public void subscribeSnipettedMessages(int limit, SubscribeListener listener, StreamCollectionListener<MessageDocument> snipetedMessagesCollectionListener) {
         if (snipetedMessagesSubId == null) {
             snipetedMessagesSubId = client.subscribeSnipettedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeSnipetedMessagesCollection(snipetedMessagesCollectionListener);
         }
     }
 

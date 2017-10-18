@@ -35,23 +35,23 @@ public class LocalStreamCollectionManager {
         this.moshi = moshi;
     }
 
-    public void setRoomFilesCollection(StreamCollectionListener<FileDocument> roomFilesCollection) {
+    public void subscribeRoomFilesCollection(StreamCollectionListener<FileDocument> roomFilesCollection) {
         this.roomFilesCollection = roomFilesCollection;
     }
 
-    public void setMentionedMessagesCollection(StreamCollectionListener<MessageDocument> mentionedMessagesCollection) {
+    public void subscribeMentionedMessagesCollection(StreamCollectionListener<MessageDocument> mentionedMessagesCollection) {
         this.mentionedMessagesCollection = mentionedMessagesCollection;
     }
 
-    public void setStarredMessagesCollection(StreamCollectionListener<MessageDocument> starredMessagesCollection) {
+    public void subscribeStarredMessagesCollection(StreamCollectionListener<MessageDocument> starredMessagesCollection) {
         this.starredMessagesCollection = starredMessagesCollection;
     }
 
-    public void setPinnedMessagesCollection(StreamCollectionListener<MessageDocument> pinnedMessagesCollection) {
+    public void subscribePinnedMessagesCollection(StreamCollectionListener<MessageDocument> pinnedMessagesCollection) {
         this.pinnedMessagesCollection = pinnedMessagesCollection;
     }
 
-    public void setSnipetedMessagesCollection(StreamCollectionListener<MessageDocument> snipetedMessagesCollection) {
+    public void subscribeSnipetedMessagesCollection(StreamCollectionListener<MessageDocument> snipetedMessagesCollection) {
         this.snipetedMessagesCollection = snipetedMessagesCollection;
     }
 
@@ -76,7 +76,7 @@ public class LocalStreamCollectionManager {
         }
     }
 
-    public void updateRoomFiles(JSONObject object, RPC.MsgType type) {
+    private void updateRoomFiles(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
         if (roomFilesCollection != null) {
@@ -98,29 +98,29 @@ public class LocalStreamCollectionManager {
         System.out.println("Got into update room files");
     }
 
-    public void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
+    private void updateMentionedMessages(JSONObject object, RPC.MsgType type) {
         updateMessageCollection(mentionedMessagesCollection, object, type);
         System.out.println("Got into mentioned messages");
     }
 
-    public void updateStarredMessages(JSONObject object, RPC.MsgType type) {
+    private void updateStarredMessages(JSONObject object, RPC.MsgType type) {
         updateMessageCollection(starredMessagesCollection, object, type);
         System.out.println("Got into starred messages");
     }
 
-    public void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
+    private void updatePinnedMessages(JSONObject object, RPC.MsgType type) {
         updateMessageCollection(pinnedMessagesCollection, object, type);
         System.out.println("Got into pinned messages");
     }
 
-    public void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
+    private void updateSnipettedMessages(JSONObject object, RPC.MsgType type) {
         updateMessageCollection(snipetedMessagesCollection, object, type);
 
         System.out.println("Got into snipetted messages");
     }
 
 
-    public void updateMessageCollection(StreamCollectionListener<MessageDocument> collectionListener, JSONObject object, RPC.MsgType type) {
+    private void updateMessageCollection(StreamCollectionListener<MessageDocument> collectionListener, JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
 
         if (collectionListener != null) {
