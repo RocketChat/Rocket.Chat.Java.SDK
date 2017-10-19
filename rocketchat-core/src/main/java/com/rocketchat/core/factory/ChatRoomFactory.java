@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 
 /**
@@ -18,21 +19,21 @@ import java.util.ListIterator;
 // TODO: 29/7/17 might have to make separate arraylist for each type, seems little impossible, better to keep generic
 public class ChatRoomFactory {
 
-    private RocketChatClient api;
-    private ArrayList<ChatRoom> rooms;
+    private RocketChatClient client;
+    private List<ChatRoom> rooms;
 
     public static final String FAVORITE = "f";
     public static final String DIRECT = "d";
     public static final String PUBLIC = "c";
     public static final String PRIVATE = "p";
 
-    public ChatRoomFactory(RocketChatClient api) {
-        this.api = api;
+    public ChatRoomFactory(RocketChatClient client) {
+        this.client = client;
         rooms = new ArrayList<>();
     }
 
     private ChatRoom createChatRoom(BaseRoom room) {
-        return new ChatRoom(api, room);
+        return new ChatRoom(client, room);
     }
 
     public ChatRoomFactory createChatRooms(List<? extends BaseRoom> roomObjects) {
@@ -51,13 +52,13 @@ public class ChatRoomFactory {
         return this;
     }
 
-    public ArrayList<ChatRoom> getChatRooms() {
+    public List<ChatRoom> getChatRooms() {
         return rooms;
     }
 
 
-    public ArrayList<ChatRoom> getPrivateGroups() {
-        ArrayList<ChatRoom> groups = new ArrayList<>();
+    public List<ChatRoom> getPrivateGroups() {
+        List<ChatRoom> groups = new ArrayList<>();
         for (ChatRoom room : rooms) {
             if (room.getRoomData().type() == BaseRoom.RoomType.PRIVATE) {
                 groups.add(room);
@@ -66,8 +67,8 @@ public class ChatRoomFactory {
         return groups;
     }
 
-    public ArrayList<ChatRoom> getPublicGroups() {
-        ArrayList<ChatRoom> groups = new ArrayList<>();
+    public List<ChatRoom> getPublicGroups() {
+        List<ChatRoom> groups = new ArrayList<>();
         for (ChatRoom room : rooms) {
             if (room.getRoomData().type() == BaseRoom.RoomType.PUBLIC) {
                 groups.add(room);
@@ -76,8 +77,8 @@ public class ChatRoomFactory {
         return groups;
     }
 
-    public ArrayList<ChatRoom> getDirectRooms() {
-        ArrayList<ChatRoom> directRooms = new ArrayList<>();
+    public List<ChatRoom> getDirectRooms() {
+        List<ChatRoom> directRooms = new ArrayList<>();
         for (ChatRoom room : rooms) {
             if (room.getRoomData().type() == BaseRoom.RoomType.ONE_TO_ONE) {
                 directRooms.add(room);
@@ -86,8 +87,8 @@ public class ChatRoomFactory {
         return directRooms;
     }
 
-    public ArrayList<ChatRoom> getFavoriteRooms() {
-        ArrayList<ChatRoom> favorites = new ArrayList<>();
+    public List<ChatRoom> getFavoriteRooms() {
+        List<ChatRoom> favorites = new ArrayList<>();
         for (ChatRoom room : rooms) {
             BaseRoom roomObject = room.getRoomData();
             if (roomObject instanceof Subscription) {
@@ -99,7 +100,7 @@ public class ChatRoomFactory {
         return favorites;
     }
 
-    private ArrayList<ChatRoom> removeFavorite(ArrayList<ChatRoom> rooms) {
+    private List<ChatRoom> removeFavorite(List<ChatRoom> rooms) {
 
         ListIterator<ChatRoom> roomListIterator = rooms.listIterator();
         while (roomListIterator.hasNext()) {
@@ -124,8 +125,8 @@ public class ChatRoomFactory {
      * 4. ChatRoomFactory.PRIVATE
      */
 
-    public HashMap<String, ArrayList<ChatRoom>> getSortedRooms() {
-        HashMap<String, ArrayList<ChatRoom>> rooms = new HashMap<>();
+    public Map<String, List<ChatRoom>> getSortedRooms() {
+        Map<String, List<ChatRoom>> rooms = new HashMap<>();
         rooms.put(FAVORITE, getFavoriteRooms());
         rooms.put(DIRECT, removeFavorite(getDirectRooms()));
         rooms.put(PUBLIC, removeFavorite(getPublicGroups()));

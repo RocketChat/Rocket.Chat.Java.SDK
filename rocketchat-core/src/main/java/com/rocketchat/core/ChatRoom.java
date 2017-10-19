@@ -172,7 +172,7 @@ public class ChatRoom {
     //Subscription methods
 
     public void subscribeRoomMessageEvent(SubscribeListener subscribeListener,
-                                          MessageCallback.SubscriptionListener callback) {
+                                          MessageCallback.MessageListener callback) {
         if (roomSubId == null) {
             roomSubId = client.subscribeRoomMessageEvent(room.roomId(),
                     true, subscribeListener, callback);

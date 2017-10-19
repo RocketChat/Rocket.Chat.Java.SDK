@@ -403,7 +403,7 @@ public class WebsocketImpl implements SocketListener {
     }
 
     //Tested
-    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionListener listener) {
+    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.MessageListener listener) {
         String uniqueID = Utils.shortUUID();
         coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
         coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);

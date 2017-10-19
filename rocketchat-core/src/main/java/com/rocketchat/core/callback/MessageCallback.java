@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public class MessageCallback {
-    public interface SubscriptionListener extends Listener {
+    public interface MessageListener extends Listener {
         void onMessage(String roomId, Message message);
     }
 
