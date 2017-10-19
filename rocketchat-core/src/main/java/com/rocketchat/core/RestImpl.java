@@ -231,7 +231,7 @@ class RestImpl {
 
                 try {
                     JSONObject json = new JSONObject(response.body().string());
-                    logger.debug("getRoomFiles JSON = ", json.toString());
+                    logger.info("JSON = " + json.toString());
 
                     JSONArray filesJSONArray = json.getJSONArray("files");
                     int length = filesJSONArray.length();
