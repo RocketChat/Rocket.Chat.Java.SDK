@@ -49,7 +49,7 @@ public class Main {
         client.setPingInterval(15000);
 
 
-        // Example login with REST Api, then use the token for websocket login
+        // Example signin with REST Api, then use the token for websocket login
         client.signin("username", "password", new LoginCallback() {
             @Override
             public void onLoginSuccess(Token token) {
