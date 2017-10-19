@@ -226,7 +226,7 @@ public class Attachment {
 
         private String propertyName;
 
-        private SortBy(String propertyName) {
+        SortBy(String propertyName) {
             this.propertyName =  propertyName;
         }
 
@@ -235,4 +235,3 @@ public class Attachment {
         }
     }
 }
-
