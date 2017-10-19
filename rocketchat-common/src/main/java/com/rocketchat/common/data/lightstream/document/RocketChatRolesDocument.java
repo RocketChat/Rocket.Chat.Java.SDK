@@ -8,14 +8,14 @@ public class RocketChatRolesDocument {
     String name;
     String scope;
     String description;
-    Boolean _protected;
+    Boolean isProtected;
     Date updatedAt;
 
     public RocketChatRolesDocument(JSONObject roles) {
         name = roles.optString("name");
         scope = roles.optString("scope");
         description = roles.optString("description");
-        _protected = roles.optBoolean("protected");
+        isProtected = roles.optBoolean("protected");
         if (roles.opt("_updatedAt") != null) {
             updatedAt = new Date(roles.optJSONObject("_updatedAt").optLong("$date"));
         }
@@ -42,12 +42,12 @@ public class RocketChatRolesDocument {
         this.description = description;
     }
 
-    public Boolean getProtected() {
-        return _protected;
+    public Boolean isProtected() {
+        return isProtected;
     }
 
     public void setProtected(Boolean _protected) {
-        this._protected = _protected;
+        this.isProtected = _protected;
     }
 
     public Date getUpdatedAt() {
@@ -69,7 +69,7 @@ public class RocketChatRolesDocument {
             description = object.optString("description");
         }
         if (object.opt("protected") != null) {
-            _protected = object.optBoolean("protected");
+            isProtected = object.optBoolean("protected");
         }
         if (object.opt("_updatedAt") != null) {
             updatedAt = new Date(object.optJSONObject("_updatedAt").optLong("$date"));
@@ -82,7 +82,7 @@ public class RocketChatRolesDocument {
                 "name='" + name + '\'' +
                 ", scope='" + scope + '\'' +
                 ", description='" + description + '\'' +
-                ", _protected=" + _protected +
+                ", isProtected=" + isProtected +
                 ", updatedAt=" + updatedAt +
                 '}';
     }
