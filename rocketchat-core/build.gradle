@@ -70,9 +70,6 @@ dependencies {
     testCompile 'com.github.luciofm:mockwebserver:852ce0b657'
 
     compile project (':rocketchat-common')
-//    compile 'com.rocketchat.common:rocketchat-common:0.7.2'
-
-//    compile 'com.rocketchat.common:rocketchat-common:0.7.1.3'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     compileOnly "com.google.auto.value:auto-value:1.5"

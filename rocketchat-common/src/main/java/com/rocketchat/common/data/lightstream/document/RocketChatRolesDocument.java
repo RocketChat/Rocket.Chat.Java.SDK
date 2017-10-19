@@ -3,6 +3,7 @@ package com.rocketchat.common.data.lightstream.document;
 import java.util.Date;
 import org.json.JSONObject;
 
+// TODO: 19/10/17 Add autovalue
 public class RocketChatRolesDocument {
     String name;
     String scope;
@@ -41,11 +42,11 @@ public class RocketChatRolesDocument {
         this.description = description;
     }
 
-    public Boolean get_protected() {
+    public Boolean getProtected() {
         return _protected;
     }
 
-    public void set_protected(Boolean _protected) {
+    public void setProtected(Boolean _protected) {
         this._protected = _protected;
     }
 

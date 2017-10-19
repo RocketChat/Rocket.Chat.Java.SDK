@@ -2,6 +2,7 @@ package com.rocketchat.common.data.lightstream.document;
 
 import org.json.JSONObject;
 
+// TODO: 19/10/17 Add autovalue to the class
 public class ClientVersionsDocument {
 
     String id;
