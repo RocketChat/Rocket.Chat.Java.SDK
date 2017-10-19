@@ -35,7 +35,7 @@ public class RestApiRoomList {
         doLogin();
     }
 
-    // Build the RocketChatClient.
+    // Builds the RocketChatClient.
     private void buildClient() {
         rocketChatClient = new RocketChatClient.Builder()
                 .websocketUrl(serverUrl)
@@ -43,11 +43,8 @@ public class RestApiRoomList {
                 .logger(logger)
                 .tokenProvider(tokenProvider)
                 .build();
-
         rocketChatClient.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
         rocketChatClient.setPingInterval(15000);
-
-        chatRoomFactory = rocketChatClient.getChatRoomFactory();
     }
 
     // Example of login with REST API.
@@ -71,13 +68,14 @@ public class RestApiRoomList {
                 logger.info("\n\nSuccess getting the subscriptions!");
                 logger.info("Subscriptions: " + subscriptions + "\n\n");
 
-                room = chatRoomFactory.createChatRooms(subscriptions).getChatRoomByName("general");
+                ChatRoomFactory chatRoomFactory = rocketChatClient.getChatRoomFactory();
+                ChatRoom room = chatRoomFactory.createChatRooms(subscriptions).getChatRoomByName("general");
                 getRoomFilesByRoom(room);
             }
 
             @Override
             public void onError(RocketChatException error) {
-                logger.info("Error on getting the subscriptions", error.getMessage());
+                logger.info("Error on getting the subscriptions. Error: " + error.getMessage());
             }
         });
     }
@@ -88,26 +86,32 @@ public class RestApiRoomList {
             @Override
             public void onGetRoomFiles(int total, List<Attachment> files) {
                 logger.info("\n\nSuccess getting the file list from " + room.getRoomData().name() + " room");
-                logger.info("File list total number: " + total + "\n\n");
+                logger.info("File list total number: " + total);
+                logger.info("Files:\n");
+                for(Attachment attachment: files) {
+                    logger.info("File name: " + attachment.getName());
+                    logger.info("File type: " + attachment.getType());
+                    logger.info("File link: " + attachment.getLink());
+                    logger.info("File upload date (timestamp): " + attachment.getUploadedAt());
+                    logger.info("\n\n");
+                }
             }
 
             @Override
             public void onError(RocketChatException error) {
-
+                logger.info("Error on getting the file list. Error: " + error.getMessage());
             }
         });
     }
 
     // ---------------------------------------------------------------- ATTRIBUTES ----------------------------------------------------------------
     private RocketChatClient rocketChatClient;
-    private ChatRoomFactory chatRoomFactory;
-    private ChatRoom room;
     private Token token;
 
     private Logger logger = new Logger() {
         @Override
         public void info(String format, Object... args) {
-            System.out.println(String.format(format, args));
+            System.out.println(format);
         }
 
         @Override
@@ -124,8 +128,8 @@ public class RestApiRoomList {
     private TokenProvider tokenProvider = new TokenProvider() {
         @Override
         public void saveToken(Token token) {
-            RestApiRoomList.this.token = token;
             logger.info("Saving token...");
+            RestApiRoomList.this.token = token;
             logger.info("Token saved! Token: " + token.getAuthToken() + "\n\n");
         }
 
