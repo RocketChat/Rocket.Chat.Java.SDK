@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.data.lightstream.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.StreamCollectionListener;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
@@ -64,7 +64,7 @@ public class Main {
         @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
-            client.subscribeActiveUsers(new SubscribeListener() {
+            client.subscribeActiveUsers(new SubscribeCallback() {
                 @Override
                 public void onSubscribe(Boolean isSubscribed, String subId) {
                     if (isSubscribed) {

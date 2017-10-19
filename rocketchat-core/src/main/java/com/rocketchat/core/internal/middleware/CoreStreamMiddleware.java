@@ -1,7 +1,7 @@
 package com.rocketchat.core.internal.middleware;
 
 import com.rocketchat.common.listener.Listener;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.utils.Types;
 import com.rocketchat.core.callback.MessageCallback;
@@ -23,7 +23,7 @@ import org.json.JSONObject;
 public class CoreStreamMiddleware {
 
     private final Moshi moshi;
-    private ConcurrentHashMap<String, SubscribeListener> listeners;
+    private ConcurrentHashMap<String, SubscribeCallback> listeners;
     private ConcurrentHashMap<String, ConcurrentHashMap<SubscriptionType, Listener>> subs;
 
     public CoreStreamMiddleware(Moshi moshi) {
@@ -56,7 +56,7 @@ public class CoreStreamMiddleware {
     }
 
 
-    public void createSubscriptionListener(String subId, SubscribeListener callback) {
+    public void createSubscriptionListener(String subId, SubscribeCallback callback) {
         if (callback != null) {
             listeners.put(subId, callback);
         }
@@ -105,8 +105,8 @@ public class CoreStreamMiddleware {
     public void processUnsubscriptionSuccess(JSONObject unsubObj) {
         String id = unsubObj.optString("id");
         if (listeners.containsKey(id)) {
-            SubscribeListener subscribeListener = listeners.remove(id);
-            subscribeListener.onSubscribe(false, id);
+            SubscribeCallback subscribeCallback = listeners.remove(id);
+            subscribeCallback.onSubscribe(false, id);
         }
     }
 

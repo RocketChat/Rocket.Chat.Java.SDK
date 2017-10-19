@@ -9,7 +9,7 @@ import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
@@ -334,61 +334,61 @@ public class RocketChatClient {
         websocketImpl.setStatus(s, callback);
     }
 
-    public void subscribeActiveUsers(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeActiveUsers(subscribeListener);
+    public void subscribeActiveUsers(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeActiveUsers(subscribeCallback);
     }
 
-    public void subscribeUserData(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeUserData(subscribeListener);
+    public void subscribeUserData(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeUserData(subscribeCallback);
     }
 
-    public void subscribeUserRoles(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeUserRoles(subscribeListener);
+    public void subscribeUserRoles(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeUserRoles(subscribeCallback);
     }
 
-    public void subscribeLoginConf(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeLoginConf(subscribeListener);
+    public void subscribeLoginConf(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeLoginConf(subscribeCallback);
     }
 
-    public void subscribeClientVersions(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeClientVersions(subscribeListener);
+    public void subscribeClientVersions(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeClientVersions(subscribeCallback);
     }
 
-    String subscribeRoomFiles(String roomId, int limit, SubscribeListener listener) {
+    String subscribeRoomFiles(String roomId, int limit, SubscribeCallback listener) {
         return websocketImpl.subscribeRoomFiles(roomId, limit, listener);
     }
 
-    String subscribeMentionedMessages(String roomId, int limit, SubscribeListener listener) {
+    String subscribeMentionedMessages(String roomId, int limit, SubscribeCallback listener) {
         return websocketImpl.subscribeMentionedMessages(roomId, limit, listener);
     }
 
-    String subscribeStarredMessages(String roomId, int limit, SubscribeListener listener) {
+    String subscribeStarredMessages(String roomId, int limit, SubscribeCallback listener) {
         return websocketImpl.subscribeStarredMessages(roomId, limit, listener);
     }
 
-    String subscribePinnedMessages(String roomId, int limit, SubscribeListener listener) {
+    String subscribePinnedMessages(String roomId, int limit, SubscribeCallback listener) {
         return websocketImpl.subscribePinnedMessages(roomId, limit, listener);
     }
 
-    String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener listener) {
+    String subscribeSnipettedMessages(String roomId, int limit, SubscribeCallback listener) {
         return websocketImpl.subscribeSnipettedMessages(roomId, limit, listener);
     }
 
     //Tested
-    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.MessageListener listener) {
-        return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeListener, listener);
+    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, MessageCallback.MessageListener listener) {
+        return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeCallback, listener);
     }
 
-    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
-        return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeListener, listener);
+    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, TypingListener listener) {
+        return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeCallback, listener);
     }
 
-    String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeListener subscribeListener) {
-        return websocketImpl.subscribeRoomDeleteEvent(roomId, enable, subscribeListener);
+    String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeCallback subscribeCallback) {
+        return websocketImpl.subscribeRoomDeleteEvent(roomId, enable, subscribeCallback);
     }
 
-    void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
-        websocketImpl.unsubscribeRoom(subId, subscribeListener);
+    void unsubscribeRoom(String subId, SubscribeCallback subscribeCallback) {
+        websocketImpl.unsubscribeRoom(subId, subscribeCallback);
     }
 
     public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateCallback listener) {

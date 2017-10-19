@@ -7,7 +7,7 @@ import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
@@ -337,98 +337,98 @@ public class WebsocketImpl implements SocketListener {
         socket.sendData(PresenceRPC.setDefaultStatus(uniqueID, s));
     }
 
-    void subscribeActiveUsers(SubscribeListener subscribeListener) {
+    void subscribeActiveUsers(SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeActiveUsers(uniqueID));
     }
 
-    void subscribeUserData(SubscribeListener subscribeListener) {
+    void subscribeUserData(SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeUserData(uniqueID));
     }
 
-    void subscribeUserRoles(SubscribeListener subscribeListener) {
+    void subscribeUserRoles(SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeUserRoles(uniqueID));
     }
 
-    void subscribeLoginConf(SubscribeListener subscribeListener) {
+    void subscribeLoginConf(SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeLoginServiceConfiguration(uniqueID));
     }
 
-    void subscribeClientVersions(SubscribeListener subscribeListener) {
+    void subscribeClientVersions(SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeClientVersions(uniqueID));
     }
 
-    String subscribeRoomFiles(String roomId, int limit, SubscribeListener subscribeListener) {
+    String subscribeRoomFiles(String roomId, int limit, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeRoomFiles(uniqueID, roomId, limit));
         return uniqueID;
     }
 
-    String subscribeMentionedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+    String subscribeMentionedMessages(String roomId, int limit, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeMentionedMessages(uniqueID, roomId, limit));
         return uniqueID;
     }
 
-    String subscribeStarredMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+    String subscribeStarredMessages(String roomId, int limit, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeStarredMessages(uniqueID, roomId, limit));
         return uniqueID;
     }
 
-    String subscribePinnedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+    String subscribePinnedMessages(String roomId, int limit, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribePinnedMessages(uniqueID, roomId, limit));
         return uniqueID;
     }
 
-    String subscribeSnipettedMessages(String roomId, int limit, SubscribeListener subscribeListener) {
+    String subscribeSnipettedMessages(String roomId, int limit, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeSnipettedMessages(uniqueID, roomId, limit));
         return uniqueID;
     }
 
     //Tested
-    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.MessageListener listener) {
+    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, MessageCallback.MessageListener listener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
         socket.sendData(CoreSubRPC.subscribeRoomMessageEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
-    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
+    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, TypingListener listener) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         coreStreamMiddleware.createSubscription(roomId, listener, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
         socket.sendData(CoreSubRPC.subscribeRoomTypingEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
-    String subscribeRoomDeleteEvent(String roomId, Boolean enable, SubscribeListener subscribeListener) {
+    String subscribeRoomDeleteEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback) {
         String uniqueID = Utils.shortUUID();
-        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(uniqueID, subscribeCallback);
         socket.sendData(CoreSubRPC.subscribeRoomMessageDeleteEvent(uniqueID, roomId, enable));
         return uniqueID;
     }
 
-    void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
+    void unsubscribeRoom(String subId, SubscribeCallback subscribeCallback) {
         socket.sendData(CoreSubRPC.unsubscribeRoom(subId));
-        coreStreamMiddleware.createSubscriptionListener(subId, subscribeListener);
+        coreStreamMiddleware.createSubscriptionListener(subId, subscribeCallback);
     }
 
     void setReconnectionStrategy(ReconnectionStrategy strategy) {
