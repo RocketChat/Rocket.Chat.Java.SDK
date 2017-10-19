@@ -231,14 +231,15 @@ class RestImpl {
 
                 try {
                     JSONObject json = new JSONObject(response.body().string());
-                    logger.info("JSON = " + json.toString());
+                    logger.info("Response = " + json.toString());
 
                     JSONArray filesJSONArray = json.getJSONArray("files");
                     int length = filesJSONArray.length();
                     List<Attachment> attachments = new ArrayList<>(length);
                     for (int i = 0; i < length; ++i) {
-                        attachments.add(new Attachment(filesJSONArray.getJSONObject(i)));
+                        attachments.add(new Attachment(filesJSONArray.getJSONObject(i), baseUrl.url().toString()));
                     }
+
                     callback.onGetRoomFiles(json.optInt("total"), attachments);
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
