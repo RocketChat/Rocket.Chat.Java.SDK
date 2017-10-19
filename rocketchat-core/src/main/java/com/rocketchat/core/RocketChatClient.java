@@ -106,11 +106,10 @@ public class RocketChatClient {
                 .add(CommonJsonAdapterFactory.create())
                 .build();
 
-        tokenProvider = builder.provider;
-
         dbManager = new DbManager(moshi);
         chatRoomFactory = new ChatRoomFactory(this);
 
+        tokenProvider = builder.provider;
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
         websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
     }
