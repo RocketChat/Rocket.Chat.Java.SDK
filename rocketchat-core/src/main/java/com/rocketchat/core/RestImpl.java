@@ -206,7 +206,7 @@ class RestImpl {
         checkNotNull(sort,"sort == null");
         checkNotNull(callback,"callback == null");
 
-        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType) + "files")
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "files"))
                 .addQueryParameter("roomId", roomId)
                 .addQueryParameter("offset", offset)
                 .addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
@@ -254,14 +254,14 @@ class RestImpl {
      * @return A Rest API method name accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
-    private String getRestApiMethodNameByRoomType(BaseRoom.RoomType roomType) {
+    private String getRestApiMethodNameByRoomType(BaseRoom.RoomType roomType, String method) {
         switch (roomType) {
             case PUBLIC:
-                return "channels.";
+                return "channels." + method;
             case PRIVATE:
-                return "groups.";
+                return "groups." + method;
             default:
-                return "dm.";
+                return "dm." + method;
         }
     }
 
