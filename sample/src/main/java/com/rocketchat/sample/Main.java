@@ -1,18 +1,14 @@
 package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
+import com.rocketchat.common.data.lightstream.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.utils.Logger;
-import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.roomstream.Document.MessageDocument;
-import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
-import java.util.List;
 import org.json.JSONObject;
 
 /**
@@ -39,6 +35,23 @@ public class Main {
                 .build();
         client.connect(connectListener);
 
+        client.getGlobalStreamCollectionManager().subscribeUserCollection(new StreamCollectionListener<UserDocument>() {
+            @Override
+            public void onAdded(String documentKey, UserDocument document) {
+                System.out.println("User added "+ document);
+            }
+
+            @Override
+            public void onChanged(String documentKey, JSONObject values) {
+                System.out.println("User values changed " + values.toString());
+            }
+
+            @Override
+            public void onRemoved(String documentKey) {
+                System.out.println("User removed with id "+ documentKey);
+            }
+        });
+
     }
 
 
@@ -51,43 +64,16 @@ public class Main {
         @Override
         public void onLoginSuccess(Token token) {
             System.out.println("Login is successful");
-            client.getSubscriptions(new SimpleListCallback<Subscription>() {
+            client.subscribeActiveUsers(new SubscribeListener() {
                 @Override
-                public void onSuccess(List<Subscription> list) {
-                    client.getChatRoomFactory().createChatRooms(list);
-                    ChatRoom chatRoom = client.getChatRoomFactory().getChatRoomByName("general");
-                    chatRoom.subscribeStarredMessages(20, new SubscribeListener() {
-                        @Override
-                        public void onSubscribe(Boolean isSubscribed, String subId) {
-                            if (isSubscribed) {
-                                System.out.println("Subscribed to starred messages");
-                            }
-                        }
-                    }, new StreamCollectionListener<MessageDocument>() {
-                        @Override
-                        public void onAdded(String documentKey, MessageDocument document) {
-                            System.out.println("Added starred messages " + document);
-                        }
-
-                        @Override
-                        public void onChanged(String documentKey, JSONObject values) {
-                            System.out.println("Value changed " + values);
-                        }
-
-                        @Override
-                        public void onRemoved(String documentKey) {
-                            System.out.println("Value removed " + documentKey);
-                        }
-                    });
-                }
-
-                @Override
-                public void onError(RocketChatException error) {
-
+                public void onSubscribe(Boolean isSubscribed, String subId) {
+                    if (isSubscribed) {
+                        System.out.println("Subscribed for getting active user statuses");
+                    }
                 }
             });
-        }
 
+        }
     };
 
     ConnectListener connectListener = new ConnectListener() {

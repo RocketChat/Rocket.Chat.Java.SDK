@@ -80,6 +80,13 @@ public class GlobalStreamCollectionManager {
         return versionsDocumentCollectionListener.remove(listener);
     }
 
+    public void unsubscribeAll() {
+        usersCollectionListener.clear();
+        loginConfDocumentCollectionListener.clear();
+        rolesDocumentCollectionListener.clear();
+        versionsDocumentCollectionListener.clear();
+    }
+
     public void update(JSONObject object, RPC.MsgType type) {
         String collectionName = object.optString("collection");
         if (collectionName.equals(COLLECTION_TYPE_USERS)) {
