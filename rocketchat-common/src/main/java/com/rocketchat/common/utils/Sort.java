@@ -12,7 +12,7 @@ public enum Sort {
 
     private String direction;
 
-    private Sort(String direction) {
+    Sort(String direction) {
         this.direction = direction;
     }
 
