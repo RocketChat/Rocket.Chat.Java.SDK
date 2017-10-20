@@ -249,10 +249,11 @@ class RestImpl {
     }
 
     /**
-     * Returns the correspondent Rest API method name accordingly with the room type.
+     * Returns the correspondent Rest API method accordingly with the room type.
      *
      * @param roomType The type of the room.
-     * @return A Rest API method name accordingly with the room type.
+     * @param method The method.
+     * @return A Rest API method accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
     private String getRestApiMethodNameByRoomType(BaseRoom.RoomType roomType, String method) {
@@ -267,7 +268,7 @@ class RestImpl {
     }
 
     /**
-     * Builds the request URL as {baseUrl}/api/v1/{method}
+     * Builds and returns the HttpUrl.Builder as {baseUrl}/api/v1/{method}
      *
      * @param baseUrl The base URL.
      * @param method The method name.
@@ -281,7 +282,7 @@ class RestImpl {
     }
 
     /**
-     * Builds the Request.Builder with HttpUrl and header.
+     * Builds and returns the Request.Builder with HttpUrl and header.
      * Note: The user token and its ID will be added to the header only if present.
      *
      * @param httpUrl The HttpUrl.
