@@ -2,6 +2,7 @@ package com.rocketchat.sample;
 
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
@@ -9,7 +10,6 @@ import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.ChatRoom;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
@@ -82,13 +82,14 @@ public class RestApiRoomList {
 
     // Example of querying the file list from a room.
     private void getRoomFilesByRoom(final ChatRoom room) {
-        room.getFiles("0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new RoomCallback.GetFilesCallback() {
+        room.getFiles("0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
             @Override
-            public void onGetRoomFiles(int total, List<Attachment> files) {
+            public void onSuccess(List list, int total) {
                 logger.info("\n\nSuccess getting the file list from " + room.getRoomData().name() + " room");
                 logger.info("File list total number: " + total);
                 logger.info("Files:\n");
-                for(Attachment attachment: files) {
+                List<Attachment> attachments = list;
+                for(Attachment attachment: attachments) {
                     logger.info("File name: " + attachment.getName());
                     logger.info("File type: " + attachment.getType());
                     logger.info("File link: " + attachment.getLink());
