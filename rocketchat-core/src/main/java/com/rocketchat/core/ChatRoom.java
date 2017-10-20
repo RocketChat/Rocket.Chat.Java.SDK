@@ -1,6 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
@@ -61,10 +62,22 @@ public class ChatRoom {
         client.getRoomMembers(room.roomId(), false, callback);
     }
 
+    /**
+     * Gets the room file list.
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param sortBy The attribute name to sort.
+     * @param sort The order in which the results should be returned.
+     * @param callback The paginated callback.
+     * @since 0.8.0
+     * @see BaseRoom
+     * @see com.rocketchat.core.model.attachment.Attachment.SortBy
+     * @see Sort
+     */
     public void getFiles(String offset,
                          Attachment.SortBy sortBy,
                          Sort sort,
-                         RoomCallback.GetFilesCallback callback) {
+                        PaginatedCallback callback) {
         client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 
