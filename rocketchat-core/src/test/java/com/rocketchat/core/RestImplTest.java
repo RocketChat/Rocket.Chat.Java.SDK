@@ -6,10 +6,10 @@ import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
@@ -49,7 +49,7 @@ public class RestImplTest {
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
     @Mock private LoginCallback loginCallback;
-    @Mock private RoomCallback.GetFilesCallback getFilesCallback;
+    @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
 
@@ -170,27 +170,27 @@ public class RestImplTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullRoomId() {
-        rest.getRoomFiles(null, BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, getFilesCallback);
+        rest.getRoomFiles(null, BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullRoomType() {
-        rest.getRoomFiles("roomId", null, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, getFilesCallback);
+        rest.getRoomFiles("roomId", null, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullOffset() {
-        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, null, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, getFilesCallback);
+        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, null, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullSortBy() {
-        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, "0", null, Sort.DESC, getFilesCallback);
+        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, "0", null, Sort.DESC, paginatedCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullSort() {
-        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, null, getFilesCallback);
+        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, null, paginatedCallback);
     }
 
     @Test(expected = NullPointerException.class)
@@ -206,8 +206,8 @@ public class RestImplTest {
                 .andReturn(200, "NOT A JSON")
                 .once();
 
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, getFilesCallback);
-        verify(getFilesCallback, timeout(100).only())
+        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        verify(paginatedCallback, timeout(100).only())
                 .onError(exceptionCaptor.capture());
 
         RocketChatException exception = exceptionCaptor.getValue();
@@ -223,10 +223,10 @@ public class RestImplTest {
                 .andReturn(200, "{\"status\": \"success\"}")
                 .once();
 
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, getFilesCallback);
+        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
-        verify(getFilesCallback, timeout(100).only())
-                .onGetRoomFiles(anyInt(), ArgumentMatchers.<Attachment>anyList());
+        verify(paginatedCallback, timeout(100).only())
+                .onSuccess(ArgumentMatchers.<Attachment>anyList(), anyInt());
 
         List<Attachment> attachmentList = ArgumentMatchers.anyList();
         assertThat(attachmentList, is(notNullValue()));
