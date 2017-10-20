@@ -8,6 +8,7 @@ import com.rocketchat.common.data.lightdb.DbManager;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
@@ -166,7 +167,7 @@ public class RocketChatClient {
                              String offset,
                              Attachment.SortBy sortBy,
                              Sort sort,
-                             final RoomCallback.GetFilesCallback callback) {
+                             final PaginatedCallback callback) {
         restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
     }
 
