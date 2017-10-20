@@ -8,6 +8,7 @@ import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.Callback;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
@@ -198,7 +199,7 @@ class RestImpl {
                       String offset,
                       Attachment.SortBy sortBy,
                       Sort sort,
-                      final RoomCallback.GetFilesCallback callback) {
+                      final PaginatedCallback callback) {
         checkNotNull(roomId,"roomId == null");
         checkNotNull(roomType,"roomType == null");
         checkNotNull(offset,"offset == null");
@@ -240,7 +241,7 @@ class RestImpl {
                         attachments.add(new Attachment(filesJSONArray.getJSONObject(i), baseUrl.url().toString()));
                     }
 
-                    callback.onGetRoomFiles(json.optInt("total"), attachments);
+                    callback.onSuccess(attachments, json.optInt("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
