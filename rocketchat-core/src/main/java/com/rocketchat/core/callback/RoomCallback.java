@@ -2,6 +2,7 @@ package com.rocketchat.core.callback;
 
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.core.model.attachment.Attachment;
 
 import java.util.List;
@@ -17,9 +18,5 @@ public class RoomCallback {
 
     public interface GetMembersCallback extends Callback {
         void onGetRoomMembers(Integer total, List<User> members);
-    }
-
-    public interface GetFilesCallback extends Callback {
-        void onGetRoomFiles(int total, List<Attachment> files);
     }
 }
