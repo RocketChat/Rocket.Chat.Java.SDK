@@ -59,10 +59,6 @@ public class ChatRoom {
         client.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lasttimestamp, callback);
     }
 
-    public void getMembers(RoomCallback.GetMembersCallback callback) {
-        client.getRoomMembers(room.roomId(), false, callback);
-    }
-
     /**
      * Gets the room member list.
      *

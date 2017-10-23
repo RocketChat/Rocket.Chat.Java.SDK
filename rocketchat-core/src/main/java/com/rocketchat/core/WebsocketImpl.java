@@ -165,12 +165,6 @@ public class WebsocketImpl implements SocketListener {
         socket.sendData(ChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
     }
 
-    void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_ROOM_MEMBERS);
-        socket.sendData(RoomRPC.getRoomMembers(uniqueID, roomID, allUsers));
-    }
-
     //Tested
     void sendIsTyping(String roomId, String username, Boolean istyping) {
         int uniqueID = integer.getAndIncrement();
