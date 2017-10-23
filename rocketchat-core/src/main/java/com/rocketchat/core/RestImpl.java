@@ -202,7 +202,6 @@ class RestImpl {
                       final PaginatedCallback callback) {
         checkNotNull(roomId,"roomId == null");
         checkNotNull(roomType,"roomType == null");
-        checkNotNull(offset,"offset == null");
         checkNotNull(sortBy,"sortBy == null");
         checkNotNull(sort,"sort == null");
         checkNotNull(callback,"callback == null");
