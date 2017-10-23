@@ -217,8 +217,9 @@ public class RestImplTest {
     }
 
     @Test
+    //TODO Needs to know why it is failing.
     public void testGetRoomFilesShouldBeSuccessful() {
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
         verify(paginatedCallback, timeout(100).only())
                 .onSuccess(listCaptor.capture(), anyInt());
