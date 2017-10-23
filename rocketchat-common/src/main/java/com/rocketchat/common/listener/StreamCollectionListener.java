@@ -5,7 +5,7 @@ import org.json.JSONObject;
 public interface StreamCollectionListener<T> {
     void onAdded(String documentKey, T document);
 
-    void onChanged(String documentKey, JSONObject values);
+    void onChanged(String documentKey, T values);
 
     void onRemoved(String documentKey);
 }

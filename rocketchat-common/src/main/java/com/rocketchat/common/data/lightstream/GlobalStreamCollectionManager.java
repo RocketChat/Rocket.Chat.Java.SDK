@@ -116,7 +116,13 @@ public class GlobalStreamCollectionManager {
                     userListener.onAdded(id, userDocument);
                     break;
                 case CHANGED:
-                    userListener.onChanged(id, object.optJSONObject("fields"));
+                    UserDocument changedDocument = null;
+                    try {
+                        changedDocument = getUserDocumentAdapter().fromJson(object.optJSONObject("fields").toString()).withId(id);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    userListener.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     userListener.onRemoved(id);
@@ -138,7 +144,8 @@ public class GlobalStreamCollectionManager {
                     rolesListener.onAdded(id, rolesDocument);
                     break;
                 case CHANGED:
-                    rolesListener.onChanged(id, object.optJSONObject("fields"));
+                    RocketChatRolesDocument changedDocument = new RocketChatRolesDocument(object.optJSONObject("fields"));
+                    rolesListener.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     rolesListener.onRemoved(id);
@@ -149,6 +156,7 @@ public class GlobalStreamCollectionManager {
 
     private void updateLoginConfiguration(JSONObject object, RPC.MsgType type) {
         String id = object.optString("id");
+
         for (StreamCollectionListener<LoginConfDocument> loginConfListener : loginConfDocumentCollectionListener) {
             switch (type) {
                 case ADDED:
@@ -156,7 +164,8 @@ public class GlobalStreamCollectionManager {
                     loginConfListener.onAdded(id, loginConfDocument);
                     break;
                 case CHANGED:
-                    loginConfListener.onChanged(id, object.optJSONObject("fields"));
+                    LoginConfDocument changedDocument = new LoginConfDocument(object.optJSONObject("fields"));
+                    loginConfListener.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     loginConfListener.onRemoved(id);
@@ -176,7 +185,9 @@ public class GlobalStreamCollectionManager {
                     clientVersionListener.onAdded(id, clientVersionsDocument);
                     break;
                 case CHANGED:
-                    clientVersionListener.onChanged(id, object.optJSONObject("fields"));
+                    ClientVersionsDocument changedDocument = new ClientVersionsDocument(object.optJSONObject("fields"));
+                    changedDocument.setId(id);
+                    clientVersionListener.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     clientVersionListener.onRemoved(id);

@@ -94,7 +94,9 @@ public class LocalStreamCollectionManager {
                     roomFilesCollection.onAdded(id, document);
                     break;
                 case CHANGED:
-                    roomFilesCollection.onChanged(id, object.optJSONObject("fields"));
+                    FileDocument changedDocument = new FileDocument(object.optJSONObject("fields"));
+                    changedDocument.setId(id);
+                    roomFilesCollection.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     roomFilesCollection.onRemoved(id);
@@ -148,7 +150,17 @@ public class LocalStreamCollectionManager {
 
                     break;
                 case CHANGED:
-                    collectionListener.onChanged(id, object.optJSONObject("fields"));
+
+                    MessageDocument changedDocument = null;
+                    try {
+                        changedDocument = new MessageDocument(getMessageDocumentAdapter().fromJson(object.optJSONObject("fields").put("_id", id).toString()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    collectionListener.onChanged(id, changedDocument);
                     break;
                 case REMOVED:
                     collectionListener.onRemoved(id);

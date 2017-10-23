@@ -42,7 +42,7 @@ public class Main {
             }
 
             @Override
-            public void onChanged(String documentKey, JSONObject values) {
+            public void onChanged(String documentKey, UserDocument values) {
                 System.out.println("User values changed " + values.toString());
             }
 
