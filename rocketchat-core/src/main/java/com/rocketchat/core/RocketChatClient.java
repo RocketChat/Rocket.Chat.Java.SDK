@@ -242,10 +242,6 @@ public class RocketChatClient {
         websocketImpl.getChatHistory(roomID, limit, oldestMessageTimestamp, lasttimestamp, callback);
     }
 
-    void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersCallback callback) {
-        websocketImpl.getRoomMembers(roomID, allUsers, callback);
-    }
-
     //Tested
     void sendIsTyping(String roomId, String username, Boolean istyping) {
         websocketImpl.sendIsTyping(roomId, username, istyping);
