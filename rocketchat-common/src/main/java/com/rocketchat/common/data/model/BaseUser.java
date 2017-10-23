@@ -43,15 +43,16 @@ public abstract class BaseUser {
     public static final String BUSY = "busy";
     public static final String AWAY = "away";
 
-    public static Status getStatus(String s) {
-        if (s.equals(ONLINE)) {
-            return Status.ONLINE;
-        } else if (s.equals(OFFLINE)) {
-            return Status.OFFLINE;
-        } else if (s.equals(BUSY)) {
-            return Status.BUSY;
-        } else if (s.equals(AWAY)) {
-            return Status.AWAY;
+    public static Status getStatus(String status) {
+        switch (status) {
+            case ONLINE:
+                return Status.ONLINE;
+            case OFFLINE:
+                return Status.OFFLINE;
+            case BUSY:
+                return Status.BUSY;
+            case AWAY:
+                return Status.AWAY;
         }
         return Status.OFFLINE;
     }
