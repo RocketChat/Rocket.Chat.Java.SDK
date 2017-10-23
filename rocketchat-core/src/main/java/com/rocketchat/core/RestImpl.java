@@ -196,7 +196,7 @@ class RestImpl {
 
     void getRoomFiles(String roomId,
                       BaseRoom.RoomType roomType,
-                      String offset,
+                      int offset,
                       Attachment.SortBy sortBy,
                       Sort sort,
                       final PaginatedCallback callback) {
@@ -209,7 +209,7 @@ class RestImpl {
 
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "files"))
                 .addQueryParameter("roomId", roomId)
-                .addQueryParameter("offset", offset)
+                .addQueryParameter("offset", String.valueOf(offset))
                 .addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
                 .build();
 
