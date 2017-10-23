@@ -17,6 +17,20 @@ public abstract class BaseUser {
         public abstract T roles(List<String> roles);
     }
 
+    public enum SortBy {
+        USERNAME("username");
+
+        private String propertyName;
+
+        SortBy(String propertyName) {
+            this.propertyName =  propertyName;
+        }
+
+        public String getPropertyName() {
+            return propertyName;
+        }
+    }
+
     public enum Status {
         @Json(name = "online") ONLINE,
         @Json(name = "busy") BUSY,
