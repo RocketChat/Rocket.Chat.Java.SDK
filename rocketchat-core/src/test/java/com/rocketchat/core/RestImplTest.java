@@ -51,6 +51,7 @@ public class RestImplTest {
     @Mock private LoginCallback loginCallback;
     @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
+    @Captor private ArgumentCaptor<List> listCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
 
     @Before
@@ -217,18 +218,12 @@ public class RestImplTest {
 
     @Test
     public void testGetRoomFilesShouldBeSuccessful() {
-        mockServer.expect()
-                .get()
-                .withPath("api/v1/channels.files")
-                .andReturn(200, "{\"status\": \"success\"}")
-                .once();
-
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, "0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
         verify(paginatedCallback, timeout(100).only())
-                .onSuccess(ArgumentMatchers.<Attachment>anyList(), anyInt());
+                .onSuccess(listCaptor.capture(), anyInt());
 
-        List<Attachment> attachmentList = ArgumentMatchers.anyList();
+        List attachmentList = listCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
     }
 }
