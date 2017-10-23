@@ -6,6 +6,7 @@ import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.PaginatedCallback;
@@ -147,9 +148,13 @@ public class RocketChatClient {
         restImpl.pinMessage(messageId, callback);
     }
 
-    // TODO
-    public void getRoomMembers() {
-
+    public void getRoomMembers(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               BaseUser.SortBy sortBy,
+                               Sort sort,
+                               final PaginatedCallback callback) {
+        restImpl.getRoomMembers(roomId, roomType, offset, sortBy, sort, callback);
     }
 
     // TODO
