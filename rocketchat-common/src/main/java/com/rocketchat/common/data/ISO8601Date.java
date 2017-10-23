@@ -7,5 +7,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @JsonQualifier
-public @interface Timestamp {
+public @interface ISO8601Date {
 }

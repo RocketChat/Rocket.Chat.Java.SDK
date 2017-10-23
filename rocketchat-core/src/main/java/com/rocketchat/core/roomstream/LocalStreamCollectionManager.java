@@ -1,10 +1,7 @@
 package com.rocketchat.core.roomstream;
 
-import com.rocketchat.common.data.CommonJsonAdapterFactory;
-import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.StreamCollectionListener;
-import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.roomstream.Document.FileDocument;
 import com.rocketchat.core.roomstream.Document.MessageDocument;
@@ -20,11 +17,7 @@ import org.json.JSONObject;
 
 public class LocalStreamCollectionManager {
 
-    private static Moshi moshi = new Moshi.Builder()
-            .add(new TimestampAdapter())
-            .add(JsonAdapterFactory.create())
-            .add(CommonJsonAdapterFactory.create())
-            .build();
+    private final Moshi moshi;
 
     StreamCollectionListener<FileDocument> roomFilesCollection;
     StreamCollectionListener<MessageDocument> mentionedMessagesCollection;
@@ -38,8 +31,8 @@ public class LocalStreamCollectionManager {
     private static final String COLLECTION_TYPE_PINNED_MESSAGES = "rocketchat_pinned_message";
     private static final String COLLECTION_TYPE_SNIPETED_MESSAGES = "rocketchat_snippeted_message";
 
-    public LocalStreamCollectionManager() {
-
+    public LocalStreamCollectionManager(Moshi moshi) {
+        this.moshi = moshi;
     }
 
     public void subscribeRoomFilesCollection(StreamCollectionListener<FileDocument> roomFilesCollection) {

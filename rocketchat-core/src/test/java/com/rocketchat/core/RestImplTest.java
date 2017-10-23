@@ -5,8 +5,12 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
+<<<<<<< HEAD
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.listener.PaginatedCallback;
+=======
+import com.rocketchat.common.utils.CalendarISO8601Converter;
+>>>>>>> - Generic REST calls processing
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
@@ -63,7 +67,7 @@ public class RestImplTest {
         OkHttpClient client = new OkHttpClient();
 
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(new CalendarISO8601Converter()))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();

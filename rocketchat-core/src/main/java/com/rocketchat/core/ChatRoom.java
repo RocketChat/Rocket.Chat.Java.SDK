@@ -48,10 +48,10 @@ public class ChatRoom {
     private String pinnedMessagesSubId;
     private String snipetedMessagesSubId;
 
-    public ChatRoom(RocketChatClient api, BaseRoom room) {
-        this.client = api;
+    public ChatRoom(RocketChatClient client, BaseRoom room) {
+        this.client = client;
         this.room = room;
-        this.localStreamCollectionManager = new LocalStreamCollectionManager();
+        this.localStreamCollectionManager = new LocalStreamCollectionManager(client.getMoshi());
     }
 
     public LocalStreamCollectionManager getLocalStreamCollectionManager() {

@@ -1,7 +1,7 @@
 package com.rocketchat.core.model;
 
 import com.google.auto.value.AutoValue;
-import com.rocketchat.common.data.Timestamp;
+import com.rocketchat.common.data.ISO8601Date;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
@@ -23,7 +23,7 @@ public abstract class Room extends BaseRoom {
     public abstract List<String> mutedUsers();
 
     @Nullable
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long jitsiTimeout();
 
     @Json(name = "ro")
