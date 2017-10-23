@@ -131,7 +131,7 @@ public class RestApiRoomList {
         public void saveToken(Token token) {
             logger.info("Saving token...");
             RestApiRoomList.this.token = token;
-            logger.info("Token saved! Token: " + token.getAuthToken() + "\n\n");
+            logger.info("Token saved! Token: " + token.authToken() + "\n\n");
         }
 
         @Override
@@ -156,7 +156,7 @@ public class RestApiRoomList {
 
     private ConnectListener connectListener = new ConnectListener() {
         public void onConnect(String sessionID) {
-            rocketChatClient.loginUsingToken(tokenProvider.getToken().getAuthToken(), loginCallback);
+            rocketChatClient.loginUsingToken(tokenProvider.getToken().authToken(), loginCallback);
             logger.info("\n\nLogged using token!\n\n");
         }
 

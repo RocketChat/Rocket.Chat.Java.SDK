@@ -1,7 +1,7 @@
 package com.rocketchat.core.model;
 
 import com.google.auto.value.AutoValue;
-import com.rocketchat.common.data.Timestamp;
+import com.rocketchat.common.data.ISO8601Date;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -13,7 +13,8 @@ public abstract class Token {
 
     @Json(name = "id") public abstract String userId();
     @Json(name = "token") public abstract String authToken();
-    @Json(name = "tokenExpires") @Nullable public abstract @Timestamp Long expiresAt();
+    @Json(name = "tokenExpires") @Nullable public abstract @ISO8601Date
+    Long expiresAt();
 
     public static Token create(String userId, String authToken) {
         return create(userId, authToken, null);

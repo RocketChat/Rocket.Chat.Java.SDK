@@ -15,7 +15,7 @@ import com.rocketchat.core.model.Token;
 import com.squareup.moshi.Moshi;
 import io.fabric8.mockwebserver.DefaultMockServer;
 import okhttp3.OkHttpClient;
-import org.json.JSONObject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,7 +68,7 @@ public class WebsocketImplTest {
         };
 
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();

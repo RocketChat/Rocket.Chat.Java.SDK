@@ -2,14 +2,15 @@ package com.rocketchat.livechat;
 
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.model.MessageType;
-import com.rocketchat.common.data.model.internal.SocketMessage;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Utils;
@@ -44,6 +45,7 @@ public class LiveChatClient implements SocketListener {
 
     private final Logger logger;
     private final Socket socket;
+    private final ISO8601Converter dateConverter;
 
     private AtomicInteger integer;
     private String sessionId;
@@ -80,9 +82,15 @@ public class LiveChatClient implements SocketListener {
             this.logger = new NoopLogger();
         }
 
+        if (builder.dateConverter != null) {
+            dateConverter = builder.dateConverter;
+        } else {
+            dateConverter = new CalendarISO8601Converter();
+        }
+
         // TODO - Add to the Builder
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();
@@ -399,6 +407,7 @@ public class LiveChatClient implements SocketListener {
         private OkHttpClient client;
         private SocketFactory factory;
         private Logger logger;
+        private ISO8601Converter dateConverter;
 
         public Builder websocketUrl(String url) {
             this.websocketUrl = checkNotNull(url, "url == null");
@@ -417,6 +426,11 @@ public class LiveChatClient implements SocketListener {
 
         public Builder logger(Logger logger) {
             this.logger = checkNotNull(logger, "logger == null");
+            return this;
+        }
+
+        public Builder dateConverter(ISO8601Converter dateConverter) {
+            this.dateConverter = checkNotNull(dateConverter, "dateConverter == null");
             return this;
         }
 
