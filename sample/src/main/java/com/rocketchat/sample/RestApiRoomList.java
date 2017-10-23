@@ -82,7 +82,7 @@ public class RestApiRoomList {
 
     // Example of querying the file list from a room.
     private void getRoomFilesByRoom(final ChatRoom room) {
-        room.getFiles("0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
+        room.getFiles(0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
             @Override
             public void onSuccess(List list, int total) {
                 logger.info("\n\nSuccess getting the file list from " + room.getRoomData().name() + " room");
