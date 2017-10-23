@@ -164,7 +164,7 @@ public class RocketChatClient {
 
     public void getRoomFiles(String roomId,
                              BaseRoom.RoomType roomType,
-                             String offset,
+                             int offset,
                              Attachment.SortBy sortBy,
                              Sort sort,
                              final PaginatedCallback callback) {
