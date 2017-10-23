@@ -89,7 +89,7 @@ public class ChatRoom {
      * @see Sort
      * @since 0.8.0
      */
-    public void getFiles(String offset,
+    public void getFiles(int offset,
                          Attachment.SortBy sortBy,
                          Sort sort,
                         PaginatedCallback callback) {
