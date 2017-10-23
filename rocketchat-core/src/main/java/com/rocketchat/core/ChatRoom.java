@@ -69,7 +69,7 @@ public class ChatRoom {
      * <p>Example of expected usage:
      *
      * <blockquote><pre>
-     * room.getFiles("0", Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
+     * room.getFiles(0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
      *     public void onSuccess(List list, int total) {
      *         // Handle the file list and the total of files in the room (this is not the file list size).
      *     }
