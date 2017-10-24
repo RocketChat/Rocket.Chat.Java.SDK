@@ -83,7 +83,7 @@ public class CoreMiddleware {
                     String error = "Missing \"result\" or \"error\" values: " + object.toString();
                     callback.onError(new RocketChatInvalidResponseException(error));
                 } else {
-                    callback.onError(new RocketChatApiException(errorObject.optJSONObject("error")));
+                    callback.onError(new RocketChatApiException(errorObject));
                 }
                 return;
             }

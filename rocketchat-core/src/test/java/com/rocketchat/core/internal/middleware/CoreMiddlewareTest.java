@@ -4,8 +4,11 @@ import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.core.TestMessages;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
@@ -54,6 +57,8 @@ public class CoreMiddlewareTest {
     @Before
     public void setup() throws JSONException {
         Moshi moshi = new Moshi.Builder()
+                .add(new TimestampAdapter(new CalendarISO8601Converter()))
+                .add(CommonJsonAdapterFactory.create())
                 .add(JsonAdapterFactory.create())
                 .build();
         middleware = new CoreMiddleware(moshi);

@@ -11,10 +11,12 @@ import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
+import com.squareup.moshi.JsonEncodingException;
 import com.squareup.moshi.Moshi;
 
 import org.json.JSONException;
@@ -68,6 +70,7 @@ public class RestImplTest {
                 .add(new TimestampAdapter(new CalendarISO8601Converter()))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
+                .add(new RestResult.JsonAdapterFactory())
                 .build();
 
         rest = new RestImpl(client, moshi, baseUrl, tokenProvider, new NoopLogger());
@@ -130,8 +133,9 @@ public class RestImplTest {
 
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatInvalidResponseException.class)));
-        assertThat(exception.getMessage(), is(equalTo("A JSONObject text must begin with '{' at character 1")));
-        assertThat(exception.getCause(), is(instanceOf(JSONException.class)));
+        assertThat(exception.getMessage(),
+                is(equalTo("Use JsonReader.setLenient(true) to accept malformed JSON at path $")));
+        assertThat(exception.getCause(), is(instanceOf(JsonEncodingException.class)));
     }
 
     @Test
