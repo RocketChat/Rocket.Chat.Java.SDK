@@ -5,8 +5,10 @@ import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
@@ -16,6 +18,7 @@ import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
+import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -32,6 +35,7 @@ import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
+import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
@@ -103,11 +107,10 @@ public class RocketChatClient {
                 .add(CommonJsonAdapterFactory.create())
                 .build();
 
-        tokenProvider = builder.provider;
-
         dbManager = new DbManager(moshi);
         chatRoomFactory = new ChatRoomFactory(this);
 
+        tokenProvider = builder.provider;
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
         websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
     }
@@ -132,16 +135,40 @@ public class RocketChatClient {
         return dbManager;
     }
 
-    public void serverInfo(ServerInfoCallback callback) {
-        restImpl.serverInfo(callback);
-    }
-
     public void signin(String username, String password, final LoginCallback loginCallback) {
         restImpl.signin(username, password, loginCallback);
     }
 
+    public void serverInfo(ServerInfoCallback callback) {
+        restImpl.serverInfo(callback);
+    }
+
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
+    }
+
+    // TODO
+    public void getRoomMembers() {
+
+    }
+
+    // TODO
+    public void getRoomFavoriteMessages() {
+
+    }
+
+    // TODO
+    public void getRoomPinnedMessages() {
+
+    }
+
+    public void getRoomFiles(String roomId,
+                             BaseRoom.RoomType roomType,
+                             int offset,
+                             Attachment.SortBy sortBy,
+                             Sort sort,
+                             final PaginatedCallback callback) {
+        restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
     }
 
     public void login(LoginCallback loginCallback) {

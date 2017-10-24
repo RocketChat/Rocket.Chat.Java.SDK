@@ -1,10 +1,12 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.listener.SubscribeListener;
 import com.rocketchat.common.listener.TypingListener;
+import com.rocketchat.common.utils.Sort;
 import com.rocketchat.common.utils.Utils;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
@@ -15,11 +17,13 @@ import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.uploader.FileUploader;
 
 import org.json.JSONObject;
 
 import java.util.Date;
+import java.util.Formatter;
 
 // TODO: 29/7/17 add throw custom exceptions if method call violates permission required to execute given RPC
 public class ChatRoom {
@@ -57,6 +61,39 @@ public class ChatRoom {
 
     public void getMembers(RoomCallback.GetMembersCallback callback) {
         client.getRoomMembers(room.roomId(), false, callback);
+    }
+
+    /**
+     * Gets the room file list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getFiles(0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the file list and the total of files in the room (this is not the file list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param sortBy The attribute name to sort.
+     * @param sort The order in which the results should be returned.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @see com.rocketchat.core.model.attachment.Attachment.SortBy
+     * @see Sort
+     * @since 0.8.0
+     */
+    public void getFiles(int offset,
+                         Attachment.SortBy sortBy,
+                         Sort sort,
+                        PaginatedCallback callback) {
+        client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 
     public void sendIsTyping(Boolean istyping) {
