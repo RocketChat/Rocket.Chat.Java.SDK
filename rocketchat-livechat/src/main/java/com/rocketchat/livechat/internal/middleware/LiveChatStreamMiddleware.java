@@ -1,6 +1,6 @@
 package com.rocketchat.livechat.internal.middleware;
 
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.livechat.callback.AgentCallback;
 import com.rocketchat.livechat.callback.MessageListener;
@@ -8,7 +8,6 @@ import com.rocketchat.livechat.model.AgentObject;
 import com.rocketchat.livechat.model.LiveChatMessage;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONArray;
@@ -28,7 +27,7 @@ public class LiveChatStreamMiddleware {
     private AgentCallback.AgentConnectListener agentConnectListener;
     private TypingListener typingListener;
 
-    private ConcurrentHashMap<String, SubscribeListener> subcallbacks;
+    private ConcurrentHashMap<String, SubscribeCallback> subcallbacks;
 
     public LiveChatStreamMiddleware(Moshi moshi) {
         this.moshi = moshi;
@@ -57,7 +56,7 @@ public class LiveChatStreamMiddleware {
         typingListener = callback;
     }
 
-    public void createSubCallbacks(String id, SubscribeListener callback) {
+    public void createSubCallbacks(String id, SubscribeCallback callback) {
         if (callback != null) {
             subcallbacks.put(id, callback);
         }
@@ -105,8 +104,8 @@ public class LiveChatStreamMiddleware {
         if (subObj.optJSONArray("subs") != null) {
             String id = subObj.optJSONArray("subs").optString(0);
             if (subcallbacks.containsKey(id)) {
-                SubscribeListener subscribeListener = subcallbacks.remove(id);
-                subscribeListener.onSubscribe(true, id);
+                SubscribeCallback subscribeCallback = subcallbacks.remove(id);
+                subscribeCallback.onSubscribe(true, id);
             }
         }
     }

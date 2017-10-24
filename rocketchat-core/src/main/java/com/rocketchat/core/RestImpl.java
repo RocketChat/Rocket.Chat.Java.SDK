@@ -13,7 +13,6 @@ import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
-import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;

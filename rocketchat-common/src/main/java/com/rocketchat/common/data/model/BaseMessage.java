@@ -2,7 +2,6 @@ package com.rocketchat.common.data.model;
 
 import com.rocketchat.common.data.Timestamp;
 import com.squareup.moshi.Json;
-
 import javax.annotation.Nullable;
 
 /**
@@ -45,28 +44,62 @@ public abstract class BaseMessage {
 
     }*/
 
-    @Json(name = "_id") public abstract String id();
-    @Json(name = "rid") public abstract String roomId();
-    @Json(name = "msg") public abstract String message();
-    @Json(name = "ts") public abstract @Timestamp Long timestamp();
-    @Nullable public abstract User sender();
-    @Json(name = "_updatedAt") public abstract @Timestamp Long updatedAt();
-    @Nullable public abstract @Timestamp Long editedAt();
-    @Nullable public abstract User editedBy();
-    // TODO - use an ENUM
-    @Json(name = "t") @Nullable public abstract String type();
-    @Json(name = "alias") @Nullable public abstract String senderAlias();
+    @Json(name = "_id")
+    public abstract String id();
+
+    @Json(name = "rid")
+    public abstract String roomId();
+
+    @Json(name = "msg")
+    public abstract String message();
+
+    @Json(name = "ts")
+    public abstract @Timestamp
+    Long timestamp();
+
+    @Json(name = "u")
+    @Nullable
+    public abstract User sender();
+
+    @Json(name = "_updatedAt")
+    public abstract @Timestamp
+    Long updatedAt();
+
+    @Nullable
+    public abstract @Timestamp
+    Long editedAt();
+
+    @Nullable
+    public abstract User editedBy();
+
+    // TODO - use an ENUM (Convert it into proper enum)
+    @Json(name = "t")
+    @Nullable
+    public abstract String type();
+
+    @Json(name = "alias")
+    @Nullable
+    public abstract String senderAlias();
 
     public abstract static class BaseBuilder<T extends BaseBuilder<T>> {
         public abstract T setId(String id);
+
         public abstract T setRoomId(String id);
+
         public abstract T setMessage(String message);
+
         public abstract T setTimestamp(Long timestamp);
+
         public abstract T setSender(User sender);
+
         public abstract T setUpdatedAt(Long updatedAt);
+
         public abstract T setEditedAt(Long editedAt);
+
         public abstract T setEditedBy(User editedBy);
+
         public abstract T setType(String type);
+
         public abstract T setSenderAlias(String alias);
     }
 }

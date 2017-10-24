@@ -7,7 +7,6 @@ import com.rocketchat.common.utils.RocketChatVerifier;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.Token;
-
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
@@ -61,16 +60,16 @@ public class RxRocketChatClient implements ConnectListener {
             public void subscribe(final CompletableEmitter emitter) throws Exception {
                 RocketChatVerifier.checkServerVersion(client, baseUrl, verifier,
                         new SimpleCallback() {
-                    @Override
-                    public void onSuccess() {
-                        emitter.onComplete();
-                    }
+                            @Override
+                            public void onSuccess() {
+                                emitter.onComplete();
+                            }
 
-                    @Override
-                    public void onError(RocketChatException error) {
-                        emitter.onError(error);
-                    }
-                });
+                            @Override
+                            public void onError(RocketChatException error) {
+                                emitter.onError(error);
+                            }
+                        });
             }
         });
     }

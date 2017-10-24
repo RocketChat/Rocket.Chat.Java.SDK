@@ -97,7 +97,7 @@ Following methods are provided by RocketChatAPI class
 
     @Override
     public void onGetSubscriptions(List<SubscriptionObject> subscriptions, ErrorObject error) {
-        ChatRoomFactory factory = client.getChatRoomFactory();   //Api is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
+        ChatRoomFactory factory = client.getChatRoomFactory();   //client.is used for creating rooms from subscriptions/ rooms retured by either getSubscriptions or getRooms API
         room = factory.createChatRooms(subscriptions).getChatRoomByName("general");
     }
     
@@ -145,60 +145,6 @@ factory.removeChatRoomById("room_id");
 //or 
 
 factory.removeChatRoomByName(room);
-
-```
-
-**6. getDbManager**
-
-- Whenever subscribed to ActiveUsers and UserData (see method number 17 and 18), server will keep sending data to a user about other users presence.
-- Other users can be thought as _Users in the vicinity_.
-- Those users automatically gets added in lightweight memory database.
-- This method provides a way to access those users by their id or registering a observer when status of a user changes from ONLINE TO OFFLINE.
-
-- Getting user status from id (method returns doc which also contains other information of a given user)
-
-```
-   UserDocument user = client.getDbManager().getUserCollection().get("userid");
-   System.out.println("UserName is " + user.getName());
-   System.out.println("User status is "+ user.getStatus());
-   System.out.println("User avatar url is "+ user.getAvatarUrl());
-```
-
-
-- Observe for status change of a particular user by providing his/her user-id
-
-```
-        client.getDbManager().getUserCollection().register("user_id", new
-            Collection.Observer<UserDocument>() {
-            public void onUpdate(Collection.Type type, UserDocument user) {
-                switch (type) {
-                    case ADDED:
-                        System.out.println("user has been added, status is "+ user.getStatus());
-                        break;
-                    case CHANGED:
-                        System.out.println("user has been changed, status is "+ user.getStatus());
-                        break;
-                    case REMOVED:
-                        System.out.println("user has been removed, status is "+ user.getStatus());
-                        break;
-                }
-            }
-        });
-
-```
-
-- Observe all users for status changes.
-
-```
-        client.getDbManager().addObserver(new Observer() {
-            public void update(Observable o, Object arg) {
-                if (arg !=null) {
-                    UserDocument document = (UserDocument) arg;
-                    System.out.println("Username is "+ document.getName());
-                    System.out.println("Status of a user is " + document.getStatus());
-                }
-            }
-        });
 
 ```
 
@@ -368,6 +314,26 @@ factory.removeChatRoomByName(room);
                 System.out.println("Subscribed to user data");
             }
         });
+```
+
+19. subscribeUserRoles
+- Used to get different user roles 
+```java
+
+```
+
+20. subscribeLoginConf
+- Used to get different login configurations used for facebook, twitter, github etc
+
+```java
+
+```
+21. subscribeClientVersions
+- Used to get different client versions
+
+```java
+
+
 ```
 
 **19. logout**

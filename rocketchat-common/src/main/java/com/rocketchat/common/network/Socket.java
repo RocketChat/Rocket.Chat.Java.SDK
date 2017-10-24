@@ -4,19 +4,16 @@ import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.Timer;
 import java.util.TimerTask;
-
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 7/6/17.

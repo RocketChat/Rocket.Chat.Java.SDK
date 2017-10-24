@@ -1,7 +1,7 @@
 // This is a original collection file with multiple observers supports for single UserID
 // Will add multiple listeners based on demand
 
-package com.rocketchat.common.data.lightdb.collection;
+package com.rocketchat.common.data.lightstream.collection;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,6 +3,7 @@ package com.rocketchat.core.model;
 import com.ryanharter.auto.value.moshi.MoshiAdapterFactory;
 import com.squareup.moshi.JsonAdapter;
 
+
 @MoshiAdapterFactory
 public abstract class JsonAdapterFactory implements JsonAdapter.Factory {
 

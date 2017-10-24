@@ -6,9 +6,7 @@ import com.rocketchat.common.data.model.BaseRoom;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 /**
@@ -17,13 +15,20 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Room extends BaseRoom {
 
-    @Nullable public abstract String topic();
+    @Nullable
+    public abstract String topic();
 
-    @Json(name = "muted") @Nullable public abstract List<String> mutedUsers();
+    @Json(name = "muted")
+    @Nullable
+    public abstract List<String> mutedUsers();
 
-    @Nullable public abstract @Timestamp Long jitsiTimeout();
+    @Nullable
+    public abstract @Timestamp
+    Long jitsiTimeout();
 
-    @Json(name = "ro") @Nullable public abstract Boolean readOnly();
+    @Json(name = "ro")
+    @Nullable
+    public abstract Boolean readOnly();
 
     public static JsonAdapter<Room> jsonAdapter(Moshi moshi) {
         return new AutoValue_Room.MoshiJsonAdapter(moshi);

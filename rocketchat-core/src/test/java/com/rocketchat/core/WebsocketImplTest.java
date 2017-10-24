@@ -12,7 +12,8 @@ import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.squareup.moshi.Moshi;
-
+import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.OkHttpClient;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -24,9 +25,6 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import io.fabric8.mockwebserver.DefaultMockServer;
-import okhttp3.OkHttpClient;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,7 +72,7 @@ public class WebsocketImplTest {
                 .add(CommonJsonAdapterFactory.create())
                 .build();
 
-        sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger());
+        sut = new WebsocketImpl(client, factory, moshi, socketUrl, new NoopLogger(), null, null, null);
         sut.disablePing();
     }
 

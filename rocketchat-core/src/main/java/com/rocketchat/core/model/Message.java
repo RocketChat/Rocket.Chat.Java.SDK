@@ -6,10 +6,8 @@ import com.rocketchat.common.data.model.User;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nullable;
 
 /**
@@ -23,16 +21,36 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Message extends BaseMessage {
 
-    @Nullable public abstract Boolean groupable();
-    @Nullable public abstract List<Url> urls();
-    @Nullable public abstract String avatar();
-    @Nullable public abstract List<User> mentions();
-    @Nullable public abstract Boolean parseUrls();
+    @Nullable
+    public abstract Boolean groupable();
+
+    @Nullable
+    public abstract List<Url> urls();
+
+    @Nullable
+    public abstract String avatar();
+
+    @Nullable
+    public abstract List<User> mentions();
+
+    @Nullable
+    public abstract Boolean parseUrls();
+
     // TODO -> channels
     // TODO -> attachments
-    @Nullable public abstract Map<String, String> translations();
+    @Nullable
+    public abstract Map<String, String> translations();
+
     // TODO -> reactions
-    @Json(name = "starred") @Nullable public abstract List<User> starredBy();
+    @Json(name = "starred")
+    @Nullable
+    public abstract List<User> starredBy();
+    // TODO: 10/10/17 Implement boolean parseURLS inside message defines =>Whether Rocket.Chat should try and parse the urls or not
+    // TODO : Add file which is required for getting attachments
+    // TODO: 19/10/17 pinned boolean that shows if this is a pinned message
+    // TODO: 19/10/17 pinned at : show date when a particular message was pinned
+    // TODO: 19/10/17 pinned by : shows who pinned the message (It is a user)
+
 
     public static JsonAdapter<Message> jsonAdapter(Moshi moshi) {
         return new AutoValue_Message.MoshiJsonAdapter(moshi);
@@ -194,7 +212,7 @@ public abstract class Message extends BaseMessage {
                 return MessageType.MESSAGE_EDITED;
             } else if (starredBy() != null) {
                 return MessageType.MESSAGE_STARRED;
-            // TODO - implement reactions and attachments...
+                // TODO - implement reactions and attachments...
             /*} else if (reactions != null) {
                 return MessageType.MESSAGE_REACTION;
             } else if (attachments != null) {
