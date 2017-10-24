@@ -4,6 +4,7 @@ import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
+
 import java.util.List;
 
 /**

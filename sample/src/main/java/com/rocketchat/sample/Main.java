@@ -5,6 +5,7 @@ import com.rocketchat.common.data.lightstream.document.UserDocument;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.listener.SubscribeCallback;
+import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.core.RocketChatClient;
 import com.rocketchat.core.callback.LoginCallback;
@@ -22,6 +23,7 @@ public class Main {
     RocketChatClient client;
     String username = "";
     String password = "";
+    private Token token;
 
     public static void main(String[] args) {
         new Main().call();
@@ -33,7 +35,23 @@ public class Main {
                 .restBaseUrl(baseUrl)
                 .logger(logger)
                 .build();
-        client.connect(connectListener);
+        client.setReconnectionStrategy(new ReconnectionStrategy(4, 2000));
+        client.setPingInterval(15000);
+
+
+        // Example signin with REST Api, then use the token for websocket login
+        client.signin("username", "password", new LoginCallback() {
+            @Override
+            public void onError(RocketChatException error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onLoginSuccess(Token token) {
+                Main.this.token = token;
+                client.connect(connectListener);
+            }
+        });
 
         client.getGlobalStreamCollectionManager().subscribeUserCollection(new StreamCollectionListener<UserDocument>() {
             @Override
@@ -53,7 +71,6 @@ public class Main {
         });
 
     }
-
 
     LoginCallback loginCallback = new LoginCallback() {
         @Override

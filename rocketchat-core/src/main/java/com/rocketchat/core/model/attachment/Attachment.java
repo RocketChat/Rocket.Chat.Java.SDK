@@ -1,5 +1,7 @@
 package com.rocketchat.core.model.attachment;
 
+import com.rocketchat.common.utils.Url;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,26 +10,32 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by sachin on 20/8/17.
+ * @author Sachin Shinde
+ * @author Filipe de Lima Brito (filipedelimabrito@gmail.com)
  */
-
 public class Attachment {
-    protected String title;
+    protected String id;
+    protected String name;
     protected String type;
     protected String description;
-    protected String title_link;
-    protected Boolean title_link_download;
+    protected String size;
+    protected String uploadedAt;
+    protected String updatedAt;
+    protected String link;
 
-    Attachment(JSONObject object) {
-        title = object.optString("title");
+    public Attachment(JSONObject object, String hostname) {
+        id =  object.optString("_id");
+        name = object.optString("name");
         type = object.optString("type");
         description = object.optString("description");
-        title_link = object.optString("title_link");
-        title_link_download = object.optBoolean("title_link_download");
+        size = object.optString("size");
+        uploadedAt = object.optString("uploadedAt");
+        updatedAt = object.optString("_updatedAt");
+        link = getAttachmentLink(hostname, id, name);
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public String getType() {
@@ -38,14 +46,25 @@ public class Attachment {
         return description;
     }
 
-    public String getTitle_link() {
-        return title_link;
+    public String getSize() {
+        return size;
     }
 
-    public Boolean getTitle_link_download() {
-        return title_link_download;
+    public String getUploadedAt() {
+        return uploadedAt;
     }
 
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    private String getAttachmentLink(String hostname, String attachmentId, String attachmentName) {
+        return Url.getSafeUrl(hostname + "file-upload/" + attachmentId + "/" + attachmentName);
+    }
 
     public static class TextAttachment implements TAttachment {
         private String text;
@@ -56,7 +75,7 @@ public class Attachment {
         private List<Attachment> attachments; //A collection of attachment objects, available only when the message has at least one attachment
         private Date msgTimestamp;
 
-        public TextAttachment(JSONObject object) {
+        public TextAttachment(JSONObject object, String hostname) {
             try {
                 text = object.optString("text");
                 translations = object.optJSONObject("translations");
@@ -68,7 +87,7 @@ public class Attachment {
                     attachments = new ArrayList<>();
                     JSONArray array = object.optJSONArray("attachments");
                     for (int i = 0; i < array.length(); i++) {
-                        attachments.add(new Attachment(array.optJSONObject(i)));
+                        attachments.add(new Attachment(array.optJSONObject(i), hostname));
                     }
                 }
 
@@ -120,8 +139,8 @@ public class Attachment {
         String image_type;
         int image_size;
 
-        public ImageAttachment(JSONObject object) {
-            super(object);
+        public ImageAttachment(JSONObject object, String hostname) {
+            super(object, hostname);
             // Exclusively for image
             image_url = object.optString("image_url");
             image_type = object.optString("image_type");
@@ -153,8 +172,8 @@ public class Attachment {
         String audio_type;
         int audio_size;
 
-        public AudioAttachment(JSONObject object) {
-            super(object);
+        public AudioAttachment(JSONObject object, String hostname) {
+            super(object, hostname);
             // Exclusively For audio
             audio_url = object.optString("audio_url");
             audio_type = object.optString("audio_type");
@@ -187,8 +206,8 @@ public class Attachment {
         String video_type;
         int video_size;
 
-        public VideoAttachment(JSONObject object) {
-            super(object);
+        public VideoAttachment(JSONObject object, String hostname) {
+            super(object, hostname);
             // Exclusively For video
             video_url = object.optString("video_url");
             video_type = object.optString("video_type");
@@ -220,5 +239,18 @@ public class Attachment {
         VIDEO,
         OTHER
     }
-}
 
+    public enum SortBy {
+        UPLOADED_DATE("uploadedAt");
+
+        private String propertyName;
+
+        SortBy(String propertyName) {
+            this.propertyName =  propertyName;
+        }
+
+        public String getPropertyName() {
+            return propertyName;
+        }
+    }
+}
