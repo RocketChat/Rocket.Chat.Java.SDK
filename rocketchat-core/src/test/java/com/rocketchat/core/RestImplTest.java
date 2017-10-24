@@ -35,6 +35,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.timeout;
@@ -123,6 +124,7 @@ public class RestImplTest {
                 .once();
 
         rest.signin("user", "password", loginCallback);
+
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
 
@@ -144,6 +146,7 @@ public class RestImplTest {
 
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
+
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
         assertThat(exception.getMessage(), is(equalTo("Unauthorized")));
@@ -155,6 +158,7 @@ public class RestImplTest {
 
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
+
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatException.class)));
 
@@ -203,6 +207,7 @@ public class RestImplTest {
                 .once();
 
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+
         verify(paginatedCallback, timeout(100).only())
                 .onError(exceptionCaptor.capture());
 
@@ -212,7 +217,6 @@ public class RestImplTest {
     }
 
     @Test
-    //TODO Needs to know why it is failing.
     public void testGetRoomFilesShouldBeSuccessful() {
         mockServer.expect()
                 .get()
