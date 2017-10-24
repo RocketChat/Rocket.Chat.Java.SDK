@@ -7,6 +7,7 @@ import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.model.MessageType;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.core.callback.LoginCallback;
@@ -68,7 +69,7 @@ public class WebsocketImplTest {
         };
 
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter(dateConverter))
+                .add(new TimestampAdapter(new CalendarISO8601Converter()))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();

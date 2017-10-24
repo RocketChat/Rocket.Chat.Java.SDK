@@ -602,6 +602,9 @@ public class WebsocketImpl implements SocketListener {
             case CONNECTED:
                 processOnConnected(message);
                 break;
+            case PING:
+                socket.sendData(RPC.PONG_MESSAGE);
+                break;
             case RESULT:
                 coreMiddleware.processCallback(Long.valueOf(id), object, message);
                 break;

@@ -159,34 +159,14 @@ public /*final*/ class Socket extends WebSocketListener {
     }
 
     private void onTextMessage(String text) {
-        try {
-            logger.info("Receiving: " + text);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        logger.info("Receiving: " + text);
 
-        /*JSONObject message = null;
-        try {
-            message = new JSONObject(text);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return; // ignore non-json messages
-        }
-
-        JsonReader reader;
-        try {
-            reader = Json.checkJsonMessage(text);
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
-        SocketMessage message = null;
+        SocketMessage message;
         try {
             message = messageAdapter.fromJson(text);
         } catch (IOException|NullPointerException e) {
             // log and ignore parse errors
-            logger.debug("Error parsing message: " + e);
+            logger.warning("Error parsing message: " + e);
             return;
         }
 

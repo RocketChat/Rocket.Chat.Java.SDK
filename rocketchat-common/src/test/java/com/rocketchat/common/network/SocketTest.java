@@ -1,10 +1,15 @@
 package com.rocketchat.common.network;
 
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.model.MessageType;
 import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.utils.Logger;
+import com.rocketchat.common.utils.NoopLogger;
+
 import io.fabric8.mockwebserver.DefaultMockServer;
+import okhttp3.OkHttpClient;
+
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +21,14 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.timeout;
@@ -27,11 +40,17 @@ public class SocketTest {
     @Mock
     private SocketListener listener;
 
+    @Mock
+    private Logger logger;
+
     @Captor
     private ArgumentCaptor<Throwable> throwableCaptor;
 
     @Captor
-    private ArgumentCaptor<JSONObject> jsonCaptor;
+    private ArgumentCaptor<MessageType> messageTypeCaptor;
+
+    @Captor
+    private ArgumentCaptor<String> messageCaptor;
 
     private DefaultMockServer mockServer;
 
@@ -95,7 +114,7 @@ public class SocketTest {
      * Then the Socket should be able to receive JSON messages
      */
     @Test
-    public void testShouldReceiveJsonMessage() throws JSONException {
+    public void testShouldIgnoreValidJsonWithoutMessageType() throws JSONException {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
@@ -103,12 +122,17 @@ public class SocketTest {
                 .done()
                 .once();
 
-        Socket socket = new Socket(mockServer.url("/websocket"), listener);
+        Socket socket = new Socket(new OkHttpClient(), mockServer.url("/websocket"),
+                logger, listener);
         socket.connect();
 
-        verify(listener, Mockito.timeout(1000)).onMessageReceived(jsonCaptor.capture());
-        assertTrue(jsonCaptor.getValue() != null);
-        assertTrue(jsonCaptor.getValue().getString("key").contentEquals("value"));
+        verify(listener, timeout(200).times(0))
+                .onMessageReceived(any(MessageType.class), any(String.class), any(String.class));
+
+        verify(logger, timeout(200).times(1))
+                .warning(messageCaptor.capture());
+        assertTrue(messageCaptor.getValue() != null);
+        assertThat(messageCaptor.getValue(), startsWith("Error parsing message: "));
 
         socket.disconnect();
     }
@@ -126,10 +150,17 @@ public class SocketTest {
                 .done()
                 .once();
 
-        Socket socket = new Socket(mockServer.url("/websocket"), listener);
+        Socket socket = new Socket(new OkHttpClient(), mockServer.url("/websocket"),
+                logger, listener);
         socket.connect();
 
-        verify(listener, after(400).times(0)).onMessageReceived(jsonCaptor.capture());
+        verify(listener, timeout(2000).times(0))
+                .onMessageReceived(any(MessageType.class), any(String.class), any(String.class));
+
+        verify(logger, timeout(2000).times(1))
+                .warning(messageCaptor.capture());
+        assertTrue(messageCaptor.getValue() != null);
+        assertThat(messageCaptor.getValue(), startsWith("Error parsing message: "));
         socket.disconnect();
     }
 
@@ -142,7 +173,7 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                .waitFor(500).andEmit("{\"valid\":\"message\"}")
+                .waitFor(500).andEmit("{\"msg\":\"connected\"}")
                 .expect(RPC.PING_MESSAGE).andEmit(RPC.PONG_MESSAGE).always()
                 .done()
                 .once();
@@ -151,11 +182,20 @@ public class SocketTest {
         socket.setPingInterval(1000);
         socket.connect();
 
-        verify(listener, timeout(2000).times(2)).onMessageReceived(jsonCaptor.capture());
-        assertTrue(jsonCaptor.getValue() != null);
-        assertTrue(jsonCaptor.getAllValues().size() == 2);
-        assertTrue(jsonCaptor.getAllValues().get(0).toString().contentEquals("{\"valid\":\"message\"}"));
-        assertTrue(jsonCaptor.getAllValues().get(1).toString().contentEquals(RPC.PONG_MESSAGE));
+        verify(listener, timeout(2000).times(2))
+                .onMessageReceived(messageTypeCaptor.capture(), nullable(String.class),
+                        messageCaptor.capture());
+        assertThat(messageCaptor.getValue(), is(notNullValue()));
+        assertThat(messageCaptor.getAllValues().size(), is(equalTo(2)));
+
+        assertThat(messageTypeCaptor.getValue(), is(notNullValue()));;
+        assertThat(messageTypeCaptor.getAllValues().size(), is(equalTo(2)));
+
+        assertThat(messageTypeCaptor.getAllValues().get(0), is(equalTo(MessageType.CONNECTED)));
+        assertThat(messageTypeCaptor.getAllValues().get(1), is(equalTo(MessageType.PONG)));
+
+        assertThat(messageCaptor.getAllValues().get(0), is(equalTo("{\"msg\":\"connected\"}")));
+        assertThat(messageCaptor.getAllValues().get(1), is(equalTo(RPC.PONG_MESSAGE)));
 
         socket.disconnect();
     }
@@ -169,8 +209,8 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                .waitFor(500).andEmit(RPC.PING_MESSAGE)
-                .expect(RPC.PONG_MESSAGE).andEmit("{\"pong\":\"OK\"}").once()
+                .waitFor(200).andEmit(RPC.PING_MESSAGE)
+                .expect(RPC.PING_MESSAGE).andEmit(RPC.PING_MESSAGE).once()
                 .done()
                 .once();
 
@@ -178,9 +218,14 @@ public class SocketTest {
         socket.connect();
         socket.setPingInterval(5000);
 
-        verify(listener, Mockito.timeout(2000)).onMessageReceived(jsonCaptor.capture());
-        assertTrue(jsonCaptor.getValue() != null);
-        assertTrue(jsonCaptor.getValue().toString().contentEquals("{\"pong\":\"OK\"}"));
+        /*verify(listener, Mockito.timeout(2000)).onMessageReceived(messageTypeCaptor.capture(),
+                nullable(String.class), messageCaptor.capture());
+        assertThat(messageTypeCaptor.getValue(), is(notNullValue()));
+        assertThat(messageTypeCaptor.getValue(), is(equalTo(MessageType.PING)));
+        assertThat(messageCaptor.getValue(), is(notNullValue()));
+        assertThat(messageCaptor.getValue(), is(equalTo(RPC.PING_MESSAGE)));*/
+        verify(listener, timeout(2000).times(0))
+                .onMessageReceived(any(MessageType.class), any(String.class), any(String.class));
 
         socket.disconnect();
     }
