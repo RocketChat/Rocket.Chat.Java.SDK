@@ -45,6 +45,7 @@ class RestImpl {
     private final TokenProvider tokenProvider;
     private final Moshi moshi;
     private final Logger logger;
+    private Token token;
 
     RestImpl(OkHttpClient client, Moshi moshi, HttpUrl baseUrl, TokenProvider tokenProvider, Logger logger) {
         this.client = client;
@@ -183,9 +184,49 @@ class RestImpl {
 
     }
 
-    // TODO
-    void getRoomFavoriteMessages() {
+    void getRoomFavoriteMessages(String roomId,
+                                 BaseRoom.RoomType roomType,
+                                 int offset,
+                                 final PaginatedCallback callback) {
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"starred._id\":{\"\\$in\":[\"" + token.getUserId() + "\"]}}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, callback);
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
+
+                    // TODO Parse
+
+                    // callback.onSuccess(messages, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     // TODO
@@ -199,11 +240,11 @@ class RestImpl {
                       Attachment.SortBy sortBy,
                       Sort sort,
                       final PaginatedCallback callback) {
-        checkNotNull(roomId,"roomId == null");
-        checkNotNull(roomType,"roomType == null");
-        checkNotNull(sortBy,"sortBy == null");
-        checkNotNull(sort,"sort == null");
-        checkNotNull(callback,"callback == null");
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(sortBy, "sortBy == null");
+        checkNotNull(sort, "sort == null");
+        checkNotNull(callback, "callback == null");
 
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "files"))
                 .addQueryParameter("roomId", roomId)
@@ -251,7 +292,7 @@ class RestImpl {
      * Returns the correspondent Rest API method accordingly with the room type.
      *
      * @param roomType The type of the room.
-     * @param method The method.
+     * @param method   The method.
      * @return A Rest API method accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
@@ -270,7 +311,7 @@ class RestImpl {
      * Builds and returns the HttpUrl.Builder as {baseUrl}/api/v1/{method}
      *
      * @param baseUrl The base URL.
-     * @param method The method name.
+     * @param method  The method name.
      * @return A HttpUrl pointing to the REST API call.
      */
     private HttpUrl.Builder requestUrl(HttpUrl baseUrl, String method) {
@@ -292,7 +333,7 @@ class RestImpl {
                 .url(httpUrl);
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
-            Token token = tokenProvider.getToken();
+            token = tokenProvider.getToken();
             builder.addHeader("X-Auth-Token", token.getAuthToken())
                     .addHeader("X-User-Id", token.getUserId());
         }
