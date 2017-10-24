@@ -82,6 +82,32 @@ public class ChatRoom {
     }
 
     /**
+     * Gets the room pinned message list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getPinnedMessages(0, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the pinned message list and the total of pinned messages in the room (this is not the pinned message list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @since 0.8.0
+     */
+    public void getPinnedMessages(int offset, PaginatedCallback callback) {
+        client.getRoomPinnedMessages(room.roomId(), room.type(), offset, callback);
+    }
+
+    /**
      * Gets the room file list.
      *
      * <p>Example of expected usage:
