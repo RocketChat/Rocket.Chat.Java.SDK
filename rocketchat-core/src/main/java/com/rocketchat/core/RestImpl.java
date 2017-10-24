@@ -45,7 +45,6 @@ class RestImpl {
     private final TokenProvider tokenProvider;
     private final Moshi moshi;
     private final Logger logger;
-    private Token token;
 
     RestImpl(OkHttpClient client, Moshi moshi, HttpUrl baseUrl, TokenProvider tokenProvider, Logger logger) {
         this.client = client;
@@ -188,6 +187,7 @@ class RestImpl {
                                  BaseRoom.RoomType roomType,
                                  int offset,
                                  final PaginatedCallback callback) {
+        checkNotNull(tokenProvider, "token == null");
         checkNotNull(roomId, "roomId == null");
         checkNotNull(roomType, "roomType == null");
         checkNotNull(callback, "callback == null");
@@ -195,7 +195,7 @@ class RestImpl {
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
                 .addQueryParameter("roomId", roomId)
                 .addQueryParameter("offset", String.valueOf(offset))
-                .addQueryParameter("query", "{\"starred._id\":{\"\\$in\":[\"" + token.getUserId() + "\"]}}")
+                .addQueryParameter("query", "{\"starred._id\":{\"$in\":[\"" + tokenProvider.getToken().getUserId() + "\"]}}")
                 .build();
 
         Request request = requestBuilder(httpUrl)
@@ -221,7 +221,7 @@ class RestImpl {
 
                     // TODO Parse
 
-                    // callback.onSuccess(messages, json.optInt("total"));
+//                     callback.onSuccess(messages, json.optInt("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
@@ -333,7 +333,7 @@ class RestImpl {
                 .url(httpUrl);
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
-            token = tokenProvider.getToken();
+            Token token = tokenProvider.getToken();
             builder.addHeader("X-Auth-Token", token.getAuthToken())
                     .addHeader("X-User-Id", token.getUserId());
         }
