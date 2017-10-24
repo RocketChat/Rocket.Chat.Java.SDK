@@ -188,9 +188,49 @@ class RestImpl {
 
     }
 
-    // TODO
-    void getRoomPinnedMessages() {
+    void getRoomPinnedMessages(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               final PaginatedCallback callback) {
+        checkNotNull(roomId,"roomId == null");
+        checkNotNull(roomType,"roomType == null");
+        checkNotNull(callback,"callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"pinned\":true}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, callback);
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
+
+                    // TODO Parse
+
+//                    callback.onSuccess(messages, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     void getRoomFiles(String roomId,
