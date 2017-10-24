@@ -48,9 +48,10 @@ public class RestImplTest {
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
     @Mock private LoginCallback loginCallback;
-    @Mock private PaginatedCallback<Attachment> paginatedCallback;
+    @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
     @Captor private ArgumentCaptor<List<Attachment>> attachmentsCaptor;
+    @Captor private ArgumentCaptor<List<Message>> messagesCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
     
     private static final int DEFAULT_TIMEOUT = 200;
@@ -259,6 +260,7 @@ public class RestImplTest {
 
         verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onSuccess(attachmentsCaptor.capture(), anyInt());
+
         List<Attachment> attachmentList = attachmentsCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
         assertThat(attachmentList.size(), is(equalTo(1)));
@@ -266,4 +268,29 @@ public class RestImplTest {
         assertThat(attachment.getId(), is(equalTo("B5HXEJQvoqXjfMyKD")));
         assertThat(attachment.getName(), is(equalTo("sample.txt")));
     }
+
+    //     _____ ______ _______     _____   ____   ____  __  __        ______ __      ______  _____  _____ _______ ______      __  __ ______  _____ _____         _____ ______  _____   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   |  __ \ / __ \ / __ \|  \/  |      |  ____/\ \    / / __ \|  __ \|_   _|__   __|  ____|    |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|/ ____| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |__) | |  | | |  | | \  / |______| |__ /  \ \  / / |  | | |__) | | |    | |  | |__ ______| \  / | |__  | (___| (___   /  \ | |  __| |__  | (___      | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______|  _  /| |  | | |  | | |\/| |______|  __/ /\ \ \/ /| |  | |  _  /  | |    | |  |  __|______| |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|  \___ \     | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | | \ \| |__| | |__| | |  | |      | | / ____ \  / | |__| | | \ \ _| |_   | |  | |____     | |  | | |____ ____) |___) / ____ \ |__| | |____ ____) |    | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|      |_|  \_\\____/ \____/|_|  |_|      |_|/_/    \_\/   \____/|_|  \_\_____|  |_|  |______|    |_|  |_|______|_____/_____/_/    \_\_____|______|_____/     |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testGetFavoriteMessagesShouldFailWithNullRoomId() {
+        rest.getRoomFavoriteMessages(null, BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomFavoriteMessagesShouldFailWithNullRoomType() {
+        rest.getRoomFavoriteMessages("roomId", null, 0, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomFavoriteMessagesShouldFailWithNullCallback() {
+        rest.getRoomFavoriteMessages("roomId", BaseRoom.RoomType.PUBLIC, 0, null);
+    }
+    
 }
