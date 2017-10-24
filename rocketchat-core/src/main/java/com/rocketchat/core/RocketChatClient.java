@@ -165,9 +165,11 @@ public class RocketChatClient {
 
     }
 
-    // TODO
-    public void getRoomPinnedMessages() {
-
+    public void getRoomPinnedMessages(String roomId,
+                                      BaseRoom.RoomType roomType,
+                                      int offset,
+                                      final PaginatedCallback callback) {
+        restImpl.getRoomPinnedMessages(roomId, roomType, offset, callback);
     }
 
     public void getRoomFiles(String roomId,
