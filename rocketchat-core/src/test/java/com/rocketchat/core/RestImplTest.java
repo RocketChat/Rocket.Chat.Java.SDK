@@ -6,6 +6,8 @@ import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
@@ -35,6 +37,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.timeout;
@@ -47,9 +50,10 @@ public class RestImplTest {
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
     @Mock private LoginCallback loginCallback;
-    @Mock private PaginatedCallback<Attachment> paginatedCallback;
+    @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
     @Captor private ArgumentCaptor<List<Attachment>> attachmentsCaptor;
+    @Captor private ArgumentCaptor<List<User>> usersCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
     
     private static final int DEFAULT_TIMEOUT = 200;
@@ -261,5 +265,73 @@ public class RestImplTest {
         Attachment attachment = attachmentList.get(0);
         assertThat(attachment.getId(), is(equalTo("B5HXEJQvoqXjfMyKD")));
         assertThat(attachment.getName(), is(equalTo("sample.txt")));
+    }
+
+    //     _____ ______ _______     _____   ____   ____  __  __        __  __ ______ __  __ ____  ______ _____   _____   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   |  __ \ / __ \ / __ \|  \/  |      |  \/  |  ____|  \/  |  _ \|  ____|  __ \ / ____| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |__) | |  | | |  | | \  / |______| \  / | |__  | \  / | |_) | |__  | |__) | (___      | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______|  _  /| |  | | |  | | |\/| |______| |\/| |  __| | |\/| |  _ <|  __| |  _  / \___ \     | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | | \ \| |__| | |__| | |  | |      | |  | | |____| |  | | |_) | |____| | \ \ ____) |    | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|      |_|  \_\\____/ \____/|_|  |_|      |_|  |_|______|_|  |_|____/|______|_|  \_\_____/     |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomMembersShouldFailWithNullRoomId() {
+        rest.getRoomMembers(null, BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomMembersShouldFailWithNullRoomType() {
+        rest.getRoomMembers("roomId", null, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomMembersShouldFailWithNullSortBy() {
+        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, null, Sort.DESC, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomMembersShouldFailWithNullSort() {
+        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, null, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomMembersShouldFailWithNullCallback() {
+        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, null);
+    }
+
+    @Test
+    public void testGetRoomMembersShouldBeSuccessful() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/channels.members?roomId=GENERAL&offset=0")
+                .andReturn(200, "{" +
+                        "   \"total\":154581," +
+                        "   \"offset\":0," +
+                        "   \"success\":true," +
+                        "   \"members\":[" +
+                        "      {" +
+                        "         \"utcOffset\":2," +
+                        "         \"name\":\"User\"," +
+                        "         \"_id\":\"hcBGHsKo763bTDAiw\"," +
+                        "         \"username\":\"user\"," +
+                        "         \"status\":\"offline\"" +
+                        "      }" +
+                        "   ]," +
+                        "   \"count\":1" +
+                        "}")
+                .once();
+
+        rest.getRoomMembers("GENERAL", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+
+        verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(usersCaptor.capture(), anyInt());
+
+        List<User> userList = usersCaptor.getValue();
+        assertThat(userList, is(notNullValue()));
+        assertThat(userList.size(), is(equalTo(1)));
+        User user = userList.get(0);
+        assertThat(user.id(), is(equalTo("hcBGHsKo763bTDAiw")));
     }
 }
