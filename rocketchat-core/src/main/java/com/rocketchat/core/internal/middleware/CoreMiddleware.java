@@ -104,12 +104,9 @@ public class CoreMiddleware {
                         break;
                     case GET_PUBLIC_SETTINGS:
                         SimpleListCallback<PublicSetting> settingsCallback = (SimpleListCallback<PublicSetting>) callback;
-                        array = (JSONArray) result;
-                        List<PublicSetting> settings = new ArrayList<>(array.length());
-                        for (int j = 0; j < array.length(); j++) {
-                            settings.add(new PublicSetting(array.optJSONObject(j)));
-                        }
-                        settingsCallback.onSuccess(settings);
+                        type = Types.newParameterizedType(TypedListResponse.class, PublicSetting.class);
+                        TypedListResponse<PublicSetting> settings = Json.parseJson(moshi, type, message);
+                        settingsCallback.onSuccess(settings.result());
                         break;
                     case GET_USER_ROLES:
                         SimpleListCallback<User> rolesCallback = (SimpleListCallback<User>) callback;

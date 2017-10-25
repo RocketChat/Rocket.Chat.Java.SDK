@@ -2,6 +2,7 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.AsStringAdapter;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
@@ -113,6 +114,7 @@ public class RocketChatClient {
 
         // TODO - Add to the Builder
         moshi = new Moshi.Builder()
+                .add(new AsStringAdapter())
                 .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
@@ -216,7 +218,7 @@ public class RocketChatClient {
         websocketImpl.getPermissions(callback);
     }
 
-    //Tested
+    @MissingRestMethod
     public void getPublicSettings(SimpleListCallback<PublicSetting> callback) {
         websocketImpl.getPublicSettings(callback);
     }
