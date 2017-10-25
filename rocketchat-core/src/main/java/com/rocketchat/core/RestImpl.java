@@ -187,7 +187,8 @@ class RestImpl {
                                  BaseRoom.RoomType roomType,
                                  int offset,
                                  final PaginatedCallback callback) {
-        checkNotNull(tokenProvider, "token == null");
+        String userId = tokenProvider.getToken().getUserId();
+        checkNotNull(userId, "userId == null");
         checkNotNull(roomId, "roomId == null");
         checkNotNull(roomType, "roomType == null");
         checkNotNull(callback, "callback == null");
@@ -195,7 +196,7 @@ class RestImpl {
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
                 .addQueryParameter("roomId", roomId)
                 .addQueryParameter("offset", String.valueOf(offset))
-                .addQueryParameter("query", "{\"starred._id\":{\"$in\":[\"" + tokenProvider.getToken().getUserId() + "\"]}}")
+                .addQueryParameter("query", "{\"starred._id\":{\"$in\":[\"" + userId + "\"]}}")
                 .build();
 
         Request request = requestBuilder(httpUrl)
