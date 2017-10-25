@@ -51,8 +51,7 @@ public class RestImplTest {
     @Mock private LoginCallback loginCallback;
     @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
-    @Captor private ArgumentCaptor<List<Attachment>> attachmentsCaptor;
-    @Captor private ArgumentCaptor<List<Message>> messagesCaptor;
+    @Captor private ArgumentCaptor<List> listCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
     
     private static final int DEFAULT_TIMEOUT = 200;
@@ -260,9 +259,9 @@ public class RestImplTest {
         rest.getRoomFiles("GENERAL", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
         verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(attachmentsCaptor.capture(), anyInt());
+                .onSuccess(listCaptor.capture(), anyInt());
 
-        List<Attachment> attachmentList = attachmentsCaptor.getValue();
+        List<Attachment> attachmentList = listCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
         assertThat(attachmentList.size(), is(equalTo(1)));
         Attachment attachment = attachmentList.get(0);
@@ -350,9 +349,9 @@ public class RestImplTest {
         rest.getRoomFavoriteMessages("GENERAL", BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
 
         verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(attachmentsCaptor.capture(), anyInt());
+                .onSuccess(listCaptor.capture(), anyInt());
 
-        List<Message> messageList = messagesCaptor.getValue();
+        List<Message> messageList = listCaptor.getValue();
         assertThat(messageList, is(notNullValue()));
         assertThat(messageList.size(), is(equalTo(1)));
         Message message = messageList.get(0);
