@@ -49,11 +49,12 @@ public class RestImplTest {
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
     @Mock private LoginCallback loginCallback;
-    @Mock private PaginatedCallback paginatedCallback;
+    @Mock private PaginatedCallback<Attachment> paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
     @Captor private ArgumentCaptor<List> listCaptor;
-    @Captor private ArgumentCaptor<List<Message>> messagesCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
+    
+    private static final int DEFAULT_TIMEOUT = 200;
 
     @Before
     public void setup() {
@@ -106,7 +107,7 @@ public class RestImplTest {
 
         rest.signin("user", "password", loginCallback);
 
-        verify(loginCallback, timeout(100).only())
+        verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onLoginSuccess(tokenCaptor.capture());
 
         Token token = tokenCaptor.getValue();
@@ -124,7 +125,7 @@ public class RestImplTest {
                 .once();
 
         rest.signin("user", "password", loginCallback);
-        verify(loginCallback, timeout(100).only())
+        verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
 
         RocketChatException exception = exceptionCaptor.getValue();
@@ -143,7 +144,7 @@ public class RestImplTest {
 
         rest.signin("user", "password", loginCallback);
 
-        verify(loginCallback, timeout(200).only())
+        verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
@@ -154,7 +155,7 @@ public class RestImplTest {
     public void testSigninShouldFailIfNot2xx() {
         rest.signin("user", "password", loginCallback);
 
-        verify(loginCallback, timeout(200).only())
+        verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatException.class)));
@@ -200,7 +201,7 @@ public class RestImplTest {
         mockServer.expect()
                 .get()
                 .withPath("/api/v1/channels.files")
-                .andReturn(200, "NOT A JSON")
+                .andReturn(DEFAULT_TIMEOUT, "NOT A JSON")
                 .once();
 
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
@@ -216,9 +217,10 @@ public class RestImplTest {
     //TODO Needs to know why it is failing.
     public void testGetRoomFilesShouldBeSuccessful() {
         mockServer.expect()
-                .post()
-                .withPath("/api/v1/channels.files")
-                .andReturn(200, "\"total\":5000," +
+                .get()
+                .withPath("/api/v1/channels.files?roomId=general&offset=0&sort={%22uploadedAt%22:-1}")
+                .andReturn(200,
+                        "{\"total\":5000," +
                         "   \"offset\":0," +
                         "   \"success\":true," +
                         "   \"count\":1," +
@@ -253,11 +255,15 @@ public class RestImplTest {
 
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
-        verify(paginatedCallback, timeout(100).only())
+        verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onSuccess(listCaptor.capture(), anyInt());
 
-//        List attachmentList = listCaptor.getValue();
-//        assertThat(attachmentList, is(notNullValue()));
+        List<Attachment> attachmentList = listCaptor.getValue();
+        assertThat(attachmentList, is(notNullValue()));
+        assertThat(attachmentList.size(), is(equalTo(1)));
+        Attachment attachment = attachmentList.get(0);
+        assertThat(attachment.getId(), is(equalTo("B5HXEJQvoqXjfMyKD")));
+        assertThat(attachment.getName(), is(equalTo("sample.txt")));
     }
 
     //     _____ ______ _______     _____   ____   ____  __  __        _____ _____ _   _ _   _ ______ _____         __  __ ______  _____ _____         _____ ______  _____   _______ ______  _____ _______ _____
@@ -324,9 +330,9 @@ public class RestImplTest {
         rest.getRoomPinnedMessages("general", BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
 
         verify(paginatedCallback, timeout(100).only())
-                .onSuccess(messagesCaptor.capture(), anyInt());
+                .onSuccess(listCaptor.capture(), anyInt());
 
-        List<Message> messageList = messagesCaptor.getValue();
+        List<Message> messageList = listCaptor.getValue();
         assertThat(messageList, is(notNullValue()));
         assertThat(messageList.size(), is(equalTo(1)));
         Message message = messageList.get(0);
