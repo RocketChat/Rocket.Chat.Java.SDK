@@ -8,25 +8,18 @@ import com.rocketchat.common.listener.StreamCollectionListener;
 import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.utils.Sort;
-import com.rocketchat.common.utils.Utils;
-import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.MessageCallback;
 import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
-import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
-import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.roomstream.Document.FileDocument;
 import com.rocketchat.core.roomstream.Document.MessageDocument;
 import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
-import com.rocketchat.core.uploader.FileUploader;
 
 import org.json.JSONObject;
-
-import java.util.Date;
 
 // TODO: 29/7/17 add throw custom exceptions if method call violates permission required to execute given RPC
 public class ChatRoom {
@@ -39,7 +32,6 @@ public class ChatRoom {
     private String roomSubId;
     private String typingSubId;
     private String deleteSubId;
-
 
     //subscription Ids for room collections
     private String filesSubId;
@@ -68,17 +60,17 @@ public class ChatRoom {
 
     //RPC methods
 
-    public void getRoomRoles(SimpleListCallback<RoomRole> callback) {
-        client.getRoomRoles(room.roomId(), callback);
+    public void getRoomRoles() {
+        client.getRoomRoles(room.roomId());
     }
 
-    public void getChatHistory(int limit, Date oldestMessageTimestamp, Date lasttimestamp,
+    public void getChatHistory(int limit, long oldestMessageTimestamp, long lastTimestamp,
                                HistoryCallback callback) {
-        client.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lasttimestamp, callback);
+        client.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lastTimestamp);
     }
 
     public void getMembers(RoomCallback.GetMembersCallback callback) {
-        client.getRoomMembers(room.roomId(), false, callback);
+        client.getRoomMembers();
     }
 
     /**
@@ -119,18 +111,10 @@ public class ChatRoom {
     }
 
     public void sendMessage(String message) {
-        client.sendMessage(Utils.shortUUID(), room.roomId(), message, null);
+        client.sendMessage(room.roomId(), message);
     }
 
-    public void sendMessage(String message, MessageCallback.MessageAckCallback callback) {
-        client.sendMessage(Utils.shortUUID(), room.roomId(), message, callback);
-    }
-
-    // TODO: 27/7/17 Need more attention on replying to message
-    private void replyMessage(Message msg, String message,
-                              MessageCallback.MessageAckCallback callback) {
-            /*message = "[ ](?msg=" + msg.id() + ") @" + msg.sender().getUserName() + " " + message;
-            client.sendMessage(Utils.shortUUID(), room.roomId(), message, callback);*/
+    private void replyMessage(Message msg, String message) {
     }
 
     public void deleteMessage(String msgId, SimpleCallback callback) {
@@ -143,11 +127,6 @@ public class ChatRoom {
 
     public void pinMessage(String messageId, SimpleCallback callback) {
         client.pinMessage(messageId, callback);
-    }
-
-    @Deprecated
-    public void pinMessage(JSONObject message, SimpleCallback callback) {
-        client.pinMessage(message, callback);
     }
 
     public void unpinMessage(JSONObject message, SimpleCallback callback) {
@@ -191,24 +170,11 @@ public class ChatRoom {
         client.openRoom(room.roomId(), callback);
     }
 
-    public void uploadFile(java.io.File file, String newName, String description, FileListener fileListener) {
-        FileUploader uploader = new FileUploader(client, file, newName, description,
-                this, fileListener);
-        uploader.startUpload();
-    }
-
-    public void sendFileMessage(FileDescriptor file, MessageCallback.MessageAckCallback callback) {
-        client.sendFileMessage(room.roomId(), file.getStore(), file.getFileId(),
-                file.getFileType(), file.getSize(), file.getFileName(), file.getDescription(),
-                file.getUrl(), callback);
-    }
-
     public void setFavourite(Boolean isFavoutite, SimpleCallback callback) {
         client.setFavouriteRoom(room.roomId(), isFavoutite, callback);
     }
 
     //Subscription methods
-
     public void subscribeRoomMessageEvent(SubscribeCallback subscribeCallback,
                                           MessageCallback.MessageListener callback) {
         if (roomSubId == null) {

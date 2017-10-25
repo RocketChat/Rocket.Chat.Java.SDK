@@ -10,6 +10,7 @@ import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
@@ -17,6 +18,7 @@ import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.internal.model.RestToken;
 import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.Setting;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -32,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import com.squareup.moshi.Types;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 
 import okhttp3.Call;
@@ -42,8 +43,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import javax.annotation.Nonnull;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -165,7 +164,7 @@ class RestImpl {
                       int offset,
                       Attachment.SortBy sortBy,
                       Sort sort,
-                      final PaginatedCallback callback) {
+                      final PaginatedCallback<Attachment> callback) {
         checkNotNull(roomId,"roomId == null");
         checkNotNull(roomType,"roomType == null");
         checkNotNull(sortBy,"sortBy == null");
@@ -206,13 +205,33 @@ class RestImpl {
                         attachments.add(new Attachment(filesJSONArray.getJSONObject(i), baseUrl.url().toString()));
                     }
 
-                    callback.onSuccess(attachments, json.optInt("total"));
+                    callback.onSuccess(attachments, json.optLong("offset"), json.optLong("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
             }
         });
 
+    }
+
+    public void getSettings(int offset, final PaginatedCallback<Setting> callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, "settings")
+                .addQueryParameter("offset", String.valueOf(offset))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class, List.class, Setting.class);
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Setting>>>() {
+            @Override
+            public void onValue(RestResult<List<Setting>> data) {
+                callback.onSuccess(data.result(), data.offset(), data.total());
+            }
+        }, ERROR_HANDLER(callback));
     }
 
     private interface ValueCallback<T> {

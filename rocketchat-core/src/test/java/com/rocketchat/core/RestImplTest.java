@@ -41,6 +41,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
@@ -260,7 +261,7 @@ public class RestImplTest {
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
         verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(attachmentsCaptor.capture(), anyInt());
+                .onSuccess(attachmentsCaptor.capture(), anyLong(), anyLong());
         List<Attachment> attachmentList = attachmentsCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
         assertThat(attachmentList.size(), is(equalTo(1)));

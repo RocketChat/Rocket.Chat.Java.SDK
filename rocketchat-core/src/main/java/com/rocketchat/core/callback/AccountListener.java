@@ -3,7 +3,7 @@ package com.rocketchat.core.callback;
 import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.PublicSetting;
+import com.rocketchat.core.model.Setting;
 import java.util.List;
 
 /**
@@ -15,6 +15,6 @@ public class AccountListener {
     }
 
     public interface getPublicSettingsListener extends Listener {
-        void onGetPublicSettings(List<PublicSetting> settings, RocketChatApiException error);
+        void onGetPublicSettings(List<Setting> settings, RocketChatApiException error);
     }
 }

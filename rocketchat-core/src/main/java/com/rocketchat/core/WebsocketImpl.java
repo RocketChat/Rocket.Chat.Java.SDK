@@ -4,7 +4,6 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.MessageType;
-import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.data.model.internal.ConnectedMessage;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
@@ -18,32 +17,18 @@ import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Utils;
-import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
-import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreMiddleware;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.internal.rpc.AccountRPC;
 import com.rocketchat.core.internal.rpc.BasicRPC;
-import com.rocketchat.core.internal.rpc.ChatHistoryRPC;
 import com.rocketchat.core.internal.rpc.CoreSubRPC;
-import com.rocketchat.core.internal.rpc.FileUploadRPC;
-import com.rocketchat.core.internal.rpc.MessageRPC;
-import com.rocketchat.core.internal.rpc.PresenceRPC;
-import com.rocketchat.core.internal.rpc.RoomRPC;
-import com.rocketchat.core.internal.rpc.TypingRPC;
-import com.rocketchat.core.model.Emoji;
-import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.PublicSetting;
-import com.rocketchat.core.model.Room;
-import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
-import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -51,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import okhttp3.OkHttpClient;
@@ -113,25 +97,6 @@ public class WebsocketImpl implements SocketListener {
     }
 
     //Tested
-    void login(String username, String password, final LoginCallback delegate) {
-        LoginCallback callback = new LoginCallback() {
-            @Override
-            public void onLoginSuccess(Token token) {
-                userId = token.userId();
-                delegate.onLoginSuccess(token);
-            }
-
-            @Override
-            public void onError(RocketChatException error) {
-                delegate.onError(error);
-            }
-        };
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LOGIN);
-        socket.sendData(BasicRPC.login(uniqueID, username, password));
-    }
-
-    //Tested
     void loginUsingToken(String token, final LoginCallback delegate) {
         LoginCallback callback = new LoginCallback() {
             @Override
@@ -158,27 +123,6 @@ public class WebsocketImpl implements SocketListener {
     }
 
     //Tested
-    void getPublicSettings(SimpleListCallback<PublicSetting> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_PUBLIC_SETTINGS);
-        socket.sendData(AccountRPC.getPublicSettings(uniqueID, null));
-    }
-
-    //Tested
-    void getUserRoles(SimpleListCallback<User> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_USER_ROLES);
-        socket.sendData(BasicRPC.getUserRoles(uniqueID));
-    }
-
-    //Tested
-    void listCustomEmoji(SimpleListCallback<Emoji> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LIST_CUSTOM_EMOJI);
-        socket.sendData(BasicRPC.listCustomEmoji(uniqueID));
-    }
-
-    //Tested
     void logout(SimpleCallback listener) {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.CallbackType.LOGOUT);
@@ -190,184 +134,6 @@ public class WebsocketImpl implements SocketListener {
         int uniqueID = integer.getAndIncrement();
         coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_SUBSCRIPTIONS);
         socket.sendData(BasicRPC.getSubscriptions(uniqueID));
-    }
-
-    //Tested
-    void getRooms(SimpleListCallback<Room> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_ROOMS);
-        socket.sendData(BasicRPC.getRooms(uniqueID));
-    }
-
-    //Tested
-    void getRoomRoles(String roomId, SimpleListCallback<RoomRole> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_ROOM_ROLES);
-        socket.sendData(BasicRPC.getRoomRoles(uniqueID, roomId));
-    }
-
-    //Tested
-    void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp,
-                        Date lasttimestamp, HistoryCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LOAD_HISTORY);
-        socket.sendData(ChatHistoryRPC.loadHistory(uniqueID, roomID, oldestMessageTimestamp, limit, lasttimestamp));
-    }
-
-    void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.GET_ROOM_MEMBERS);
-        socket.sendData(RoomRPC.getRoomMembers(uniqueID, roomID, allUsers));
-    }
-
-    //Tested
-    void sendIsTyping(String roomId, String username, Boolean istyping) {
-        int uniqueID = integer.getAndIncrement();
-        socket.sendData(TypingRPC.sendTyping(uniqueID, roomId, username, istyping));
-    }
-
-    //Tested
-    void sendMessage(String msgId, String roomID, String message, MessageCallback.MessageAckCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SEND_MESSAGE);
-        socket.sendData(MessageRPC.sendMessage(uniqueID, msgId, roomID, message));
-    }
-
-    //Tested
-    void deleteMessage(String msgId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.deleteMessage(uniqueID, msgId));
-    }
-
-    //Tested
-    void updateMessage(String msgId, String roomId, String message, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.updateMessage(uniqueID, msgId, roomId, message));
-    }
-
-    //Tested
-    void pinMessage(JSONObject message, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.pinMessage(uniqueID, message));
-    }
-
-    //Tested
-    void unpinMessage(JSONObject message, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.unpinMessage(uniqueID, message));
-    }
-
-    //Tested
-    void starMessage(String msgId, String roomId, Boolean starred, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.starMessage(uniqueID, msgId, roomId, starred));
-    }
-
-    //Tested
-    void setReaction(String emojiId, String msgId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        socket.sendData(MessageRPC.setReaction(uniqueID, emojiId, msgId));
-    }
-
-    void searchMessage(String message, String roomId, int limit,
-                       SimpleListCallback<Message> callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SEARCH_MESSAGE);
-        socket.sendData(MessageRPC.searchMessage(uniqueID, message, roomId, limit));
-    }
-
-    //Tested
-    void createPublicGroup(String groupName, String[] users, Boolean readOnly,
-                           RoomCallback.GroupCreateCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.CREATE_GROUP);
-        socket.sendData(RoomRPC.createPublicGroup(uniqueID, groupName, users, readOnly));
-    }
-
-    //Tested
-    void createPrivateGroup(String groupName, String[] users,
-                            RoomCallback.GroupCreateCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.CREATE_GROUP);
-        socket.sendData(RoomRPC.createPrivateGroup(uniqueID, groupName, users));
-    }
-
-    //Tested
-    void deleteGroup(String roomId, SimpleCallback callback) {
-        //Apply simpleListener
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.DELETE_GROUP);
-        socket.sendData(RoomRPC.deleteGroup(uniqueID, roomId));
-    }
-
-    //Tested
-    void archiveRoom(String roomId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.ARCHIVE);
-        socket.sendData(RoomRPC.archieveRoom(uniqueID, roomId));
-    }
-
-    //Tested
-    void unarchiveRoom(String roomId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.UNARCHIVE);
-        socket.sendData(RoomRPC.unarchiveRoom(uniqueID, roomId));
-    }
-
-    //Tested
-    void joinPublicGroup(String roomId, String joinCode, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.JOIN_PUBLIC_GROUP);
-        socket.sendData(RoomRPC.joinPublicGroup(uniqueID, roomId, joinCode));
-    }
-
-    //Tested
-    void leaveGroup(String roomId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LEAVE_GROUP);
-        socket.sendData(RoomRPC.leaveGroup(uniqueID, roomId));
-    }
-
-    //Tested
-    void hideRoom(String roomId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.HIDE_ROOM);
-        socket.sendData(RoomRPC.hideRoom(uniqueID, roomId));
-    }
-
-    //Tested
-    void openRoom(String roomId, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.OPEN_ROOM);
-        socket.sendData(RoomRPC.openRoom(uniqueID, roomId));
-    }
-
-    //Tested
-    void setFavouriteRoom(String roomId, Boolean isFavouriteRoom, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SET_FAVOURITE_ROOM);
-        socket.sendData(RoomRPC.setFavouriteRoom(uniqueID, roomId, isFavouriteRoom));
-    }
-
-    void sendFileMessage(String roomId, String store, String fileId, String fileType,
-                         int size, String fileName, String desc, String url,
-                         MessageCallback.MessageAckCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SEND_MESSAGE);
-        socket.sendData(MessageRPC.sendFileMessage(uniqueID, roomId, store, fileId, fileType, size, fileName, desc, url));
-    }
-
-    //Tested
-    void setStatus(User.Status s, SimpleCallback callback) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.SET_STATUS);
-        socket.sendData(PresenceRPC.setDefaultStatus(uniqueID, s));
     }
 
     void subscribeActiveUsers(SubscribeCallback subscribeCallback) {
@@ -466,18 +232,6 @@ public class WebsocketImpl implements SocketListener {
 
     void setReconnectionStrategy(ReconnectionStrategy strategy) {
         socket.setReconnectionStrategy(strategy);
-    }
-
-    void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateCallback listener) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.CallbackType.UFS_CREATE);
-        socket.sendData(FileUploadRPC.ufsCreate(uniqueID, fileName, fileSize, fileType, roomId, description, store));
-    }
-
-    void completeUFS(String fileId, String store, String token, IFileUpload.UfsCompleteListener listener) {
-        int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, listener, CoreMiddleware.CallbackType.UFS_COMPLETE);
-        socket.sendData(FileUploadRPC.ufsComplete(uniqueID, fileId, store, token));
     }
 
     void setPingInterval(long interval) {
