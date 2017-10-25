@@ -48,7 +48,6 @@ public class RestImplTest {
     private RestImpl rest;
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
-    @Mock private Token token;
     @Mock private LoginCallback loginCallback;
     @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
