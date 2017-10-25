@@ -1,44 +1,24 @@
 package com.rocketchat.core.model;
 
-import java.util.Date;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.auto.value.AutoValue;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
-/**
- * Created by sachin on 26/7/17.
- */
-public class MetaData {
-    private Integer revision;
-    private Date created;
-    private Integer version;
-    private Date updated;
+import javax.annotation.Nullable;
 
-    public MetaData(JSONObject object) {
-        try {
-            revision = object.getInt("revision");
-            created = new Date(object.getInt("created"));
-            version = object.getInt("version");
-            if (object.opt("updated") != null) {
-                updated = new Date(object.getInt("updated"));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+@AutoValue
+public abstract class MetaData {
 
-    public Integer getRevision() {
-        return revision;
-    }
+    public abstract int revision();
 
-    public Date getCreated() {
-        return created;
-    }
+    public abstract long created();
 
-    public Integer getVersion() {
-        return version;
-    }
+    public abstract int version();
 
-    public Date getUpdated() {
-        return updated;
+    @Nullable
+    public abstract Long updated();
+
+    public static JsonAdapter<MetaData> jsonAdapter(Moshi moshi) {
+        return new AutoValue_MetaData.MoshiJsonAdapter(moshi);
     }
 }

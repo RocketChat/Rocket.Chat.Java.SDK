@@ -22,6 +22,7 @@ import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
+import com.rocketchat.core.annotation.MissingRestMethod;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -206,16 +207,11 @@ public class RocketChatClient {
     }
 
     //Tested
-    public void login(String username, String password, LoginCallback loginCallback) {
-        websocketImpl.login(username, password, loginCallback);
-    }
-
-    //Tested
     public void loginUsingToken(String token, LoginCallback loginCallback) {
         websocketImpl.loginUsingToken(token, loginCallback);
     }
 
-    //Tested
+    @MissingRestMethod
     public void getPermissions(SimpleListCallback<Permission> callback) {
         websocketImpl.getPermissions(callback);
     }
