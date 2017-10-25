@@ -14,17 +14,20 @@ import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -223,9 +226,11 @@ class RestImpl {
                     JSONObject json = new JSONObject(response.body().string());
                     logger.info("Response = " + json.toString());
 
-                    // TODO Parse
+                    Type type = Types.newParameterizedType(List.class, Message.class);
+                    JsonAdapter<List<Message>> adapter = moshi.adapter(type);
+                    List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
 
-//                    callback.onSuccess(messages, json.optInt("total"));
+                    callback.onSuccess(messageList, json.optInt("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
