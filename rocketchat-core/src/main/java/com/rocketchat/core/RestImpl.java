@@ -21,12 +21,14 @@ import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,18 +222,11 @@ class RestImpl {
                     JSONObject json = new JSONObject(response.body().string());
                     logger.info("Response = " + json.toString());
 
-                    JSONArray membersJsonArray = json.getJSONArray("members");
-                    int length = membersJsonArray.length();
-                    List<User> memberList = new ArrayList<>(length);
-                    for (int i = 0; i < length; ++i) {
-                        JSONObject memberJsonObject = membersJsonArray.getJSONObject(i);
-                        memberList.add(User.builder()
-                                .id(memberJsonObject.optString("_id"))
-                                .username(memberJsonObject.optString("username"))
-                                .build());
-                    }
+                    Type type = Types.newParameterizedType(List.class, User.class);
+                    JsonAdapter<List<User>> adapter = moshi.adapter(type);
+                    List<User> userList = adapter.fromJson(json.getJSONArray("members").toString());
 
-                    callback.onSuccess(memberList, json.optInt("total"));
+                    callback.onSuccess(userList, json.optInt("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
