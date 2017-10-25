@@ -4,7 +4,7 @@ import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.lightdb.DbManager;
+import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
@@ -12,8 +12,9 @@ import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
+import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
@@ -40,14 +41,11 @@ import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
-
-import org.json.JSONObject;
-
 import java.util.Date;
 import java.util.List;
-
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import org.json.JSONObject;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -63,7 +61,6 @@ public class RocketChatClient {
     private final Logger logger;
     private final SocketFactory factory;
 
-    private DbManager dbManager;
     private TokenProvider tokenProvider;
     private RestImpl restImpl;
     private WebsocketImpl websocketImpl;
@@ -71,6 +68,8 @@ public class RocketChatClient {
 
     // chatRoomFactory class
     private ChatRoomFactory chatRoomFactory;
+    private GlobalStreamCollectionManager globalStreamCollectionManager;
+    private ConnectivityManager connectivityManager;
 
     private RocketChatClient(final Builder builder) {
         if (builder.baseUrl == null || builder.websocketUrl == null) {
@@ -102,18 +101,23 @@ public class RocketChatClient {
         }
 
         // TODO - Add to the Builder
-        Moshi moshi = new Moshi.Builder()
+        moshi = new Moshi.Builder()
                 .add(new TimestampAdapter())
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();
 
-        dbManager = new DbManager(moshi);
+        connectivityManager = new ConnectivityManager();
         chatRoomFactory = new ChatRoomFactory(this);
+        globalStreamCollectionManager = new GlobalStreamCollectionManager(moshi);
 
         tokenProvider = builder.provider;
         restImpl = new RestImpl(client, moshi, baseUrl, tokenProvider, logger);
-        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger);
+        websocketImpl = new WebsocketImpl(client, factory, moshi, builder.websocketUrl, logger, chatRoomFactory, globalStreamCollectionManager, connectivityManager);
+    }
+
+    public WebsocketImpl getWebsocketImpl() {
+        return websocketImpl;
     }
 
     public String getMyUserName() {
@@ -132,8 +136,12 @@ public class RocketChatClient {
         return chatRoomFactory;
     }
 
-    public DbManager getDbManager() {
-        return dbManager;
+    public GlobalStreamCollectionManager getGlobalStreamCollectionManager() {
+        return globalStreamCollectionManager;
+    }
+
+    public ConnectivityManager getConnectivityManager() {
+        return connectivityManager;
     }
 
     public void signin(String username, String password, final LoginCallback loginCallback) {
@@ -352,25 +360,61 @@ public class RocketChatClient {
         websocketImpl.setStatus(s, callback);
     }
 
-    public void subscribeActiveUsers(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeActiveUsers(subscribeListener);
+    public void subscribeActiveUsers(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeActiveUsers(subscribeCallback);
     }
 
-    public void subscribeUserData(SubscribeListener subscribeListener) {
-        websocketImpl.subscribeUserData(subscribeListener);
+    public void subscribeUserData(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeUserData(subscribeCallback);
+    }
+
+    public void subscribeUserRoles(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeUserRoles(subscribeCallback);
+    }
+
+    public void subscribeLoginConf(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeLoginConf(subscribeCallback);
+    }
+
+    public void subscribeClientVersions(SubscribeCallback subscribeCallback) {
+        websocketImpl.subscribeClientVersions(subscribeCallback);
+    }
+
+    String subscribeRoomFiles(String roomId, int limit, SubscribeCallback listener) {
+        return websocketImpl.subscribeRoomFiles(roomId, limit, listener);
+    }
+
+    String subscribeMentionedMessages(String roomId, int limit, SubscribeCallback listener) {
+        return websocketImpl.subscribeMentionedMessages(roomId, limit, listener);
+    }
+
+    String subscribeStarredMessages(String roomId, int limit, SubscribeCallback listener) {
+        return websocketImpl.subscribeStarredMessages(roomId, limit, listener);
+    }
+
+    String subscribePinnedMessages(String roomId, int limit, SubscribeCallback listener) {
+        return websocketImpl.subscribePinnedMessages(roomId, limit, listener);
+    }
+
+    String subscribeSnipettedMessages(String roomId, int limit, SubscribeCallback listener) {
+        return websocketImpl.subscribeSnipettedMessages(roomId, limit, listener);
     }
 
     //Tested
-    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, MessageCallback.SubscriptionCallback listener) {
-        return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeListener, listener);
+    String subscribeRoomMessageEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, MessageCallback.MessageListener listener) {
+        return websocketImpl.subscribeRoomMessageEvent(roomId, enable, subscribeCallback, listener);
     }
 
-    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeListener subscribeListener, TypingListener listener) {
-        return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeListener, listener);
+    String subscribeRoomTypingEvent(String roomId, Boolean enable, SubscribeCallback subscribeCallback, TypingListener listener) {
+        return websocketImpl.subscribeRoomTypingEvent(roomId, enable, subscribeCallback, listener);
     }
 
-    void unsubscribeRoom(String subId, SubscribeListener subscribeListener) {
-        websocketImpl.unsubscribeRoom(subId, subscribeListener);
+    String subscribeRoomDeleteEvent(String roomId, boolean enable, SubscribeCallback subscribeCallback) {
+        return websocketImpl.subscribeRoomDeleteEvent(roomId, enable, subscribeCallback);
+    }
+
+    void unsubscribeRoom(String subId, SubscribeCallback subscribeCallback) {
+        websocketImpl.unsubscribeRoom(subId, subscribeCallback);
     }
 
     public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateCallback listener) {
@@ -409,9 +453,10 @@ public class RocketChatClient {
         websocketImpl.removeSubscription(roomId, CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
     }
 
-    public void removeAllSubscriptions(String roomId) {
+    void removeAllSubscriptions(String roomId) {
         websocketImpl.removeAllSubscriptions(roomId);
     }
+
 
     public static final class Builder {
         private String websocketUrl;
@@ -448,7 +493,7 @@ public class RocketChatClient {
         /**
          * Set the API base URL.
          * <p>
-         * The specified endpoint values (such as with {@link GET @GET}) are resolved against this
+         * The specified endpoint values (such as with {@link @GET}) are resolved against this
          * value using {@link HttpUrl#resolve(String)}. The behavior of this matches that of an
          * {@code <a href="">} link on a website resolving on the current URL.
          * <p>

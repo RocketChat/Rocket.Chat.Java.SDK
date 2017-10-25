@@ -5,7 +5,8 @@ import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.StreamCollectionListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.common.utils.Utils;
@@ -19,6 +20,9 @@ import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.attachment.Attachment;
+import com.rocketchat.core.roomstream.Document.FileDocument;
+import com.rocketchat.core.roomstream.Document.MessageDocument;
+import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.uploader.FileUploader;
 
 import org.json.JSONObject;
@@ -30,14 +34,29 @@ public class ChatRoom {
 
     private final RocketChatClient client;
     private final BaseRoom room;
+    private LocalStreamCollectionManager localStreamCollectionManager;
 
     //Subscription Ids for new subscriptions
-    private String roomSubId;  // TODO: 29/7/17 check for persistent SubscriptionId of the room
+    private String roomSubId;
     private String typingSubId;
+    private String deleteSubId;
+
+
+    //subscription Ids for room collections
+    private String filesSubId;
+    private String mentionedMessagesSubId;
+    private String starredMessagesSubId;
+    private String pinnedMessagesSubId;
+    private String snipetedMessagesSubId;
 
     public ChatRoom(RocketChatClient api, BaseRoom room) {
         this.client = api;
         this.room = room;
+        this.localStreamCollectionManager = new LocalStreamCollectionManager();
+    }
+
+    public LocalStreamCollectionManager getLocalStreamCollectionManager() {
+        return localStreamCollectionManager;
     }
 
     public Boolean isSubscriptionObject() {
@@ -220,33 +239,109 @@ public class ChatRoom {
 
     //Subscription methods
 
-    public void subscribeRoomMessageEvent(SubscribeListener subscribeListener,
-                                          MessageCallback.SubscriptionCallback callback) {
+    public void subscribeRoomMessageEvent(SubscribeCallback subscribeCallback,
+                                          MessageCallback.MessageListener callback) {
         if (roomSubId == null) {
             roomSubId = client.subscribeRoomMessageEvent(room.roomId(),
-                    true, subscribeListener, callback);
+                    true, subscribeCallback, callback);
+            deleteSubId = client.subscribeRoomDeleteEvent(room.roomId(), true, null);
         }
     }
 
-    public void subscribeRoomTypingEvent(SubscribeListener subscribeListener, TypingListener listener) {
+    public void subscribeRoomTypingEvent(SubscribeCallback subscribeCallback, TypingListener listener) {
         if (typingSubId == null) {
-            typingSubId = client.subscribeRoomTypingEvent(room.roomId(), true, subscribeListener, listener);
+            typingSubId = client.subscribeRoomTypingEvent(room.roomId(), true, subscribeCallback, listener);
         }
     }
 
-    public void unSubscribeRoomMessageEvent(SubscribeListener subscribeListener) {
+    public void unSubscribeRoomMessageEvent(SubscribeCallback subscribeCallback) {
         if (roomSubId != null) {
             client.removeSubscription(room.roomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_MESSAGE);
-            client.unsubscribeRoom(roomSubId, subscribeListener);
+            client.unsubscribeRoom(roomSubId, subscribeCallback);
+            client.unsubscribeRoom(deleteSubId, null);
             roomSubId = null;
+            deleteSubId = null;
         }
     }
 
-    public void unSubscribeRoomTypingEvent(SubscribeListener subscribeListener) {
+    public void unSubscribeRoomTypingEvent(SubscribeCallback subscribeCallback) {
         if (typingSubId != null) {
             client.removeSubscription(room.roomId(), CoreStreamMiddleware.SubscriptionType.SUBSCRIBE_ROOM_TYPING);
-            client.unsubscribeRoom(typingSubId, subscribeListener);
+            client.unsubscribeRoom(typingSubId, subscribeCallback);
             typingSubId = null;
+        }
+    }
+
+    // Subscription methods available for flex-tab-container border-component-color on the right side
+
+    public void subscribeRoomFiles(int limit, SubscribeCallback listener, StreamCollectionListener<FileDocument> roomFilesCollectionListener) {
+        if (filesSubId == null) {
+            filesSubId = client.subscribeRoomFiles(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeRoomFilesCollection(roomFilesCollectionListener);
+        }
+    }
+
+    public void subscribeMentionedMessages(int limit, SubscribeCallback listener, StreamCollectionListener<MessageDocument> mentionedMessagesCollectionListener) {
+        if (mentionedMessagesSubId == null) {
+            mentionedMessagesSubId = client.subscribeMentionedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeMentionedMessagesCollection(mentionedMessagesCollectionListener);
+
+        }
+    }
+
+    public void subscribeStarredMessages(int limit, SubscribeCallback listener, StreamCollectionListener<MessageDocument> starredMessagesCollectionListener) {
+        if (starredMessagesSubId == null) {
+            starredMessagesSubId = client.subscribeStarredMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeStarredMessagesCollection(starredMessagesCollectionListener);
+        }
+    }
+
+    public void subscribePinnedMessages(int limit, SubscribeCallback listener, StreamCollectionListener<MessageDocument> pinnedMessagesCollectionListener) {
+        if (pinnedMessagesSubId == null) {
+            pinnedMessagesSubId = client.subscribePinnedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribePinnedMessagesCollection(pinnedMessagesCollectionListener);
+        }
+    }
+
+    public void subscribeSnipettedMessages(int limit, SubscribeCallback listener, StreamCollectionListener<MessageDocument> snipetedMessagesCollectionListener) {
+        if (snipetedMessagesSubId == null) {
+            snipetedMessagesSubId = client.subscribeSnipettedMessages(room.roomId(), limit, listener);
+            localStreamCollectionManager.subscribeSnipetedMessagesCollection(snipetedMessagesCollectionListener);
+        }
+    }
+
+    public void unsubscribeRoomFiles(SubscribeCallback subscribeCallback) {
+        if (filesSubId != null) {
+            client.unsubscribeRoom(filesSubId, subscribeCallback);
+            filesSubId = null;
+        }
+    }
+
+    public void unsubscribeMentionedMessages(SubscribeCallback subscribeCallback) {
+        if (mentionedMessagesSubId != null) {
+            client.unsubscribeRoom(mentionedMessagesSubId, subscribeCallback);
+            mentionedMessagesSubId = null;
+        }
+    }
+
+    public void unsubscribeStarredMessages(SubscribeCallback subscribeCallback) {
+        if (starredMessagesSubId != null) {
+            client.unsubscribeRoom(starredMessagesSubId, subscribeCallback);
+            starredMessagesSubId = null;
+        }
+    }
+
+    public void unsubscribePinnedMessages(SubscribeCallback subscribeCallback) {
+        if (pinnedMessagesSubId != null) {
+            client.unsubscribeRoom(pinnedMessagesSubId, subscribeCallback);
+            pinnedMessagesSubId = null;
+        }
+    }
+
+    public void unsubscribeSnipettedMessages(SubscribeCallback subscribeCallback) {
+        if (snipetedMessagesSubId != null) {
+            client.unsubscribeRoom(snipetedMessagesSubId, subscribeCallback);
+            snipetedMessagesSubId = null;
         }
     }
 
@@ -254,6 +349,11 @@ public class ChatRoom {
         client.removeAllSubscriptions(room.roomId());
         unSubscribeRoomMessageEvent(null);
         unSubscribeRoomTypingEvent(null);
+        unsubscribeRoomFiles(null);
+        unsubscribeMentionedMessages(null);
+        unsubscribePinnedMessages(null);
+        unsubscribeStarredMessages(null);
+        unsubscribeSnipettedMessages(null);
     }
 
     // TODO: 29/7/17 refresh methods to be added, changing data should change internal data, maintain state of the room

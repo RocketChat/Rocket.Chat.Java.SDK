@@ -1,7 +1,6 @@
 package com.rocketchat.livechat.callback;
 
 import com.rocketchat.common.listener.Callback;
-import com.rocketchat.common.listener.Listener;
 import com.rocketchat.livechat.model.LiveChatMessage;
 import java.util.List;
 

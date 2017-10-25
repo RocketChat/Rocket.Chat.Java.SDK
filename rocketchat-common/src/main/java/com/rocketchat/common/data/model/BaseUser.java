@@ -1,19 +1,27 @@
 package com.rocketchat.common.data.model;
 
 import com.squareup.moshi.Json;
-
 import java.util.List;
-
 import javax.annotation.Nullable;
 
 public abstract class BaseUser {
-    @Nullable @Json(name = "_id") public abstract String id();
-    @Nullable public abstract String username();
-    @Nullable public abstract List<String> roles();
+    @Nullable
+    @Json(name = "_id")
+    public abstract String id();
+
+    @Nullable
+    public abstract String username();
+
+    @Nullable
+    public abstract List<String> roles();
+
+    // TODO: 9/10/17 Implement JSONArray for emails e.g. emails = object.optJSONArray("emails");
 
     public abstract static class BaseBuilder<T extends BaseBuilder<T>> {
         public abstract T id(String id);
+
         public abstract T username(String username);
+
         public abstract T roles(List<String> roles);
     }
 

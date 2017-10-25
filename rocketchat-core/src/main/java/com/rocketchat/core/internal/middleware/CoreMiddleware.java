@@ -28,23 +28,23 @@ import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.JsonDataException;
 import com.squareup.moshi.Moshi;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by sachin on 18/7/17.
  */
 
-// TODO: 20/8/17 Process callbacks on UIThread and backgroundThread
+
+// TODO: 9/10/17 Removed some of the APIs need to fix them, especially file uploading API's, calls for upload has been removed
+
 public class CoreMiddleware {
 
     private final Moshi moshi;

@@ -2,7 +2,7 @@ package com.rocketchat.common.network;
 
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.rpc.RPC;
-
+import io.fabric8.mockwebserver.DefaultMockServer;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -14,8 +14,6 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import io.fabric8.mockwebserver.DefaultMockServer;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.mockito.BDDMockito.given;
@@ -101,7 +99,7 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(500).andEmit("{\"key\":\"value\"}")
+                .waitFor(500).andEmit("{\"key\":\"value\"}")
                 .done()
                 .once();
 
@@ -124,7 +122,7 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(100).andEmit("INVALID MESSAGE")
+                .waitFor(100).andEmit("INVALID MESSAGE")
                 .done()
                 .once();
 
@@ -144,8 +142,8 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(500).andEmit("{\"valid\":\"message\"}")
-                    .expect(RPC.PING_MESSAGE).andEmit(RPC.PONG_MESSAGE).always()
+                .waitFor(500).andEmit("{\"valid\":\"message\"}")
+                .expect(RPC.PING_MESSAGE).andEmit(RPC.PONG_MESSAGE).always()
                 .done()
                 .once();
 
@@ -171,8 +169,8 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(500).andEmit(RPC.PING_MESSAGE)
-                    .expect(RPC.PONG_MESSAGE).andEmit("{\"pong\":\"OK\"}").once()
+                .waitFor(500).andEmit(RPC.PING_MESSAGE)
+                .expect(RPC.PONG_MESSAGE).andEmit("{\"pong\":\"OK\"}").once()
                 .done()
                 .once();
 
@@ -196,8 +194,8 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(100).andEmit(RPC.PONG_MESSAGE)
-                    .expect(RPC.PING_MESSAGE).andEmit("A").once()
+                .waitFor(100).andEmit(RPC.PONG_MESSAGE)
+                .expect(RPC.PING_MESSAGE).andEmit("A").once()
                 .done()
                 .once();
 
@@ -225,8 +223,8 @@ public class SocketTest {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket()
                 .open()
-                    .waitFor(100).andEmit(RPC.PONG_MESSAGE)
-                    .expect(RPC.PING_MESSAGE).andEmit("A").once()
+                .waitFor(100).andEmit(RPC.PONG_MESSAGE)
+                .expect(RPC.PING_MESSAGE).andEmit("A").once()
                 .done()
                 .once();
 
@@ -268,7 +266,7 @@ public class SocketTest {
     public void testShouldDisconnectSocket() {
         mockServer.expect().withPath("/websocket")
                 .andUpgradeToWebSocket().open()
-                    .expect("A").andEmit("B").once()
+                .expect("A").andEmit("B").once()
                 .done()
                 .once();
 

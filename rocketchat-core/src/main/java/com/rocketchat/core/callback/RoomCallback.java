@@ -2,8 +2,8 @@ package com.rocketchat.core.callback;
 
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
-import com.rocketchat.common.listener.PaginatedCallback;
-import com.rocketchat.core.model.attachment.Attachment;
+import com.rocketchat.core.model.Room;
+import com.rocketchat.core.model.RoomRole;
 
 import java.util.List;
 
@@ -11,6 +11,14 @@ import java.util.List;
  * Created by sachin on 20/7/17.
  */
 public class RoomCallback {
+
+    public interface GetRoomsCallback extends Callback {
+        void onGetRooms(List<Room> rooms);
+    }
+
+    public interface RoomRolesCallback extends Callback {
+        void onGetRoomRoles(List<RoomRole> roles);
+    }
 
     public interface GroupCreateCallback extends Callback {
         void onCreateGroup(String roomId);

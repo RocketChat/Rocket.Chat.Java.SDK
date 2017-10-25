@@ -2,13 +2,11 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.utils.Pair;
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import io.fabric8.mockwebserver.DefaultMockServer;
 import io.fabric8.mockwebserver.dsl.EventDoneable;
 import io.fabric8.mockwebserver.dsl.TimesOnceableOrHttpHeaderable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class TestUtils {
     @SafeVarargs

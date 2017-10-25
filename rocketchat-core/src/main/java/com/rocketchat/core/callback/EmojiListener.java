@@ -3,7 +3,6 @@ package com.rocketchat.core.callback;
 import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.listener.Listener;
 import com.rocketchat.core.model.Emoji;
-
 import java.util.List;
 
 /**

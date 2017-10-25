@@ -3,7 +3,6 @@ package com.rocketchat.core.model;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-
 import javax.annotation.Nullable;
 
 /**
@@ -12,9 +11,15 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Url {
     public abstract String url();
-    @Nullable public abstract Boolean ignoreParse();
-    @Nullable public abstract UrlMeta meta();
-    @Nullable public abstract ParsedUrl parsedUrl();
+
+    @Nullable
+    public abstract Boolean ignoreParse();
+
+    @Nullable
+    public abstract UrlMeta meta();
+
+    @Nullable
+    public abstract ParsedUrl parsedUrl();
 
     public static Url create(String url, Boolean ignoreParse, UrlMeta meta, ParsedUrl parsedUrl) {
         return new AutoValue_Url(url, ignoreParse, meta, parsedUrl);

@@ -4,7 +4,6 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.core.callback.FileListener;
 import com.rocketchat.core.model.FileDescriptor;
 import com.rocketchat.core.model.Message;
-
 import java.io.IOException;
 
 /**

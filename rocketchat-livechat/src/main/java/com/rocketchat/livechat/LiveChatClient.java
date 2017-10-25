@@ -5,7 +5,7 @@ import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
-import com.rocketchat.common.listener.SubscribeListener;
+import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
@@ -19,20 +19,18 @@ import com.rocketchat.livechat.callback.LoadHistoryCallback;
 import com.rocketchat.livechat.callback.MessageListener;
 import com.rocketchat.livechat.internal.middleware.LiveChatMiddleware;
 import com.rocketchat.livechat.internal.middleware.LiveChatStreamMiddleware;
-import com.rocketchat.livechat.model.JsonAdapterFactory;
 import com.rocketchat.livechat.internal.rpc.LiveChatBasicRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatHistoryRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatSendMsgRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatSubRPC;
 import com.rocketchat.livechat.internal.rpc.LiveChatTypingRPC;
+import com.rocketchat.livechat.model.JsonAdapterFactory;
 import com.squareup.moshi.Moshi;
-
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
+import okhttp3.OkHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import okhttp3.OkHttpClient;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -160,29 +158,29 @@ public class LiveChatClient implements SocketListener {
         socket.sendData(LiveChatTypingRPC.streamNotifyRoom(uniqueID, roomId, username, istyping));
     }
 
-    private void subscribeRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+    private void subscribeRoom(String roomID, Boolean enable, SubscribeCallback subscribeCallback,
                                MessageListener.SubscriptionListener listener) {
 
         String uniqueID = Utils.shortUUID();
-        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback);
         liveChatStreamMiddleware.subscribeRoom(listener);
         socket.sendData(LiveChatSubRPC.streamRoomMessages(uniqueID, roomID, enable));
     }
 
-    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeListener subscribeListener,
+    private void subscribeLiveChatRoom(String roomID, Boolean enable, SubscribeCallback subscribeCallback,
                                        AgentCallback.AgentConnectListener agentConnectListener) {
 
         String uniqueID = Utils.shortUUID();
-        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback);
         liveChatStreamMiddleware.subscribeLiveChatRoom(agentConnectListener);
         socket.sendData(LiveChatSubRPC.streamLivechatRoom(uniqueID, roomID, enable));
     }
 
-    private void subscribeTyping(String roomID, Boolean enable, SubscribeListener subscribeListener,
+    private void subscribeTyping(String roomID, Boolean enable, SubscribeCallback subscribeCallback,
                                  TypingListener listener) {
 
         String uniqueID = Utils.shortUUID();
-        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeListener);
+        liveChatStreamMiddleware.createSubCallbacks(uniqueID, subscribeCallback);
         liveChatStreamMiddleware.subscribeTyping(listener);
         socket.sendData(LiveChatSubRPC.subscribeTyping(uniqueID, roomID, enable));
     }
@@ -340,17 +338,17 @@ public class LiveChatClient implements SocketListener {
             LiveChatClient.this.sendIsTyping(roomId, userName, istyping);
         }
 
-        public void subscribeRoom(SubscribeListener subscribeListener, MessageListener.SubscriptionListener listener) {
-            LiveChatClient.this.subscribeRoom(roomId, false, subscribeListener, listener);
+        public void subscribeRoom(SubscribeCallback subscribeCallback, MessageListener.SubscriptionListener listener) {
+            LiveChatClient.this.subscribeRoom(roomId, false, subscribeCallback, listener);
         }
 
-        public void subscribeLiveChatRoom(SubscribeListener subscribeListener,
+        public void subscribeLiveChatRoom(SubscribeCallback subscribeCallback,
                                           AgentCallback.AgentConnectListener agentConnectListener) {
-            LiveChatClient.this.subscribeLiveChatRoom(roomId, false, subscribeListener, agentConnectListener);
+            LiveChatClient.this.subscribeLiveChatRoom(roomId, false, subscribeCallback, agentConnectListener);
         }
 
-        public void subscribeTyping(SubscribeListener subscribeListener, TypingListener listener) {
-            LiveChatClient.this.subscribeTyping(roomId, false, subscribeListener, listener);
+        public void subscribeTyping(SubscribeCallback subscribeCallback, TypingListener listener) {
+            LiveChatClient.this.subscribeTyping(roomId, false, subscribeCallback, listener);
         }
 
         public void closeConversation() {

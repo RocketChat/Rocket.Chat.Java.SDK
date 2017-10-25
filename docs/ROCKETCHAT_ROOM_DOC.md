@@ -16,6 +16,7 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 - subscribe room for new messages (Room will receive messages in real-time)
 - subscribe room for typing events (Room will receive messages regarding typing events in real-time)
 - uploading file to the server (Update AUDIO, VIDEO, IMAGE file to the server)
+- subscribe for getting starred, pinned, mentioned, snippeted and file messages
  
 **1. getChatHistory**
 
@@ -312,85 +313,102 @@ Following methods are provided by RocketChatAPI.ChatRoom API
 
 
 ```
-    @Override
-    public void onMessage(String roomId, RocketChatMessage message) {
-        System.out.println("Got message " + message.getMessage());
-        switch (message.getMsgType()) {
-            case TEXT:
-                System.out.println("This is a text message");
-                break;
-            case ATTACHMENT:
-                List <TAttachment> attachments= message.getAttachments();
-                for (TAttachment attachment : attachments) {
-                    switch (attachment.getAttachmentType()) {
-                        case TEXT_ATTACHMENT:
-                            System.out.println("This is a reply or quote to a message");
-                            break;
-                        case IMAGE:
-                            System.out.println("There is a image attachment");
-                            break;
-                        case AUDIO:
-                            System.out.println("There is a audio attachment");
-                            break;
-                        case VIDEO:
-                            System.out.println("There is a video attachment");
-                            break;
+        @Override
+        public void onMessage(String roomId, RocketChatMessage message) {
+            System.out.println("Got message " + message.getMessage());
+            switch (message.getMsgType()) {
+                case TEXT:
+                    System.out.println("This is a text message");
+                    break;
+                case ATTACHMENT:
+                    List<TAttachment> attachments = message.getAttachments();
+                    for (TAttachment attachment : attachments) {
+                        switch (attachment.getAttachmentType()) {
+                            case TEXT_ATTACHMENT:
+                                Attachment.TextAttachment textAttachment= (Attachment.TextAttachment) attachment;
+                                System.out.println("Message is "+ textAttachment.getText());
+                                System.out.println("This is a reply or quote to a message");
+                                break;
+                            case IMAGE:
+                                System.out.println("This is a image attachment");
+                                Attachment.ImageAttachment imageAttachment = (Attachment.ImageAttachment) attachment;
+                                System.out.println("Attachment title is " + imageAttachment.getTitle());
+                                System.out.println("Attachment description is "+ imageAttachment.getDescription());
+                                System.out.println("Image url is "+ imageAttachment.getImage_url());
+                                System.out.println("Image type is "+imageAttachment.getImage_type());
+                                break;
+                            case AUDIO:
+                                System.out.println("There is a audio attachment");
+                                Attachment.AudioAttachment audioAttachment = (Attachment.AudioAttachment) attachment;
+                                System.out.println("Attachment title is " + audioAttachment.getTitle());
+                                System.out.println("Attachment description is "+audioAttachment.getDescription());
+                                System.out.println("Audio url is "+audioAttachment.getAudio_url());
+                                System.out.println("Audio type is "+ audioAttachment.getAudio_type());
+                                break;
+                            case VIDEO:
+                                System.out.println("There is a video attachment");
+                                Attachment.VideoAttachment videoAttachment = (Attachment.VideoAttachment) attachment;
+                                System.out.println("Attachment title is " + videoAttachment.getTitle());
+                                System.out.println("Attachment description is "+ videoAttachment.getDescription());
+                                System.out.println("Video url is "+ videoAttachment.getVideo_url());
+                                System.out.println("Video type is "+ videoAttachment.getVideo_type());
+                                break;
+                        }
                     }
-                }
-                break;
-            case MESSAGE_EDITED:
-                System.out.println("Message has been edited");
-                break;
-            case MESSAGE_STARRED:
-                System.out.println("Message is starred now");
-                break;
-            case MESSAGE_REACTION:
-                System.out.println("Got message reaction");
-                break;
-            case MESSAGE_REMOVED:
-                System.out.println("Message is deleted");
-                break;
-            case ROOM_NAME_CHANGED:
-                System.out.println("Room name changed");
-                break;
-            case ROOM_ARCHIVED:
-                System.out.println("Room is archived");
-                break;
-            case ROOM_UNARCHIVED:
-                System.out.println("Room is unarchieved");
-                break;
-            case USER_ADDED:
-                System.out.println("User added to the room");
-                break;
-            case USER_REMOVED:
-                System.out.println("User removed from the room");
-                break;
-            case USER_JOINED:
-                System.out.println("User joined the room");
-                break;
-            case USER_LEFT:
-                System.out.println("User left the room");
-                break;
-            case USER_MUTED:
-                System.out.println("User muted now");
-                break;
-            case USER_UNMUTED:
-                System.out.println("User un-muted now");
-                break;
-            case WELCOME:
-                System.out.println("User welcomed");
-                break;
-            case SUBSCRIPTION_ROLE_ADDED:
-                System.out.println("Subscription role added");
-                break;
-            case SUBSCRIPTION_ROLE_REMOVED:
-                System.out.println("Subscription role removed");
-                break;
-            case OTHER:
-                break;
+                    break;
+                case MESSAGE_EDITED:
+                    System.out.println("Message has been edited");
+                    break;
+                case MESSAGE_STARRED:
+                    System.out.println("Message is starred now");
+                    break;
+                case MESSAGE_REACTION:
+                    System.out.println("Got message reaction");
+                    break;
+                case MESSAGE_REMOVED:
+                    System.out.println("Message is deleted");
+                    break;
+                case ROOM_NAME_CHANGED:
+                    System.out.println("Room name changed");
+                    break;
+                case ROOM_ARCHIVED:
+                    System.out.println("Room is archived");
+                    break;
+                case ROOM_UNARCHIVED:
+                    System.out.println("Room is unarchieved");
+                    break;
+                case USER_ADDED:
+                    System.out.println("User added to the room");
+                    break;
+                case USER_REMOVED:
+                    System.out.println("User removed from the room");
+                    break;
+                case USER_JOINED:
+                    System.out.println("User joined the room");
+                    break;
+                case USER_LEFT:
+                    System.out.println("User left the room");
+                    break;
+                case USER_MUTED:
+                    System.out.println("User muted now");
+                    break;
+                case USER_UNMUTED:
+                    System.out.println("User un-muted now");
+                    break;
+                case WELCOME:
+                    System.out.println("User welcomed");
+                    break;
+                case SUBSCRIPTION_ROLE_ADDED:
+                    System.out.println("Subscription role added");
+                    break;
+                case SUBSCRIPTION_ROLE_REMOVED:
+                    System.out.println("Subscription role removed");
+                    break;
+                case OTHER:
+                    break;
+            }
+    
         }
-
-    }
 
 ```
 
@@ -454,4 +472,189 @@ Following methods are provided by RocketChatAPI.ChatRoom API
             }
         });
 
+```
+
+**17. subscriptions for starred, snipetted, mentioned and file messages**
+
+- These are all room specific subscriptions and data returned is stored in memory db.
+- It is used for getting individual set of messages from all messages.
+- This individual set contains starred messages, pinned messages, snipetty messages, mentioned and file messages.
+- Subscription allows to get those messages as well as observer for the change of messages.
+- All subscription API's has as limit param to get total number of latest set of individual messages.
+- To get next set of messages, unsubscribe current subscription and fetch total extra messages (new limit = prev limit+ extra)
+
+1. Starred messages
+- This subscription is used for getting individual set of starred messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting starred messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// subscribe for starred messages
+        room.subscribeStarredMessages(50, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for starred messages
+room.getRoomDbManager().getStarredMessagesCollection().addObserver(new Observer() {
+    public void update(Observable o, Object arg) {
+        MessageDocument messageDocument = (MessageDocument) arg;
+        System.out.println("Starred message is " + messageDocument.getMessage());
+        System.out.println("Starred message Sender is " + messageDocument.getSender().getUserName());
+    }
+});
+```
+
+III. Getting all messages from DB anytime needed.
+
+```java
+    System.out.println("Number of starred messages for room are " + room.getRoomDbManager().getStarredMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
+
+2. Pinned messages
+- This subscription is used for getting individual set of pinned messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change. 
+
+I. subscribing for getting pinned messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+        // subcribing for getting pinned messages
+        room.subscribePinnedMessages(50, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for pinned messages
+        room.getRoomDbManager().getPinnedMessagesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                MessageDocument messageDocument = (MessageDocument) arg;
+                System.out.println("Pinned message is " + messageDocument.getMessage());
+                System.out.println("Sender is " + messageDocument.getSender().getUserName());
+
+            }
+        });
+
+```
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of pinned messages for room are " + room.getRoomDbManager().getPinnedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
+
+3. Snipetted messsages (Message containing code)
+- This subscription is used for getting individual set of snipetted messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+I. subscribing for getting snipetted messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// Subscribing for getting max 20 snipetted documents in collection, callbacks will be available at above method
+        room.subscribeSnipettedMessages(20, null);
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// Adding observer for snipetted messages
+room.getRoomDbManager().getSnipetedMessagesCollection().addObserver(new Observer() {
+    public void update(Observable o, Object arg) {
+        MessageDocument document = (MessageDocument) arg;
+        System.out.println("snipetted message is " + document.getMessage());
+        System.out.println("snipetted message sender is"  + document.getSender().getUserName());
+    }
+});
+```
+
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of snipetted messages for room are " + room.getRoomDbManager().getSnipetedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
+
+4. Mentioned messages
+- This subscription is used for getting individual set of mentioned messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting mentioned messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// subscribe for mentioned messages
+        room.subscribeMentionedMessages(50, null);
+        
+```
+
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// add observer for mentioned messages
+        room.getRoomDbManager().getMentionedMessagesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                MessageDocument messageDocument = (MessageDocument) arg;
+                System.out.println("Mentioned message is " + messageDocument.getMessage());
+                System.out.println("Mentioned message Sender is " + messageDocument.getSender().getUserName());
+            }
+});
+
+```
+
+III. Getting all messages from DB anytime needed.
+```java
+    System.out.println("Number of mentioned messages for room are " + room.getRoomDbManager().getMentionedMessagesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
+```
+
+5. File Messages
+- This subscription is used for getting individual set of file messages.
+- All upcoming messages are stored in lightweight memory db.
+- It is possible to observe for incoming message change.
+
+I. subscribing for getting file messages
+- Suppose room is a ChatRoom object of RocketChat API, subscription can be given as
+
+```java
+// Subscribing to the room files for getting 20 files in collection, callbacks will be available at above method
+        room.subscribeRoomFiles(20, null);
+```        
+        
+II. Observing message change 
+- You can add observer anytime needed. 
+- Observer is specific to the particular collection and will return callback if particular document changes.
+
+```java
+// Adding observer for file collection document files
+        room.getRoomDbManager().getRoomFilesCollection().addObserver(new Observer() {
+            public void update(Observable o, Object arg) {
+                FileDocument document = (FileDocument) arg;
+                System.out.println("document file name is " + document.getFileName());
+                System.out.println("document file type is " + document.getFileType());
+            }
+        });
+```
+
+III. Getting all messages from DB anytime needed.
+
+```java
+    System.out.println("Number of files are " + room.getRoomDbManager().getRoomFilesCollection().getData().size());
+    // You can use for loop to iterate through each file and getting it's properties.
 ```

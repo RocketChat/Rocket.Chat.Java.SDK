@@ -1,7 +1,6 @@
 package com.rocketchat.common.data.model;
 
 import com.squareup.moshi.Json;
-
 import javax.annotation.Nullable;
 
 /**
@@ -35,13 +34,19 @@ public abstract class BaseRoom {
         }
     }*/
 
-    @Json(name = "_id") public abstract String roomId();
+    @Json(name = "_id")
+    public abstract String roomId();
 
-    @Json(name = "t") @Nullable public abstract RoomType type();
+    @Json(name = "t")
+    @Nullable
+    public abstract RoomType type();
 
-    @Json(name = "u") @Nullable public abstract User user();
+    @Json(name = "u")
+    @Nullable
+    public abstract User user();
 
-    @Nullable public abstract String name();
+    @Nullable
+    public abstract String name();
 
     public enum RoomType {
         @Json(name = "c") PUBLIC,
