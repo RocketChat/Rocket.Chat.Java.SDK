@@ -159,7 +159,12 @@ public /*final*/ class Socket extends WebSocketListener {
     }
 
     private void onTextMessage(String text) {
-        logger.info("Receiving: " + text);
+        try {
+            logger.info("Receiving: " + text);
+        } catch (Exception e) {
+            // Ignore
+            logger.debug("Ignoring received text log");
+        }
 
         SocketMessage message;
         try {
