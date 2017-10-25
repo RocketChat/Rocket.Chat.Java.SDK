@@ -11,6 +11,7 @@ import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -47,6 +48,7 @@ public class RestImplTest {
     private RestImpl rest;
     private DefaultMockServer mockServer;
     @Mock private TokenProvider tokenProvider;
+    @Mock private Token token;
     @Mock private LoginCallback loginCallback;
     @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
@@ -256,7 +258,7 @@ public class RestImplTest {
                         "}")
                 .once();
 
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles("GENERAL", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
 
         verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onSuccess(attachmentsCaptor.capture(), anyInt());
@@ -292,5 +294,69 @@ public class RestImplTest {
     public void testGetRoomFavoriteMessagesShouldFailWithNullCallback() {
         rest.getRoomFavoriteMessages("roomId", BaseRoom.RoomType.PUBLIC, 0, null);
     }
-    
+
+    @Test
+    public void testGetRoomFavoriteMessages() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"starred._id\":{\"$in\":[\"userId\"]}}")
+                .andReturn(200,
+                        "{  " +
+                                "   \"total\":20," +
+                                "   \"offset\":0," +
+                                "   \"success\":true," +
+                                "   \"count\":1," +
+                                "   \"messages\":[  " +
+                                "      {  " +
+                                "         \"msg\":\"\"," +
+                                "         \"file\":{  " +
+                                "            \"name\":\"damaged-a.jpg\"," +
+                                "            \"_id\":\"omTGDjutznbmEHzHs\"," +
+                                "            \"type\":\"image/jpeg\"" +
+                                "         }," +
+                                "         \"attachments\":[  " +
+                                "            {  " +
+                                "               \"title_link_download\":true," +
+                                "               \"image_size\":577146," +
+                                "               \"image_url\":\"/file-upload/omTGDjutznbmEHzHs/damaged-a.jpg\"," +
+                                "               \"description\":\"\"," +
+                                "               \"title_link\":\"/file-upload/omTGDjutznbmEHzHs/damaged-a.jpg\"," +
+                                "               \"title\":\"damaged-a.jpg\"," +
+                                "               \"type\":\"file\"," +
+                                "               \"image_type\":\"image/jpeg\"" +
+                                "            }" +
+                                "         ]," +
+                                "         \"channels\":[]," +
+                                "         \"starred\":[  " +
+                                "            {  " +
+                                "               \"_id\":\"cBD6dHc7oBvGjkruM\"" +
+                                "            }" +
+                                "         ]," +
+                                "         \"u\":{  " +
+                                "            \"name\":\"Petya Sorokin\"," +
+                                "            \"_id\":\"2AWv5b2vkkg9zRmKX\"," +
+                                "            \"username\":\"petya.sorokin\"" +
+                                "         }," +
+                                "         \"mentions\":[ ]," +
+                                "         \"groupable\":false," +
+                                "         \"_id\":\"6G8o7QxDDyPmWdBdF\"," +
+                                "         \"rid\":\"GENERAL\"," +
+                                "         \"_updatedAt\":\"2017-10-03T15:19:33.927Z\"," +
+                                "         \"ts\":\"2017-10-03T13:05:23.185Z\"" +
+                                "      }" +
+                                "   ]" +
+                                "}")
+                .once();
+
+        rest.getRoomFavoriteMessages("GENERAL", BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
+
+        verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(attachmentsCaptor.capture(), anyInt());
+
+        List<Message> messageList = messagesCaptor.getValue();
+        assertThat(messageList, is(notNullValue()));
+        assertThat(messageList.size(), is(equalTo(1)));
+        Message message = messageList.get(0);
+        assertThat(message.id(), is(equalTo("6G8o7QxDDyPmWdBdF")));
+    }
 }
