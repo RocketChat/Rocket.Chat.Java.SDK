@@ -54,16 +54,14 @@ public abstract class BaseMessage {
     public abstract String message();
 
     @Json(name = "ts")
-    public abstract @Timestamp
-    Long timestamp();
+    public abstract String timestamp();
 
     @Json(name = "u")
     @Nullable
     public abstract User sender();
 
     @Json(name = "_updatedAt")
-    public abstract @Timestamp
-    Long updatedAt();
+    public abstract String updatedAt();
 
     @Nullable
     public abstract @Timestamp
