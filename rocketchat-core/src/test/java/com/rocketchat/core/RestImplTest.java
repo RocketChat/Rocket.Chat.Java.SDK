@@ -11,6 +11,7 @@ import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -35,6 +36,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.timeout;
@@ -50,6 +52,7 @@ public class RestImplTest {
     @Mock private PaginatedCallback paginatedCallback;
     @Captor private ArgumentCaptor<Token> tokenCaptor;
     @Captor private ArgumentCaptor<List> listCaptor;
+    @Captor private ArgumentCaptor<List<Message>> messagesCaptor;
     @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
 
     @Before
@@ -255,5 +258,78 @@ public class RestImplTest {
 
 //        List attachmentList = listCaptor.getValue();
 //        assertThat(attachmentList, is(notNullValue()));
+    }
+
+    //     _____ ______ _______     _____   ____   ____  __  __        _____ _____ _   _ _   _ ______ _____         __  __ ______  _____ _____         _____ ______  _____   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   |  __ \ / __ \ / __ \|  \/  |      |  __ \_   _| \ | | \ | |  ____|  __ \       |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|/ ____| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |__) | |  | | |  | | \  / |______| |__) || | |  \| |  \| | |__  | |  | |______| \  / | |__  | (___| (___   /  \ | |  __| |__  | (___      | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______|  _  /| |  | | |  | | |\/| |______|  ___/ | | | . ` | . ` |  __| | |  | |______| |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|  \___ \     | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | | \ \| |__| | |__| | |  | |      | |    _| |_| |\  | |\  | |____| |__| |      | |  | | |____ ____) |___) / ____ \ |__| | |____ ____) |    | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|      |_|  \_\\____/ \____/|_|  |_|      |_|   |_____|_| \_|_| \_|______|_____/       |_|  |_|______|_____/_____/_/    \_\_____|______|_____/     |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullRoomId() {
+        rest.getRoomPinnedMessages(null, BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullRoomType() {
+        rest.getRoomPinnedMessages(null, null, 0, paginatedCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullCallback() {
+        rest.getRoomPinnedMessages(null, BaseRoom.RoomType.PUBLIC, 0, null);
+    }
+
+    public void testGetRoomPinnedMessagesShouldBeSuccessful() {
+        mockServer.expect()
+                .post()
+                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"pinned\":true}")
+                .andReturn(200, "{" +
+                        "   \"total\":50," +
+                        "   \"offset\":0," +
+                        "   \"success\":true," +
+                        "   \"count\":1," +
+                        "   \"messages\":[" +
+                        "      {" +
+                        "         \"msg\":\"##滚滚滚\"," +
+                        "         \"pinned\":true," +
+                        "         \"channels\":[]," +
+                        "         \"u\":{" +
+                        "            \"name\":\"ugcode\"," +
+                        "            \"_id\":\"aS66iLvbLN7LhFBJ5\"," +
+                        "            \"username\":\"ugcode\"" +
+                        "         }," +
+                        "         \"translations\":{" +
+                        "            \"en\":\"##roll roll roll\"" +
+                        "         }," +
+                        "         \"mentions\":[]," +
+                        "         \"_id\":\"qQ3AaUlgt9RWeB9hYi\"," +
+                        "         \"pinnedBy\":{" +
+                        "            \"_id\":\"aS66iLvbLN7LhFBJ5\"," +
+                        "            \"username\":\"ugcode\"" +
+                        "         }," +
+                        "         \"rid\":\"GENERAL\"," +
+                        "         \"_updatedAt\":\"2017-10-21T02:33:44.737Z\"," +
+                        "         \"ts\":\"2017-10-21T02:28:24.682Z\"," +
+                        "         \"pinnedAt\":\"2017-10-21T02:33:44.737Z\"" +
+                        "      }" +
+                        "   ]" +
+                        "}")
+                .once();
+
+        rest.getRoomPinnedMessages("general", BaseRoom.RoomType.PUBLIC, 0, paginatedCallback);
+
+        verify(paginatedCallback, timeout(100).only())
+                .onSuccess(messagesCaptor.capture(), anyInt());
+
+        List<Message> messageList = messagesCaptor.getValue();
+        assertThat(messageList, is(notNullValue()));
+        assertThat(messageList.size(), is(equalTo(1)));
+        Message message = messageList.get(0);
+        assertThat(message.id(), is(equalTo("qQ3AaUlgt9RWeB9hYi")));
     }
 }
