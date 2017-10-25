@@ -225,7 +225,6 @@ class RestImpl {
 
                     Type type = Types.newParameterizedType(List.class, Message.class);
                     JsonAdapter<List<Message>> adapter = moshi.adapter(type);
-                    // TODO fix: Exception in thread "OkHttp Dispatcher" com.squareup.moshi.JsonDataException: com.squareup.moshi.JsonDataException: Expected BEGIN_OBJECT but was STRING at path $[0]._updatedAt at $[0]._updatedAt
                     List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
 
                      callback.onSuccess(messageList, json.optInt("total"));
