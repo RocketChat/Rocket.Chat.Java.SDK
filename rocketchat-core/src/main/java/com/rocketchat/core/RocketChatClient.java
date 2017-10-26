@@ -203,6 +203,32 @@ public class RocketChatClient {
         restImpl.getUserChannelList(callback);
     }
 
+    /**
+     * Gets all of the direct messages the calling user has joined.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * rocketChatClient.getUserDirectMessageList(new SimpleListCallback() {
+     *     public void onSuccess(List list) {
+     *         // Handle the direct message list.
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error.
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param callback The simple list callback.
+     * @see #getUserGroupList(SimpleListCallback)
+     * @see #getUserChannelList(SimpleListCallback)
+     * @since 0.8.0
+     */
+    public void getUserDirectMessageList(SimpleListCallback callback) {
+        restImpl.getUserDirectMessageList(callback);
+    }
+
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
     }
