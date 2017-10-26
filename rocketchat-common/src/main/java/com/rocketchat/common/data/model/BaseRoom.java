@@ -45,6 +45,7 @@ public abstract class BaseRoom {
     @Nullable
     public abstract User user();
 
+    @Json(name = "name")
     @Nullable
     public abstract String name();
 
