@@ -399,4 +399,67 @@ public class RestImplTest {
         assertThat(subscription.name(), is(equalTo("invite-me")));
         assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.PUBLIC)));
     }
+
+    //     _____ ______ _______     _    _  _____ ______ _____        _____ _____ _____  ______ _____ _______     __  __ ______  _____ _____         _____ ______      _      _____  _____ _______   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   | |  | |/ ____|  ____|  __ \      |  __ \_   _|  __ \|  ____/ ____|__   __|   |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|    | |    |_   _|/ ____|__   __| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |  | | (___ | |__  | |__) |_____| |  | || | | |__) | |__ | |       | |______| \  / | |__  | (___| (___   /  \ | |  __| |__ ______| |      | | | (___    | |       | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______| |  | |\___ \|  __| |  _  /______| |  | || | |  _  /|  __|| |       | |______| |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|______| |      | |  \___ \   | |       | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | |__| |____) | |____| | \ \      | |__| || |_| | \ \| |___| |____   | |      | |  | | |____ ____) |___) / ____ \ |__| | |____     | |____ _| |_ ____) |  | |       | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|       \____/|_____/|______|_|  \_\     |_____/_____|_|  \_\______\_____|  |_|      |_|  |_|______|_____/_____/_/    \_\_____|______|    |______|_____|_____/   |_|       |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testUserDirectMessagelListShouldFailWithNullCallback() {
+        rest.getUserDirectMessageList(null);
+    }
+
+    @Test
+    public void testUserDirectMessagelListShouldBeSuccessful() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/dm.list")
+                .andReturn(200, "{" +
+                        "   \"success\":true," +
+                        "   \"ims\":[" +
+                        "      {" +
+                        "         \"msgs\":90," +
+                        "         \"lm\":\"2017-09-29T14:43:54.207Z\"," +
+                        "         \"t\":\"d\"," +
+                        "         \"usernames\":[" +
+                        "            \"user1\"," +
+                        "            \"user2\"" +
+                        "         ]," +
+                        "         \"_id\":\"0WCaFa2Jve4FEjMYacBD6dHcSoBvGjkrzM\"," +
+                        "         \"_updatedAt\":\"2017-09-29T14:43:54.286Z\"," +
+                        "         \"ts\":\"2017-08-15T17:56:09.013Z\"" +
+                        "      }," +
+                        "      {" +
+                        "         \"msgs\":2," +
+                        "         \"lm\":\"2017-08-18T18:01:33.580Z\"," +
+                        "         \"t\":\"d\"," +
+                        "         \"usernames\":[" +
+                        "            \"user1\"," +
+                        "            \"user3\"" +
+                        "         ]," +
+                        "         \"_id\":\"0WCaFa2Jve4FEjMYacBD6dHcIoBEGjJszO\"," +
+                        "         \"_updatedAt\":\"2017-08-18T18:01:33.667Z\"," +
+                        "         \"ts\":\"2017-08-18T18:00:57.369Z\"" +
+                        "      }" +
+                        "   ]" +
+                        "}")
+                .once();
+
+        rest.getUserDirectMessageList(simpleListCallback);
+
+        verify(simpleListCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(listCaptor.capture());
+
+        List<Subscription> subscriptionList = listCaptor.getValue();
+        assertThat(subscriptionList, is(notNullValue()));
+        assertThat(subscriptionList.size(), is(equalTo(2)));
+        Subscription subscription = subscriptionList.get(0);
+        assertThat(subscription.roomId(), is(equalTo("0WCaFa2Jve4FEjMYacBD6dHcSoBvGjkrzM")));
+        assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.ONE_TO_ONE)));
+    }
 }
