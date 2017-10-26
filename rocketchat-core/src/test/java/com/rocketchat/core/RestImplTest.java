@@ -48,20 +48,15 @@ public class RestImplTest {
 
     private RestImpl rest;
     private DefaultMockServer mockServer;
-    @Mock
-    private TokenProvider tokenProvider;
-    @Mock
-    private LoginCallback loginCallback;
-    @Mock
-    private PaginatedCallback<Attachment> paginatedCallback;
-    @Mock
-    private SimpleListCallback simpleListCallback;
-    @Captor
-    private ArgumentCaptor<Token> tokenCaptor;
-    @Captor
-    private ArgumentCaptor<List> listCaptor;
-    @Captor
-    private ArgumentCaptor<RocketChatException> exceptionCaptor;
+
+    @Mock private TokenProvider tokenProvider;
+    @Mock private LoginCallback loginCallback;
+    @Mock private PaginatedCallback<Attachment> paginatedCallback;
+    @Mock private SimpleListCallback simpleListCallback;
+
+    @Captor private ArgumentCaptor<Token> tokenCaptor;
+    @Captor private ArgumentCaptor<List> listCaptor;
+    @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
 
     private static final int DEFAULT_TIMEOUT = 200;
 
@@ -223,7 +218,6 @@ public class RestImplTest {
     }
 
     @Test
-    //TODO Needs to know why it is failing.
     public void testGetRoomFilesShouldBeSuccessful() {
         mockServer.expect()
                 .get()
@@ -293,13 +287,13 @@ public class RestImplTest {
     public void testUserGroupListShouldBeSuccessful() {
         mockServer.expect()
                 .get()
-                .withPath("/api/v1/channels.list")
+                .withPath("/api/v1/groups.list")
                 .andReturn(200, "{" +
                         "    \"groups\": [" +
                         "        {" +
                         "            \"_id\": \"ByehQjC44FwMeiLbX\"," +
-                        "            \"name\": \"invite-me\"," +
-                        "            \"t\": \"c\"," +
+                        "            \"name\": \"test-test\"," +
+                        "            \"t\": \"p\"," +
                         "            \"usernames\": [" +
                         "                \"testing1\"" +
                         "            ]," +
@@ -309,6 +303,23 @@ public class RestImplTest {
                         "                \"username\": \"testing1\"" +
                         "            }," +
                         "            \"ts\": \"2016-12-09T15:08:58.042Z\"," +
+                        "            \"ro\": false," +
+                        "            \"sysMes\": true," +
+                        "            \"_updatedAt\": \"2016-12-09T15:22:40.656Z\"" +
+                        "        }," +
+                        "        {" +
+                        "            \"_id\": \"t7qapfhZjANMRAi5w\"," +
+                        "            \"name\": \"testing\"," +
+                        "            \"t\": \"p\"," +
+                        "            \"usernames\": [" +
+                        "                \"testing2\"" +
+                        "            ]," +
+                        "            \"msgs\": 0," +
+                        "            \"u\": {" +
+                        "                \"_id\": \"y65tAmHs93aDChMWu\"," +
+                        "                \"username\": \"testing2\"" +
+                        "            }," +
+                        "            \"ts\": \"2016-12-01T15:08:58.042Z\"," +
                         "            \"ro\": false," +
                         "            \"sysMes\": true," +
                         "            \"_updatedAt\": \"2016-12-09T15:22:40.656Z\"" +
@@ -324,10 +335,11 @@ public class RestImplTest {
                 .onSuccess(listCaptor.capture());
 
         List<Subscription> subscriptionList = listCaptor.getValue();
-        //        assertThat(subscriptionList, is(notNullValue()));
-        //        assertThat(subscriptionList.size(), is(equalTo(1)));
-        //        Subscription subscription = subscriptionList.get(0);
-        //        assertThat(subscription.roomId(), is(equalTo("B5HXEJQvoqXjfMyKD")));
-        //        assertThat(attachment.getName(), is(equalTo("sample.txt")));
+        assertThat(subscriptionList, is(notNullValue()));
+        assertThat(subscriptionList.size(), is(equalTo(2)));
+        Subscription subscription = subscriptionList.get(0);
+        assertThat(subscription.roomId(), is(equalTo("ByehQjC44FwMeiLbX")));
+        assertThat(subscription.name(), is(equalTo("test-test")));
+        assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.PRIVATE)));
     }
 }
