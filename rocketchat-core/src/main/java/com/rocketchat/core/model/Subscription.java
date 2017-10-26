@@ -15,17 +15,16 @@ import javax.annotation.Nullable;
 public abstract class Subscription extends BaseRoom {
 
     @Json(name = "rid")
+    @Nullable
     public abstract String roomId();
 
     @Json(name = "ts")
     @Nullable
-    public abstract @Timestamp
-    Long timestamp();
+    public abstract String timestamp();
 
     @Json(name = "ls")
     @Nullable
-    public abstract @Timestamp
-    Long lastSeen();
+    public abstract String lastSeen();
 
     @Nullable
     public abstract Boolean open();
@@ -42,8 +41,7 @@ public abstract class Subscription extends BaseRoom {
 
     @Json(name = "_updatedAt")
     @Nullable
-    public abstract @Timestamp
-    Long updatedAt();
+    public abstract String updatedAt();
 
     @Nullable
     public abstract String desktopNotifications();
