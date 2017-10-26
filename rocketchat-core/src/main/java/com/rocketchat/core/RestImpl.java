@@ -10,21 +10,25 @@ import com.rocketchat.common.data.model.ServerInfo;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +142,47 @@ class RestImpl {
         });
     }
 
+    /**
+     * Lists all of the private groups the calling user has joined.
+     */
+    void getUserGroupList(final SimpleListCallback callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.PRIVATE, "list"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, callback);
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+
+                    Type type = Types.newParameterizedType(List.class, Subscription.class);
+                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
+                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("groups").toString());
+
+                    callback.onSuccess(subscriptionList);
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
+    }
+
     void pinMessage(String messageId, final SimpleCallback callback) {
         checkNotNull(messageId, "messageId == null");
         checkNotNull(callback, "callback == null");
@@ -199,11 +244,11 @@ class RestImpl {
                       Attachment.SortBy sortBy,
                       Sort sort,
                       final PaginatedCallback callback) {
-        checkNotNull(roomId,"roomId == null");
-        checkNotNull(roomType,"roomType == null");
-        checkNotNull(sortBy,"sortBy == null");
-        checkNotNull(sort,"sort == null");
-        checkNotNull(callback,"callback == null");
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(sortBy, "sortBy == null");
+        checkNotNull(sort, "sort == null");
+        checkNotNull(callback, "callback == null");
 
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "files"))
                 .addQueryParameter("roomId", roomId)
@@ -251,7 +296,7 @@ class RestImpl {
      * Returns the correspondent Rest API method accordingly with the room type.
      *
      * @param roomType The type of the room.
-     * @param method The method.
+     * @param method   The method.
      * @return A Rest API method accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
@@ -270,7 +315,7 @@ class RestImpl {
      * Builds and returns the HttpUrl.Builder as {baseUrl}/api/v1/{method}
      *
      * @param baseUrl The base URL.
-     * @param method The method name.
+     * @param method  The method name.
      * @return A HttpUrl pointing to the REST API call.
      */
     private HttpUrl.Builder requestUrl(HttpUrl baseUrl, String method) {
