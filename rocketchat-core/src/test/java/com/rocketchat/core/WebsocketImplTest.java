@@ -79,53 +79,6 @@ public class WebsocketImplTest {
     }
 
     @Test
-    public void testShouldLoginSuccessfully() throws InterruptedException {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESPONSE_OK);
-                return null;
-            }
-        }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST);
-
-        sut.login("testuserrocks", "testuserrocks", loginCallback);
-
-        verify(loginCallback).onLoginSuccess(tokenArgumentCaptor.capture());
-        verify(loginCallback, never()).onError(any(RocketChatApiException.class));
-        Token token = tokenArgumentCaptor.getValue();
-        assertTrue(token != null);
-        assertTrue(token.authToken().contentEquals("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg"));
-        assertTrue(token.userId().contentEquals("yG6FQYRsuTWRK8KP6"));
-        assertTrue(token.expiresAt() == 1511909570220L);
-
-        sut.disconnect();
-    }
-
-    @Test
-    public void testShouldFailLoginWithWrongPassword() throws InterruptedException {
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                listener.onMessageReceived(MessageType.RESULT, "1", TestMessages.LOGIN_RESPONSE_FAIL);
-                return null;
-            }
-        }).when(mockedSocket).sendData(TestMessages.LOGIN_REQUEST_FAIL);
-
-        sut.login("testuserrocks", "wrongpassword", loginCallback);
-
-        verify(loginCallback).onError(errorArgumentCaptor.capture());
-        verify(loginCallback, never()).onLoginSuccess(any(Token.class));
-        RocketChatApiException error = errorArgumentCaptor.getValue();
-        assertTrue(error != null);
-        assertTrue(error.getError() == 403);
-        assertTrue(error.getReason().contentEquals("User not found"));
-        assertTrue(error.getMessage().contentEquals("User not found [403]"));
-        assertTrue(error.getErrorType().contentEquals("Meteor.Error"));
-
-        sut.disconnect();
-    }
-
-    @Test
     public void testShouldResumeLogin() throws InterruptedException {
         doAnswer(new Answer() {
             @Override

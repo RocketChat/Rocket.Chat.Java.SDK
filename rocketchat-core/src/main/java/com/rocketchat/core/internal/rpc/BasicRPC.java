@@ -12,11 +12,7 @@ import org.json.JSONObject;
 public class BasicRPC extends RPC {
 
     private static final String LOGIN = "login";
-    private static final String GET_USER_ROLES = "getUserRoles";
     private static final String GET_SUBSCRIPTIONS = "subscriptions/get";
-    private static final String GET_ROOMS = "rooms/get";
-    private static final String GET_ROOM_ROLES = "getRoomRoles";
-    private static final String LIST_EMOJI = "listEmojiCustom";
     private static final String LOGOUT = "logout";
 
     /**
@@ -51,41 +47,9 @@ public class BasicRPC extends RPC {
      * Tested
      */
 
-    public static String getUserRoles(int integer) {
-        return getRemoteMethodObject(integer, GET_USER_ROLES).toString();
-    }
-
-    /**
-     * Tested
-     */
-
     // TODO: 29/7/17 add getSubscriptions based on date
     public static String getSubscriptions(int integer) {
         return getRemoteMethodObject(integer, GET_SUBSCRIPTIONS).toString();
-    }
-
-    /**
-     * Tested
-     */
-    // TODO: 29/7/17 add getRooms based on date
-    public static String getRooms(int integer) {
-        return getRemoteMethodObject(integer, GET_ROOMS).toString();
-    }
-
-    /**
-     * Used to return users with room roles
-     *
-     * @param roomId List of comma separated room Id to return room specific roles
-     */
-    public static String getRoomRoles(int integer, String... roomId) {
-        return getRemoteMethodObject(integer, GET_ROOM_ROLES, (Object[]) roomId).toString();
-    }
-
-    /**
-     * Returns a list of custom emoji registered with the server. There’s no need for parameters.
-     */
-    public static String listCustomEmoji(int integer) {
-        return getRemoteMethodObject(integer, LIST_EMOJI).toString();
     }
 
     /**

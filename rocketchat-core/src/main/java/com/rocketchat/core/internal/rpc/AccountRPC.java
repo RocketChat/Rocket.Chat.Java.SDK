@@ -10,13 +10,7 @@ import org.json.JSONObject;
  */
 public class AccountRPC extends RPC {
 
-    private static final String PUBLIC_SETTINGS = "public-settings/get";
-
     private static final String GET_PERMISSIONS = "permissions/get";
-
-    public static String getPublicSettings(int integer, Date date) {
-        return getCommonData(integer, PUBLIC_SETTINGS, date);
-    }
 
     public static String getPermissions(int integer, Date date) {
         return getCommonData(integer, GET_PERMISSIONS, date);

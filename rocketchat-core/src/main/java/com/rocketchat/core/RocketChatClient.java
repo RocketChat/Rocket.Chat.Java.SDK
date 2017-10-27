@@ -2,6 +2,7 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
+import com.rocketchat.common.data.AsStringAdapter;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
@@ -22,6 +23,8 @@ import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
+import com.rocketchat.core.annotation.MissingRestMethod;
+import com.rocketchat.core.annotation.MoveToRest;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.MessageCallback;
@@ -30,18 +33,16 @@ import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.internal.model.RestResult;
-import com.rocketchat.core.model.Emoji;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Permission;
-import com.rocketchat.core.model.PublicSetting;
+import com.rocketchat.core.model.Setting;
 import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
-import com.rocketchat.core.uploader.IFileUpload;
 import com.squareup.moshi.Moshi;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +113,7 @@ public class RocketChatClient {
 
         // TODO - Add to the Builder
         moshi = new Moshi.Builder()
+                .add(new AsStringAdapter())
                 .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
@@ -206,173 +208,225 @@ public class RocketChatClient {
     }
 
     //Tested
-    public void login(String username, String password, LoginCallback loginCallback) {
-        websocketImpl.login(username, password, loginCallback);
-    }
-
-    //Tested
     public void loginUsingToken(String token, LoginCallback loginCallback) {
         websocketImpl.loginUsingToken(token, loginCallback);
     }
 
-    //Tested
+    @MoveToRest
+    @MissingRestMethod
     public void getPermissions(SimpleListCallback<Permission> callback) {
         websocketImpl.getPermissions(callback);
     }
 
-    //Tested
-    public void getPublicSettings(SimpleListCallback<PublicSetting> callback) {
-        websocketImpl.getPublicSettings(callback);
+    public void getSettings(PaginatedCallback<Setting> callback) {
+        getSettings(0, callback);
     }
 
-    //Tested
+    /**
+     * Get public Setting's from the Server
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * client.getSettings(0, new PaginatedCallback<Setting>() {
+     *     public void onSuccess(List<Setting> list, long offset, long total) {
+     *         // list with the returned Setting's, current offset, and total number of settings
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param callback The paginated callback.
+     * @see Setting
+     * @since 0.8.0
+     */
+    public void getSettings(int offset, PaginatedCallback<Setting> callback) {
+        restImpl.getSettings(offset, callback);
+    }
+
+    @MoveToRest
+    @MissingRestMethod
     public void getUserRoles(SimpleListCallback<User> callback) {
-        websocketImpl.getUserRoles(callback);
+        throw new UnsupportedOperationException("get user roles not implemented");
     }
 
-    //Tested
-    public void listCustomEmoji(SimpleListCallback<Emoji> callback) {
-        websocketImpl.listCustomEmoji(callback);
+    @MoveToRest
+    @MissingRestMethod
+    public void listCustomEmoji() {
+        throw new UnsupportedOperationException("get custom emojis not implemented");
     }
 
-    //Tested
     public void logout(SimpleCallback callback) {
         websocketImpl.logout(callback);
     }
 
-    //Tested
+    @MoveToRest(discuss = true)
+    @MissingRestMethod
     public void getSubscriptions(SimpleListCallback<Subscription> callback) {
         websocketImpl.getSubscriptions(callback);
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.list.joinned",
+            "/api/v1/groups.list",
+            "/api/v1/dm.list"
+    })
     public void getRooms(SimpleListCallback<Room> callback) {
-        websocketImpl.getRooms(callback);
+        throw new UnsupportedOperationException("getRooms not implemented");
     }
 
-    //Tested
-    void getRoomRoles(String roomId, SimpleListCallback<RoomRole> callback) {
-        websocketImpl.getRoomRoles(roomId, callback);
+    @MoveToRest
+    @MissingRestMethod
+    void getRoomRoles(String roomId) {
+        throw new UnsupportedOperationException("get Room roles not implemented");
     }
 
-    //Tested
-    void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp,
-                        Date lasttimestamp, HistoryCallback callback) {
-        websocketImpl.getChatHistory(roomID, limit, oldestMessageTimestamp, lasttimestamp, callback);
+    @MoveToRest(methods = {
+            "/api/v1/channels.history",
+            "/api/v1/groups.history",
+            "/api/v1/dm.history"
+    })
+    void getChatHistory(String roomID, int limit, long oldestMessage,
+                        long lastTimestamp) {
+        throw new UnsupportedOperationException("get chat history not implemented");
     }
 
-    void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersCallback callback) {
-        websocketImpl.getRoomMembers(roomID, allUsers, callback);
-    }
-
-    //Tested
+    @MoveToRest
+    @MissingRestMethod
     void sendIsTyping(String roomId, String username, Boolean istyping) {
-        websocketImpl.sendIsTyping(roomId, username, istyping);
+        throw new UnsupportedOperationException("send typing event not implemented");
     }
 
-    //Tested
-    void sendMessage(String msgId, String roomID, String message, MessageCallback.MessageAckCallback callback) {
-        websocketImpl.sendMessage(msgId, roomID, message, callback);
+    @MoveToRest(method = "/api/v1/chat.postMessage")
+    void sendMessage(String roomID, String message) {
+        throw new UnsupportedOperationException("send message not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/chat.delete")
     void deleteMessage(String msgId, SimpleCallback callback) {
-        websocketImpl.deleteMessage(msgId, callback);
+        throw new UnsupportedOperationException("delete message not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/chat.update")
     void updateMessage(String msgId, String roomId, String message, SimpleCallback callback) {
-        websocketImpl.updateMessage(msgId, roomId, message, callback);
+        throw new UnsupportedOperationException("update message not implemented");
     }
 
-    //Tested
-    @Deprecated
-    void pinMessage(JSONObject message, SimpleCallback callback) {
-        websocketImpl.pinMessage(message, callback);
-    }
-
-    //Tested
+    @MoveToRest(method = "/api/v1/{channels,groups,im}.unPinMessage")
     void unpinMessage(JSONObject message, SimpleCallback callback) {
-        websocketImpl.unpinMessage(message, callback);
+        throw new UnsupportedOperationException("unpin message not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/chat.starMessage")
     void starMessage(String msgId, String roomId, Boolean starred, SimpleCallback callback) {
-        websocketImpl.starMessage(msgId, roomId, starred, callback);
+        throw new UnsupportedOperationException("star message not implemented");
     }
 
-    //Tested
+    @MoveToRest
+    @MissingRestMethod
     void setReaction(String emojiId, String msgId, SimpleCallback callback) {
-        websocketImpl.setReaction(emojiId, msgId, callback);
+        throw new UnsupportedOperationException("set reaction not implemented");
     }
 
+    @MoveToRest(methods = {
+            "/api/v1/channels.messages",
+            "/api/v1/groups.messages",
+            "/api/v1/dm.messages",
+    })
     void searchMessage(String message, String roomId, int limit,
                        SimpleListCallback<Message> callback) {
-        websocketImpl.searchMessage(message, roomId, limit, callback);
+        throw new UnsupportedOperationException("search message not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/channels.create")
     public void createPublicGroup(String groupName, String[] users, Boolean readOnly,
                                   RoomCallback.GroupCreateCallback callback) {
-        websocketImpl.createPublicGroup(groupName, users, readOnly, callback);
+        throw new UnsupportedOperationException("create public channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/groups.create")
     public void createPrivateGroup(String groupName, String[] users,
                                    RoomCallback.GroupCreateCallback callback) {
-        websocketImpl.createPrivateGroup(groupName, users, callback);
+        throw new UnsupportedOperationException("create private channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.delete",
+            "/api/v1/groups.delete",
+            "/api/v1/dm.close" // couldn't find a delete version for DMs
+    })
     void deleteGroup(String roomId, SimpleCallback callback) {
-        websocketImpl.deleteGroup(roomId, callback);
+        throw new UnsupportedOperationException("delete channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.archive",
+            "/api/v1/groups.archive",
+            //no archive method for DMs
+    })
     void archiveRoom(String roomId, SimpleCallback callback) {
-        websocketImpl.archiveRoom(roomId, callback);
+        throw new UnsupportedOperationException("archive channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.unarchive",
+            "/api/v1/groups.unarchive",
+            //no unarchive method for DMs
+    })
     void unarchiveRoom(String roomId, SimpleCallback callback) {
-        websocketImpl.unarchiveRoom(roomId, callback);
+        throw new UnsupportedOperationException("unarchive channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/channels.join")
     public void joinPublicGroup(String roomId, String joinCode, SimpleCallback callback) {
-        websocketImpl.joinPublicGroup(roomId, joinCode, callback);
+        throw new UnsupportedOperationException("join channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(method = "/api/v1/channels.leave")
     void leaveGroup(String roomId, SimpleCallback callback) {
-        websocketImpl.leaveGroup(roomId, callback);
+        throw new UnsupportedOperationException("leave channel not implemented");
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.close",
+            "/api/v1/groups.close",
+            "/api/v1/dm.close"
+    })
     void hideRoom(String roomId, SimpleCallback callback) {
-        websocketImpl.hideRoom(roomId, callback);
+        throw new UnsupportedOperationException("hide room not implemented");
     }
 
-    //Tested
+    @MoveToRest(methods = {
+            "/api/v1/channels.open",
+            "/api/v1/groups.open",
+            "/api/v1/dm.open"
+    })
     void openRoom(String roomId, SimpleCallback callback) {
-        websocketImpl.openRoom(roomId, callback);
+        throw new UnsupportedOperationException("hide room not implemented");
     }
 
-    //Tested
+    @MoveToRest
+    @MissingRestMethod
     void setFavouriteRoom(String roomId, Boolean isFavouriteRoom, SimpleCallback callback) {
-        websocketImpl.setFavouriteRoom(roomId, isFavouriteRoom, callback);
+        throw new UnsupportedOperationException("set favorite not implemented");
     }
 
+    @MoveToRest
+    @MissingRestMethod
     void sendFileMessage(String roomId, String store, String fileId, String fileType,
                          int size, String fileName, String desc, String url,
                          MessageCallback.MessageAckCallback callback) {
-        websocketImpl.sendFileMessage(roomId, store, fileId, fileType, size, fileName, desc, url,
-                callback);
+        throw new UnsupportedOperationException("send file message not implemented");
     }
 
-    //Tested
+    @MoveToRest
+    @MissingRestMethod
     public void setStatus(User.Status s, SimpleCallback callback) {
-        websocketImpl.setStatus(s, callback);
+        throw new UnsupportedOperationException("set status not implemented");
     }
 
     public void subscribeActiveUsers(SubscribeCallback subscribeCallback) {
@@ -430,14 +484,6 @@ public class RocketChatClient {
 
     void unsubscribeRoom(String subId, SubscribeCallback subscribeCallback) {
         websocketImpl.unsubscribeRoom(subId, subscribeCallback);
-    }
-
-    public void createUFS(String fileName, int fileSize, String fileType, String roomId, String description, String store, IFileUpload.UfsCreateCallback listener) {
-        websocketImpl.createUFS(fileName, fileSize, fileType, roomId, description, store, listener);
-    }
-
-    public void completeUFS(String fileId, String store, String token, IFileUpload.UfsCompleteListener listener) {
-        websocketImpl.completeUFS(fileId, store, token, listener);
     }
 
     public void connect(ConnectListener connectListener) {

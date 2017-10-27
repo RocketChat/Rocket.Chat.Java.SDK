@@ -20,8 +20,14 @@ import javax.annotation.Nullable;
 public abstract class RestResult<T> {
     public abstract T result();
 
+    @Nullable
+    public abstract Long offset();
+
+    @Nullable
+    public abstract Long total();
+
     public static class MoshiJsonAdapter<T> extends JsonAdapter<RestResult<T>> {
-        private static final String[] NAMES = new String[] {"status", "success"};
+        private static final String[] NAMES = new String[] {"status", "success", "offset", "total"};
         private static final JsonReader.Options OPTIONS = JsonReader.Options.of(NAMES);
         private final JsonAdapter<T> tAdaptper;
 
@@ -33,12 +39,22 @@ public abstract class RestResult<T> {
         public RestResult<T> fromJson(JsonReader reader) throws IOException {
             reader.beginObject();
             T result = null;
+            Long offset = null;
+            Long total = null;
             while (reader.hasNext()) {
                 switch (reader.selectName(OPTIONS)) {
                     case 0:
                     case 1: {
                         // Just ignore status or success value, since this is for parsing 200 OK messages
                         reader.skipValue();
+                        break;
+                    }
+                    case 2: {
+                        offset = reader.nextLong();
+                        break;
+                    }
+                    case 3: {
+                        total = reader.nextLong();
                         break;
                     }
                     case -1: {
@@ -53,7 +69,7 @@ public abstract class RestResult<T> {
                 }
             }
             reader.endObject();
-            return new AutoValue_RestResult(result);
+            return new AutoValue_RestResult(result, offset, total);
         }
 
         @Override
