@@ -34,10 +34,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import com.squareup.moshi.Types;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -46,8 +42,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import javax.annotation.Nonnull;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -154,7 +148,7 @@ class RestImpl {
                         int offset,
                         BaseUser.SortBy sortBy,
                         Sort sort,
-                        final PaginatedCallback callback) {
+                        final PaginatedCallback<User> callback) {
         checkNotNull(roomId, "roomId == null");
         checkNotNull(roomType, "roomType == null");
         checkNotNull(sortBy, "sortBy == null");
@@ -165,7 +159,7 @@ class RestImpl {
                 .addQueryParameter("roomId", roomId)
                 .addQueryParameter("offset", String.valueOf(offset))
                 // TODO add the sort on the query parameter. Track the status here: 
-                //                .addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
+                //.addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
                 .build();
 
         Request request = requestBuilder(httpUrl)
@@ -182,7 +176,7 @@ class RestImpl {
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     logger.info("Response = " + response.body().string());
-                    processCallbackError(response, callback);
+                    processCallbackError(response, ERROR_HANDLER(callback));
                     return;
                 }
                 try {
@@ -206,9 +200,51 @@ class RestImpl {
 
     }
 
-    // TODO
-    void getRoomPinnedMessages() {
+    void getRoomPinnedMessages(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               final PaginatedCallback<Message> callback) {
+        checkNotNull(roomId,"roomId == null");
+        checkNotNull(roomType,"roomType == null");
+        checkNotNull(callback,"callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"pinned\":true}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, ERROR_HANDLER(callback));
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
+
+                    Type type = Types.newParameterizedType(List.class, Message.class);
+                    JsonAdapter<List<Message>> adapter = moshi.adapter(type);
+                    List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
+
+                    callback.onSuccess(messageList, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     void getRoomFiles(String roomId,
@@ -216,7 +252,7 @@ class RestImpl {
                       int offset,
                       Attachment.SortBy sortBy,
                       Sort sort,
-                      final PaginatedCallback callback) {
+                      final PaginatedCallback<Attachment> callback) {
         checkNotNull(roomId, "roomId == null");
         checkNotNull(roomType, "roomType == null");
         checkNotNull(sortBy, "sortBy == null");

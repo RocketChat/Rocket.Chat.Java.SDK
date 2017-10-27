@@ -177,7 +177,7 @@ public class RocketChatClient {
                                int offset,
                                BaseUser.SortBy sortBy,
                                Sort sort,
-                               final PaginatedCallback callback) {
+                               final PaginatedCallback<User> callback) {
         restImpl.getRoomMembers(roomId, roomType, offset, sortBy, sort, callback);
     }
 
@@ -186,9 +186,11 @@ public class RocketChatClient {
 
     }
 
-    // TODO
-    public void getRoomPinnedMessages() {
-
+    public void getRoomPinnedMessages(String roomId,
+                                      BaseRoom.RoomType roomType,
+                                      int offset,
+                                      final PaginatedCallback<Message> callback) {
+        restImpl.getRoomPinnedMessages(roomId, roomType, offset, callback);
     }
 
     public void getRoomFiles(String roomId,
@@ -196,7 +198,7 @@ public class RocketChatClient {
                              int offset,
                              Attachment.SortBy sortBy,
                              Sort sort,
-                             final PaginatedCallback callback) {
+                             final PaginatedCallback<Attachment> callback) {
         restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
     }
 
