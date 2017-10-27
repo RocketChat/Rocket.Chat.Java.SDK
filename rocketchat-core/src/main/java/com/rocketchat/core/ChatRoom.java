@@ -2,6 +2,7 @@ package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.BaseUser;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
@@ -107,8 +108,34 @@ public class ChatRoom {
     public void getMembers(int offset,
                          BaseUser.SortBy sortBy,
                          Sort sort,
-                         PaginatedCallback callback) {
+                         PaginatedCallback<User> callback) {
         client.getRoomMembers(room.roomId(), room.type(), offset, sortBy, sort, callback);
+    }
+
+    /**
+     * Gets the room pinned message list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getPinnedMessages(0, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the pinned message list and the total of pinned messages in the room (this is not the pinned message list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @since 0.8.0
+     */
+    public void getPinnedMessages(int offset, PaginatedCallback<Message> callback) {
+        client.getRoomPinnedMessages(room.roomId(), room.type(), offset, callback);
     }
 
     /**
@@ -140,7 +167,7 @@ public class ChatRoom {
     public void getFiles(int offset,
                          Attachment.SortBy sortBy,
                          Sort sort,
-                        PaginatedCallback callback) {
+                        PaginatedCallback<Attachment> callback) {
         client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 

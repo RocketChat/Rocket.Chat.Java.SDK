@@ -15,6 +15,7 @@ import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.model.JsonAdapterFactory;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -40,7 +41,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -52,14 +52,37 @@ public class RestImplTest {
 
     private RestImpl rest;
     private DefaultMockServer mockServer;
-    @Mock private TokenProvider tokenProvider;
-    @Mock private LoginCallback loginCallback;
-    @Mock private PaginatedCallback paginatedCallback;
-    @Captor private ArgumentCaptor<Token> tokenCaptor;
-    @Captor private ArgumentCaptor<List<Attachment>> attachmentsCaptor;
-    @Captor private ArgumentCaptor<List<User>> usersCaptor;
-    @Captor private ArgumentCaptor<RocketChatException> exceptionCaptor;
-    
+
+    @Mock
+    private TokenProvider tokenProvider;
+
+    @Mock
+    private LoginCallback loginCallback;
+
+    @Mock
+    private PaginatedCallback<Attachment> attachmentCallback;
+
+    @Mock
+    private PaginatedCallback<Message> messagesCallback;
+
+    @Mock
+    private PaginatedCallback<User> usersCallback;
+
+    @Captor
+    private ArgumentCaptor<Token> tokenCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<Attachment>> attachmentsCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<User>> usersCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<Message>> messagesCaptor;
+
+    @Captor
+    private ArgumentCaptor<RocketChatException> exceptionCaptor;
+
     private static final int DEFAULT_TIMEOUT = 200;
 
     @Before
@@ -181,22 +204,22 @@ public class RestImplTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullRoomId() {
-        rest.getRoomFiles(null, BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles(null, BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullRoomType() {
-        rest.getRoomFiles("roomId", null, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles("roomId", null, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullSortBy() {
-        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, 0, null, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, 0, null, Sort.DESC, attachmentCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomFilesShouldFailWithNullSort() {
-        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, null, paginatedCallback);
+        rest.getRoomFiles("roomId", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, null, attachmentCallback);
     }
 
     @Test(expected = NullPointerException.class)
@@ -212,8 +235,8 @@ public class RestImplTest {
                 .andReturn(DEFAULT_TIMEOUT, "NOT A JSON")
                 .once();
 
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
-        verify(paginatedCallback, timeout(100).only())
+        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
+        verify(attachmentCallback, timeout(100).only())
                 .onError(exceptionCaptor.capture());
 
         RocketChatException exception = exceptionCaptor.getValue();
@@ -261,9 +284,9 @@ public class RestImplTest {
                         "}")
                 .once();
 
-        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, paginatedCallback);
+        rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
 
-        verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
+        verify(attachmentCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onSuccess(attachmentsCaptor.capture(), anyInt());
         List<Attachment> attachmentList = attachmentsCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
@@ -284,22 +307,22 @@ public class RestImplTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomMembersShouldFailWithNullRoomId() {
-        rest.getRoomMembers(null, BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+        rest.getRoomMembers(null, BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, usersCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomMembersShouldFailWithNullRoomType() {
-        rest.getRoomMembers("roomId", null, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+        rest.getRoomMembers("roomId", null, 0, BaseUser.SortBy.USERNAME, Sort.DESC, usersCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomMembersShouldFailWithNullSortBy() {
-        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, null, Sort.DESC, paginatedCallback);
+        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, null, Sort.DESC, usersCallback);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetRoomMembersShouldFailWithNullSort() {
-        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, null, paginatedCallback);
+        rest.getRoomMembers("roomId", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, null, usersCallback);
     }
 
     @Test(expected = NullPointerException.class)
@@ -329,9 +352,9 @@ public class RestImplTest {
                         "}")
                 .once();
 
-        rest.getRoomMembers("GENERAL", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, paginatedCallback);
+        rest.getRoomMembers("GENERAL", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, usersCallback);
 
-        verify(paginatedCallback, timeout(DEFAULT_TIMEOUT).only())
+        verify(usersCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onSuccess(usersCaptor.capture(), anyInt());
 
         List<User> userList = usersCaptor.getValue();
@@ -339,5 +362,77 @@ public class RestImplTest {
         assertThat(userList.size(), is(equalTo(1)));
         User user = userList.get(0);
         assertThat(user.id(), is(equalTo("hcBGHsKo763bTDAiw")));
+    }
+
+    //     _____ ______ _______     _____   ____   ____  __  __        _____ _____ _   _ _   _ ______ _____         __  __ ______  _____ _____         _____ ______  _____   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   |  __ \ / __ \ / __ \|  \/  |      |  __ \_   _| \ | | \ | |  ____|  __ \       |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|/ ____| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |__) | |  | | |  | | \  / |______| |__) || | |  \| |  \| | |__  | |  | |______| \  / | |__  | (___| (___   /  \ | |  __| |__  | (___      | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______|  _  /| |  | | |  | | |\/| |______|  ___/ | | | . ` | . ` |  __| | |  | |______| |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|  \___ \     | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | | \ \| |__| | |__| | |  | |      | |    _| |_| |\  | |\  | |____| |__| |      | |  | | |____ ____) |___) / ____ \ |__| | |____ ____) |    | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|      |_|  \_\\____/ \____/|_|  |_|      |_|   |_____|_| \_|_| \_|______|_____/       |_|  |_|______|_____/_____/_/    \_\_____|______|_____/     |_|  |______|_____/   |_| |_____/
+    //
+    //
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullRoomId() {
+        rest.getRoomPinnedMessages(null, BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullRoomType() {
+        rest.getRoomPinnedMessages(null, null, 0, messagesCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomPinnedMessagesShouldFailWithNullCallback() {
+        rest.getRoomPinnedMessages(null, BaseRoom.RoomType.PUBLIC, 0, null);
+    }
+
+    public void testGetRoomPinnedMessagesShouldBeSuccessful() {
+        mockServer.expect()
+                .post()
+                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"pinned\":true}")
+                .andReturn(200, "{" +
+                        "   \"total\":50," +
+                        "   \"offset\":0," +
+                        "   \"success\":true," +
+                        "   \"count\":1," +
+                        "   \"messages\":[" +
+                        "      {" +
+                        "         \"msg\":\"##滚滚滚\"," +
+                        "         \"pinned\":true," +
+                        "         \"channels\":[]," +
+                        "         \"u\":{" +
+                        "            \"name\":\"ugcode\"," +
+                        "            \"_id\":\"aS66iLvbLN7LhFBJ5\"," +
+                        "            \"username\":\"ugcode\"" +
+                        "         }," +
+                        "         \"translations\":{" +
+                        "            \"en\":\"##roll roll roll\"" +
+                        "         }," +
+                        "         \"mentions\":[]," +
+                        "         \"_id\":\"qQ3AaUlgt9RWeB9hYi\"," +
+                        "         \"pinnedBy\":{" +
+                        "            \"_id\":\"aS66iLvbLN7LhFBJ5\"," +
+                        "            \"username\":\"ugcode\"" +
+                        "         }," +
+                        "         \"rid\":\"GENERAL\"," +
+                        "         \"_updatedAt\":\"2017-10-21T02:33:44.737Z\"," +
+                        "         \"ts\":\"2017-10-21T02:28:24.682Z\"," +
+                        "         \"pinnedAt\":\"2017-10-21T02:33:44.737Z\"" +
+                        "      }" +
+                        "   ]" +
+                        "}")
+                .once();
+
+        rest.getRoomPinnedMessages("general", BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
+
+        verify(messagesCallback, timeout(100).only())
+                .onSuccess(messagesCaptor.capture(), anyInt());
+
+        List<Message> messageList = messagesCaptor.getValue();
+        assertThat(messageList, is(notNullValue()));
+        assertThat(messageList.size(), is(equalTo(1)));
+        Message message = messageList.get(0);
+        assertThat(message.id(), is(equalTo("qQ3AaUlgt9RWeB9hYi")));
     }
 }
