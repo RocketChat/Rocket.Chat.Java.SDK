@@ -2,13 +2,15 @@ package com.rocketchat.livechat;
 
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
-import com.rocketchat.common.data.rpc.RPC;
+import com.rocketchat.common.data.model.MessageType;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SubscribeCallback;
 import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Utils;
@@ -43,6 +45,7 @@ public class LiveChatClient implements SocketListener {
 
     private final Logger logger;
     private final Socket socket;
+    private final ISO8601Converter dateConverter;
 
     private AtomicInteger integer;
     private String sessionId;
@@ -79,9 +82,15 @@ public class LiveChatClient implements SocketListener {
             this.logger = new NoopLogger();
         }
 
+        if (builder.dateConverter != null) {
+            dateConverter = builder.dateConverter;
+        } else {
+            dateConverter = new CalendarISO8601Converter();
+        }
+
         // TODO - Add to the Builder
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
                 .build();
@@ -203,30 +212,36 @@ public class LiveChatClient implements SocketListener {
     }
 
     @Override
-    public void onMessageReceived(JSONObject message) {
-        switch (RPC.getMessageType(message.optString("msg"))) {
+    public void onMessageReceived(MessageType type, /* nullable */ String id, String message) {
+        /* FIXME - temporary JSONObject while we don't convert everything to Moshi and AutoValue */
+        JSONObject object = null;
+        try {
+            object = new JSONObject(message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        switch (type) {
             case CONNECTED:
-                sessionId = message.optString("session");
+                sessionId = object.optString("session");
                 if (connectListener != null) {
                     connectListener.onConnect(sessionId);
                 }
                 break;
             case ADDED:
-                if (message.optString("collection").equals("users")) {
-                    userInfo = message.optJSONObject("fields");
+                if (object.optString("collection").equals("users")) {
+                    userInfo = object.optJSONObject("fields");
                 }
                 break;
             case RESULT:
-                liveChatMiddleware.processCallback(Long.valueOf(message.optString("id")), message);
+                liveChatMiddleware.processCallback(Long.valueOf(object.optString("id")), object);
                 break;
             case READY:
-                liveChatStreamMiddleware.processSubSuccess(message);
+                liveChatStreamMiddleware.processSubSuccess(object);
                 break;
             case CHANGED:
-                liveChatStreamMiddleware.processCallback(message);
-                break;
-            case OTHER:
-                //DO SOMETHING
+                liveChatStreamMiddleware.processCallback(object);
                 break;
         }
     }
@@ -392,6 +407,7 @@ public class LiveChatClient implements SocketListener {
         private OkHttpClient client;
         private SocketFactory factory;
         private Logger logger;
+        private ISO8601Converter dateConverter;
 
         public Builder websocketUrl(String url) {
             this.websocketUrl = checkNotNull(url, "url == null");
@@ -410,6 +426,11 @@ public class LiveChatClient implements SocketListener {
 
         public Builder logger(Logger logger) {
             this.logger = checkNotNull(logger, "logger == null");
+            return this;
+        }
+
+        public Builder dateConverter(ISO8601Converter dateConverter) {
+            this.dateConverter = checkNotNull(dateConverter, "dateConverter == null");
             return this;
         }
 

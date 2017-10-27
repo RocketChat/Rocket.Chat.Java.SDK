@@ -14,6 +14,9 @@ import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
+import com.rocketchat.core.internal.model.RestResult;
+import com.rocketchat.core.internal.model.RestToken;
+import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -27,6 +30,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import com.squareup.moshi.Types;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -35,6 +42,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import javax.annotation.Nonnull;
 
 import static com.rocketchat.common.utils.Preconditions.checkNotNull;
 
@@ -72,32 +81,18 @@ class RestImpl {
                 .post(body)
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class, RestToken.class);
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<RestToken>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                loginCallback.onError(new RocketChatNetworkErrorException("network error", e));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, loginCallback);
-                    return;
+            public void onValue(RestResult<RestToken> data) {
+                RestToken restToken = data.result();
+                Token token = Token.create(restToken.userId(), restToken.authToken());
+                if (tokenProvider != null) {
+                    tokenProvider.saveToken(token);
                 }
-
-                // TODO parse message and check the response type.
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    JSONObject data = json.getJSONObject("data");
-                    String id = data.getString("userId");
-                    String token = data.getString("authToken");
-
-                    loginCallback.onLoginSuccess(new Token(id, token, null));
-                } catch (JSONException e) {
-                    loginCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
+                loginCallback.onLoginSuccess(token);
             }
-        });
+        }, ERROR_HANDLER(loginCallback));
     }
 
     void serverInfo(final ServerInfoCallback callback) {
@@ -113,29 +108,12 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        handleSimpleRestCall(request, ServerInfo.class, new ValueCallback<ServerInfo>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(ServerInfo data) {
+                callback.onServerInfo(data);
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, callback);
-                    return;
-                }
-
-                try {
-                    JsonAdapter<ServerInfo> adapter = moshi.adapter(ServerInfo.class);
-                    ServerInfo info = adapter.fromJson(response.body().string());
-
-                    callback.onServerInfo(info);
-                } catch (IOException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     void pinMessage(String messageId, final SimpleCallback callback) {
@@ -153,29 +131,18 @@ class RestImpl {
                 .post(body)
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class, Message.class);
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<Message>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<Message> data) {
+                /* TODO - should we just ignore the message, since it comes on the message stream...
+                 * Maybe we should send the message, since the user could have unsubscribed
+                 * the stream before the call returns
+                 */
+                logger.debug("Pinned message: " + data.result());
+                callback.onSuccess();
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, callback);
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    System.out.println("RESPONSE: " + json.toString());
-
-                    callback.onSuccess();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     // TODO
@@ -224,7 +191,7 @@ class RestImpl {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    processCallbackError(response, callback);
+                    processCallbackError(response, ERROR_HANDLER(callback));
                     return;
                 }
 
@@ -242,6 +209,52 @@ class RestImpl {
                     callback.onSuccess(attachments, json.optInt("total"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
+
+    }
+
+    private interface ValueCallback<T> {
+        void onValue(T data);
+    }
+
+    private interface ErrorCallback {
+        void onError(RocketChatException error);
+    }
+
+    private static ErrorCallback ERROR_HANDLER(final Callback callback) {
+        return new ErrorCallback() {
+            @Override
+            public void onError(RocketChatException error) {
+                callback.onError(error);
+            }
+        };
+    }
+
+    private <T> void handleSimpleRestCall(Request request,
+                                          final Type type,
+                                          final ValueCallback<T> valueCallback,
+                                          final ErrorCallback errorCallback) {
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                errorCallback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, errorCallback);
+                    return;
+                }
+
+                try {
+                    JsonAdapter<T> adapter = moshi.adapter(type);
+                    T data = adapter.fromJson(response.body().source());
+                    valueCallback.onValue(data);
+                } catch (IOException e) {
+                    errorCallback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
             }
         });
@@ -293,20 +306,22 @@ class RestImpl {
 
         if (tokenProvider != null && tokenProvider.getToken() != null) {
             Token token = tokenProvider.getToken();
-            builder.addHeader("X-Auth-Token", token.getAuthToken())
-                    .addHeader("X-User-Id", token.getUserId());
+            builder.addHeader("X-Auth-Token", token.authToken())
+                    .addHeader("X-User-Id", token.userId());
         }
 
         return builder;
     }
 
-    private void processCallbackError(Response response, Callback callback) {
+    private void processCallbackError(Response response, ErrorCallback callback) {
         try {
+            String body = response.body().string();
+            logger.debug("Error body: %s", body);
             if (response.code() == 401) {
-                JSONObject json = new JSONObject(response.body().string());
+                JSONObject json = new JSONObject(body);
                 callback.onError(new RocketChatAuthException(json.optString("message")));
             } else {
-                JSONObject json = new JSONObject(response.body().string());
+                JSONObject json = new JSONObject(body);
                 String message = json.optString("error");
                 String errorType = json.optString("errorType");
                 callback.onError(new RocketChatApiException(response.code(), message, errorType));

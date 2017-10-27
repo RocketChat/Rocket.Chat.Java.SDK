@@ -1,6 +1,6 @@
 package com.rocketchat.common.data.model;
 
-import com.rocketchat.common.data.Timestamp;
+import com.rocketchat.common.data.ISO8601Date;
 import com.squareup.moshi.Json;
 import javax.annotation.Nullable;
 
@@ -54,7 +54,7 @@ public abstract class BaseMessage {
     public abstract String message();
 
     @Json(name = "ts")
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long timestamp();
 
     @Json(name = "u")
@@ -62,11 +62,11 @@ public abstract class BaseMessage {
     public abstract User sender();
 
     @Json(name = "_updatedAt")
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long updatedAt();
 
     @Nullable
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long editedAt();
 
     @Nullable

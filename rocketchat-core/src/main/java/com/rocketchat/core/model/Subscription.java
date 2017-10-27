@@ -1,7 +1,7 @@
 package com.rocketchat.core.model;
 
 import com.google.auto.value.AutoValue;
-import com.rocketchat.common.data.Timestamp;
+import com.rocketchat.common.data.ISO8601Date;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
@@ -19,12 +19,12 @@ public abstract class Subscription extends BaseRoom {
 
     @Json(name = "ts")
     @Nullable
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long timestamp();
 
     @Json(name = "ls")
     @Nullable
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long lastSeen();
 
     @Nullable
@@ -42,7 +42,7 @@ public abstract class Subscription extends BaseRoom {
 
     @Json(name = "_updatedAt")
     @Nullable
-    public abstract @Timestamp
+    public abstract @ISO8601Date
     Long updatedAt();
 
     @Nullable

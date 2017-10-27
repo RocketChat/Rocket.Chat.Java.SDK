@@ -3,6 +3,7 @@ package com.rocketchat.core;
 import com.rocketchat.common.RocketChatAuthException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.BaseRoom;
@@ -17,6 +18,7 @@ import com.rocketchat.common.network.ConnectivityManager;
 import com.rocketchat.common.network.ReconnectionStrategy;
 import com.rocketchat.common.network.Socket;
 import com.rocketchat.common.network.SocketFactory;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
@@ -27,6 +29,7 @@ import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.factory.ChatRoomFactory;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
+import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.model.Emoji;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
@@ -59,6 +62,7 @@ public class RocketChatClient {
     private final OkHttpClient client;
     private final Logger logger;
     private final SocketFactory factory;
+    private final ISO8601Converter dateConverter;
 
     private TokenProvider tokenProvider;
     private RestImpl restImpl;
@@ -87,7 +91,8 @@ public class RocketChatClient {
         } else {
             this.factory = new SocketFactory() {
                 @Override
-                public Socket create(OkHttpClient client, String url, Logger logger, SocketListener socketListener) {
+                public Socket create(OkHttpClient client, String url, Logger logger,
+                                     SocketListener socketListener) {
                     return new Socket(client, url, logger, socketListener);
                 }
             };
@@ -99,11 +104,18 @@ public class RocketChatClient {
             this.logger = new NoopLogger();
         }
 
+        if (builder.dateConverter != null) {
+            dateConverter = builder.dateConverter;
+        } else {
+            dateConverter = new CalendarISO8601Converter();
+        }
+
         // TODO - Add to the Builder
         moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(dateConverter))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
+                .add(new RestResult.JsonAdapterFactory())
                 .build();
 
         connectivityManager = new ConnectivityManager();
@@ -137,6 +149,10 @@ public class RocketChatClient {
 
     public GlobalStreamCollectionManager getGlobalStreamCollectionManager() {
         return globalStreamCollectionManager;
+    }
+
+    public Moshi getMoshi() {
+        return moshi;
     }
 
     public ConnectivityManager getConnectivityManager() {
@@ -186,7 +202,7 @@ public class RocketChatClient {
             return;
         }
 
-        loginUsingToken(token.getAuthToken(), loginCallback);
+        loginUsingToken(token.authToken(), loginCallback);
     }
 
     //Tested
@@ -464,6 +480,7 @@ public class RocketChatClient {
         private SocketFactory factory;
         private TokenProvider provider;
         private Logger logger;
+        private ISO8601Converter dateConverter;
 
         public Builder websocketUrl(String url) {
             this.websocketUrl = checkNotNull(url, "url == null");
@@ -556,6 +573,11 @@ public class RocketChatClient {
 
         public Builder logger(Logger logger) {
             this.logger = checkNotNull(logger, "logger == null");
+            return this;
+        }
+
+        public Builder dateConverter(ISO8601Converter dateConverter) {
+            this.dateConverter = checkNotNull(dateConverter, "dateConverter == null");
             return this;
         }
 

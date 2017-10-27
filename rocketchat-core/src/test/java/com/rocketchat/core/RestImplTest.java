@@ -7,13 +7,16 @@ import com.rocketchat.common.data.CommonJsonAdapterFactory;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.listener.PaginatedCallback;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
+import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
+import com.squareup.moshi.JsonEncodingException;
 import com.squareup.moshi.Moshi;
 
 import org.json.JSONException;
@@ -36,6 +39,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -63,9 +67,10 @@ public class RestImplTest {
         OkHttpClient client = new OkHttpClient();
 
         Moshi moshi = new Moshi.Builder()
-                .add(new TimestampAdapter())
+                .add(new TimestampAdapter(new CalendarISO8601Converter()))
                 .add(JsonAdapterFactory.create())
                 .add(CommonJsonAdapterFactory.create())
+                .add(new RestResult.JsonAdapterFactory())
                 .build();
 
         rest = new RestImpl(client, moshi, baseUrl, tokenProvider, new NoopLogger());
@@ -109,9 +114,9 @@ public class RestImplTest {
                 .onLoginSuccess(tokenCaptor.capture());
 
         Token token = tokenCaptor.getValue();
-        assertThat(token.getUserId(), is(equalTo("userid")));
-        assertThat(token.getAuthToken(), is(equalTo("token")));
-        assertThat(token.getExpiry(), is(nullValue()));
+        assertThat(token.userId(), is(equalTo("userid")));
+        assertThat(token.authToken(), is(equalTo("token")));
+        assertThat(token.expiresAt(), is(nullValue()));
     }
 
     @Test
@@ -128,8 +133,9 @@ public class RestImplTest {
 
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatInvalidResponseException.class)));
-        assertThat(exception.getMessage(), is(equalTo("A JSONObject text must begin with '{' at character 1")));
-        assertThat(exception.getCause(), is(instanceOf(JSONException.class)));
+        assertThat(exception.getMessage(),
+                is(equalTo("Use JsonReader.setLenient(true) to accept malformed JSON at path $")));
+        assertThat(exception.getCause(), is(instanceOf(JsonEncodingException.class)));
     }
 
     @Test

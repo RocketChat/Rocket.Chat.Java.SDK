@@ -1,8 +1,11 @@
 package com.rocketchat.core;
 
+import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.SocketListener;
 import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
+import com.rocketchat.common.data.model.MessageType;
 import com.rocketchat.common.data.model.User;
+import com.rocketchat.common.data.model.internal.ConnectedMessage;
 import com.rocketchat.common.data.rpc.RPC;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -38,14 +41,20 @@ import com.rocketchat.core.model.PublicSetting;
 import com.rocketchat.core.model.Room;
 import com.rocketchat.core.model.RoomRole;
 import com.rocketchat.core.model.Subscription;
+import com.rocketchat.core.model.Token;
 import com.rocketchat.core.roomstream.LocalStreamCollectionManager;
 import com.rocketchat.core.uploader.IFileUpload;
+import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-import okhttp3.OkHttpClient;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import okhttp3.OkHttpClient;
 
 public class WebsocketImpl implements SocketListener {
     private final OkHttpClient client;
@@ -104,16 +113,40 @@ public class WebsocketImpl implements SocketListener {
     }
 
     //Tested
-    void login(String username, String password, LoginCallback loginCallback) {
+    void login(String username, String password, final LoginCallback delegate) {
+        LoginCallback callback = new LoginCallback() {
+            @Override
+            public void onLoginSuccess(Token token) {
+                userId = token.userId();
+                delegate.onLoginSuccess(token);
+            }
+
+            @Override
+            public void onError(RocketChatException error) {
+                delegate.onError(error);
+            }
+        };
         int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, loginCallback, CoreMiddleware.CallbackType.LOGIN);
+        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LOGIN);
         socket.sendData(BasicRPC.login(uniqueID, username, password));
     }
 
     //Tested
-    void loginUsingToken(String token, LoginCallback loginCallback) {
+    void loginUsingToken(String token, final LoginCallback delegate) {
+        LoginCallback callback = new LoginCallback() {
+            @Override
+            public void onLoginSuccess(Token token) {
+                userId = token.userId();
+                delegate.onLoginSuccess(token);
+            }
+
+            @Override
+            public void onError(RocketChatException error) {
+                delegate.onError(error);
+            }
+        };
         int uniqueID = integer.getAndIncrement();
-        coreMiddleware.createCallback(uniqueID, loginCallback, CoreMiddleware.CallbackType.LOGIN);
+        coreMiddleware.createCallback(uniqueID, callback, CoreMiddleware.CallbackType.LOGIN);
         socket.sendData(BasicRPC.loginUsingToken(uniqueID, token));
     }
 
@@ -459,10 +492,18 @@ public class WebsocketImpl implements SocketListener {
         socket.enablePing();
     }
 
-    private void processOnConnected(JSONObject object) {
-        sessionId = object.optString("session");
-        connectivityManager.publishConnect(sessionId);
-        /*sendData(BasicRPC.PING_MESSAGE);*/
+    private void processOnConnected(String message) {
+        JsonAdapter<ConnectedMessage> adapter = moshi.adapter(ConnectedMessage.class);
+        try {
+            ConnectedMessage connectedMessage = adapter.fromJson(message);
+            sessionId = connectedMessage.session();
+            connectivityManager.publishConnect(sessionId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            coreMiddleware.notifyDisconnection(e.getMessage());
+            coreStreamMiddleware.cleanup();
+            connectivityManager.publishConnectError(e);
+        }
     }
 
     private void processCollectionsAdded(JSONObject object) {
@@ -547,33 +588,40 @@ public class WebsocketImpl implements SocketListener {
     }
 
     @Override
-    public void onMessageReceived(JSONObject message) {
-        switch (RPC.getMessageType(message.optString("msg"))) {
+    public void onMessageReceived(MessageType type, /* nullable */ String id, String message) {
+        /* FIXME - temporary JSONObject while we don't convert everything to Moshi and AutoValue */
+        JSONObject object = null;
+        try {
+            object = new JSONObject(message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        switch (type) {
             case CONNECTED:
                 processOnConnected(message);
                 break;
+            case PING:
+                socket.sendData(RPC.PONG_MESSAGE);
+                break;
             case RESULT:
-                coreMiddleware.processCallback(Long.valueOf(message.optString("id")), message);
+                coreMiddleware.processCallback(Long.valueOf(id), object, message);
                 break;
             case READY:
-                coreStreamMiddleware.processSubscriptionSuccess(message);
+                coreStreamMiddleware.processSubscriptionSuccess(object);
                 break;
             case ADDED:
-                processCollectionsAdded(message);
+                processCollectionsAdded(object);
                 break;
             case CHANGED:
-                processCollectionsChanged(message);
+                processCollectionsChanged(object);
                 break;
             case REMOVED:
-                processCollectionsRemoved(message);
+                processCollectionsRemoved(object);
                 break;
-            case NOSUB:
-                coreStreamMiddleware.processUnsubscriptionSuccess(message);
-                break;
-            case OTHER:
-                break;
-            default:
-
+            case UNSUBSCRIBED:
+                coreStreamMiddleware.processUnsubscriptionSuccess(object);
                 break;
         }
     }
@@ -587,13 +635,16 @@ public class WebsocketImpl implements SocketListener {
     public void onClosed() {
         logger.info("onClosed");
         coreMiddleware.cleanup();
+        coreStreamMiddleware.cleanup();
         connectivityManager.publishDisconnect(true);
     }
 
     @Override
     public void onFailure(Throwable throwable) {
+        throwable.printStackTrace();
         logger.info("onFailure: " + throwable);
         coreMiddleware.notifyDisconnection(throwable.getMessage());
+        coreStreamMiddleware.cleanup();
         connectivityManager.publishConnectError(throwable);
     }
 

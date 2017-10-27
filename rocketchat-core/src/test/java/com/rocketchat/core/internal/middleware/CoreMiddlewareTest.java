@@ -4,8 +4,11 @@ import com.rocketchat.common.RocketChatApiException;
 import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
+import com.rocketchat.common.data.CommonJsonAdapterFactory;
+import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.core.TestMessages;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.model.JsonAdapterFactory;
@@ -54,6 +57,8 @@ public class CoreMiddlewareTest {
     @Before
     public void setup() throws JSONException {
         Moshi moshi = new Moshi.Builder()
+                .add(new TimestampAdapter(new CalendarISO8601Converter()))
+                .add(CommonJsonAdapterFactory.create())
                 .add(JsonAdapterFactory.create())
                 .build();
         middleware = new CoreMiddleware(moshi);
@@ -64,7 +69,8 @@ public class CoreMiddlewareTest {
     @Test
     public void testShouldEmitOnSuccessForSimpleCallback() throws JSONException {
         middleware.createCallback(1, simpleCallback, CoreMiddleware.CallbackType.MESSAGE_OP);
-        middleware.processCallback(1, new JSONObject("{\"result\":\"ok\"}"));
+        middleware.processCallback(1, new JSONObject("{\"result\":\"ok\"}"),
+                "{\"result\":\"ok\"}");
 
         verify(simpleCallback).onSuccess();
     }
@@ -72,17 +78,20 @@ public class CoreMiddlewareTest {
     @Test
     public void testShouldEmitSuccessOnLogin() throws JSONException {
         middleware.createCallback(1, loginCallback, CoreMiddleware.CallbackType.LOGIN);
-        middleware.processCallback(1, new JSONObject(TestMessages.LOGIN_RESPONSE_OK));
+        middleware.processCallback(1, new JSONObject(TestMessages.LOGIN_RESPONSE_OK),
+                TestMessages.LOGIN_RESPONSE_OK);
 
         verify(loginCallback).onLoginSuccess(tokenCaptor.capture());
-        assertThat(tokenCaptor.getValue().getAuthToken(), is(equalTo("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg")));
-        assertThat(tokenCaptor.getValue().getUserId(), is(equalTo("yG6FQYRsuTWRK8KP6")));
+        assertThat(tokenCaptor.getValue().authToken(),
+                is(equalTo("Yk_MNMp7K6A8J_3ytsC3rxwIZe9PZ4pfkPe-6G7JPYg")));
+        assertThat(tokenCaptor.getValue().userId(), is(equalTo("yG6FQYRsuTWRK8KP6")));
     }
 
     @Test
     public void testShouldEmitOnErrorOnLogin() throws JSONException {
         middleware.createCallback(1, loginCallback, CoreMiddleware.CallbackType.LOGIN);
-        middleware.processCallback(1, new JSONObject(TestMessages.LOGIN_RESPONSE_FAIL));
+        middleware.processCallback(1, new JSONObject(TestMessages.LOGIN_RESPONSE_FAIL),
+                TestMessages.LOGIN_RESPONSE_FAIL);
 
         verify(loginCallback).onError(errorArgumentCaptor.capture());
         RocketChatApiException error = (RocketChatApiException) errorArgumentCaptor.getValue();
@@ -114,13 +123,14 @@ public class CoreMiddlewareTest {
     @Test
     public void shouldEmitErrorWithInvalidResponse() {
         middleware.createCallback(1, simpleCallback, CoreMiddleware.CallbackType.ARCHIVE);
-        middleware.processCallback(1, INVALID_RESPONSE);
+        middleware.processCallback(1, INVALID_RESPONSE, INVALID_RESPONSE.toString());
 
         verify(simpleCallback).onError(errorArgumentCaptor.capture());
         verifyNoMoreInteractions(simpleCallback);
         assertThat(errorArgumentCaptor.getValue(), instanceOf(RocketChatInvalidResponseException.class));
         RocketChatInvalidResponseException exception = (RocketChatInvalidResponseException) errorArgumentCaptor.getValue();
-        assertThat(exception.getMessage(), is(equalTo("Missing \"result\" or \"error\" values: {\"valid\":\"json\"}")));
+        assertThat(exception.getMessage(),
+                is(equalTo("Missing \"result\" or \"error\" values: {\"valid\":\"json\"}")));
     }
 
     // TODO - add more tests...
