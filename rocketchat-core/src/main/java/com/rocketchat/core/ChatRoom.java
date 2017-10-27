@@ -1,6 +1,7 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
@@ -77,8 +78,37 @@ public class ChatRoom {
         client.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lasttimestamp, callback);
     }
 
-    public void getMembers(RoomCallback.GetMembersCallback callback) {
-        client.getRoomMembers(room.roomId(), false, callback);
+    /**
+     * Gets the room member list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getMembers(0, BaseUser.SortBy.USERNAME, Sort.DESC, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the member list and the total of members in the room (this is not the member list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param sortBy The attribute name to sort.
+     * @param sort The order in which the results should be returned.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @see com.rocketchat.core.model.attachment.Attachment.SortBy
+     * @see Sort
+     * @since 0.8.0
+     */
+    public void getMembers(int offset,
+                         BaseUser.SortBy sortBy,
+                         Sort sort,
+                         PaginatedCallback callback) {
+        client.getRoomMembers(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 
     /**

@@ -131,9 +131,4 @@ public class RoomRPC extends RPC {
         return getRemoteMethodObject(integer, SAVE_ROOM_SETTINGS, roomId, setting, value).toString();
     }
 
-    public static String getRoomMembers(int integer, String roomId, Boolean allUsers) {
-        return getRemoteMethodObject(integer, GET_ROOM_MEMBERS, roomId, allUsers).toString();
-    }
-
-
 }

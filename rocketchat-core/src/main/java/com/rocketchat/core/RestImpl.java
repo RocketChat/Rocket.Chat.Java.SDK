@@ -6,7 +6,9 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.ServerInfo;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -22,12 +24,14 @@ import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import com.squareup.moshi.Types;
@@ -145,9 +149,56 @@ class RestImpl {
         }, ERROR_HANDLER(callback));
     }
 
-    // TODO
-    void getRoomMembers() {
+    void getRoomMembers(String roomId,
+                        BaseRoom.RoomType roomType,
+                        int offset,
+                        BaseUser.SortBy sortBy,
+                        Sort sort,
+                        final PaginatedCallback callback) {
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(sortBy, "sortBy == null");
+        checkNotNull(sort, "sort == null");
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "members"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                // TODO add the sort on the query parameter. Track the status here: 
+                //                .addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("Network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    logger.info("Response = " + response.body().string());
+                    processCallbackError(response, callback);
+                    return;
+                }
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
+
+                    Type type = Types.newParameterizedType(List.class, User.class);
+                    JsonAdapter<List<User>> adapter = moshi.adapter(type);
+                    List<User> userList = adapter.fromJson(json.getJSONArray("members").toString());
+
+                    callback.onSuccess(userList, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     // TODO
@@ -166,11 +217,11 @@ class RestImpl {
                       Attachment.SortBy sortBy,
                       Sort sort,
                       final PaginatedCallback callback) {
-        checkNotNull(roomId,"roomId == null");
-        checkNotNull(roomType,"roomType == null");
-        checkNotNull(sortBy,"sortBy == null");
-        checkNotNull(sort,"sort == null");
-        checkNotNull(callback,"callback == null");
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(sortBy, "sortBy == null");
+        checkNotNull(sort, "sort == null");
+        checkNotNull(callback, "callback == null");
 
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "files"))
                 .addQueryParameter("roomId", roomId)

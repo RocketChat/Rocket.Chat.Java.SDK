@@ -7,6 +7,7 @@ import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.PaginatedCallback;
@@ -171,9 +172,13 @@ public class RocketChatClient {
         restImpl.pinMessage(messageId, callback);
     }
 
-    // TODO
-    public void getRoomMembers() {
-
+    public void getRoomMembers(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               BaseUser.SortBy sortBy,
+                               Sort sort,
+                               final PaginatedCallback callback) {
+        restImpl.getRoomMembers(roomId, roomType, offset, sortBy, sort, callback);
     }
 
     // TODO
@@ -259,10 +264,6 @@ public class RocketChatClient {
     void getChatHistory(String roomID, int limit, Date oldestMessageTimestamp,
                         Date lasttimestamp, HistoryCallback callback) {
         websocketImpl.getChatHistory(roomID, limit, oldestMessageTimestamp, lasttimestamp, callback);
-    }
-
-    void getRoomMembers(String roomID, Boolean allUsers, RoomCallback.GetMembersCallback callback) {
-        websocketImpl.getRoomMembers(roomID, allUsers, callback);
     }
 
     //Tested
