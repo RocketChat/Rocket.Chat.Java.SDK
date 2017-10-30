@@ -195,9 +195,53 @@ class RestImpl {
         });
     }
 
-    // TODO
-    void getRoomFavoriteMessages() {
+    void getRoomFavoriteMessages(String roomId,
+                                 BaseRoom.RoomType roomType,
+                                 int offset,
+                                 final PaginatedCallback<Message> callback) {
+        String userId = tokenProvider.getToken().userId();
+        checkNotNull(userId, "userId == null");
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"starred._id\":{\"$in\":[\"" + userId + "\"]}}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, ERROR_HANDLER(callback));
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
+
+                    Type type = Types.newParameterizedType(List.class, Message.class);
+                    JsonAdapter<List<Message>> adapter = moshi.adapter(type);
+                    List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
+
+                    callback.onSuccess(messageList, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
     }
 
     void getRoomPinnedMessages(String roomId,
@@ -351,7 +395,7 @@ class RestImpl {
      * Returns the correspondent Rest API method accordingly with the room type.
      *
      * @param roomType The type of the room.
-     * @param method The method.
+     * @param method   The method.
      * @return A Rest API method accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
@@ -370,7 +414,7 @@ class RestImpl {
      * Builds and returns the HttpUrl.Builder as {baseUrl}/api/v1/{method}
      *
      * @param baseUrl The base URL.
-     * @param method The method name.
+     * @param method  The method name.
      * @return A HttpUrl pointing to the REST API call.
      */
     private HttpUrl.Builder requestUrl(HttpUrl baseUrl, String method) {

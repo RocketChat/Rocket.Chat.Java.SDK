@@ -181,9 +181,11 @@ public class RocketChatClient {
         restImpl.getRoomMembers(roomId, roomType, offset, sortBy, sort, callback);
     }
 
-    // TODO
-    public void getRoomFavoriteMessages() {
-
+    public void getRoomFavoriteMessages(String roomId,
+                                        BaseRoom.RoomType roomType,
+                                        int offset,
+                                        final PaginatedCallback callback) {
+        restImpl.getRoomFavoriteMessages(roomId, roomType, offset, callback);
     }
 
     public void getRoomPinnedMessages(String roomId,

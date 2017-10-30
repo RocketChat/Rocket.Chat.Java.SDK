@@ -41,6 +41,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -155,6 +156,7 @@ public class RestImplTest {
                 .once();
 
         rest.signin("user", "password", loginCallback);
+
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
 
@@ -177,6 +179,7 @@ public class RestImplTest {
 
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
+
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatAuthException.class)));
         assertThat(exception.getMessage(), is(equalTo("Unauthorized")));
@@ -188,6 +191,7 @@ public class RestImplTest {
 
         verify(loginCallback, timeout(DEFAULT_TIMEOUT).only())
                 .onError(exceptionCaptor.capture());
+
         RocketChatException exception = exceptionCaptor.getValue();
         assertThat(exception, is(instanceOf(RocketChatException.class)));
 
@@ -245,7 +249,6 @@ public class RestImplTest {
     }
 
     @Test
-    //TODO Needs to know why it is failing.
     public void testGetRoomFilesShouldBeSuccessful() {
         mockServer.expect()
                 .get()
@@ -434,5 +437,93 @@ public class RestImplTest {
         assertThat(messageList.size(), is(equalTo(1)));
         Message message = messageList.get(0);
         assertThat(message.id(), is(equalTo("qQ3AaUlgt9RWeB9hYi")));
+    }
+
+    //     _____ ______ _______     _____   ____   ____  __  __        ______ __      ______  _____  _____ _______ ______      __  __ ______  _____ _____         _____ ______  _____   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   |  __ \ / __ \ / __ \|  \/  |      |  ____/\ \    / / __ \|  __ \|_   _|__   __|  ____|    |  \/  |  ____|/ ____/ ____|  /\   / ____|  ____|/ ____| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |__) | |  | | |  | | \  / |______| |__ /  \ \  / / |  | | |__) | | |    | |  | |__ ______| \  / | |__  | (___| (___   /  \ | |  __| |__  | (___      | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______|  _  /| |  | | |  | | |\/| |______|  __/ /\ \ \/ /| |  | |  _  /  | |    | |  |  __|______| |\/| |  __|  \___ \\___ \ / /\ \| | |_ |  __|  \___ \     | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | | \ \| |__| | |__| | |  | |      | | / ____ \  / | |__| | | \ \ _| |_   | |  | |____     | |  | | |____ ____) |___) / ____ \ |__| | |____ ____) |    | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|      |_|  \_\\____/ \____/|_|  |_|      |_|/_/    \_\/   \____/|_|  \_\_____|  |_|  |______|    |_|  |_|______|_____/_____/_/    \_\_____|______|_____/     |_|  |______|_____/   |_| |_____/
+    //
+    //
+    @Test(expected = NullPointerException.class)
+    public void testGetFavoriteMessagesShouldFailWithNullRoomId() {
+        rest.getRoomFavoriteMessages(null, BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomFavoriteMessagesShouldFailWithNullRoomType() {
+        rest.getRoomFavoriteMessages("roomId", null, 0, messagesCallback);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetRoomFavoriteMessagesShouldFailWithNullCallback() {
+        rest.getRoomFavoriteMessages("roomId", BaseRoom.RoomType.PUBLIC, 0, null);
+    }
+
+    @Test
+    public void testGetRoomFavoriteMessages() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"starred._id\":{\"$in\":[\"userId\"]}}")
+                .andReturn(200,
+                        "{  " +
+                                "   \"total\":20," +
+                                "   \"offset\":0," +
+                                "   \"success\":true," +
+                                "   \"count\":1," +
+                                "   \"messages\":[  " +
+                                "      {  " +
+                                "         \"msg\":\"\"," +
+                                "         \"file\":{  " +
+                                "            \"name\":\"damaged-a.jpg\"," +
+                                "            \"_id\":\"omTGDjutznbmEHzHs\"," +
+                                "            \"type\":\"image/jpeg\"" +
+                                "         }," +
+                                "         \"attachments\":[  " +
+                                "            {  " +
+                                "               \"title_link_download\":true," +
+                                "               \"image_size\":577146," +
+                                "               \"image_url\":\"/file-upload/omTGDjutznbmEHzHs/damaged-a.jpg\"," +
+                                "               \"description\":\"\"," +
+                                "               \"title_link\":\"/file-upload/omTGDjutznbmEHzHs/damaged-a.jpg\"," +
+                                "               \"title\":\"damaged-a.jpg\"," +
+                                "               \"type\":\"file\"," +
+                                "               \"image_type\":\"image/jpeg\"" +
+                                "            }" +
+                                "         ]," +
+                                "         \"channels\":[]," +
+                                "         \"starred\":[  " +
+                                "            {  " +
+                                "               \"_id\":\"cBD6dHc7oBvGjkruM\"" +
+                                "            }" +
+                                "         ]," +
+                                "         \"u\":{  " +
+                                "            \"name\":\"Petya Sorokin\"," +
+                                "            \"_id\":\"2AWv5b2vkkg9zRmKX\"," +
+                                "            \"username\":\"petya.sorokin\"" +
+                                "         }," +
+                                "         \"mentions\":[ ]," +
+                                "         \"groupable\":false," +
+                                "         \"_id\":\"6G8o7QxDDyPmWdBdF\"," +
+                                "         \"rid\":\"GENERAL\"," +
+                                "         \"_updatedAt\":\"2017-10-03T15:19:33.927Z\"," +
+                                "         \"ts\":\"2017-10-03T13:05:23.185Z\"" +
+                                "      }" +
+                                "   ]" +
+                                "}")
+                .once();
+
+        rest.getRoomFavoriteMessages("GENERAL", BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
+
+        verify(messagesCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(messagesCaptor.capture(), anyInt());
+
+        List<Message> messageList = messagesCaptor.getValue();
+        assertThat(messageList, is(notNullValue()));
+        assertThat(messageList.size(), is(equalTo(1)));
+        Message message = messageList.get(0);
+        assertThat(message.id(), is(equalTo("6G8o7QxDDyPmWdBdF")));
     }
 }
