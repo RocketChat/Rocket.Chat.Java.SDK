@@ -9,8 +9,8 @@ import com.rocketchat.common.data.model.BaseRoom;
 import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.PaginatedCallback;
-import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.listener.SimpleListCallback;
+import com.rocketchat.common.utils.CalendarISO8601Converter;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
@@ -45,9 +45,10 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RestImplTest {
@@ -107,6 +108,8 @@ public class RestImplTest {
                 .add(CommonJsonAdapterFactory.create())
                 .add(new RestResult.JsonAdapterFactory())
                 .build();
+
+        when(tokenProvider.getToken()).thenReturn(Token.create("userId", "authToken"));
 
         rest = new RestImpl(client, moshi, baseUrl, tokenProvider, new NoopLogger());
     }
@@ -297,7 +300,7 @@ public class RestImplTest {
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
 
         verify(attachmentCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(attachmentsCaptor.capture(), anyInt());
+                .onSuccess(attachmentsCaptor.capture(), anyLong(), anyLong());
         List<Attachment> attachmentList = attachmentsCaptor.getValue();
         assertThat(attachmentList, is(notNullValue()));
         assertThat(attachmentList.size(), is(equalTo(1)));
@@ -365,7 +368,7 @@ public class RestImplTest {
         rest.getRoomMembers("GENERAL", BaseRoom.RoomType.PUBLIC, 0, BaseUser.SortBy.USERNAME, Sort.DESC, usersCallback);
 
         verify(usersCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(usersCaptor.capture(), anyInt());
+                .onSuccess(usersCaptor.capture(), anyLong(), anyLong());
 
         List<User> userList = usersCaptor.getValue();
         assertThat(userList, is(notNullValue()));
@@ -397,10 +400,11 @@ public class RestImplTest {
         rest.getRoomPinnedMessages(null, BaseRoom.RoomType.PUBLIC, 0, null);
     }
 
+    @Test
     public void testGetRoomPinnedMessagesShouldBeSuccessful() {
         mockServer.expect()
-                .post()
-                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"pinned\":true}")
+                .get()
+                .withPath("/api/v1/channels.messages?roomId=general&offset=0&query={%22pinned%22:true}")
                 .andReturn(200, "{" +
                         "   \"total\":50," +
                         "   \"offset\":0," +
@@ -437,7 +441,7 @@ public class RestImplTest {
         rest.getRoomPinnedMessages("general", BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
 
         verify(messagesCallback, timeout(100).only())
-                .onSuccess(messagesCaptor.capture(), anyInt());
+                .onSuccess(messagesCaptor.capture(), anyLong(), anyLong());
 
         List<Message> messageList = messagesCaptor.getValue();
         assertThat(messageList, is(notNullValue()));
@@ -473,7 +477,7 @@ public class RestImplTest {
     public void testGetRoomFavoriteMessages() {
         mockServer.expect()
                 .get()
-                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={\"starred._id\":{\"$in\":[\"userId\"]}}")
+                .withPath("/api/v1/channels.messages?roomId=GENERAL&offset=0&query={%22starred._id%22:{%22$in%22:[%22userId%22]}}")
                 .andReturn(200,
                         "{  " +
                                 "   \"total\":20," +
@@ -525,7 +529,7 @@ public class RestImplTest {
         rest.getRoomFavoriteMessages("GENERAL", BaseRoom.RoomType.PUBLIC, 0, messagesCallback);
 
         verify(messagesCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(messagesCaptor.capture(), anyInt());
+                .onSuccess(messagesCaptor.capture(), anyLong(), anyLong());
 
         List<Message> messageList = messagesCaptor.getValue();
         assertThat(messageList, is(notNullValue()));
@@ -715,12 +719,12 @@ public class RestImplTest {
                         "}")
                 .once();
 
-        rest.getUserDirectMessageList(simpleListCallback);
+        rest.getUserDirectMessageList(subscriptionsCallback);
 
-        verify(simpleListCallback, timeout(DEFAULT_TIMEOUT).only())
-                .onSuccess(listCaptor.capture());
+        verify(subscriptionsCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(subscriptionsCaptor.capture());
 
-        List<Subscription> subscriptionList = listCaptor.getValue();
+        List<Subscription> subscriptionList = subscriptionsCaptor.getValue();
         assertThat(subscriptionList, is(notNullValue()));
         assertThat(subscriptionList.size(), is(equalTo(2)));
         Subscription subscription = subscriptionList.get(0);

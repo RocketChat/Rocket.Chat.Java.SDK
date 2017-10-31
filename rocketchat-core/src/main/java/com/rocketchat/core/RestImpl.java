@@ -168,33 +168,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, User.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<User>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("Network error", e));
+            public void onValue(RestResult<List<User>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    logger.info("Response = " + response.body().string());
-                    processCallbackError(response, ERROR_HANDLER(callback));
-                    return;
-                }
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    logger.info("Response = " + json.toString());
-
-                    Type type = Types.newParameterizedType(List.class, User.class);
-                    JsonAdapter<List<User>> adapter = moshi.adapter(type);
-                    List<User> userList = adapter.fromJson(json.getJSONArray("members").toString());
-
-                    callback.onSuccess(userList, json.optInt("total"));
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     void getRoomFavoriteMessages(String roomId,
@@ -217,33 +198,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Message.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Message>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<List<Message>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, ERROR_HANDLER(callback));
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    logger.info("Response = " + json.toString());
-
-                    Type type = Types.newParameterizedType(List.class, Message.class);
-                    JsonAdapter<List<Message>> adapter = moshi.adapter(type);
-                    List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
-
-                    callback.onSuccess(messageList, json.optInt("total"));
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     /**
@@ -259,32 +221,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response,ERROR_HANDLER(callback));
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-
-                    Type type = Types.newParameterizedType(List.class, Subscription.class);
-                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
-                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("groups").toString());
-
-                    callback.onSuccess(subscriptionList);
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     /**
@@ -300,32 +244,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, ERROR_HANDLER(callback));
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-
-                    Type type = Types.newParameterizedType(List.class, Subscription.class);
-                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
-                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("channels").toString());
-
-                    callback.onSuccess(subscriptionList);
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     /**
@@ -341,33 +267,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, ERROR_HANDLER(callback));
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    logger.info("Response = " + json.toString());
-
-                    Type type = Types.newParameterizedType(List.class, Subscription.class);
-                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
-                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("ims").toString());
-
-                    callback.onSuccess(subscriptionList);
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     void getRoomPinnedMessages(String roomId,
@@ -388,33 +295,14 @@ class RestImpl {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Message.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Message>>>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            public void onValue(RestResult<List<Message>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
             }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    processCallbackError(response, ERROR_HANDLER(callback));
-                    return;
-                }
-
-                try {
-                    JSONObject json = new JSONObject(response.body().string());
-                    logger.info("Response = " + json.toString());
-
-                    Type type = Types.newParameterizedType(List.class, Message.class);
-                    JsonAdapter<List<Message>> adapter = moshi.adapter(type);
-                    List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
-
-                    callback.onSuccess(messageList, json.optInt("total"));
-                } catch (JSONException e) {
-                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
-                }
-            }
-        });
+        }, ERROR_HANDLER(callback));
     }
 
     void getRoomFiles(String roomId,
@@ -463,7 +351,7 @@ class RestImpl {
                         attachments.add(new Attachment(filesJSONArray.getJSONObject(i), baseUrl.url().toString()));
                     }
 
-                    callback.onSuccess(attachments, json.optInt("total"));
+                    callback.onSuccess(attachments, json.optLong("total"), json.optLong("offset"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }

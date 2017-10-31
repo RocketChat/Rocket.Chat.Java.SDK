@@ -19,26 +19,45 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class RestResult<T> {
     public abstract T result();
+    @Nullable public abstract Long total();
+    @Nullable public abstract Long offset();
+    @Nullable public abstract Long count();
 
     public static class MoshiJsonAdapter<T> extends JsonAdapter<RestResult<T>> {
-        private static final String[] NAMES = new String[] {"status", "success"};
+        private static final String[] NAMES = new String[] {"status", "success", "total", "offset", "count"};
         private static final JsonReader.Options OPTIONS = JsonReader.Options.of(NAMES);
         private final JsonAdapter<T> tAdaptper;
 
         public MoshiJsonAdapter(Moshi moshi, Type[] types) {
             this.tAdaptper = adapter(moshi, types[0]);
         }
+
         @Nullable
         @Override
         public RestResult<T> fromJson(JsonReader reader) throws IOException {
             reader.beginObject();
             T result = null;
+            Long total = null;
+            Long offset = null;
+            Long count = null;
             while (reader.hasNext()) {
                 switch (reader.selectName(OPTIONS)) {
                     case 0:
                     case 1: {
                         // Just ignore status or success value, since this is for parsing 200 OK messages
                         reader.skipValue();
+                        break;
+                    }
+                    case 2: {
+                        total = reader.nextLong();
+                        break;
+                    }
+                    case 3: {
+                        offset = reader.nextLong();
+                        break;
+                    }
+                    case 4: {
+                        count = reader.nextLong();
                         break;
                     }
                     case -1: {
@@ -53,7 +72,7 @@ public abstract class RestResult<T> {
                 }
             }
             reader.endObject();
-            return new AutoValue_RestResult(result);
+            return new AutoValue_RestResult(result, total, offset, count);
         }
 
         @Override

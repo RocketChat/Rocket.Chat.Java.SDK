@@ -84,7 +84,7 @@ public class RestApiRoomList {
     private void getRoomFilesByRoom(final ChatRoom room) {
         room.getFiles(0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, new PaginatedCallback() {
             @Override
-            public void onSuccess(List list, int total) {
+            public void onSuccess(List list, long total, long offset) {
                 logger.info("\n\nSuccess getting the file list from " + room.getRoomData().name() + " room");
                 logger.info("File list total number: " + total);
                 logger.info("Files:\n");
