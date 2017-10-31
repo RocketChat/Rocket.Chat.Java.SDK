@@ -6,7 +6,9 @@ import com.rocketchat.common.RocketChatException;
 import com.rocketchat.common.RocketChatInvalidResponseException;
 import com.rocketchat.common.RocketChatNetworkErrorException;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.ServerInfo;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
@@ -19,22 +21,22 @@ import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.internal.model.RestToken;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Setting;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import com.squareup.moshi.Types;
-
-import java.lang.reflect.Type;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -144,19 +146,164 @@ class RestImpl {
         }, ERROR_HANDLER(callback));
     }
 
-    // TODO
-    void getRoomMembers() {
+    void getRoomMembers(String roomId,
+                        BaseRoom.RoomType roomType,
+                        int offset,
+                        BaseUser.SortBy sortBy,
+                        Sort sort,
+                        final PaginatedCallback<User> callback) {
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(sortBy, "sortBy == null");
+        checkNotNull(sort, "sort == null");
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "members"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                // TODO add the sort on the query parameter. Track the status here: 
+                //.addQueryParameter("sort", "{\"" + sortBy.getPropertyName() + "\":" + sort.getDirection() + "}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, User.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<User>>>() {
+            @Override
+            public void onValue(RestResult<List<User>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
+            }
+        }, ERROR_HANDLER(callback));
     }
 
-    // TODO
-    void getRoomFavoriteMessages() {
+    void getRoomFavoriteMessages(String roomId,
+                                 BaseRoom.RoomType roomType,
+                                 int offset,
+                                 final PaginatedCallback<Message> callback) {
+        String userId = tokenProvider.getToken().userId();
+        checkNotNull(userId, "userId == null");
+        checkNotNull(roomId, "roomId == null");
+        checkNotNull(roomType, "roomType == null");
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"starred._id\":{\"$in\":[\"" + userId + "\"]}}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Message.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Message>>>() {
+            @Override
+            public void onValue(RestResult<List<Message>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
+            }
+        }, ERROR_HANDLER(callback));
     }
 
-    // TODO
-    void getRoomPinnedMessages() {
+    /**
+     * Lists all of the private groups the calling user has joined.
+     */
+    void getUserGroupList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
 
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.PRIVATE, "list"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
+            @Override
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
+            }
+        }, ERROR_HANDLER(callback));
+    }
+
+    /**
+     * Lists all of the channels the calling user has joined.
+     */
+    void getUserChannelList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.PUBLIC, "list.joined"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
+            @Override
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
+            }
+        }, ERROR_HANDLER(callback));
+    }
+
+    /**
+     * Lists all of the direct messages the calling user has joined.
+     */
+    void getUserDirectMessageList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.ONE_TO_ONE, "list"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Subscription.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Subscription>>>() {
+            @Override
+            public void onValue(RestResult<List<Subscription>> data) {
+                callback.onSuccess(data.result());
+            }
+        }, ERROR_HANDLER(callback));
+    }
+
+    void getRoomPinnedMessages(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               final PaginatedCallback<Message> callback) {
+        checkNotNull(roomId,"roomId == null");
+        checkNotNull(roomType,"roomType == null");
+        checkNotNull(callback,"callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(roomType, "messages"))
+                .addQueryParameter("roomId", roomId)
+                .addQueryParameter("offset", String.valueOf(offset))
+                .addQueryParameter("query", "{\"pinned\":true}")
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        Type type = Types.newParameterizedType(RestResult.class,
+                Types.newParameterizedType(List.class, Message.class));
+        handleSimpleRestCall(request, type, new ValueCallback<RestResult<List<Message>>>() {
+            @Override
+            public void onValue(RestResult<List<Message>> data) {
+                callback.onSuccess(data.result(), data.total(), data.offset());
+            }
+        }, ERROR_HANDLER(callback));
     }
 
     void getRoomFiles(String roomId,
@@ -205,7 +352,7 @@ class RestImpl {
                         attachments.add(new Attachment(filesJSONArray.getJSONObject(i), baseUrl.url().toString()));
                     }
 
-                    callback.onSuccess(attachments, json.optLong("offset"), json.optLong("total"));
+                    callback.onSuccess(attachments, json.optLong("total"), json.optLong("offset"));
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }
@@ -283,7 +430,7 @@ class RestImpl {
      * Returns the correspondent Rest API method accordingly with the room type.
      *
      * @param roomType The type of the room.
-     * @param method The method.
+     * @param method   The method.
      * @return A Rest API method accordingly with the room type.
      * @see #requestUrl(HttpUrl, String)
      */
@@ -302,7 +449,7 @@ class RestImpl {
      * Builds and returns the HttpUrl.Builder as {baseUrl}/api/v1/{method}
      *
      * @param baseUrl The base URL.
-     * @param method The method name.
+     * @param method  The method name.
      * @return A HttpUrl pointing to the REST API call.
      */
     private HttpUrl.Builder requestUrl(HttpUrl baseUrl, String method) {

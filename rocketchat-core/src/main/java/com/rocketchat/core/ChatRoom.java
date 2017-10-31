@@ -1,6 +1,8 @@
 package com.rocketchat.core;
 
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
+import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
 import com.rocketchat.common.listener.SimpleListCallback;
@@ -10,7 +12,6 @@ import com.rocketchat.common.listener.TypingListener;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.HistoryCallback;
 import com.rocketchat.core.callback.MessageCallback;
-import com.rocketchat.core.callback.RoomCallback;
 import com.rocketchat.core.internal.middleware.CoreStreamMiddleware;
 import com.rocketchat.core.model.Message;
 import com.rocketchat.core.model.Subscription;
@@ -69,8 +70,89 @@ public class ChatRoom {
         client.getChatHistory(room.roomId(), limit, oldestMessageTimestamp, lastTimestamp);
     }
 
-    public void getMembers(RoomCallback.GetMembersCallback callback) {
-        client.getRoomMembers();
+    /**
+     * Gets the room member list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getMembers(0, BaseUser.SortBy.USERNAME, Sort.DESC, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the member list and the total of members in the room (this is not the member list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param sortBy The attribute name to sort.
+     * @param sort The order in which the results should be returned.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @see com.rocketchat.core.model.attachment.Attachment.SortBy
+     * @see Sort
+     * @since 0.8.0
+     */
+    public void getMembers(int offset,
+                         BaseUser.SortBy sortBy,
+                         Sort sort,
+                         PaginatedCallback<User> callback) {
+        client.getRoomMembers(room.roomId(), room.type(), offset, sortBy, sort, callback);
+    }
+
+    /**
+     * Gets the room pinned message list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getPinnedMessages(0, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the pinned message list and the total of pinned messages in the room (this is not the pinned message list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @since 0.8.0
+     */
+    public void getPinnedMessages(int offset, PaginatedCallback<Message> callback) {
+        client.getRoomPinnedMessages(room.roomId(), room.type(), offset, callback);
+    }
+
+    /**
+     * Gets the room favorite message list.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * room.getFavoriteMessages(0, new PaginatedCallback() {
+     *     public void onSuccess(List list, int total) {
+     *         // Handle the favorite message list and the total of favorite messages in the room (this is not the favorite message list size).
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error like showing a message to the user
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param offset The number of items to “skip” in the query, is zero based so it starts off at 0 being the first item.
+     * @param callback The paginated callback.
+     * @see BaseRoom
+     * @since 0.8.0
+     */
+    public void getFavoriteMessages(int offset, PaginatedCallback<Message> callback) {
+        client.getRoomFavoriteMessages(room.roomId(), room.type(), offset, callback);
     }
 
     /**
@@ -102,7 +184,7 @@ public class ChatRoom {
     public void getFiles(int offset,
                          Attachment.SortBy sortBy,
                          Sort sort,
-                        PaginatedCallback callback) {
+                        PaginatedCallback<Attachment> callback) {
         client.getRoomFiles(room.roomId(), room.type(), offset, sortBy, sort, callback);
     }
 

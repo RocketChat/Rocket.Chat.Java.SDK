@@ -14,9 +14,6 @@ import javax.annotation.Nullable;
 @AutoValue
 public abstract class Subscription extends BaseRoom {
 
-    @Json(name = "rid")
-    public abstract String roomId();
-
     @Json(name = "ts")
     @Nullable
     public abstract @ISO8601Date

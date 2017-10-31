@@ -8,6 +8,7 @@ import com.rocketchat.common.data.ISO8601Converter;
 import com.rocketchat.common.data.TimestampAdapter;
 import com.rocketchat.common.data.lightstream.GlobalStreamCollectionManager;
 import com.rocketchat.common.data.model.BaseRoom;
+import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.ConnectListener;
 import com.rocketchat.common.listener.PaginatedCallback;
@@ -169,23 +170,109 @@ public class RocketChatClient {
         restImpl.serverInfo(callback);
     }
 
+    /**
+     * Gets all of the private groups the calling user has joined.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * rocketChatClient.getUserGroupList(new SimpleListCallback() {
+     *     public void onSuccess(List list) {
+     *         // Handle the user group list.
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error.
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param callback The simple list callback.
+     * @see #getUserChannelList(SimpleListCallback)
+     * @see #getUserDirectMessageList(SimpleListCallback)
+     * @since 0.8.0
+     */
+    public void getUserGroupList(SimpleListCallback callback) {
+        restImpl.getUserGroupList(callback);
+    }
+
+    /**
+     * Gets all of the channels the calling user has joined.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * rocketChatClient.getUserChannelList(new SimpleListCallback() {
+     *     public void onSuccess(List list) {
+     *         // Handle the user channel list.
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error.
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param callback The simple list callback.
+     * @see #getUserGroupList(SimpleListCallback)
+     * @see #getUserDirectMessageList(SimpleListCallback)
+     * @since 0.8.0
+     */
+    public void getUserChannelList(SimpleListCallback callback) {
+        restImpl.getUserChannelList(callback);
+    }
+
+    /**
+     * Gets all of the direct messages the calling user has joined.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * rocketChatClient.getUserDirectMessageList(new SimpleListCallback() {
+     *     public void onSuccess(List list) {
+     *         // Handle the direct message list.
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error.
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param callback The simple list callback.
+     * @see #getUserGroupList(SimpleListCallback)
+     * @see #getUserChannelList(SimpleListCallback)
+     * @since 0.8.0
+     */
+    public void getUserDirectMessageList(SimpleListCallback callback) {
+        restImpl.getUserDirectMessageList(callback);
+    }
+
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
     }
 
-    // TODO
-    public void getRoomMembers() {
-
+    public void getRoomMembers(String roomId,
+                               BaseRoom.RoomType roomType,
+                               int offset,
+                               BaseUser.SortBy sortBy,
+                               Sort sort,
+                               final PaginatedCallback<User> callback) {
+        restImpl.getRoomMembers(roomId, roomType, offset, sortBy, sort, callback);
     }
 
-    // TODO
-    public void getRoomFavoriteMessages() {
-
+    public void getRoomFavoriteMessages(String roomId,
+                                        BaseRoom.RoomType roomType,
+                                        int offset,
+                                        final PaginatedCallback callback) {
+        restImpl.getRoomFavoriteMessages(roomId, roomType, offset, callback);
     }
 
-    // TODO
-    public void getRoomPinnedMessages() {
-
+    public void getRoomPinnedMessages(String roomId,
+                                      BaseRoom.RoomType roomType,
+                                      int offset,
+                                      final PaginatedCallback<Message> callback) {
+        restImpl.getRoomPinnedMessages(roomId, roomType, offset, callback);
     }
 
     public void getRoomFiles(String roomId,
@@ -193,7 +280,7 @@ public class RocketChatClient {
                              int offset,
                              Attachment.SortBy sortBy,
                              Sort sort,
-                             final PaginatedCallback callback) {
+                             final PaginatedCallback<Attachment> callback) {
         restImpl.getRoomFiles(roomId, roomType, offset, sortBy, sort, callback);
     }
 
