@@ -334,7 +334,6 @@ class RestImpl {
     void getUserDirectMessageList(final SimpleListCallback<Subscription> callback) {
         checkNotNull(callback, "callback == null");
 
-        // TODO check if the REST api call is ok because we are calling /api/v1/dm.list instead of /api/v1/im.list
         HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.ONE_TO_ONE, "list"))
                 .build();
 
@@ -357,6 +356,7 @@ class RestImpl {
 
                 try {
                     JSONObject json = new JSONObject(response.body().string());
+                    logger.info("Response = " + json.toString());
 
                     Type type = Types.newParameterizedType(List.class, Subscription.class);
                     JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
