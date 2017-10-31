@@ -12,6 +12,7 @@ import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.Callback;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.listener.SimpleCallback;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.Logger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
@@ -19,6 +20,7 @@ import com.rocketchat.core.callback.ServerInfoCallback;
 import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.internal.model.RestToken;
 import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -237,6 +239,47 @@ class RestImpl {
                     List<Message> messageList = adapter.fromJson(json.getJSONArray("messages").toString());
 
                     callback.onSuccess(messageList, json.optInt("total"));
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
+    }
+
+    /**
+     * Lists all of the private groups the calling user has joined.
+     */
+    void getUserGroupList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.PRIVATE, "list"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response,ERROR_HANDLER(callback));
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+
+                    Type type = Types.newParameterizedType(List.class, Subscription.class);
+                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
+                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("groups").toString());
+
+                    callback.onSuccess(subscriptionList);
                 } catch (JSONException e) {
                     callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
                 }

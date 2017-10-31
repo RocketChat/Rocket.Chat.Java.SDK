@@ -10,12 +10,14 @@ import com.rocketchat.common.data.model.BaseUser;
 import com.rocketchat.common.data.model.User;
 import com.rocketchat.common.listener.PaginatedCallback;
 import com.rocketchat.common.utils.CalendarISO8601Converter;
+import com.rocketchat.common.listener.SimpleListCallback;
 import com.rocketchat.common.utils.NoopLogger;
 import com.rocketchat.common.utils.Sort;
 import com.rocketchat.core.callback.LoginCallback;
 import com.rocketchat.core.internal.model.RestResult;
 import com.rocketchat.core.model.JsonAdapterFactory;
 import com.rocketchat.core.model.Message;
+import com.rocketchat.core.model.Subscription;
 import com.rocketchat.core.model.Token;
 import com.rocketchat.core.model.attachment.Attachment;
 import com.rocketchat.core.provider.TokenProvider;
@@ -41,9 +43,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
@@ -69,6 +70,9 @@ public class RestImplTest {
     @Mock
     private PaginatedCallback<User> usersCallback;
 
+    @Mock
+    private SimpleListCallback<Subscription> subscriptionsCallback;
+
     @Captor
     private ArgumentCaptor<Token> tokenCaptor;
 
@@ -80,6 +84,9 @@ public class RestImplTest {
 
     @Captor
     private ArgumentCaptor<List<Message>> messagesCaptor;
+
+    @Captor
+    private ArgumentCaptor<List<Subscription>> subscriptionsCaptor;
 
     @Captor
     private ArgumentCaptor<RocketChatException> exceptionCaptor;
@@ -255,36 +262,36 @@ public class RestImplTest {
                 .withPath("/api/v1/channels.files?roomId=general&offset=0&sort={%22uploadedAt%22:-1}")
                 .andReturn(200,
                         "{\"total\":5000," +
-                        "   \"offset\":0," +
-                        "   \"success\":true," +
-                        "   \"count\":1," +
-                        "   \"files\":[" +
-                        "      {" +
-                        "         \"extension\":\"txt\"," +
-                        "         \"description\":\"\"," +
-                        "         \"store\":\"GoogleCloudStorage:Uploads\"," +
-                        "         \"type\":\"text/plain\"," +
-                        "         \"rid\":\"GENERAL\"," +
-                        "         \"userId\":\"mTYz5v78fEETuyvxH\"," +
-                        "         \"url\":\"/ufs/GoogleCloudStorage:Uploads/B5HXEJQvoqXjfMyKD/%E6%96%B0%E5%BB%BA%E6%96%87%E6%9C%AC%E6%96%87%E6%A1%A3%20(2).txt\"," +
-                        "         \"token\":\"C8BB59192B\"," +
-                        "         \"path\":\"/ufs/GoogleCloudStorage:Uploads/B5HXEJQvoqXjfMyKD/%E6%96%B0%E5%BB%BA%E6%96%87%E6%9C%AC%E6%96%87%E6%A1%A3%20(2).txt\"," +
-                        "         \"GoogleStorage\":{" +
-                        "            \"path\":\"eoRXMCHBbQCdDnrke/uploads/GENERAL/mTYz5v78fEETuyvxH/B5HXEJQvoqXjfMyKD\"" +
-                        "         }," +
-                        "         \"instanceId\":\"kPnqzFNvmxkMWdcKC\"," +
-                        "         \"size\":469," +
-                        "         \"name\":\"sample.txt\"," +
-                        "         \"progress\":1," +
-                        "         \"uploadedAt\":\"2017-10-23T05:13:44.875Z\"," +
-                        "         \"uploading\":false," +
-                        "         \"etag\":\"mXWYhuiWiCxXpDYdg\"," +
-                        "         \"_id\":\"B5HXEJQvoqXjfMyKD\"," +
-                        "         \"complete\":true," +
-                        "         \"_updatedAt\":\"2017-10-23T05:13:43.220Z\"" +
-                        "      }" +
-                        "   ]" +
-                        "}")
+                                "   \"offset\":0," +
+                                "   \"success\":true," +
+                                "   \"count\":1," +
+                                "   \"files\":[" +
+                                "      {" +
+                                "         \"extension\":\"txt\"," +
+                                "         \"description\":\"\"," +
+                                "         \"store\":\"GoogleCloudStorage:Uploads\"," +
+                                "         \"type\":\"text/plain\"," +
+                                "         \"rid\":\"GENERAL\"," +
+                                "         \"userId\":\"mTYz5v78fEETuyvxH\"," +
+                                "         \"url\":\"/ufs/GoogleCloudStorage:Uploads/B5HXEJQvoqXjfMyKD/%E6%96%B0%E5%BB%BA%E6%96%87%E6%9C%AC%E6%96%87%E6%A1%A3%20(2).txt\"," +
+                                "         \"token\":\"C8BB59192B\"," +
+                                "         \"path\":\"/ufs/GoogleCloudStorage:Uploads/B5HXEJQvoqXjfMyKD/%E6%96%B0%E5%BB%BA%E6%96%87%E6%9C%AC%E6%96%87%E6%A1%A3%20(2).txt\"," +
+                                "         \"GoogleStorage\":{" +
+                                "            \"path\":\"eoRXMCHBbQCdDnrke/uploads/GENERAL/mTYz5v78fEETuyvxH/B5HXEJQvoqXjfMyKD\"" +
+                                "         }," +
+                                "         \"instanceId\":\"kPnqzFNvmxkMWdcKC\"," +
+                                "         \"size\":469," +
+                                "         \"name\":\"sample.txt\"," +
+                                "         \"progress\":1," +
+                                "         \"uploadedAt\":\"2017-10-23T05:13:44.875Z\"," +
+                                "         \"uploading\":false," +
+                                "         \"etag\":\"mXWYhuiWiCxXpDYdg\"," +
+                                "         \"_id\":\"B5HXEJQvoqXjfMyKD\"," +
+                                "         \"complete\":true," +
+                                "         \"_updatedAt\":\"2017-10-23T05:13:43.220Z\"" +
+                                "      }" +
+                                "   ]" +
+                                "}")
                 .once();
 
         rest.getRoomFiles("general", BaseRoom.RoomType.PUBLIC, 0, Attachment.SortBy.UPLOADED_DATE, Sort.DESC, attachmentCallback);
@@ -525,5 +532,79 @@ public class RestImplTest {
         assertThat(messageList.size(), is(equalTo(1)));
         Message message = messageList.get(0);
         assertThat(message.id(), is(equalTo("6G8o7QxDDyPmWdBdF")));
+    }
+
+    //     _____ ______ _______     _    _  _____ ______ _____         _____ _____   ____  _    _ _____        _      _____  _____ _______   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   | |  | |/ ____|  ____|  __ \       / ____|  __ \ / __ \| |  | |  __ \      | |    |_   _|/ ____|__   __| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |  | | (___ | |__  | |__) |_____| |  __| |__) | |  | | |  | | |__) |_____| |      | | | (___    | |       | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______| |  | |\___ \|  __| |  _  /______| | |_ |  _  /| |  | | |  | |  ___/______| |      | |  \___ \   | |       | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | |__| |____) | |____| | \ \      | |__| | | \ \| |__| | |__| | |          | |____ _| |_ ____) |  | |       | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|       \____/|_____/|______|_|  \_\      \_____|_|  \_\\____/ \____/|_|          |______|_____|_____/   |_|       |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testUserGroupListShouldFailWithNullCallback() {
+        rest.getUserGroupList(null);
+    }
+
+    @Test
+    public void testUserGroupListShouldBeSuccessful() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/groups.list")
+                .andReturn(200, "{" +
+                        "    \"groups\": [" +
+                        "        {" +
+                        "            \"_id\": \"ByehQjC44FwMeiLbX\"," +
+                        "            \"name\": \"test-test\"," +
+                        "            \"t\": \"p\"," +
+                        "            \"usernames\": [" +
+                        "                \"testing1\"" +
+                        "            ]," +
+                        "            \"msgs\": 0," +
+                        "            \"u\": {" +
+                        "                \"_id\": \"aobEdbYhXfu5hkeqG\"," +
+                        "                \"username\": \"testing1\"" +
+                        "            }," +
+                        "            \"ts\": \"2016-12-09T15:08:58.042Z\"," +
+                        "            \"ro\": false," +
+                        "            \"sysMes\": true," +
+                        "            \"_updatedAt\": \"2016-12-09T15:22:40.656Z\"" +
+                        "        }," +
+                        "        {" +
+                        "            \"_id\": \"t7qapfhZjANMRAi5w\"," +
+                        "            \"name\": \"testing\"," +
+                        "            \"t\": \"p\"," +
+                        "            \"usernames\": [" +
+                        "                \"testing2\"" +
+                        "            ]," +
+                        "            \"msgs\": 0," +
+                        "            \"u\": {" +
+                        "                \"_id\": \"y65tAmHs93aDChMWu\"," +
+                        "                \"username\": \"testing2\"" +
+                        "            }," +
+                        "            \"ts\": \"2016-12-01T15:08:58.042Z\"," +
+                        "            \"ro\": false," +
+                        "            \"sysMes\": true," +
+                        "            \"_updatedAt\": \"2016-12-09T15:22:40.656Z\"" +
+                        "        }" +
+                        "    ]," +
+                        "    \"success\": true" +
+                        "}")
+                .once();
+
+        rest.getUserGroupList(subscriptionsCallback);
+
+        verify(subscriptionsCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(subscriptionsCaptor.capture());
+
+        List<Subscription> subscriptionList = subscriptionsCaptor.getValue();
+        assertThat(subscriptionList, is(notNullValue()));
+        assertThat(subscriptionList.size(), is(equalTo(2)));
+        Subscription subscription = subscriptionList.get(0);
+        assertThat(subscription.roomId(), is(equalTo("ByehQjC44FwMeiLbX")));
+        assertThat(subscription.name(), is(equalTo("test-test")));
+        assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.PRIVATE)));
     }
 }

@@ -168,6 +168,32 @@ public class RocketChatClient {
         restImpl.serverInfo(callback);
     }
 
+    /**
+     * Gets all of the private groups the calling user has joined.
+     *
+     * <p>Example of expected usage:
+     *
+     * <blockquote><pre>
+     * rocketChatClient.getUserGroupList(new SimpleListCallback() {
+     *     public void onSuccess(List list) {
+     *         // Handle the user group list.
+     *     }
+     *
+     *     public void onError(RocketChatException error) {
+     *        // Handle the error.
+     *     }
+     * });
+     * </pre></blockquote>
+     *
+     * @param callback The simple list callback.
+     * @see #getUserChannelList(SimpleListCallback)
+     * @see #getUserDirectMessageList(SimpleListCallback)
+     * @since 0.8.0
+     */
+    public void getUserGroupList(SimpleListCallback callback) {
+        restImpl.getUserGroupList(callback);
+    }
+
     public void pinMessage(String messageId, SimpleCallback callback) {
         restImpl.pinMessage(messageId, callback);
     }
@@ -249,7 +275,7 @@ public class RocketChatClient {
         websocketImpl.logout(callback);
     }
 
-    //Tested
+    //Todo remove method!
     public void getSubscriptions(SimpleListCallback<Subscription> callback) {
         websocketImpl.getSubscriptions(callback);
     }
