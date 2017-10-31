@@ -287,6 +287,89 @@ class RestImpl {
         });
     }
 
+    /**
+     * Lists all of the channels the calling user has joined.
+     */
+    void getUserChannelList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
+
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.PUBLIC, "list.joined"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, ERROR_HANDLER(callback));
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+
+                    Type type = Types.newParameterizedType(List.class, Subscription.class);
+                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
+                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("channels").toString());
+
+                    callback.onSuccess(subscriptionList);
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
+    }
+
+    /**
+     * Lists all of the direct messages the calling user has joined.
+     */
+    void getUserDirectMessageList(final SimpleListCallback<Subscription> callback) {
+        checkNotNull(callback, "callback == null");
+
+        // TODO check if the REST api call is ok because we are calling /api/v1/dm.list instead of /api/v1/im.list
+        HttpUrl httpUrl = requestUrl(baseUrl, getRestApiMethodNameByRoomType(BaseRoom.RoomType.ONE_TO_ONE, "list"))
+                .build();
+
+        Request request = requestBuilder(httpUrl)
+                .get()
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                callback.onError(new RocketChatNetworkErrorException("network error", e));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    processCallbackError(response, ERROR_HANDLER(callback));
+                    return;
+                }
+
+                try {
+                    JSONObject json = new JSONObject(response.body().string());
+
+                    Type type = Types.newParameterizedType(List.class, Subscription.class);
+                    JsonAdapter<List<Subscription>> adapter = moshi.adapter(type);
+                    List<Subscription> subscriptionList = adapter.fromJson(json.getJSONArray("ims").toString());
+
+                    callback.onSuccess(subscriptionList);
+                } catch (JSONException e) {
+                    callback.onError(new RocketChatInvalidResponseException(e.getMessage(), e));
+                }
+            }
+        });
+    }
+
     void getRoomPinnedMessages(String roomId,
                                BaseRoom.RoomType roomType,
                                int offset,

@@ -607,4 +607,61 @@ public class RestImplTest {
         assertThat(subscription.name(), is(equalTo("test-test")));
         assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.PRIVATE)));
     }
+
+    //     _____ ______ _______     _    _  _____ ______ _____         _____ _    _          _   _ _   _ ______ _          _      _____  _____ _______   _______ ______  _____ _______ _____
+    //    / ____|  ____|__   __|   | |  | |/ ____|  ____|  __ \       / ____| |  | |   /\   | \ | | \ | |  ____| |        | |    |_   _|/ ____|__   __| |__   __|  ____|/ ____|__   __/ ____|
+    //   | |  __| |__     | |______| |  | | (___ | |__  | |__) |_____| |    | |__| |  /  \  |  \| |  \| | |__  | |  ______| |      | | | (___    | |       | |  | |__  | (___    | | | (___
+    //   | | |_ |  __|    | |______| |  | |\___ \|  __| |  _  /______| |    |  __  | / /\ \ | . ` | . ` |  __| | | |______| |      | |  \___ \   | |       | |  |  __|  \___ \   | |  \___ \
+    //   | |__| | |____   | |      | |__| |____) | |____| | \ \      | |____| |  | |/ ____ \| |\  | |\  | |____| |____    | |____ _| |_ ____) |  | |       | |  | |____ ____) |  | |  ____) |
+    //    \_____|______|  |_|       \____/|_____/|______|_|  \_\      \_____|_|  |_/_/    \_\_| \_|_| \_|______|______|   |______|_____|_____/   |_|       |_|  |______|_____/   |_| |_____/
+    //
+    //
+
+    @Test(expected = NullPointerException.class)
+    public void testUserChannelListShouldFailWithNullCallback() {
+        rest.getUserChannelList(null);
+    }
+
+    @Test
+    public void testUserChannelListShouldBeSuccessful() {
+        mockServer.expect()
+                .get()
+                .withPath("/api/v1/channels.list.joined")
+                .andReturn(200, "{" +
+                        "    \"channels\": [" +
+                        "        {" +
+                        "            \"_id\": \"ByehQjC44FwMeiLbX\"," +
+                        "            \"name\": \"invite-me\"," +
+                        "            \"t\": \"c\"," +
+                        "            \"usernames\": [" +
+                        "                \"testing1\"" +
+                        "            ]," +
+                        "            \"msgs\": 0," +
+                        "            \"u\": {" +
+                        "                \"_id\": \"aobEdbYhXfu5hkeqG\"," +
+                        "                \"username\": \"testing1\"" +
+                        "            }," +
+                        "            \"ts\": \"2016-12-09T15:08:58.042Z\"," +
+                        "            \"ro\": false," +
+                        "            \"sysMes\": true," +
+                        "            \"_updatedAt\": \"2016-12-09T15:22:40.656Z\"" +
+                        "        }" +
+                        "    ]," +
+                        "    \"success\": true" +
+                        "}")
+                .once();
+
+        /*rest.getUserChannelList(simpleListCallback);
+
+        verify(simpleListCallback, timeout(DEFAULT_TIMEOUT).only())
+                .onSuccess(listCaptor.capture());
+
+        List<Subscription> subscriptionList = listCaptor.getValue();
+        assertThat(subscriptionList, is(notNullValue()));
+        assertThat(subscriptionList.size(), is(equalTo(1)));
+        Subscription subscription = subscriptionList.get(0);
+        assertThat(subscription.roomId(), is(equalTo("ByehQjC44FwMeiLbX")));
+        assertThat(subscription.name(), is(equalTo("invite-me")));
+        assertThat(subscription.type(), is(equalTo(BaseRoom.RoomType.PUBLIC)));*/
+    }
 }
