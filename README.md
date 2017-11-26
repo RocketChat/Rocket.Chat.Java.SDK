@@ -1,3 +1,8 @@
+# DEPRECATED
+We are working on a new [SDK in Kotlin](https://github.com/RocketChat/Rocket.Chat.Kotlin.SDK/), with compatibility with JAVA (in the future).
+ 
+ 
+ 
 Rocket.Chat.Java.SDK
 =====================================
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  [![RocketChat](https://img.shields.io/badge/chat-on%20rocketchat-brightgreen.svg)](https://demo.rocket.chat/channel/rocketchatjavasdk) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/Rocket-Chat-Java-SDK/Lobby)
